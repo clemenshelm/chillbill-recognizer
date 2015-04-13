@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/clemenshelm/ruby-ddp-client.git
-  revision: 309a18c31c7324ffad37ec4007425c57b3612abf
+  revision: c81f707f6b4b0318342a835a340a4018899d640b
   specs:
     ruby-ddp-client (0.0.2)
       faye-websocket
