@@ -1,0 +1,9 @@
+development:
+  meteor:
+    email: recognizer@getchillbill.com
+    password: change now!
+
+production:
+  meteor:
+    email: <%= ENV['METEOR_EMAIL'] %>
+    password: <%= ENV['METEOR_PASSWORD'] %>
