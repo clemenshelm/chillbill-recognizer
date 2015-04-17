@@ -22,6 +22,8 @@ EventMachine.run do
     ddp_client.call :login, [credentials]  do
       puts 'logged in'
 
+      ddp_client.subscribe('unprocessed-bills', [])
+
       redis.pubsub.subscribe 'results' do |bill_json|
         bill_attributes = JSON.parse bill_json
         id = bill_attributes.delete 'id'

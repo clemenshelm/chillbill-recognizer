@@ -8,3 +8,20 @@ gem 'sidekiq'
 # Used for communicating recognition results
 gem 'em-hiredis' # Inside event machine
 gem 'redis'      # and outside
+
+# Tesseract is used as OCR engine.
+gem 'tesseract-ocr'
+
+# Grim extracts pdf pages as images
+gem 'grim'
+
+# OpenCV improves the image for OCR
+gem 'ruby-opencv'
+
+group :development do
+  gem 'pry'
+end
+
+group :test do
+  gem 'rspec'
+end

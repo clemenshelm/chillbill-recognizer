@@ -1,5 +1,6 @@
 require 'sidekiq'
 require 'hiredis'
+require_relative 'lib/bill_recognizer'
 
 Sidekiq.configure_client do |config|
   config.redis = { namespace: 'jobs', size: 1 } # Run only 1 thread.
@@ -18,7 +19,9 @@ class RecognitionWorker
 
   def perform(id, bill_image_url)
     puts "performing recognition on #{bill_image_url}"
-    # TODO: perform recognition
-    REDIS.publish 'results', {id: id}.to_json
+    recognizer = BillRecognizer.new bill_image_url
+    bill_attributes = recognizer.recognize
+    bill_attributes[:id] = id
+    REDIS.publish 'results', bill_attributes.to_json
   end
 end
