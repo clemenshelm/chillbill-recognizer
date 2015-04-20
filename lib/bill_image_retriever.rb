@@ -12,7 +12,7 @@ class BillImageRetriever
     IO.copy_stream pdf_io, pdf_file
 
     pdf = Grim.reap(pdf_file.path)
-    pdf[0].save path
+    pdf[0].save(path, width: 3000, quality: 100)
     pdf_file.close!
   end
 end
