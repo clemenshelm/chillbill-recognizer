@@ -14,25 +14,19 @@ class BillRecognizer
   end
 
   def recognize
-    pdf_file = Tempfile.open 'pdf' do |pdf_file|
-      open @image_url, 'rb' do |image_download|
-        pdf_file.write(image_download.read)
-      end
-      pdf_file
-    end    
-
-    ENV['TESSDATA_PREFIX'] = '.' # must be specified
-    tesseract = Tesseract::Engine.new do |e|
-      e.language = :deu
-    end
-    
+    # Download and convert image
     image_file = Tempfile.new ['image', '.png']
-    pdf = Grim.reap(pdf_file.path)
-    pdf[0].save image_file.path, width: 3000, quality: 100
+    download = BillImageRetriever.new url: @image_url
+    download.save_to(image_file)
 
     # unskew image
     unskewer = DocumentUnskewer.new(image_path: image_file.path)
     unskewer.save_unskewed_image to: 'rotated.png'
+    
+    ENV['TESSDATA_PREFIX'] = '.' # must be specified
+    tesseract = Tesseract::Engine.new do |e|
+      e.language = :deu
+    end
     
     # simple price detection
     words = tesseract.words_for 'rotated.png'

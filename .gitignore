@@ -1,2 +1,2 @@
 spec/image_fixtures/cache/*
-!spec/image_fixtures/cache/.gitkeep
+tmp/
