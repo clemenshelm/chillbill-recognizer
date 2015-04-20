@@ -1,10 +1,7 @@
-require 'open-uri'
-require 'tempfile'
 require 'tesseract'
-require 'grim'
 require 'bigdecimal'
-require 'pry'
 require_relative './document_unskewer'
+require_relative './bill_image_retriever'
 
 class BillRecognizer
   include OpenCV
@@ -17,7 +14,7 @@ class BillRecognizer
     # Download and convert image
     image_file = Tempfile.new ['image', '.png']
     download = BillImageRetriever.new url: @image_url
-    download.save_to(image_file)
+    download.save_to(image_file.path)
 
     # unskew image
     unskewer = DocumentUnskewer.new(image_path: image_file.path)
@@ -45,6 +42,6 @@ class BillRecognizer
     
     image_file.close!
 
-    {subTotal: net_amount, vatTotal: vat_amount}
+    {subTotal: net_amount.to_s('F'), vatTotal: vat_amount.to_s('F')}
   end
 end

@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'grim'
+require 'open-uri'
 
 class BillImageRetriever
   def initialize(url:)
