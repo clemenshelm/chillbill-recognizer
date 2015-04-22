@@ -1,6 +1,7 @@
 require 'fileutils'
+require 'open-uri'
 
-module Helpers
+module SpecCache
   def cache_file(file_name)
     dir = File.expand_path("../../tmp/spec_cache/", __FILE__)
     FileUtils.mkdir_p dir

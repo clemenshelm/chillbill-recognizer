@@ -19,7 +19,7 @@ class RecognitionWorker
 
   def perform(id, bill_image_url)
     puts "performing recognition on #{bill_image_url}"
-    recognizer = BillRecognizer.new bill_image_url
+    recognizer = BillRecognizer.new(image_url: bill_image_url)
     bill_attributes = recognizer.recognize
     bill_attributes[:id] = id
     REDIS.publish 'results', bill_attributes.to_json

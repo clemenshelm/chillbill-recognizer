@@ -5,8 +5,8 @@ class DocumentUnskewer
 
   CANNY_THRESHOLD = 100
 
-  def initialize(image_path:)
-    @image_mat = CvMat.load(image_path, CV_LOAD_IMAGE_COLOR)
+  def initialize(image_path: nil, mat: nil)
+    @image_mat = mat || CvMat.load(image_path, CV_LOAD_IMAGE_COLOR)
     @width, @height = @image_mat.size
   end
 
@@ -14,11 +14,16 @@ class DocumentUnskewer
     gray = @image_mat.BGR2GRAY
     gray = gray.canny(CANNY_THRESHOLD, CANNY_THRESHOLD * 2)
 
-    lines = gray.hough_lines(:probabilistic, 1, Math::PI / 180, 100, @width / 8, 20)
+    lines = gray.hough_lines(:probabilistic, 1, Math::PI / 1800, 100, @width / 15, 20)
     angles = lines.map { |line|
       start_point, end_point = line
       Math.atan2(end_point.y - start_point.y, end_point.x - start_point.x)
     }
+    angles -= [0.0] # Clear accidental results
+    # Make all angles be around 0 degrees
+    ninety = Math::PI / 2
+    angles.map! { |angle| (angle + ninety) % ninety }
+    angles.map! { |angle| angle > ninety / 2 ? angle - ninety : angle }
     median_angle = angles.sort[angles.size / 2]
 
     median_angle * 180 / Math::PI # Convert to degrees
