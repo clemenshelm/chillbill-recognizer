@@ -18,7 +18,7 @@ class BillRecognizer
     # remove jpg artifacts and unskew image
     enhancer = DocumentEnhancer.new(image_path: image_file.path)
     unskewer = DocumentUnskewer.new(mat: enhancer.result)
-    unskewer.save_unskewed_image to: 'rotated.png'
+    unskewer.save_unskewed_image to: image_file.path
     
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
     tesseract = Tesseract::Engine.new do |e|
@@ -26,7 +26,7 @@ class BillRecognizer
     end
 
     # simple price detection
-    words = tesseract.words_for 'rotated.png'
+    words = tesseract.words_for image_file.path
     price_words = words.select { |word| word.text =~ /^\d+[\.,]\d{2}$/ rescue nil }
     price_texts = price_words.map(&:text)
 
