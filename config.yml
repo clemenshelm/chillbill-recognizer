@@ -1,9 +1,13 @@
 development:
+  host: 'localhost'
+  port: 3000
   meteor:
     email: recognizer@getchillbill.com
     password: change now!
 
 production:
+  host: 'chillbill-web.herokuapp.com'
+  port: 80
   meteor:
     email: <%= ENV['METEOR_EMAIL'] %>
     password: <%= ENV['METEOR_PASSWORD'] %>

@@ -11,7 +11,7 @@ config_yaml = ERB.new(IO.read('config.yml')).result
 CONFIG = YAML.load(config_yaml)[environment]
 
 EventMachine.run do
-  ddp_client = RubyDdp::Client.new('localhost', 3000)
+  ddp_client = RubyDdp::Client.new(CONFIG['host'], CONFIG['port'])
   redis = EM::Hiredis.connect
   puts 'running'
 
