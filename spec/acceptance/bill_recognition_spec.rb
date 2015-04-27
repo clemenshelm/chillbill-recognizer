@@ -12,18 +12,17 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatTotal]).to eq '7.81'
   end
 
-  it 'recognizes the bill 95uvAm2JF9kYtN8sJ' do
+  it 'recognizes the bill H9WCDhBHp2N7xRLoA' do
     retriever = SpecCacheRetriever.new(bill_id: 'H9WCDhBHp2N7xRLoA')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:subTotal]).to eq '6.48'
-    expect(bill_attributes[:vatTotal]).to eq '1.3'
+    expect(bill_attributes[:vatTotal]).to eq '1.30'
   end
 
   it 'recognizes the bill 8r74b2CqZpW5c8oev' do
-    pending('The numbers and commas are all different words. Make this work as well.')
     retriever = SpecCacheRetriever.new(bill_id: '8r74b2CqZpW5c8oev')
     recognizer = BillRecognizer.new(retriever: retriever)
 
