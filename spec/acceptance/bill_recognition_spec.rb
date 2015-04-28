@@ -89,4 +89,120 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:subTotal]).to eq '350.00'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
   end 
+
+  it 'recognizes the bill dXNmKuRyhwYeNQjbb' do
+    retriever = SpecCacheRetriever.new(bill_id: 'dXNmKuRyhwYeNQjbb')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '27.34'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill JRTan9t5Fuo7qE3y4' do
+    pending("The bill has a price element that looks very much like a VAT.")
+    retriever = SpecCacheRetriever.new(bill_id: 'JRTan9t5Fuo7qE3y4')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '74.82'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill aMajbm6LRwoy96xWa' do
+    # TODO: This bill contains 20% and 10% VAT. This is not important for now,
+    # but should be recognized in the future.
+    # Another bill with this feature is q475zZuQaP8mmnpt8
+    retriever = SpecCacheRetriever.new(bill_id: 'aMajbm6LRwoy96xWa')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '17.96'
+    expect(bill_attributes[:vatTotal]).to eq '2.56'
+  end 
+
+  it 'recognizes the bill XYt8oerHesxQkdwvp' do
+    retriever = SpecCacheRetriever.new(bill_id: 'XYt8oerHesxQkdwvp')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '10.28'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill uFJgmRgy68s3LXzzL' do
+    retriever = SpecCacheRetriever.new(bill_id: 'uFJgmRgy68s3LXzzL')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '10.28'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill F4QSZtMfaZKSuzTE2' do
+    retriever = SpecCacheRetriever.new(bill_id: 'F4QSZtMfaZKSuzTE2')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '10.28'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
+    pending("The bill has a transparent background which OpenCv sees as black. Make this work as well.")
+    retriever = SpecCacheRetriever.new(bill_id: '7FDFZnmZmfMyxWZtG')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '10.28'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill d8TPPMpm74BmyDsoT' do
+    retriever = SpecCacheRetriever.new(bill_id: 'd8TPPMpm74BmyDsoT')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '10.28'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
+  end 
+
+  it 'recognizes the bill pnqSyhfmwa5Qbbmwp' do
+    pending('This invoice only contains 10% and 20% VAT, but no total VAT and net amount.')
+    retriever = SpecCacheRetriever.new(bill_id: 'pnqSyhfmwa5Qbbmwp')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '345.74'
+    expect(bill_attributes[:vatTotal]).to eq '67.25'
+  end 
+
+  it 'recognizes the bill eEtGBZ6NNCXog9Wry' do
+    retriever = SpecCacheRetriever.new(bill_id: 'eEtGBZ6NNCXog9Wry')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '49.29'
+    expect(bill_attributes[:vatTotal]).to eq '9.86'
+  end 
+
+  it 'recognizes the bill YaCWsCoSEuJAr5gAZ' do
+    retriever = SpecCacheRetriever.new(bill_id: 'YaCWsCoSEuJAr5gAZ')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:subTotal]).to eq '49.29'
+    expect(bill_attributes[:vatTotal]).to eq '9.86'
+  end 
 end
