@@ -69,7 +69,7 @@ class PriceDetector
     number_words = linked_words.select { |word| word.text =~ /^[\d,\.]+$/ }
 
     # No compound numbers
-    possible_prices = number_words.select { |word| !(word.next && word.next.text =~ /^\d/) || word.text =~ /\d+,/ }
+    possible_prices = number_words.select { |word| !(word.next && word.next.text =~ /^\d/) || word.text =~ /\d+[,\.]/ }
 
     prices = possible_prices.map do |word|
       extract_price(word.self_and_following)
@@ -85,7 +85,7 @@ class PriceDetector
     # for cases like "45", ",", "00"
     words.take(3).each do |word|
       term.words << word
-      return term if term.text =~ /\d+,\d{1,3}$/
+      return term if term.text =~ /\d+[,\.]\d{1,3}$/
     end
 
     return nil

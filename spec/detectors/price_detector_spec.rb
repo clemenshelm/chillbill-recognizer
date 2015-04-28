@@ -78,4 +78,12 @@ describe PriceDetector do
     expect(bounding_box.width).to eq 151
     expect(bounding_box.height).to eq 33
   end
+
+  it 'finds prices with a colon as decimal separator' do
+    price_texts = %w(10.00 27.20 1.35 1.50 27.34)
+    words = price_texts.map { |text| double(text: text) }
+
+    prices = PriceDetector.filter(words)
+    expect(prices.map(&:text)).to eq price_texts
+  end
 end
