@@ -17,4 +17,15 @@ describe PriceCalculation do
     expect(prices.net_amount).to eq BigDecimal('6.48')
     expect(prices.vat_amount).to eq BigDecimal('1.3')
   end
+
+  it 'takes the right amount if there is no VAT' do
+    words = [
+      double(text: '1.185,00', bounding_box: double(x: 2199, y: 1996, width: 151, height: 33)),
+      double(text: '15,41', bounding_box: double(x: 2768, y: 1995, width: 91, height: 35))
+    ]
+
+    prices = PriceCalculation.new(words)
+    expect(prices.net_amount).to eq BigDecimal('15.41')
+    expect(prices.vat_amount).to eq 0
+  end
 end

@@ -23,6 +23,10 @@ class PriceDetector
       @tesseract_word.text.encode(invalid: :replace)
     end
 
+    def bounding_box
+      @tesseract_word.bounding_box
+    end
+
     def self_and_following
       klon = self.clone
 
@@ -38,9 +42,27 @@ class PriceDetector
     end
   end
 
+  class Term
+    attr_reader :words
+
+    def initialize
+      @words = []
+    end
+
+    def text
+      @words.map(&:text).join
+    end
+
+    def bounding_box
+      # This is definitely not correct,
+      # but it's sufficient for now.
+      @words.first.bounding_box
+    end
+  end
+
   def self.filter(tesseract_words)
     linked_words = Word.link(tesseract_words)
-    number_words = linked_words.select { |word| word.text =~ /^\d/ }
+    number_words = linked_words.select { |word| word.text =~ /^[\d,\.]+$/ }
 
     # No compound numbers
     possible_prices = number_words.select { |word| !(word.next && word.next.text =~ /^\d/) || word.text =~ /\d+,/ }
@@ -55,11 +77,11 @@ class PriceDetector
   private
 
   def self.extract_price(words)
-    text = ''
+    term = Term.new
     # for cases like "45", ",", "00"
     words.take(3).each do |word|
-      text += word.text
-      return OpenStruct.new(text: text) if text =~ /\d+,\d{1,3}$/
+      term.words << word
+      return term if term.text =~ /\d+,\d{1,3}$/
     end
 
     return nil

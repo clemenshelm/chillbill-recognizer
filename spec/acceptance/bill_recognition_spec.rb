@@ -43,7 +43,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:subTotal]).to eq '15.41'
-    expect(bill_attributes[:vatTotal]).to eq '0'
+    expect(bill_attributes[:vatTotal]).to eq '0.00'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do

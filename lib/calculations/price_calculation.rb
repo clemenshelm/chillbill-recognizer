@@ -24,6 +24,11 @@ class PriceCalculation
   end
 
   def calculate
+    net_and_vat
+    right_most_net unless @net_amount
+  end
+
+  def net_and_vat
     prices.each do |total|
       remaining_prices = prices - [total]
       remaining_prices.each do |net|
@@ -36,5 +41,11 @@ class PriceCalculation
         end
       end
     end
+  end
+
+  def right_most_net
+    right_most = @words.sort_by { |price| price.bounding_box.x }.last
+    @net_amount = BigDecimal.new(right_most.text.sub(',', '.'))
+    @vat_amount = 0
   end
 end
