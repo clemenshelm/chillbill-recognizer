@@ -3,6 +3,7 @@ require 'bigdecimal'
 require_relative './document_unskewer'
 require_relative './document_enhancer'
 require_relative './bill_image_retriever'
+require_relative './detectors/price_detector'
 
 class BillRecognizer
   include OpenCV
@@ -27,7 +28,7 @@ class BillRecognizer
 
     # simple price detection
     words = tesseract.words_for image_file.path
-    price_words = words.select { |word| word.text =~ /^\d+[\.,]\d{2}$/ rescue nil }
+    price_words = PriceDetector.filter(words)
     price_texts = price_words.map(&:text)
 
     prices = price_texts.map { |price_text| BigDecimal.new(price_text.sub(',', '.')) }.uniq
@@ -35,7 +36,7 @@ class BillRecognizer
 
     image_file.close
 
-    net_amount.nil? ? {} : {subTotal: net_amount.to_s('F'), vatTotal: vat_amount.to_s('F')}
+    net_amount.nil? ? {} : {subTotal: '%.2f' % net_amount, vatTotal: '%.2f' % vat_amount}
   end
 
   def net_and_vat_amount(prices)
