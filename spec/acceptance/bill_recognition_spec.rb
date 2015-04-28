@@ -38,7 +38,6 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
-    pending("The bill doesn't contain a VAT. Make this work as well.")
     retriever = SpecCacheRetriever.new(bill_id: '4f5mhL6zBb3cyny7n')
     recognizer = BillRecognizer.new(retriever: retriever)
 

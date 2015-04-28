@@ -3,6 +3,7 @@ require 'bigdecimal'
 require_relative './document_unskewer'
 require_relative './document_enhancer'
 require_relative './bill_image_retriever'
+require_relative './calculations/price_calculation'
 
 class BillRecognizer
   include OpenCV
@@ -30,27 +31,15 @@ class BillRecognizer
     price_words = words.select { |word| word.text =~ /^\d+[\.,]\d{2}$/ rescue nil }
     price_texts = price_words.map(&:text)
 
-    prices = price_texts.map { |price_text| BigDecimal.new(price_text.sub(',', '.')) }.uniq
-    net_amount, vat_amount = net_and_vat_amount(prices)
+    prices_decimals = price_texts.map { |price_text| BigDecimal.new(price_text.sub(',', '.')) }.uniq
+    prices = PriceCalculation.new(price_words)
+    net_amount = prices.net_amount
+    vat_amount = prices.vat_amount
 
     image_file.close
 
+    binding.pry
+
     net_amount.nil? ? {} : {subTotal: net_amount.to_s('F'), vatTotal: vat_amount.to_s('F')}
-  end
-
-  def net_and_vat_amount(prices)
-    prices.each do |total_amount|
-      remaining_prices = prices - [total_amount]
-      remaining_prices.each do |net_amount|
-        possible_vat_amounts = remaining_prices.select { |price| price <= (net_amount * BigDecimal('0.2')).ceil(2) }
-        possible_vat_amounts.each do |vat_amount|
-          if net_amount + vat_amount == total_amount
-            return [net_amount, vat_amount] 
-          end
-        end
-      end
-    end
-
-    nil
   end
 end
