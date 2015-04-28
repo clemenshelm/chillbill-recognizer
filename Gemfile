@@ -19,6 +19,10 @@ gem 'grim'
 gem 'ruby-opencv'
 
 group :development do
+  gem 'rake'
+end
+
+group :development, :test do
   gem 'pry'
 end
 
