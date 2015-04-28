@@ -11,6 +11,6 @@ describe BillImageRetriever do
     download = BillImageRetriever.new url: pdf_url
     file = download.save
 
-    expect(File.read(image_path, mode: 'rb')[0..100]).to eq File.read(file.path, mode: 'rb')[0..100]
+    expect(File.read(image_path, mode: 'rb')[0..50]).to eq File.read(file.path, mode: 'rb')[0..50]
   end
 end

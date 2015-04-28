@@ -19,5 +19,7 @@ RSpec.describe 'enhancing a document' do
     thresholded_data.each_with_index do |scalar, index|
       expect(result[index][0].to_i).to eq scalar
     end
+
+    file.close!
   end
 end
