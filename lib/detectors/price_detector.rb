@@ -42,7 +42,7 @@ class PriceDetector
     end
   end
 
-  class Term
+  class PriceTerm
     attr_reader :words
 
     def initialize
@@ -57,6 +57,10 @@ class PriceDetector
       # This is definitely not correct,
       # but it's sufficient for now.
       @words.first.bounding_box
+    end
+
+    def to_d
+      BigDecimal.new(text.sub(',', '.'))
     end
   end
 
@@ -77,7 +81,7 @@ class PriceDetector
   private
 
   def self.extract_price(words)
-    term = Term.new
+    term = PriceTerm.new
     # for cases like "45", ",", "00"
     words.take(3).each do |word|
       term.words << word

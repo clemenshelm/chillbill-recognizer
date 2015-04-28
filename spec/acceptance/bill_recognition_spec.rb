@@ -70,9 +70,8 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatTotal]).to eq '15.81'
   end 
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    pending("The bill has a vat of 0, so net amount equals total amount. Make this work as well.")
-    retriever = SpecCacheRetriever.new(bill_id: 'ZkPkwYF8p6PPLbf7f')
+  it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
+    retriever = SpecCacheRetriever.new(bill_id: '4WaHezqC7H7HgDzcy')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize

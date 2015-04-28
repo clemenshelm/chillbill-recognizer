@@ -17,26 +17,24 @@ class PriceCalculation
 
   private
 
-  def prices
-    @words
-      .map(&:text)
-      .map { |price_text| BigDecimal.new(price_text.sub(',', '.')) }.uniq
-  end
-
   def calculate
     net_and_vat
     right_most_net unless @net_amount
   end
 
   def net_and_vat
-    prices.each do |total|
-      remaining_prices = prices - [total]
-      remaining_prices.each do |net|
+    # Sort largest to smallest, because we want to find the higest total amount.
+    @words.sort_by(&:to_d).reverse.each do |total_word|
+      remaining_prices = (@words - [total_word]).map(&:to_d)
+      # Sort smallest to largest. Otherwise the net amount is easily considered
+      # the same as the total amount.
+      remaining_prices.reverse.each do |net|
         possible_vats = remaining_prices.select { |price| price <= (net * BigDecimal('0.2')).ceil(2) }
         possible_vats.each do |vat|
-          if net + vat == total
+          if net + vat == total_word.to_d
             @net_amount = net
             @vat_amount = vat
+            return
           end
         end
       end
