@@ -68,6 +68,13 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['1.185,00']
   end
 
+  it "doesn't find prices that contain letters" do
+    words = %w(12 x 0,95).map { |text| double(text: text) }
+
+    prices = PriceDetector.filter(words)
+    expect(prices.map(&:text)).to eq %w(0,95)
+  end
+
   it "includes a word's bounding box" do
     word = double(text: '1.185,00', bounding_box: double(x: 2199, y: 1996, width: 151, height: 33))
 
