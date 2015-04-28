@@ -44,6 +44,19 @@ describe PriceCalculation do
     expect(prices.vat_amount).to eq 0
   end
 
+  it 'takes the highest right amount if there are multiple' do
+    words = [
+      word(text: "190,00", bounding_box: {x: 2706, y: 1559, width: 118, height: 37}),
+      word(text: "80,00", bounding_box: {x: 2726, y: 1619, width: 97, height: 37}),
+      word(text: "80,00", bounding_box: {x: 2724, y: 1680, width: 99, height: 37}),
+      word(text: "350,00", bounding_box: {x: 657, y: 3397, width: 176, height: 53})
+    ]
+
+    prices = PriceCalculation.new(words)
+    expect(prices.net_amount).to eq 350
+    expect(prices.vat_amount).to eq 0
+  end
+
   it 'takes the highes net amount and VAT amount if there are many possibilities' do
     words = [
       word(text: "14,49", bounding_box: {x: 2703, y: 1313, width: 110, height: 36}),

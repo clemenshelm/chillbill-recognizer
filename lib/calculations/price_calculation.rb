@@ -19,6 +19,7 @@ class PriceCalculation
 
   def calculate
     net_and_vat
+    largest_net unless @net_amount
     right_most_net unless @net_amount
   end
 
@@ -39,6 +40,14 @@ class PriceCalculation
         end
       end
     end
+  end
+
+  def largest_net
+    # TODO: This would probably be more robust if the net amount needed to be
+    # significantly larger.
+    largest = @words.sort_by { |word| word.bounding_box.height }.last
+    @net_amount = BigDecimal.new(largest.text.sub(',', '.'))
+    @vat_amount = 0
   end
 
   def right_most_net

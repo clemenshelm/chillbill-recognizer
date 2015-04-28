@@ -81,8 +81,7 @@ describe 'Recognizing bills correctly' do
   end 
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
-    pending("The bill has no vat, so net amount equals total amount. Make this work as well.")
-    retriever = SpecCacheRetriever.new(bill_id: 'ZkPkwYF8p6PPLbf7f')
+    retriever = SpecCacheRetriever.new(bill_id: 'Ghy3MB6y9HeZg2iZB')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
