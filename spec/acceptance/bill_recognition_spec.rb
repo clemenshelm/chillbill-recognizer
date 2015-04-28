@@ -37,6 +37,8 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
+    pending("Doesn't work on CI because of different library versions") if ENV['CI']
+
     retriever = SpecCacheRetriever.new(bill_id: '4f5mhL6zBb3cyny7n')
     recognizer = BillRecognizer.new(retriever: retriever)
 
