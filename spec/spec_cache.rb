@@ -17,9 +17,16 @@ module SpecCache
       IO.copy_stream pdf_io, path
     end
 
-    cache_file("#{bill_id}.png") do |path|
+    png_path = cache_file("#{bill_id}.png") do |path|
       pdf = Grim.reap(pdf_path)
       pdf[0].save(path, width: 3000, quality: 100)
     end
+
+    # Put the PNG into a tempfile so it can savely be overwritten
+    # and the cached file won't be modified for sure.
+    tempfile = Tempfile.new(['cached', '.png'])
+    IO.copy_stream(png_path, tempfile)
+
+    tempfile.path
   end
 end
