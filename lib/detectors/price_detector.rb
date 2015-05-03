@@ -85,7 +85,7 @@ class PriceDetector
     # for cases like "45", ",", "00"
     words.take(3).each do |word|
       term.words << word
-      return term if term.text =~ /^\d+[,\.]\d{1,3}$/
+      return term if term.text =~ /^[\d\.]+[,\.]\d{1,3}$/
     end
 
     return nil
