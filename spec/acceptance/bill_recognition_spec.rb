@@ -60,7 +60,6 @@ describe 'Recognizing bills correctly' do
   end 
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    pending("The bill has a transparent background which OpenCv sees as black. Make this work as well.")
     retriever = SpecCacheRetriever.new(bill_id: 'ZkPkwYF8p6PPLbf7f')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -112,7 +111,6 @@ describe 'Recognizing bills correctly' do
   end 
 
   it 'recognizes the bill aMajbm6LRwoy96xWa' do
-    pending('It recognizes 17.95 instead of 17.96')
     # TODO: This bill contains 20% and 10% VAT. This is not important for now,
     # but should be recognized in the future.
     # Another bill with this feature is q475zZuQaP8mmnpt8
@@ -148,18 +146,18 @@ describe 'Recognizing bills correctly' do
   end 
 
   it 'recognizes the bill F4QSZtMfaZKSuzTE2' do
-    pending("The bill has a transparent background which OpenCv sees as black. Make this work as well.")
+    pending("The bill has a total amount with a € symbol. Make this work as well.")
     retriever = SpecCacheRetriever.new(bill_id: 'F4QSZtMfaZKSuzTE2')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '10.28'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:subTotal]).to eq '160.80'
+    expect(bill_attributes[:vatTotal]).to eq '32.16'
   end 
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
-    pending("The bill has a transparent background which OpenCv sees as black. Make this work as well.")
+    pending("The bill has prices without decimal places. Make this work as well.")
     retriever = SpecCacheRetriever.new(bill_id: '7FDFZnmZmfMyxWZtG')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -189,17 +187,6 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '345.74'
     expect(bill_attributes[:vatTotal]).to eq '67.25'
-  end 
-
-  it 'recognizes the bill eEtGBZ6NNCXog9Wry' do
-    pending("The total amount isn't recognized correctly")
-    retriever = SpecCacheRetriever.new(bill_id: 'eEtGBZ6NNCXog9Wry')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-
-    expect(bill_attributes[:subTotal]).to eq '49.29'
-    expect(bill_attributes[:vatTotal]).to eq '9.86'
   end 
 
   it 'recognizes the bill YaCWsCoSEuJAr5gAZ' do
