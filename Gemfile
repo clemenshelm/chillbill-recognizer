@@ -16,8 +16,8 @@ gem 'tesseract-ocr'
 # Grim extracts pdf pages as images
 gem 'grim'
 
-# OpenCV improves the image for OCR
-gem 'ruby-opencv'
+# RMagick improves the image for OCR
+gem 'rmagick'
 
 group :development do
   gem 'rake'

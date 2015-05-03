@@ -27,6 +27,6 @@ module SpecCache
     tempfile = Tempfile.new(['cached', '.png'])
     IO.copy_stream(png_path, tempfile)
 
-    tempfile.path
+    tempfile
   end
 end

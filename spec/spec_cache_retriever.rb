@@ -8,7 +8,6 @@ class SpecCacheRetriever
   end
 
   def save
-    path = cache_png(@bill_id)
-    File.new(path)
+    cache_png(@bill_id)
   end
 end
