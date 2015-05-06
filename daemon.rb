@@ -1,6 +1,6 @@
 #!/bin/ruby
 require 'eventmachine'
-require 'ruby-ddp-client'
+require 'metybur'
 require 'erb'
 require 'yaml'
 require 'em-hiredis'
@@ -11,33 +11,26 @@ config_yaml = ERB.new(IO.read('config.yml')).result
 CONFIG = YAML.load(config_yaml)[environment]
 
 EventMachine.run do
-  ddp_client = RubyDdp::Client.new(CONFIG['host'], CONFIG['port'])
   redis = EM::Hiredis.connect
   puts 'running'
 
-  ddp_client.onconnect = lambda do |event|
-    puts 'connected'
+  meteor = Metybur.connect(
+    'http://localhost:3000/websocket',
+    email: CONFIG['meteor']['email'],
+    password: CONFIG['meteor']['password']
+  )
 
-    credentials = {user: {email: CONFIG['meteor']['email']}, password: CONFIG['meteor']['password']}
-    ddp_client.call :login, [credentials]  do
-      puts 'logged in'
-
-      ddp_client.subscribe('unprocessed-bills', [])
-
-      redis.pubsub.subscribe 'results' do |bill_json|
-        bill_attributes = JSON.parse bill_json
-        id = bill_attributes.delete 'id'
-        ddp_client.call :writeDetectionResult, [id, bill_attributes]
-      end
-
-      ddp_client.observe 'unprocessed-bills', 'added' do |id, bill|
-        puts "bill was added: #{bill}"
-        RecognitionWorker.perform_async id, bill['imageUrl']
-      end
-
-      ddp_client.observe 'unprocessed-bills', 'removed' do |id|
-        puts "bill was removed: #{id}"
-      end
+  meteor.subscribe('unprocessed-bills')
+  
+  meteor.collection('unprocessed-bills')
+    .on(:added) do |id, bill|
+      puts "bill was added: #{bill}"
+      RecognitionWorker.perform_async id, bill['imageUrl']
     end
+
+  redis.pubsub.subscribe 'results' do |bill_json|
+    bill_attributes = JSON.parse bill_json
+    id = bill_attributes.delete 'id'
+    ddp_client.call :writeDetectionResult, [id, bill_attributes]
   end
 end
