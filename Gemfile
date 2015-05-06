@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.2.2'
 
-gem 'ruby-ddp-client', github: 'clemenshelm/ruby-ddp-client'
+# Connects to meteor
+gem 'metybur'
 
 # Sidekiq performs a job for each unprocessed invoice.
 gem 'sidekiq'
