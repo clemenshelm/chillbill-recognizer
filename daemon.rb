@@ -25,12 +25,12 @@ EventMachine.run do
   meteor.collection('unprocessed-bills')
     .on(:added) do |id, bill|
       puts "bill was added: #{bill}"
-      RecognitionWorker.perform_async id, bill['imageUrl']
+      RecognitionWorker.perform_async id, bill[:imageUrl]
     end
 
   redis.pubsub.subscribe 'results' do |bill_json|
     bill_attributes = JSON.parse bill_json
     id = bill_attributes.delete 'id'
-    ddp_client.call :writeDetectionResult, [id, bill_attributes]
+    meteor.write_detection_result(id, bill_attributes)
   end
 end
