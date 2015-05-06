@@ -93,4 +93,12 @@ describe PriceDetector do
     prices = PriceDetector.filter(words)
     expect(prices.map(&:text)).to eq price_texts
   end
+
+  it "doesn't find dates as prices" do
+    price_texts = %w(28.02.15 31.03.15)
+    words = price_texts.map { |text| double(text: text) }
+
+    prices = PriceDetector.filter(words)
+    expect(prices).to be_empty
+  end
 end
