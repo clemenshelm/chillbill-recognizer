@@ -1,6 +1,7 @@
 require 'tempfile'
 require 'grim'
 require 'open-uri'
+require 'aws-sdk'
 
 class BillImageRetriever
   def initialize(url:)
@@ -8,9 +9,11 @@ class BillImageRetriever
   end
 
   def save
-    pdf_io = open @url, 'rb'
+    _, bucket, region, key = @url.match(%r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}).to_a
+    puts "bucket: #{bucket}, region: #{region}, key: #{key}"
     pdf_file = Tempfile.new ['bill', '.pdf']
-    IO.copy_stream pdf_io, pdf_file
+    s3 = Aws::S3::Client.new(region: region)
+    s3.get_object(bucket: bucket, key: key, response_target: pdf_file)
 
     image_file = Tempfile.new ['bill', '.png']
     pdf = Grim.reap(pdf_file.path)

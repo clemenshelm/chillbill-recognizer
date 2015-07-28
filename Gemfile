@@ -20,6 +20,9 @@ gem 'grim'
 # RMagick improves the image for OCR
 gem 'rmagick'
 
+# AWS SDK retrieves files from S3
+gem 'aws-sdk', '~> 2'
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output
