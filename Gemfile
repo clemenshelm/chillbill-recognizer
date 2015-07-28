@@ -22,6 +22,7 @@ gem 'rmagick'
 
 group :development do
   gem 'rake'
+  gem 'colorize' # Colorizes shell output
 end
 
 group :development, :test do

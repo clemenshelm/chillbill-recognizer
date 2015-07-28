@@ -6,11 +6,13 @@ class PriceCalculation
   end
 
   def net_amount
+    return nil if @words.empty?
     calculate unless @net_amount
     @net_amount
   end
 
   def vat_amount
+    return nil if @words.empty?
     calculate unless @vat_amount
     @vat_amount
   end

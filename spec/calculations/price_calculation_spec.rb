@@ -82,6 +82,12 @@ describe PriceCalculation do
     expect(prices.vat_amount).to eq BigDecimal('7.81')
   end
 
+  it 'sets the prices to nil if there are no words' do
+    prices = PriceCalculation.new([])
+    expect(prices.net_amount).to be_nil
+    expect(prices.vat_amount).to be_nil
+  end
+
   def word(attributes = {})
     double(:word,
            text: attributes[:text],

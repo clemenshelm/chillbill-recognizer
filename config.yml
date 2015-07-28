@@ -1,13 +1,11 @@
 development:
-  host: 'localhost'
-  port: 3000
+  url: 'http://localhost:3000/websocket'
   meteor:
     email: recognizer@getchillbill.com
     password: change now!
 
 production:
-  host: 'chillbill-web.herokuapp.com'
-  port: 80
+  url: 'http://chillbill-web.herokuapp.com:80/websocket'
   meteor:
     email: <%= ENV['METEOR_EMAIL'] %>
     password: <%= ENV['METEOR_PASSWORD'] %>
