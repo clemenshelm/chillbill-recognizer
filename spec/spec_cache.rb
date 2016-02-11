@@ -11,10 +11,11 @@ module SpecCache
   end
 
   def cache_png(bill_id)
-    pdf_url = "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{bill_id}.pdf"
+    bucket = 'chillbill-prod'
+    region = 'eu-central-1'
     pdf_path = cache_file("#{bill_id}.pdf") do |path|
-      pdf_io = open pdf_url, 'rb'
-      IO.copy_stream pdf_io, path
+      s3 = Aws::S3::Client.new(region: region)
+      s3.get_object(bucket: bucket, key: "#{bill_id}.pdf", response_target: path)
     end
 
     png_path = cache_file("#{bill_id}.png") do |path|

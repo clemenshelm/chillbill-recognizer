@@ -3,16 +3,16 @@ require 'hiredis'
 require_relative 'lib/bill_recognizer'
 
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: 'jobs', size: 1 } # Run only 1 thread.
+  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis:6379' } # Run only 1 thread.
   puts 'Sidekiq client configured.'
 end
 
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: 'jobs' }
+  config.redis = { namespace: 'jobs', url: 'redis://redis:6379' }
   puts 'Sidekiq server configured.'
 end
 
-REDIS = Redis.new(driver: :hiredis)
+REDIS = Redis.new(driver: :hiredis, host: 'redis')
 
 class RecognitionWorker
   include Sidekiq::Worker

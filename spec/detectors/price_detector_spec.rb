@@ -14,6 +14,7 @@ describe PriceDetector do
   end
 
   it 'handles invalid UTF8 characters' do
+    pending 'move to word unit tests as invalid utf8 characters are handled there'
     words = [
       double(text: "S\xE2\x80raße"),
       double(text: '2,69')

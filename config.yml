@@ -1,11 +1,16 @@
+default: &default
+  tesseract_whitelist: "aäbcdefghijklmnoöpqrsßtuüvwxyzAÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ1234567890,/&@.-*€%!"
+
 development:
-  url: 'http://localhost:3000/websocket'
+  <<: *default
+  url: 'http://172.17.0.4:3000/websocket'
   meteor:
     email: recognizer@getchillbill.com
-    password: change now!
+    password:
 
 production:
-  url: 'http://chillbill-web.herokuapp.com:80/websocket'
+  <<: *default
+  url: 'https://my.chillbill.co/websocket'
   meteor:
     email: <%= ENV['METEOR_EMAIL'] %>
     password: <%= ENV['METEOR_PASSWORD'] %>

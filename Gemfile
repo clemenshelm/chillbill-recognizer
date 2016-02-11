@@ -11,14 +11,14 @@ gem 'sidekiq'
 gem 'em-hiredis' # Inside event machine
 gem 'redis'      # and outside
 
-# Tesseract is used as OCR engine.
-gem 'tesseract-ocr'
-
 # Grim extracts pdf pages as images
 gem 'grim'
 
 # RMagick improves the image for OCR
 gem 'rmagick'
+
+# Nokogiri parses tesseract's hOCR
+gem 'nokogiri'
 
 # AWS SDK retrieves files from S3
 gem 'aws-sdk', '~> 2'
