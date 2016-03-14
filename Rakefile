@@ -18,7 +18,12 @@ task :process do
     subTotal = (recognition_result[:subTotal].to_f * 100).to_i
     vatTotal = (recognition_result[:vatTotal].to_f * 100).to_i
     total = subTotal + vatTotal
-    vatRate = vatTotal * 100 / subTotal
+    vatRate =
+      if subTotal != 0
+        vatTotal * 100 / subTotal
+      else
+        0
+      end
     meteor.write_detection_result id, amounts: [{total: total, vatRate: vatRate}]
   end
 end
