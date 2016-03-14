@@ -3,12 +3,12 @@ require 'hiredis'
 require_relative 'lib/bill_recognizer'
 
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis:6379' } # Run only 1 thread.
+  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis' } # Run only 1 thread.
   puts 'Sidekiq client configured.'
 end
 
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: 'jobs', url: 'redis://redis:6379' }
+  config.redis = { namespace: 'jobs', url: 'redis://redis' }
   puts 'Sidekiq server configured.'
 end
 

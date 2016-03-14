@@ -2,6 +2,7 @@ require 'eventmachine'
 require 'metybur'
 require 'em-hiredis'
 require_relative '../sidekiq'
+require 'sidekiq/api'
 
 class Hub
   def initialize(bills: 'unprocessed', config:)
@@ -13,7 +14,8 @@ class Hub
     bills = {}
 
     EventMachine.run do
-      redis = EM::Hiredis.connect
+      redis = EM::Hiredis.connect 'redis://redis:6379'
+      Sidekiq::Queue.new.clear # Delete all sidekiq jobs
       puts 'running'
 
       Metybur.log_level = :debug
@@ -24,7 +26,7 @@ class Hub
       )
 
       meteor.subscribe("#{@bills}-bills")
-      
+
       meteor.collection('bills')
         .on(:added) do |id, bill|
           puts "bill was added: #{bill}"
