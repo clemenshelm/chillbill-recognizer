@@ -24,7 +24,10 @@ task :process do
       else
         0
       end
-    meteor.write_detection_result id, amounts: [{total: total, vatRate: vatRate}]
+    meteor.write_detection_result(id,
+      amounts: [{total: total, vatRate: vatRate}],
+      invoiceDate: invoiceDate
+    )
   end
 end
 

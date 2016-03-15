@@ -5,7 +5,9 @@ require 'pry'
 require 'nokogiri'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
+require_relative './calculations/date_calculation'
 require_relative './detectors/price_detector'
+require_relative './detectors/date_detector'
 require_relative './word'
 require_relative './config'
 
@@ -27,13 +29,14 @@ class BillRecognizer
 
     hocr_doc = Nokogiri::HTML(hocr)
     words = hocr_doc.css(".ocrx_word").map do |word_node|
-      x, y, width, height = word_node[:title]
+      x_left, y_top, x_right, y_bottom = word_node[:title]
         .match(/(\d+) (\d+) (\d+) (\d+);/)
         .captures
         .map(&:to_i)
 
-      Word.new word_node.text, x: x, y: y, width: width, height: height
+      Word.new word_node.text, x: x_left, y: y_top, width: (x_right - x_left), height: (y_bottom - y_top)
     end
+    puts words.map { |word| "#{word.text}, x: #{word.bounding_box.x}, y: #{word.bounding_box.y}, width: #{word.bounding_box.width}, height: #{word.bounding_box.height}"}
 
     price_words = PriceDetector.filter(words)
     price_texts = price_words.map(&:text)
@@ -43,9 +46,21 @@ class BillRecognizer
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
 
+    date_words = DateDetector.filter(words)
+    dates = DateCalculation.new(date_words)
+    if dates.invoice_date
+      invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
+    end
+
     #image_file.close
 
-    net_amount.nil? ? {} : {subTotal: '%.2f' % net_amount, vatTotal: '%.2f' % vat_amount}
+    return {} if net_amount.nil?
+
+    {
+      subTotal: '%.2f' % net_amount,
+      vatTotal: '%.2f' % vat_amount,
+      invoiceDate: invoice_date
+    }
   end
 
   private

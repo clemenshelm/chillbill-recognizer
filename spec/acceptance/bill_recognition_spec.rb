@@ -2,7 +2,7 @@ require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
-  it 'recognizes the bill m6jLaPhmWvuZZqSXy' do
+  it 'recognizes the bill m6jLaPhmWvuZZqSXy', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'm6jLaPhmWvuZZqSXy')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -10,6 +10,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '39.04'
     expect(bill_attributes[:vatTotal]).to eq '7.81'
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-04'
   end
 
   it 'recognizes the bill H9WCDhBHp2N7xRLoA' do
@@ -34,7 +35,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
-    pending("Doesn't work on CI because of different library versions") if ENV['CI']
+    pending("Uses 5,41 as net amount instead of 15,41")
 
     retriever = SpecCacheRetriever.new(bill_id: '4f5mhL6zBb3cyny7n')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -43,6 +44,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '15.41'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
@@ -54,9 +56,9 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '36'
     expect(bill_attributes[:vatTotal]).to eq '0'
-  end 
+  end
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
+  it 'recognizes the bill ZkPkwYF8p6PPLbf7f', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'ZkPkwYF8p6PPLbf7f')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -64,7 +66,8 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '79.06'
     expect(bill_attributes[:vatTotal]).to eq '15.81'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
+  end
 
   it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
     retriever = SpecCacheRetriever.new(bill_id: '4WaHezqC7H7HgDzcy')
@@ -74,7 +77,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '80.00'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+  end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
     pending "Total amount of 350,00 is not recognized in payment form"
@@ -85,9 +88,9 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '350.00'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+  end
 
-  it 'recognizes the bill dXNmKuRyhwYeNQjbb' do
+  it 'recognizes the bill dXNmKuRyhwYeNQjbb', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'dXNmKuRyhwYeNQjbb')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -95,7 +98,8 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '27.34'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-03'
+  end
 
   it 'recognizes the bill JRTan9t5Fuo7qE3y4' do
     pending("The bill has a price element that looks very much like a VAT.")
@@ -106,9 +110,9 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '74.82'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+  end
 
-  it 'recognizes the bill aMajbm6LRwoy96xWa' do
+  it 'recognizes the bill aMajbm6LRwoy96xWa', :afocus do
     # TODO: This bill contains 20% and 10% VAT. This is not important for now,
     # but should be recognized in the future.
     # Another bill with this feature is q475zZuQaP8mmnpt8
@@ -119,9 +123,10 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '17.96'
     expect(bill_attributes[:vatTotal]).to eq '2.56'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
+  end
 
-  it 'recognizes the bill XYt8oerHesxQkdwvp' do
+  it 'recognizes the bill XYt8oerHesxQkdwvp', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'XYt8oerHesxQkdwvp')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -129,9 +134,10 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '10.28'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
+  end
 
-  it 'recognizes the bill uFJgmRgy68s3LXzzL' do
+  it 'recognizes the bill uFJgmRgy68s3LXzzL', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'uFJgmRgy68s3LXzzL')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -139,9 +145,10 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '107.02'
     expect(bill_attributes[:vatTotal]).to eq '21.40'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
+  end
 
-  it 'recognizes the bill F4QSZtMfaZKSuzTE2' do
+  it 'recognizes the bill F4QSZtMfaZKSuzTE2', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'F4QSZtMfaZKSuzTE2')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -149,7 +156,8 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '160.80'
     expect(bill_attributes[:vatTotal]).to eq '32.16'
-  end 
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-23'
+  end
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
     pending("The bill has prices without decimal places. Make this work as well.")
@@ -160,7 +168,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '10.28'
     expect(bill_attributes[:vatTotal]).to eq '0.00'
-  end 
+  end
 
   it 'recognizes the bill d8TPPMpm74BmyDsoT' do
     pending("The net amount and VAT amount aren't recognized correctly")
@@ -171,7 +179,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '953.03'
     expect(bill_attributes[:vatTotal]).to eq '190.61'
-  end 
+  end
 
   it 'recognizes the bill pnqSyhfmwa5Qbbmwp' do
     pending('This invoice only contains 10% and 20% VAT, but no total VAT and net amount.')
@@ -182,7 +190,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '345.74'
     expect(bill_attributes[:vatTotal]).to eq '67.25'
-  end 
+  end
 
   it 'recognizes the bill YaCWsCoSEuJAr5gAZ' do
     pending("Prices are correct, but prepended with an *")
@@ -193,5 +201,5 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:subTotal]).to eq '49.29'
     expect(bill_attributes[:vatTotal]).to eq '9.86'
-  end 
+  end
 end

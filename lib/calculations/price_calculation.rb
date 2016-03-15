@@ -2,7 +2,7 @@ require 'bigdecimal'
 
 class PriceCalculation
   def initialize(words)
-    @words = words 
+    @words = words
   end
 
   def net_amount
