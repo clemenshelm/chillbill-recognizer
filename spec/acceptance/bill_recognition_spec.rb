@@ -2,6 +2,12 @@ require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
+  before(:each) do
+    Word.dataset.delete
+    DateTerm.dataset.delete
+    PriceTerm.dataset.delete
+  end
+
   it 'recognizes the bill m6jLaPhmWvuZZqSXy', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'm6jLaPhmWvuZZqSXy')
     recognizer = BillRecognizer.new(retriever: retriever)

@@ -1,94 +1,78 @@
-
+require_relative '../../lib/boot'
 require_relative '../../lib/detectors/date_detector'
+require_relative '../../lib/models/word'
 
 describe DateDetector, :focus do
+  before(:each) do
+    Word.dataset.delete
+    DateTerm.dataset.delete
+  end
+
   it 'finds short German dates' do
     # From bill m6jLaPhmWvuZZqSXy
-    words = [
-      double(text: '9025'),
-      double(text: '0650/004/133'),
-      double(text: '04.04.2015'),
-      double(text: '13133')
-    ]
+    %w(9025 0650/004/133 04.04.2015 13133).each { |text| Word.create(text: text) }
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates.map(&:text)).to eq %w(04.04.2015)
   end
 
-  it 'does not find dates connected to other words' do
+  it 'does finds dates connected to other words' do
     # From bill m6jLaPhmWvuZZqSXy
-    words = [
-      double(text: '04.04.2015/13132257')
-    ]
+    Word.create(text: '04.04.2015/13132257')
 
-    dates = DateDetector.filter(words)
-    expect(dates).to be_empty
+    dates = DateDetector.filter
+    expect(dates.first.text).to eq '04.04.2015'
   end
 
   it 'detects multiple dates in a document' do
     # From bill 4f5mhL6zBb3cyny7n
-    words = [
-      double(text: '01.04.2015'),
-      double(text: '28.02.15'),
-      double(text: '31.03.15'),
-      double(text: '31.03.15'),
-      double(text: '27.02.2015'),
-      double(text: '31.03.15'),
-      double(text: '16.03.15'),
-      double(text: '16.03.15')
-    ]
+    %w(01.04.2015 28.02.15 31.03.15 31.03.15 27.02.2015 31.03.15 16.03.15 16.03.15)
+      .each { |text| Word.create(text: text) }
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates.map(&:text)).to eq %w(01.04.2015 28.02.15 31.03.15 31.03.15 27.02.2015 31.03.15 16.03.15 16.03.15)
   end
 
   it 'detects dates spread over several words' do
     # From bill XYt8oerHesxQkdwvp
-    words = [
-      double(text: '10', bounding_box: double(x: 1623, y: 536, width: 24, height: 28)),
-      double(text: '04.2015', bounding_box: double(x: 1664, y: 536, width: 69, height: 27))
-    ]
+    %w(10 04.2015).each { |text| Word.create(text: text) }
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates.first.text).to eq '10.04.2015'
   end
 
   it 'filters number combinations with too many digits' do
-    words = [double(text: '2.5617.96')]
+    Word.create(text: '2.5617.96')
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates).to be_empty
   end
 
   it 'detects dates in compound words' do
-    words = [double(text: 'Lief.dat.:13.04.15')]
+    Word.create(text: 'Lief.dat.:13.04.15')
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates.first.text).to eq '13.04.15'
   end
 
   it 'ignores non-dates' do
-    words = [double(text: 'Lief.dat.:')]
+    Word.create(text: 'Lief.dat.:')
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates).to be_empty
   end
 
   it 'detects full German dates' do
-    words = [
-      double(text: '23.'),
-      double(text: 'April'),
-      double(text: '2015')
-    ]
+    %w(Wien, 23. April 2015 POMA).each { |text| Word.create(text: text) }
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates.first.text).to eq '23. April 2015'
   end
 
-  it 'does not recognize a number out of a date range' do
-    words = [double(text: '41.14.122')]
+  it 'does not recognize a number out of a date range', :focus do
+    Word.create(text: '41.14.122')
 
-    dates = DateDetector.filter(words)
+    dates = DateDetector.filter
     expect(dates).to be_empty
   end
 end

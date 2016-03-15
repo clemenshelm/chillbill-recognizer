@@ -1,65 +1,37 @@
 require_relative '../word_list'
+require_relative '../models/date_term'
 
 class DateDetector
-  SHORT_GERMAN_DATE_REGEX = /^[0123]?\d\.\d{2}\.\d+$/
-  FULL_GERMAN_DATE_REGEX = /^\d+\. April \d+/
+  SHORT_GERMAN_DATE_REGEX = /(?:^|\D)([0123]?\d\.(?:0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)\.\d+)/
+  FULL_GERMAN_DATE_REGEX = /\d+\. April \d+/
 
-  class DateTerm
-    attr_reader :words
-    attr_accessor :text
+  def self.filter
+    end_number_with_period = -> (term) { term.text += '.' if term.text =~ /\d$/ }
+    find_dates(SHORT_GERMAN_DATE_REGEX, after_each_word: end_number_with_period)
 
-    def initialize
-      @words = []
-      @text = ''
-    end
+    end_word_with_space = -> (term) { term.text += ' ' }
+    find_dates(FULL_GERMAN_DATE_REGEX, after_each_word: end_word_with_space)
 
-    def bounding_box
-      # This is definitely not correct,
-      # but it's sufficient for now.
-      @words.first.bounding_box
-    end
-  end
-
-  def self.filter(tesseract_words)
-    linked_words = WordList.new(tesseract_words)
-
-    dates = linked_words.map do |word|
-      extract_date(word.self_and_following)
-    end
-
-    dates.compact
+    DateTerm.dataset
   end
 
   private
 
-  def self.extract_date(words)
-    extract_short_german_date(words) or extract_long_german_date(words)
-  end
-
-  def self.extract_short_german_date(words)
+  def self.find_dates(regex, after_each_word:)
     term = DateTerm.new
-    # for cases like "10", "04.2015"
-    words.take(2).each do |word|
-      word_text = word.text
 
-      # Delete text before first number
-      after_first_number = word_text.match(/\d.+$/)
-      return nil unless after_first_number
-      word_text = after_first_number[0]
+    Word.each do |word|
+      term = DateTerm.new unless term.new?
+      term.add_word(word)
 
-      term.words << word
-      term.text += word_text
-      term.text += '.' if term.text =~ /^\d+$/
-      return term if term.text =~ SHORT_GERMAN_DATE_REGEX
+      after_each_word.call(term)
+
+      date_string = term.text.scan(regex).first
+
+      if date_string
+        term.text = date_string
+        term.save
+      end
     end
-
-    return nil
-  end
-
-  def self.extract_long_german_date(words)
-    term = DateTerm.new
-    # for cases like "23.", "April", "2015"
-    term.text = words.take(3).map(&:text).join(' ')
-    return term if term.text =~ FULL_GERMAN_DATE_REGEX
   end
 end

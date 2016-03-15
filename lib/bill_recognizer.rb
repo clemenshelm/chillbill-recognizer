@@ -3,12 +3,13 @@ require 'bigdecimal'
 require 'rmagick'
 require 'pry'
 require 'nokogiri'
+require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
-require_relative './word'
+require_relative './models/word'
 require_relative './config'
 
 class BillRecognizer
@@ -28,22 +29,21 @@ class BillRecognizer
       .force_encoding('UTF-8')
 
     hocr_doc = Nokogiri::HTML(hocr)
-    words = hocr_doc.css(".ocrx_word").map do |word_node|
-      x_left, y_top, x_right, y_bottom = word_node[:title]
+    hocr_doc.css(".ocrx_word").each do |word_node|
+      left, top, right, bottom = word_node[:title]
         .match(/(\d+) (\d+) (\d+) (\d+);/)
         .captures
         .map(&:to_i)
 
-      Word.new word_node.text, x: x_left, y: y_top, width: (x_right - x_left), height: (y_bottom - y_top)
+      Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
-    # puts words.map { |word| "#{word.text}, x: #{word.bounding_box.x}, y: #{word.bounding_box.y}, width: #{word.bounding_box.width}, height: #{word.bounding_box.height}"}
 
-    price_words = PriceDetector.filter(words)
+    price_words = PriceDetector.filter
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
 
-    date_words = DateDetector.filter(words)
+    date_words = DateDetector.filter
     dates = DateCalculation.new(date_words)
     if dates.invoice_date
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')

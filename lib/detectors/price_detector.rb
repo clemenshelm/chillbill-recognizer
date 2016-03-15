@@ -1,45 +1,18 @@
 require 'ostruct'
 require 'bigdecimal'
-require_relative '../word_list'
+require_relative '../models/price_term'
 
 class PriceDetector
-  class PriceTerm
-    attr_reader :words
-
-    def initialize
-      @words = []
-    end
-
-    def text
-      @words.map(&:text).join
-    end
-
-    def bounding_box
-      # This is definitely not correct,
-      # but it's sufficient for now.
-      @words.first.bounding_box
-    end
-
-    def to_d
-      # remove thousand separator, but keep comma
-      dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
-      # Replace commas with periods
-      dec_text.sub!(',', '.')
-      BigDecimal.new(dec_text)
-    end
-  end
-
-  def self.filter(tesseract_words)
-    linked_words = WordList.new(tesseract_words)
-    number_words = linked_words.select { |word| word.text =~ /^[\d,\.]+$/ }
+  def self.filter
+    number_words = Word.all.select { |word| word.text =~ /^[\d,\.]+$/ }
 
     # No compound numbers
     possible_prices = number_words.select { |word| !(word.next && word.next.text =~ /^\d/) || word.text =~ /\d+[,\.]/ }
-    prices = possible_prices.map do |word|
+    possible_prices.each do |word|
       extract_price(word.self_and_following)
     end
 
-    prices.compact
+    PriceTerm.dataset
   end
 
   private
@@ -47,11 +20,9 @@ class PriceDetector
   def self.extract_price(words)
     term = PriceTerm.new
     # for cases like "45", ",", "00"
-    words.take(3).each do |word|
-      term.words << word
-      return term if term.text =~ /^\d{1,3}(\.\d{3})?+[,\.]\d{1,3}$/
+    words.limit(3).each do |word|
+      term.add_word(word)
+      term.save and return if term.text =~ /^\d{1,3}(\.\d{3})?+[,\.]\d{1,3}$/
     end
-
-    return nil
   end
 end

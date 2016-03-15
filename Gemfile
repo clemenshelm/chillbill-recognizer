@@ -23,6 +23,10 @@ gem 'nokogiri'
 # AWS SDK retrieves files from S3
 gem 'aws-sdk', '~> 2'
 
+# Database to store and retrieve words from
+gem 'sqlite3'
+gem 'sequel'
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output
@@ -34,5 +38,5 @@ end
 
 group :test do
   gem 'rspec'
-  gem 'guard-rspec', require: false    
+  gem 'guard-rspec', require: false
 end

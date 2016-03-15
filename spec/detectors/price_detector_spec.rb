@@ -1,122 +1,102 @@
+require_relative '../../lib/boot'
 require_relative '../../lib/detectors/price_detector'
+require_relative '../../lib/models/word'
+require_relative '../../lib/models/price_term'
 
 describe PriceDetector, :focus do
-  it 'finds prices separated with a comma' do
-    words = [
-      double(text: 'C'),
-      double(text: '14,49'),
-      double(text: '4006972047414'),
-      double(text: '2,69')
-    ]
+  before(:each) do
+    Word.dataset.delete
+    PriceTerm.dataset.delete
+  end
 
-    prices = PriceDetector.filter(words)
+  it 'finds prices separated with a comma' do
+    %w(C 14,49 4006972047414 2,69).each { |text| Word.create(text: text) }
+
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(14,49 2,69)
   end
 
-  it 'handles invalid UTF8 characters' do
-    pending 'move to word unit tests as invalid utf8 characters are handled there'
-    words = [
-      double(text: "S\xE2\x80raße"),
-      double(text: '2,69')
-    ]
-
-    prices = PriceDetector.filter(words)
-    expect(prices.map(&:text)).to eq %w(2,69)
-  end
-
   it "doesn't find words that contain no numbers" do
-    words = [
-      double(text: '/,v„'),
-      double(text: 'Sie,')
-    ]
+    %w(/,v„ Sie,).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices).to be_empty
   end
 
   it "doesn't find words with 4 decimal places" do
-    word = double(text: '5,1920')
+    Word.create(text: '5,1920')
 
-    prices = PriceDetector.filter([word])
+    prices = PriceDetector.filter
     expect(prices).to be_empty
   end
 
   it 'finds prices that consist of 2 words' do
-    words = [
-      double(text: '54,'),
-      double(text: '00')
-    ]
+    %w(54, 00).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(54,00)
   end
 
   it 'finds prices that consist of 3 words' do
-    words = [
-      double(text: '45'),
-      double(text: ','),
-      double(text: '00')
-    ]
+    %w(45 , 00).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(45,00)
   end
 
   it 'only find prices with typical characters' do
-    words = %w(02/2015 N24 1.185,00).map { |text| double(text: text) }
+    %w(02/2015 N24 1.185,00).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['1.185,00']
   end
 
   it "doesn't find prices that contain letters" do
-    words = %w(12 x 0,95).map { |text| double(text: text) }
+    %w(12 x 0,95).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(0,95)
   end
 
   it "includes a word's bounding box" do
-    word = double(text: '1.185,00', bounding_box: double(x: 2199, y: 1996, width: 151, height: 33))
+    Word.create(text: '1.185,00', left: 2199, top: 1996, right: 2350, bottom: 2029)
 
-    prices = PriceDetector.filter([word])
-    bounding_box = prices.first.bounding_box
-    expect(bounding_box.x).to eq 2199
-    expect(bounding_box.y).to eq 1996
-    expect(bounding_box.width).to eq 151
-    expect(bounding_box.height).to eq 33
+    prices = PriceDetector.filter
+    price = prices.first
+    expect(price.left).to eq 2199
+    expect(price.top).to eq 1996
+    expect(price.width).to eq 151
+    expect(price.height).to eq 33
   end
 
   it 'finds prices with a colon as decimal separator' do
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
-    words = price_texts.map { |text| double(text: text) }
+    price_texts.each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq price_texts
   end
 
   it "doesn't find dates as prices" do
-    price_texts = %w(28.02.15 31.03.15)
-    words = price_texts.map { |text| double(text: text) }
+    %w(28.02.15 31.03.15).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     expect(prices).to be_empty
   end
 
   it 'recognizes correct prices with a period as thousand separator' do
-    price_texts = %w(3.551,37 4.261,64)
-    words = price_texts.map { |text| double(text: text) }
+    %w(3.551,37 4.261,64).each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     price_strings = prices.map { |price| '%.2f' % price.to_d }
     expect(price_strings).to eq ['3551.37', '4261.64']
   end
 
   it 'recognizes correct prices with a period as decimal separator' do
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
-    words = price_texts.map { |text| double(text: text) }
+    price_texts.each { |text| Word.create(text: text) }
 
-    prices = PriceDetector.filter(words)
+    prices = PriceDetector.filter
     price_strings = prices.map { |price| '%.2f' % price.to_d }
     expect(price_strings).to eq price_texts
   end
