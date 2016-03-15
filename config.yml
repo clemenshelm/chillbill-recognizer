@@ -1,5 +1,5 @@
 default: &default
-  tesseract_whitelist: "aäbcdefghijklmnoöpqrsßtuüvwxyzAÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ1234567890,/&@.-*€%!:"
+  tesseract_whitelist: "aäbcdefghijklmnoöpqrsßtuüvwxyzAÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ1234567890,/&@.-*€$%!:"
 
 development:
   <<: *default
