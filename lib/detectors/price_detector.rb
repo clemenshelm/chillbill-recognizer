@@ -21,7 +21,11 @@ class PriceDetector
     end
 
     def to_d
-      BigDecimal.new(text.sub('.', '').sub(',', '.'))
+      # remove thousand separator, but keep comma
+      dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
+      # Replace commas with periods
+      dec_text.sub!(',', '.')
+      BigDecimal.new(dec_text)
     end
   end
 

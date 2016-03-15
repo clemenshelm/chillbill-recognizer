@@ -8,8 +8,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '39.04'
-    expect(bill_attributes[:vatTotal]).to eq '7.81'
+    expect(bill_attributes[:amounts]).to eq [{total: 4685, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-04'
   end
 
@@ -20,8 +19,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '6.48'
-    expect(bill_attributes[:vatTotal]).to eq '1.30'
+    expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
   end
 
   it 'recognizes the bill 8r74b2CqZpW5c8oev' do
@@ -30,8 +28,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '45.00'
-    expect(bill_attributes[:vatTotal]).to eq '9.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 5400, vatRate: 20}]
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
@@ -42,8 +39,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '15.41'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 1541, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
   end
 
@@ -54,8 +50,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '36'
-    expect(bill_attributes[:vatTotal]).to eq '0'
+    expect(bill_attributes[:amounts]).to eq [{total: 3600, vatRate: 0}]
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f', :afocus do
@@ -64,8 +59,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '79.06'
-    expect(bill_attributes[:vatTotal]).to eq '15.81'
+    expect(bill_attributes[:amounts]).to eq [{total: 9487, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
   end
 
@@ -75,8 +69,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '80.00'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 8000, vatRate: 0}]
   end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
@@ -86,8 +79,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '350.00'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 35000, vatRate: 0}]
   end
 
   it 'recognizes the bill dXNmKuRyhwYeNQjbb', :afocus do
@@ -96,8 +88,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '27.34'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 2734, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-03'
   end
 
@@ -108,8 +99,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '74.82'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 7482, vatRate: 0}]
   end
 
   it 'recognizes the bill aMajbm6LRwoy96xWa', :afocus do
@@ -121,8 +111,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '17.96'
-    expect(bill_attributes[:vatTotal]).to eq '2.56'
+    expect(bill_attributes[:amounts]).to eq [{total: 2052, vatRate: 14}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
   end
 
@@ -132,8 +121,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '10.28'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
   end
 
@@ -143,8 +131,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '107.02'
-    expect(bill_attributes[:vatTotal]).to eq '21.40'
+    expect(bill_attributes[:amounts]).to eq [{total: 12842, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
   end
 
@@ -154,8 +141,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '160.80'
-    expect(bill_attributes[:vatTotal]).to eq '32.16'
+    expect(bill_attributes[:amounts]).to eq [{total: 19296, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-23'
   end
 
@@ -166,8 +152,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '10.28'
-    expect(bill_attributes[:vatTotal]).to eq '0.00'
+    expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
   end
 
   it 'recognizes the bill d8TPPMpm74BmyDsoT' do
@@ -177,8 +162,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '953.03'
-    expect(bill_attributes[:vatTotal]).to eq '190.61'
+    expect(bill_attributes[:amounts]).to eq [{total: 114364, vatRate: 20}]
   end
 
   it 'recognizes the bill pnqSyhfmwa5Qbbmwp' do
@@ -188,8 +172,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '345.74'
-    expect(bill_attributes[:vatTotal]).to eq '67.25'
+    expect(bill_attributes[:amounts]).to eq [{total: 41299, vatRate: 19}]
   end
 
   it 'recognizes the bill YaCWsCoSEuJAr5gAZ' do
@@ -199,18 +182,16 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '49.29'
-    expect(bill_attributes[:vatTotal]).to eq '9.86'
+    expect(bill_attributes[:amounts]).to eq [{total: 5915, vatRate: 20}]
   end
 
-  it 'recognizes the bill T26m53KtQ9JrGhb2T', :focus do
+  it 'recognizes the bill T26m53KtQ9JrGhb2T', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: 'T26m53KtQ9JrGhb2T')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:subTotal]).to eq '3551.37'
-    expect(bill_attributes[:vatTotal]).to eq '710.27'
+    expect(bill_attributes[:amounts]).to eq [{total: 426164, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-02-29'
   end
 end

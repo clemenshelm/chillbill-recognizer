@@ -36,12 +36,9 @@ class BillRecognizer
 
       Word.new word_node.text, x: x_left, y: y_top, width: (x_right - x_left), height: (y_bottom - y_top)
     end
-    puts words.map { |word| "#{word.text}, x: #{word.bounding_box.x}, y: #{word.bounding_box.y}, width: #{word.bounding_box.width}, height: #{word.bounding_box.height}"}
+    # puts words.map { |word| "#{word.text}, x: #{word.bounding_box.x}, y: #{word.bounding_box.y}, width: #{word.bounding_box.width}, height: #{word.bounding_box.height}"}
 
     price_words = PriceDetector.filter(words)
-    price_texts = price_words.map(&:text)
-
-    prices_decimals = price_texts.map { |price_text| BigDecimal.new(price_text.sub(',', '.')) }.uniq
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
@@ -56,9 +53,20 @@ class BillRecognizer
 
     return {} if net_amount.nil?
 
+    # Adapt recognition result to application schema
+    # TODO: Let price calculation produce required format
+    subTotal = net_amount * 100
+    vatTotal = vat_amount * 100
+    total = (subTotal + vatTotal).to_i
+    vatRate =
+      if subTotal != 0
+        (vatTotal * 100 / subTotal).round
+      else
+        0
+      end
+
     {
-      subTotal: '%.2f' % net_amount,
-      vatTotal: '%.2f' % vat_amount,
+      amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date
     }
   end

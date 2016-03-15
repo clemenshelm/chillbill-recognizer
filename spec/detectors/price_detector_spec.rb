@@ -108,7 +108,16 @@ describe PriceDetector, :focus do
     words = price_texts.map { |text| double(text: text) }
 
     prices = PriceDetector.filter(words)
-    price_strings = prices.map { |price| price.to_d.to_s('F') }
+    price_strings = prices.map { |price| '%.2f' % price.to_d }
     expect(price_strings).to eq ['3551.37', '4261.64']
+  end
+
+  it 'recognizes correct prices with a period as decimal separator' do
+    price_texts = %w(10.00 27.20 1.35 1.50 27.34)
+    words = price_texts.map { |text| double(text: text) }
+
+    prices = PriceDetector.filter(words)
+    price_strings = prices.map { |price| '%.2f' % price.to_d }
+    expect(price_strings).to eq price_texts
   end
 end

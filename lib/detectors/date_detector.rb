@@ -1,5 +1,7 @@
+require_relative '../word_list'
+
 class DateDetector
-  SHORT_GERMAN_DATE_REGEX = /^\d+\.\d{2}\.\d+$/
+  SHORT_GERMAN_DATE_REGEX = /^[0123]?\d\.\d{2}\.\d+$/
   FULL_GERMAN_DATE_REGEX = /^\d+\. April \d+/
 
   class DateTerm

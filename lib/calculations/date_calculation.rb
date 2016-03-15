@@ -1,3 +1,5 @@
+require_relative '../detectors/date_detector'
+
 class DateCalculation
   def initialize(words)
     @words = words

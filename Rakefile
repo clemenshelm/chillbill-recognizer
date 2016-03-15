@@ -13,21 +13,7 @@ task :process do
   process(:unprocessed) do |recognition_result, bill, meteor|
     id = recognition_result.delete :id
     puts ["result for bill #{id}:", recognition_result].map(&:to_s).map(&:yellow)
-    # Adapt recognition result to application schema
-    # TODO: Let recognizer produce required format
-    subTotal = (recognition_result[:subTotal].to_f * 100).to_i
-    vatTotal = (recognition_result[:vatTotal].to_f * 100).to_i
-    total = subTotal + vatTotal
-    vatRate =
-      if subTotal != 0
-        vatTotal * 100 / subTotal
-      else
-        0
-      end
-    meteor.write_detection_result(id,
-      amounts: [{total: total, vatRate: vatRate}],
-      invoiceDate: recognition_result[:invoiceDate]
-    )
+    meteor.write_detection_result(recognition_result)
   end
 end
 

@@ -84,4 +84,11 @@ describe DateDetector, :focus do
     dates = DateDetector.filter(words)
     expect(dates.first.text).to eq '23. April 2015'
   end
+
+  it 'does not recognize a number out of a date range' do
+    words = [double(text: '41.14.122')]
+
+    dates = DateDetector.filter(words)
+    expect(dates).to be_empty
+  end
 end
