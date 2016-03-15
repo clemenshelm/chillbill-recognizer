@@ -1,6 +1,6 @@
 require_relative '../../lib/detectors/price_detector'
 
-describe PriceDetector do
+describe PriceDetector, :focus do
   it 'finds prices separated with a comma' do
     words = [
       double(text: 'C'),
@@ -101,5 +101,14 @@ describe PriceDetector do
 
     prices = PriceDetector.filter(words)
     expect(prices).to be_empty
+  end
+
+  it 'recognizes correct prices with a period as thousand separator' do
+    price_texts = %w(3.551,37 4.261,64)
+    words = price_texts.map { |text| double(text: text) }
+
+    prices = PriceDetector.filter(words)
+    price_strings = prices.map { |price| price.to_d.to_s('F') }
+    expect(price_strings).to eq ['3551.37', '4261.64']
   end
 end

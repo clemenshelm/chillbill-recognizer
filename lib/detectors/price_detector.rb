@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'bigdecimal'
 require_relative '../word_list'
 
 class PriceDetector
@@ -20,7 +21,7 @@ class PriceDetector
     end
 
     def to_d
-      BigDecimal.new(text.sub(',', '.'))
+      BigDecimal.new(text.sub('.', '').sub(',', '.'))
     end
   end
 
