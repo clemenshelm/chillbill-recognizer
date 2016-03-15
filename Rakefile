@@ -26,7 +26,7 @@ task :process do
       end
     meteor.write_detection_result(id,
       amounts: [{total: total, vatRate: vatRate}],
-      invoiceDate: invoiceDate
+      invoiceDate: recognition_result[:invoiceDate]
     )
   end
 end
