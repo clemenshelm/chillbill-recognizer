@@ -10,6 +10,8 @@ require_relative './calculations/date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './models/word'
+require_relative './models/price_term'
+require_relative './models/date_term'
 require_relative './config'
 
 class BillRecognizer
@@ -20,6 +22,11 @@ class BillRecognizer
   end
 
   def recognize
+    # Make sure database is empty
+    Word.dataset.delete
+    PriceTerm.dataset.delete
+    DateTerm.dataset.delete
+
     # Download and convert image
     image_file = @retriever.save
     preprocess image_file.path
