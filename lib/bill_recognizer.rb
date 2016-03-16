@@ -32,7 +32,7 @@ class BillRecognizer
     preprocess image_file.path
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
-    hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l deu`
+    hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng`
       .force_encoding('UTF-8')
 
     hocr_doc = Nokogiri::HTML(hocr)
@@ -82,10 +82,10 @@ class BillRecognizer
 
   def preprocess(image_path)
     image = ImageList.new image_path
+    image.fuzz = "99%"
+    image.trim!
     image = image.deskew(0.4)
     image = image.normalize
-    image.fuzz = "99%"
-    image = image.trim
     image.level 0.6 * QuantumRange
     image.write image_path
   end
