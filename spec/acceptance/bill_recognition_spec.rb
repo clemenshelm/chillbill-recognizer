@@ -194,4 +194,14 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 426164, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-02-29'
   end
+
+  it 'recognizes the bill 27zu8ABiEcPTh2ELu', :focus do
+    retriever = SpecCacheRetriever.new(bill_id: '27zu8ABiEcPTh2ELu')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:amounts]).to eq [{total: 8697, vatRate: 0}]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
+  end
 end

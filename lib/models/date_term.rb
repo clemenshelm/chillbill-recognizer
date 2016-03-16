@@ -15,4 +15,17 @@ class DateTerm < Sequel::Model
     self.right = word.right
     self.bottom = word.bottom
   end
+
+  def to_datetime
+    case text
+    when /\d+\.\d+\.\d{4}/
+      DateTime.parse(text)
+    when DateDetector::FULL_GERMAN_DATE_REGEX
+      DateTime.strptime(text, '%d. %B %Y')
+    when DateDetector::FULL_ENGLISH_DATE_REGEX
+      DateTime.strptime(text, '%d %B %Y')
+    else
+      DateTime.strptime(text, '%d.%m.%y')
+    end
+  end
 end
