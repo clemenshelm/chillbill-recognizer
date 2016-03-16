@@ -4,7 +4,7 @@ require_relative '../models/price_term'
 
 class PriceDetector
   def self.filter
-    number_words = Word.all.select { |word| word.text =~ /^[\d,\.]+$/ }
+    number_words = Word.all.select { |word| word.text =~ /^[€\d,\.]+$/ }
 
     # No compound numbers
     possible_prices = number_words.select { |word| !(word.next && word.next.text =~ /^\d/) || word.text =~ /\d+[,\.]/ }
@@ -22,7 +22,7 @@ class PriceDetector
     # for cases like "45", ",", "00"
     words.limit(3).each do |word|
       term.add_word(word)
-      term.save and return if term.text =~ /^\d{1,3}(\.\d{3})?+[,\.]\d{1,3}$/
+      term.save and return if term.text =~ /^€?\d{1,3}(\.\d{3})?+[,\.]\d{1,3}$/
     end
   end
 end

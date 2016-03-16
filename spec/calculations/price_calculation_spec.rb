@@ -86,6 +86,16 @@ describe PriceCalculation do
     expect(prices.vat_amount).to be_nil
   end
 
+  it 'accepts a price term including a € symbol' do
+    PriceTerm.create(text: '€86.97', left: '2355', right: '2528', top: '1790', bottom: '1827')
+    PriceTerm.create(text: '€86.97', left: '2359', right: '2525', top: '1926', bottom: '1962')
+    PriceTerm.create(text: '€86.97', left: '2355', right: '2528', top: '2065', bottom: '2101')
+
+    prices = PriceCalculation.new(PriceTerm.dataset)
+    expect(prices.net_amount).to eq BigDecimal('86.97')
+    expect(prices.vat_amount).to eq BigDecimal('0')
+  end
+
   def word(attributes = {})
     double(:word,
            text: attributes[:text],

@@ -1,18 +1,18 @@
 require 'bigdecimal'
 
 class PriceCalculation
-  def initialize(words)
-    @words = words
+  def initialize(price_terms)
+    @price_terms = price_terms
   end
 
   def net_amount
-    return nil if @words.empty?
+    return nil if @price_terms.empty?
     calculate unless @net_amount
     @net_amount
   end
 
   def vat_amount
-    return nil if @words.empty?
+    return nil if @price_terms.empty?
     calculate unless @vat_amount
     @vat_amount
   end
@@ -27,8 +27,8 @@ class PriceCalculation
 
   def net_and_vat
     # Sort largest to smallest, because we want to find the higest total amount.
-    @words.sort_by(&:to_d).reverse.each do |total_word|
-      remaining_prices = (@words.all - [total_word]).map(&:to_d)
+    @price_terms.sort_by(&:to_d).reverse.each do |total_word|
+      remaining_prices = (@price_terms.all - [total_word]).map(&:to_d)
       # Sort smallest to largest. Otherwise the net amount is easily considered
       # the same as the total amount.
       remaining_prices.reverse.each do |net|
@@ -47,13 +47,13 @@ class PriceCalculation
   def largest_net
     # TODO: This would probably be more robust if the net amount needed to be
     # significantly larger.
-    largest = @words.sort_by { |word| word.height }.last
-    @net_amount = BigDecimal.new(largest.text.sub(',', '.'))
+    largest = @price_terms.sort_by { |word| word.height }.last
+    @net_amount = largest.to_d
     @vat_amount = 0
   end
 
   def right_most_net
-    right_most = @words.sort_by { |price| price.right }.last
+    right_most = @price_terms.sort_by { |price| price.right }.last
     @net_amount = BigDecimal.new(right_most.text.sub(',', '.'))
     @vat_amount = 0
   end

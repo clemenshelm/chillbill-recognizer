@@ -28,6 +28,8 @@ class PriceTerm < Sequel::Model
     dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
     # Replace commas with periods
     dec_text.sub!(',', '.')
+    # Remove currency symbols
+    dec_text.sub!('€', '')
     BigDecimal.new(dec_text)
   end
 end

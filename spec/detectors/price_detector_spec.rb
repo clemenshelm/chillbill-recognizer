@@ -100,4 +100,12 @@ describe PriceDetector, :focus do
     price_strings = prices.map { |price| '%.2f' % price.to_d }
     expect(price_strings).to eq price_texts
   end
+
+  it 'recognizes prices with leading euro symbol' do
+    Word.create(text: '€86.97')
+
+    prices = PriceDetector.filter
+    price_string = '%.2f' % prices.first.to_d
+    expect(price_string).to eq('86.97')
+  end
 end
