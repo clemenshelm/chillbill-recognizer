@@ -22,8 +22,8 @@ task :check do
   require 'colorize'
 
   process(:reviewed) do |recognition_result, bill|
-    attributes = recognition_result.keys
-    correct_result = bill.slice(*attributes)
+    attributes = %i(amounts invoiceDate)
+    correct_result = bill[:accountingRecord].slice(*attributes)
     id = recognition_result.delete(:id)
     if recognition_result == correct_result
       puts "✔︎ bill #{id}".green
