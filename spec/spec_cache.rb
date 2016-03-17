@@ -27,6 +27,8 @@ module SpecCache
     # and the cached file won't be modified for sure.
     tempfile = Tempfile.new(['cached', '.png'])
     IO.copy_stream(png_path, tempfile)
+    # tempfile = Tempfile.new(['cached', '.pdf'])
+    # IO.copy_stream(pdf_path, tempfile)
 
     tempfile
   end

@@ -64,10 +64,10 @@ describe DateDetector, :focus do
   end
 
   it 'detects full German dates' do
-    %w(Wien, 23. April 2015 POMA).each { |text| Word.create(text: text) }
+    %w(Wien, 23. April 2015 POMA 11. März 2016 1).each { |text| Word.create(text: text) }
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2015-04-23']
+    expect(date_strings(dates)).to eq ['2015-04-23', '2016-03-11']
   end
 
   it 'does not recognize a number out of a date range', :focus do
@@ -82,6 +82,21 @@ describe DateDetector, :focus do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-03-09']
+  end
+
+  it 'recognizes a short date with slashes as separators' do
+    %w(1/03/16).map { |text| Word.create(text: text) }
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-03-01']
+  end
+
+  it 'keeps the natural word order' do
+    %w(09 March 2016 1/03/16 09 March 2016).map { |text| Word.create(text: text) }
+
+    dates = DateDetector.filter
+    puts dates.map(&:first_word_id)
+    expect(date_strings(dates)).to eq %w(2016-03-09 2016-03-01 2016-03-09)
   end
 
   def date_strings(date_terms)

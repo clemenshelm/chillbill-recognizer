@@ -108,4 +108,12 @@ describe PriceDetector, :focus do
     price_string = '%.2f' % prices.first.to_d
     expect(price_string).to eq('86.97')
   end
+
+  it 'recognizes a price with a dash as decimal places' do
+    Word.create(text: '1000,-')
+
+    prices = PriceDetector.filter
+    price_string = '%.2f' % prices.first.to_d
+    expect(price_string).to eq('1000.00')
+  end
 end

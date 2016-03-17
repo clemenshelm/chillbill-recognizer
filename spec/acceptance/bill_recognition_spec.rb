@@ -195,7 +195,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq '2016-02-29'
   end
 
-  it 'recognizes the bill 27zu8ABiEcPTh2ELu', :focus do
+  it 'recognizes the bill 27zu8ABiEcPTh2ELu', :afocus do
     retriever = SpecCacheRetriever.new(bill_id: '27zu8ABiEcPTh2ELu')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -203,5 +203,48 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 8697, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
+  end
+
+  it 'recognizes the bill BYnCDzw7nNMFergRW', :afocus do
+    retriever = SpecCacheRetriever.new(bill_id: 'BYnCDzw7nNMFergRW')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:amounts]).to eq [{total: 29674, vatRate: 20}]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
+  end
+
+  it 'recognizes the bill iyt9vLXuFfJhJKwJ5', :afocus do
+    retriever = SpecCacheRetriever.new(bill_id: 'iyt9vLXuFfJhJKwJ5')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    # TODO: The vatRate should be 10, but we don't recognize vatRates without
+    # net amount yet.
+    # expect(bill_attributes[:amounts]).to eq [{total: 29674, vatRate: 10}]
+    expect(bill_attributes[:amounts]).to eq [{total: 790, vatRate: 0}]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
+  end
+
+  it 'recognizes the bill zcEkC9vgfcTv7DBwM', :afocus do
+    retriever = SpecCacheRetriever.new(bill_id: 'zcEkC9vgfcTv7DBwM')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
+  end
+
+  it 'recognizes the bill Etn9rJm4BAa2vnjyq', :afocus do
+    retriever = SpecCacheRetriever.new(bill_id: 'Etn9rJm4BAa2vnjyq')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:amounts]).to eq [{total: 323, vatRate: 20}]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-03-01'
   end
 end

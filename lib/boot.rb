@@ -28,6 +28,7 @@ DB.create_table :date_terms do
   Integer :right
   Integer :top
   Integer :bottom
+  Integer :first_word_id
 end
 
 Sequel::Model.db = DB
