@@ -30,10 +30,13 @@ class BillRecognizer
     # Download and convert image
     image_file = @retriever.save
     preprocess image_file.path
+    # FileUtils.rm('./test.png')
+    # FileUtils.cp(image_file.path, './test.png')
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
-    hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng`
+    hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
       .force_encoding('UTF-8')
+    # puts hocr
 
     hocr_doc = Nokogiri::HTML(hocr)
     hocr_doc.css(".ocrx_word").each do |word_node|
@@ -44,10 +47,10 @@ class BillRecognizer
 
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
-    #puts Word.map(&:text)
+    # puts Word.map(&:text)
 
     price_words = PriceDetector.filter
-    #puts price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
+    # puts price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
@@ -83,12 +86,16 @@ class BillRecognizer
   private
 
   def preprocess(image_path)
-    image = ImageList.new image_path
+    image = Image.read(image_path)[0]
+    background = Image.new(image.columns, image.rows) do |image|
+      image.background_color = '#fff'
+    end
+    image = background.composite(image, Magick::NorthEastGravity, Magick::OverCompositeOp)
     image.fuzz = "99%"
-    image.trim!
     image = image.deskew(0.4)
     image = image.normalize
     image.level 0.6 * QuantumRange
+    image.trim!
     image.write image_path
   end
 end
