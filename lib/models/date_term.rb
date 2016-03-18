@@ -1,5 +1,5 @@
-
 require 'sequel'
+require_relative './term_builder'
 
 # TODO unit test
 class DateTerm < Sequel::Model
@@ -35,7 +35,10 @@ class DateTerm < Sequel::Model
     when /\d+\.\d+\.\d{4}/
       DateTime.parse(text)
     when DateDetector::FULL_GERMAN_DATE_REGEX
-      date_text = text.gsub(/März/, 'March')
+      date_text = text.gsub(/März|Dezember/,
+        'März' => 'March',
+        'Dezember' => 'December'
+      )
       DateTime.strptime(date_text, '%d. %B %Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
@@ -46,50 +49,4 @@ class DateTerm < Sequel::Model
     end
   end
 
-  class TermBuilder
-    attr_reader :words
-    attr_accessor :text
-
-    def initialize(regex:, after_each_word:)
-      @regex = regex
-      @after_each_word = after_each_word
-      @words = []
-      @text = ''
-    end
-
-    def add_word(word)
-      @words << word
-      @text += word.text
-
-      @after_each_word.call(self) if @after_each_word
-
-      matching_text = text.scan(@regex).first
-
-      if matching_text
-        @text = matching_text
-      end
-    end
-
-    def valid?
-      @text =~ @regex
-    end
-
-    def pack!
-      catch(:done) do
-        (1..@words.length).each do |numwords|
-          available_words = @words[-numwords..-1]
-          builder = TermBuilder.new(regex: @regex, after_each_word: @after_each_word)
-
-          available_words.each do |word|
-            builder.add_word(word)
-
-            if builder.valid?
-              @words = builder.words
-              throw :done
-            end
-          end
-        end
-    end
-    end
-  end
 end

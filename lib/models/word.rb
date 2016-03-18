@@ -1,7 +1,10 @@
 require 'sequel'
+require_relative './dimensionable'
 
 # TODO unit test
 class Word < Sequel::Model
+  include Dimensionable
+
   def next
     Word[id + 1]
   end
@@ -11,7 +14,9 @@ class Word < Sequel::Model
     Word.where { id >= selfid }
   end
 
-  def width
-    right - left
+  def follows(other_word)
+    max_space_width = other_word.height
+    # puts "#{text}:: first: #{other_word.right} => space: #{max_space_width} => last: #{other_word.left}"
+    other_word.right + max_space_width >= self.left
   end
 end
