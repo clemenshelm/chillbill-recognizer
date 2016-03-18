@@ -2,10 +2,12 @@ require_relative '../word_list'
 require_relative '../models/date_term'
 
 class DateDetector
-  SHORT_PERIOD_DATE_REGEX = /[0123]?\d\.(?:0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)\.\d+/
-  SHORT_SLASH_DATE_REGEX = /[0123]?\d\/(?:0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)\/\d+/
-  FULL_GERMAN_DATE_REGEX = /\d+\. (?:März|April) \d+/
-  FULL_ENGLISH_DATE_REGEX = /\d+ March \d+/
+  months = ((1..9).map { |n| "0?#{n}" } + (10..12).to_a).join('|')
+  days = ((1..9).map { |n| "0?#{n}" } + (10..31).to_a).join('|')
+  SHORT_PERIOD_DATE_REGEX = /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.\d+)/
+  SHORT_SLASH_DATE_REGEX = /((?:#{days})\/(?:#{months})\/\d+)/
+  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|Dezember) \d+)/
+  FULL_ENGLISH_DATE_REGEX = /(\d+ March \d+)/
 
   def self.filter
     end_number_with_period = -> (term) { term.text += '.' if term.text =~ /\d$/ }
@@ -25,12 +27,15 @@ class DateDetector
 
   def self.find_dates(regex, after_each_word: nil)
     term = DateTerm.new(regex: regex, after_each_word: after_each_word)
+    last_word = nil
 
     Word.each do |word|
-      unless term.new?
+      if term.exists? || (last_word && !word.follows(last_word))
         term = DateTerm.new(regex: regex, after_each_word: after_each_word)
       end
       term.add_word(word)
+
+      last_word = word
 
       if term.valid?
         term.save
