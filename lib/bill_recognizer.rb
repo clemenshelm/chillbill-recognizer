@@ -48,6 +48,7 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # puts Word.map(&:text)
+    # puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # puts price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
