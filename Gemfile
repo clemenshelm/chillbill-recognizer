@@ -39,4 +39,5 @@ end
 group :test do
   gem 'rspec'
   gem 'guard-rspec', require: false
+  gem 'factory_girl', "~> 4.0"
 end
