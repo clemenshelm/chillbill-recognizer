@@ -1,5 +1,5 @@
 # Mostly taken from http://blog.giantswarm.io/getting-started-with-microservices-using-ruby-on-rails-and-docker/
-FROM ruby:2.2.2
+FROM ruby:2.3.1
 
 RUN apt-get update &&  apt-get install -y \
   ghostscript \
