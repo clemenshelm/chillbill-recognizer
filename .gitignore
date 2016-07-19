@@ -2,3 +2,4 @@ spec/image_fixtures/cache/*
 tmp/
 dump.rdb
 docker-compose.yml
+docker-compose-production.yml
