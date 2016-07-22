@@ -29,7 +29,7 @@ class Hub
 
       meteor.collection('bills')
         .on(:added) do |id, bill|
-          puts "bill was added: #{bill}"
+          puts "bill #{id} was added: #{bill}"
           bills[id] = bill
           RecognitionWorker.perform_async id, bill[:imageUrl]
         end

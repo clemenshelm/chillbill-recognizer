@@ -22,6 +22,7 @@ class RecognitionWorker
     recognizer = BillRecognizer.new(image_url: bill_image_url)
     bill_attributes = recognizer.recognize
     bill_attributes[:id] = id
+    puts bill_attributes
     REDIS.publish 'results', bill_attributes.to_json
   end
 end
