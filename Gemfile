@@ -3,6 +3,11 @@ ruby '2.3.1'
 
 # Connects to meteor
 gem 'metybur'
+# There were problems with newer versions of these gems. Somehow the bill id
+# didn't get passed when calling meteor.write_detection_result.
+# TODO: Investigate this issue before updating.
+gem 'eventmachine', '1.0.8'
+gem 'websocket-driver', '0.6.2'
 
 # Sidekiq performs a job for each unprocessed invoice.
 gem 'sidekiq'
