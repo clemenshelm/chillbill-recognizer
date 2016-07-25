@@ -9,13 +9,17 @@ RUN apt-get update &&  apt-get install -y \
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
-RUN mkdir -p /myapp
-WORKDIR /myapp
+ENV APP_HOME /myapp
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
 
-COPY Gemfile /myapp
-COPY Gemfile.lock /myapp
+ADD Gemfile* $APP_HOME/
+
+ENV BUNDLE_GEMFILE=$APP_HOME/Gemfile \
+  BUNDLE_JOBS=2 \
+  BUNDLE_PATH=/bundle
 
 # Should be RUN bundle install --deployment for production
 RUN bundle install
 
-COPY . /myapp
+ADD . /myapp
