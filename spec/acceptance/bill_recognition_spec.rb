@@ -10,6 +10,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 4685, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-04'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU17008805'
   end
 
   it 'recognizes the bill H9WCDhBHp2N7xRLoA' do
@@ -20,6 +21,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
+    expect(bill_attributes[:vatNumber]).to eq 'ATU18125703'
   end
 
   it 'recognizes the bill 8r74b2CqZpW5c8oev' do
@@ -29,6 +31,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 5400, vatRate: 20}]
+    expect(bill_attributes[:vatNumber]).to eq 'ATU52569000'
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
@@ -41,6 +44,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 1541, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
@@ -51,6 +55,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 3600, vatRate: 0}]
+    # No VAT Number
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f', :afocus do
@@ -61,6 +66,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 9487, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU45011703'
   end
 
   it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
@@ -70,6 +76,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 8000, vatRate: 0}]
+    # No VAT Number
   end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
