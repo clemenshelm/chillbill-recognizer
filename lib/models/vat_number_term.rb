@@ -30,9 +30,6 @@ class VatNumberTerm < Sequel::Model
   end
 
   def to_s
-    case text
-    when VatNumberDetector::AUSTRIAN_REGEX
-      vatnumber_text = text.gsub(/\s+/, "")
-    end
+    text
   end
 end

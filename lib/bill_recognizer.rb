@@ -7,14 +7,14 @@ require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
-require_relative './calculations/vatnumber_calculation'
+require_relative './calculations/vat_number_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
-require_relative './detectors/vatnumber_detector'
+require_relative './detectors/vat_number_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
-require_relative './models/vatnumber_term'
+require_relative './models/vat_number_term'
 require_relative './config'
 
 class BillRecognizer
@@ -51,8 +51,8 @@ class BillRecognizer
 
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
-    # puts Word.map(&:text)
-    # puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    #  puts Word.map(&:text)
+    puts Word.map { |word| "text: '#{word.text}', left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # puts price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
@@ -66,8 +66,8 @@ class BillRecognizer
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
     end
 
-    vatnumber_words = VatNumberDetector.filter
-    vat_number = VatNumberCalculation.new(vatnumber_words).vat_number
+    vat_number_words = VatNumberDetector.filter
+    vat_number = VatNumberCalculation.new(vat_number_words).vat_number
 
     #image_file.close
 

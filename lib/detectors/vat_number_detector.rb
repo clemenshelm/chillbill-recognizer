@@ -1,20 +1,19 @@
 require_relative '../word_list'
-require_relative '../models/vatnumber_term'
+require_relative '../models/vat_number_term'
 
 class VatNumberDetector
 
-  AUSTRIAN_VAT_REGEX = /ATU\d{8}/
+  AUSTRIAN_VAT_REGEX = /ATU\s*\d{8}/
 
   def self.filter
-    find_vatnumber(AUSTRIAN_VAT_REGEX)
-
+    find_vat_number(AUSTRIAN_VAT_REGEX)
     VatNumberTerm.dataset
   end
 
 
   private
 
-  def self.find_vatnumber(regex, after_each_word: nil)
+  def self.find_vat_number(regex, after_each_word: nil)
     term = VatNumberTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil
 
@@ -25,7 +24,6 @@ class VatNumberDetector
       term.add_word(word)
 
       last_word = word
-
       if term.valid?
         term.save
       end
