@@ -20,8 +20,9 @@ require_relative './config'
 class BillRecognizer
   include Magick
 
-  def initialize(image_url: nil, retriever: nil)
+  def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
     @retriever = retriever || BillImageRetriever.new(url: image_url)
+    @customer_vat_number = customer_vat_number
   end
 
   def recognize
@@ -67,7 +68,10 @@ class BillRecognizer
     end
 
     vat_number_words = VatNumberDetector.filter
-    vat_number = VatNumberCalculation.new(vat_number_words).vat_number
+    vat_number = VatNumberCalculation.new(
+      vat_number_words,
+      customer_vat_number: @customer_vat_number
+    ).vat_number
 
     #image_file.close
 
@@ -88,7 +92,7 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
+      vatNumber: vat_number,
     }
   end
 
