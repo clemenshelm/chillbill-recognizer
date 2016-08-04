@@ -266,7 +266,7 @@ describe 'Recognizing bills correctly' do
     # No VAT Number
   end
 
-  it 'recognizes the bill Etn9rJm4BAa2vnjyq', :focus do
+  it 'recognizes the bill Etn9rJm4BAa2vnjyq' do
     retriever = SpecCacheRetriever.new(bill_id: 'Etn9rJm4BAa2vnjyq')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -297,21 +297,27 @@ describe 'Recognizing bills correctly' do
   #   expect(bill_attributes[:vatNumber]).to eq 'ATU19420008'
   # end
 
-  it 'recognizes the bill' do
-    retriever = SpecCacheRetriever.new(bill_id: 'NfnEvEyFM4QhRh6T9')
-    recognizer = BillRecognizer.new(retriever: retriever, customer_vat_number: 'ATU67760915')
+  it 'recognizes the bill with two VAT ID numbers', :focus do
+    retriever = SpecCacheRetriever.new(bill_id: 'wrj8fiNZQYjymoocT')
+    recognizer = BillRecognizer.new(
+      retriever: retriever,
+      customer_vat_number: 'ATU62684036'
+    )
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
+    expect(bill_attributes[:vatNumber]).to eq 'IE6388047V'
   end
 
   # Access denied:
+  # - Ikea
   # kChB4ZsxN4KM62vJ8
   # MtS2JshMxa5v6N6cK
   # YRKz6aQ9cHrfz7WFx
   # RXLFDho9gEeN5n9J6
   # 4n2eQ5qG7egxbu6eF
   # ewfmsGvHQ3sQbrd4Q
+  # - Atlassian
+  # YEP5HfG2LHeBRjZf
 
   # Didn't read bill?
   # K7EuYmoyZyspSHziT

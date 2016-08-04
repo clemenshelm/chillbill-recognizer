@@ -30,9 +30,10 @@ class VatNumberDetector
       if term.exists? || (last_word && !word.follows(last_word))
         term = VatNumberTerm.new(regex: regex, after_each_word: after_each_word)
       end
-      term.add_word(word)
 
+      term.add_word(word)
       last_word = word
+      
       if term.valid?
         term.save
       end
