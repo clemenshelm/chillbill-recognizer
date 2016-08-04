@@ -298,7 +298,7 @@ describe 'Recognizing bills correctly' do
   # end
 
   it 'recognizes the bill', :focus do
-    retriever = SpecCacheRetriever.new(bill_id: 'P4iqP2vSPzgrR4akw')
+    retriever = SpecCacheRetriever.new(bill_id: 'NfnEvEyFM4QhRh6T9')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize

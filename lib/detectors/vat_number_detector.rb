@@ -4,9 +4,11 @@ require_relative '../models/vat_number_term'
 class VatNumberDetector
 
   AUSTRIAN_VAT_REGEX = /ATU\s*\d{8}/
+  EU_VAT_REGEX = /EU\s*\d{9}/
 
   def self.filter
     find_vat_number(AUSTRIAN_VAT_REGEX)
+    find_vat_number(EU_VAT_REGEX)
     VatNumberTerm.dataset
   end
 
