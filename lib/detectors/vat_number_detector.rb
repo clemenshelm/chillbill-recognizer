@@ -5,8 +5,10 @@ class VatNumberDetector
 
   AUSTRIAN_VAT_REGEX = /ATU\s*\d{8}/
   EU_VAT_REGEX = /EU\s*\d{9}/
+  LUXEMBURG_VAT_REGEX = /LU\s*\d{8}/
 
   def self.filter
+    find_vat_number(LUXEMBURG_VAT_REGEX) # This one is run first because Amazon uses two VAT IDs and we need their LU ID.
     find_vat_number(AUSTRIAN_VAT_REGEX)
     find_vat_number(EU_VAT_REGEX)
     VatNumberTerm.dataset
