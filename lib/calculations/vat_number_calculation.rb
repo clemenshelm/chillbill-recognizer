@@ -8,7 +8,7 @@ class VatNumberCalculation
 
   def vat_number
     return nil if @words.empty?
-    @words.to_s
+    @words.first.to_s
   end
 
   # Can implement for 2nd VAT ID number here
