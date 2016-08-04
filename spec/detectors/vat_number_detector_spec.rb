@@ -42,13 +42,23 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['EU372001951']
   end
 
-  it "recognizes an Luxemburg VAT ID number", :focus do
-    create( :word, text: 'Umsatzsteueridentifikationsnummer:', left: 1621, right: 2138, top: 2492, bottom: 2516)
-    create( :word, text: 'LU20260743', left: 2157, right: 2331, top: 2494, bottom: 2516)
-    create( :word, text: 'USt-ID', left: 1151, right: 1244, top: 2527, bottom: 2548)
-    create( :word, text: ':', left: 1260, right: 1264, top: 2532, bottom: 2548)
+  it "recognizes a Luxemburg VAT ID number", :focus do
+    create(:word, text: 'Umsatzsteueridentifikationsnummer:', left: 1621, right: 2138, top: 2492, bottom: 2516)
+    create(:word, text: 'LU20260743', left: 2157, right: 2331, top: 2494, bottom: 2516)
+    create(:word, text: 'USt-ID', left: 1151, right: 1244, top: 2527, bottom: 2548)
+    create(:word, text: ':', left: 1260, right: 1264, top: 2532, bottom: 2548)
 
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq ['LU20260743']
+  end
+
+  it "recognizes a German VAT ID number", :focus do
+    create(:word, text: 'USt-ID', left: 1227, right: 1335, top: 2793, bottom: 2820)
+    create(:word, text: ':', left: 1353, right: 1357, top: 2800, bottom: 2819)
+    create(:word, text: 'DE814584193', left: 1376, right: 1604, top: 2792, bottom: 2819)
+    create(:word, text: 'LU-BlO-04', left: 1329, right: 1501, top: 2831, bottom: 2858)
+
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to eq ['DE814584193']
   end
 end
