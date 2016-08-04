@@ -25,7 +25,8 @@ class VatNumberDetector
     term = VatNumberTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil
 
-    Word.each do |word|
+    median_height = Word.map(&:height).sort[Word.count / 2]
+    Word.where('bottom - top <= ?', median_height).each do |word|
       if term.exists? || (last_word && !word.follows(last_word))
         term = VatNumberTerm.new(regex: regex, after_each_word: after_each_word)
       end
