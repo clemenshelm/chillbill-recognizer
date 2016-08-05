@@ -63,7 +63,7 @@ describe VatNumberDetector do
   end
 
   # This test has a large number of samples so it can calculate a realistic median font height
-  it "recognizes Irish VAT ID number broken by a line break", :focus do
+  it "recognizes Irish VAT ID number broken by a line break" do
     create(:word, text: 'Umsatzsteuer-Identitikationsnummer:', left: 1821, right: 2483, top: 368, bottom: 398)
     create(:word, text: 'IE', left: 2500, right: 2534, top: 368, bottom: 398)
     create(:word, text: 'Rec', left: 7, right: 181, top: 362, bottom: 437)
@@ -94,4 +94,16 @@ describe VatNumberDetector do
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq ['IE6388047V']
   end
+
+
+    it "recognizes a VAT ID number where number is larger font", :focus do
+      create(:word, text: 'Wien', left: 2229, right: 2293, top: 301, bottom: 327)
+      create(:word, text: 'ATU', left: 2130, right: 2177, top: 339, bottom: 363)
+      create(:word, text: '37893801', left: 2196, right: 2323, top: 338, bottom: 365)
+      create(:word, text: 'EUR', left: 2505, right: 2553, top: 379, bottom: 404)
+
+      vat_numbers = VatNumberDetector.filter
+      expect(vat_numbers.map(&:to_s)).to eq ['ATU37893801']
+    end
+
 end

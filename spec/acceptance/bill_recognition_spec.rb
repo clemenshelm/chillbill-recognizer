@@ -298,14 +298,14 @@ describe 'Recognizing bills correctly' do
   # end
 
   it 'recognizes the bill with two VAT ID numbers', :focus do
-    retriever = SpecCacheRetriever.new(bill_id: 'wrj8fiNZQYjymoocT')
+    retriever = SpecCacheRetriever.new(bill_id: 'DvHErYSuLorcmcBk2')
     recognizer = BillRecognizer.new(
       retriever: retriever,
-      customer_vat_number: 'ATU62684036'
+      customer_vat_number: ''
     )
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:vatNumber]).to eq 'IE6388047V'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU37893801'
   end
 
   # Access denied:
