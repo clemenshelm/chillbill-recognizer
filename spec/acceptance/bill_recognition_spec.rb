@@ -79,7 +79,6 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 8000, vatRate: 0}]
-    # No VAT Number
   end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
@@ -90,7 +89,6 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 35000, vatRate: 0}]
-    # No VAT Number
   end
 
   it 'recognizes the bill dXNmKuRyhwYeNQjbb' do
@@ -101,7 +99,6 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 2734, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-03'
-    # No VAT Number
   end
 
   it 'recognizes the bill JRTan9t5Fuo7qE3y4' do
@@ -227,7 +224,6 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 8697, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
-    # No VAT Number
   end
 
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
@@ -263,7 +259,6 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
-    # No VAT Number
   end
 
   it 'recognizes the bill Etn9rJm4BAa2vnjyq' do
@@ -277,48 +272,14 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU41472107'
   end
 
-# Bill with two VATS
-  # it 'recognizes the bill' do
-  #   retriever = SpecCacheRetriever.new(bill_id: '795SDqRnoorMG6kCu')
-  #   recognizer = BillRecognizer.new(retriever: retriever)
-  #
-  #   bill_attributes = recognizer.recognize
-  #
-  #   expect(bill_attributes[:vatNumber]).to eq 'ATU19420008'
-  # end
-
-# Bill with two VATS
-  # it 'recognizes the bill', :focus do
-  #   retriever = SpecCacheRetriever.new(bill_id: 'nTLCzkEJqkfN3HCQt')
-  #   recognizer = BillRecognizer.new(retriever: retriever)
-  #
-  #   bill_attributes = recognizer.recognize
-  #
-  #   expect(bill_attributes[:vatNumber]).to eq 'ATU19420008'
-  # end
-
-  it 'recognizes the bill with two VAT ID numbers', :focus do
-    retriever = SpecCacheRetriever.new(bill_id: 'DvHErYSuLorcmcBk2')
+  it 'recognizes the bill a5b4acuqNNoQg9nh9', :focus do
+    retriever = SpecCacheRetriever.new(bill_id: 'a5b4acuqNNoQg9nh9')
     recognizer = BillRecognizer.new(
       retriever: retriever,
-      customer_vat_number: ''
+      customer_vat_number: 'ATU67760915'
     )
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:vatNumber]).to eq 'ATU37893801'
+    expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
   end
-
-  # Access denied:
-  # - Ikea
-  # kChB4ZsxN4KM62vJ8
-  # MtS2JshMxa5v6N6cK
-  # YRKz6aQ9cHrfz7WFx
-  # RXLFDho9gEeN5n9J6
-  # 4n2eQ5qG7egxbu6eF
-  # ewfmsGvHQ3sQbrd4Q
-  # - Atlassian
-  # YEP5HfG2LHeBRjZf
-
-  # Didn't read bill?
-  # K7EuYmoyZyspSHziT
 end

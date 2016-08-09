@@ -32,7 +32,7 @@ describe VatNumberDetector do
   end
 
 
-  it "recognizes an Austrian VAT ID number" do
+  it "recognizes an EU VAT ID number" do
     create(:word, text: 'Number:', left: 2272, right: 2458, top: 0, bottom: 36)
     create(:word, text: 'EU372001951', left: 2479, right: 2789, top: 0, bottom: 36)
     create(:word, text: 'summary', left: 79, right: 531, top: 112, bottom: 208)
@@ -94,7 +94,6 @@ describe VatNumberDetector do
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq ['IE6388047V']
   end
-
 
     it "recognizes a VAT ID number where number is larger font", :focus do
       create(:word, text: 'Wien', left: 2229, right: 2293, top: 301, bottom: 327)

@@ -33,7 +33,6 @@ class VatNumberDetector
 
       term.add_word(word)
       last_word = word
-      # binding.pry
       if term.valid?
         term.save
       end
