@@ -3,11 +3,11 @@ require_relative '../models/vat_number_term'
 
 class VatNumberDetector
 
-  AUSTRIAN_VAT_REGEX = /ATU\s*\d{8}/
-  EU_VAT_REGEX = /EU\s*\d{9}/
-  LUXEMBURG_VAT_REGEX = /LU\s*\d{8}/
-  GERMAN_VAT_REGEX = /DE\s*\d{9}/
-  IRISH_VAT_REGEX = /IE\s*\d{7}[A-Z]/
+  AUSTRIAN_VAT_REGEX = /ATU\d{8}/
+  EU_VAT_REGEX = /EU\d{9}/
+  LUXEMBURG_VAT_REGEX = /LU\d{8}/
+  GERMAN_VAT_REGEX = /DE\d{9}/
+  IRISH_VAT_REGEX = /IE\d{7}[A-Z]/
 
   def self.filter
     find_vat_number(LUXEMBURG_VAT_REGEX) # This one is run first because Amazon uses two VAT IDs and we need their LU ID.
