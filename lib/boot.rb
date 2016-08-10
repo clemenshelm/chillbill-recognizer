@@ -31,4 +31,13 @@ DB.create_table :date_terms do
   Integer :first_word_id
 end
 
+DB.create_table :vat_number_terms do
+  primary_key :id
+  String :text
+  Integer :left
+  Integer :right
+  Integer :top
+  Integer :bottom
+end
+
 Sequel::Model.db = DB
