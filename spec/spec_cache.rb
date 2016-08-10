@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'open-uri'
-require '../config/logger.rb'
 
 module SpecCache
   def cache_file(file_name)
@@ -42,7 +41,7 @@ module SpecCache
       IO.copy_stream(image_path, tempfile)
       tempfile
     else
-      logger.warning("Unknown data type")
+      # logger.warning("Unknown data type")
     end
   end
 end

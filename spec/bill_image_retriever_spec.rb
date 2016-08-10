@@ -39,7 +39,7 @@ describe BillImageRetriever do
     expect(File.read(image_path, mode: 'rb')[0..50]).to eq File.read(file.path, mode: 'rb')[0..50]
   end
 
-  it 'saves a jpg as an image' do
+  it 'saves a jpg billas an image' do
     file_id = '47SBGiQfJ4FhXoco7'
     file_url = "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.jpg"
     file_basename = File.basename file_url
@@ -51,7 +51,7 @@ describe BillImageRetriever do
     expect(File.read(image_path, mode: 'rb')[0..50]).to eq File.read(file.path, mode: 'rb')[0..50]
   end
 
-  it 'saves a JPG as an image' do
+  it 'saves a JPG bill as an image' do
     file_id = 'nHX9eYu9pwiFCjSoL'
     file_url = "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.JPG"
     file_basename = File.basename file_url

@@ -3,7 +3,7 @@ require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing ChillBill’s bills correctly' do
   it 'recognizes the bill gANywe3fjvx98iPp2' do
-    retriever = SpecCacheRetriever.new(bill_id: 'gANywe3fjvx98iPp2')
+    retriever = SpecCacheRetriever.new(file_basename: 'gANywe3fjvx98iPp2')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
@@ -13,7 +13,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
   end
 
   it 'recognizes the bill MM4o4pPK9Ttp2MqvJ' do
-    retriever = SpecCacheRetriever.new(bill_id: 'MM4o4pPK9Ttp2MqvJ')
+    retriever = SpecCacheRetriever.new(file_basename: 'MM4o4pPK9Ttp2MqvJ')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
@@ -23,7 +23,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
   end
 
   it 'recognizes the bill wrj8fiNZQYjymoocT' do
-    retriever = SpecCacheRetriever.new(bill_id: 'wrj8fiNZQYjymoocT')
+    retriever = SpecCacheRetriever.new(file_basename: 'wrj8fiNZQYjymoocT')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
@@ -33,7 +33,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
   end
 
   it 'recognizes the bill 7Nvce6pPniK3BCCA7' do
-    retriever = SpecCacheRetriever.new(bill_id: '7Nvce6pPniK3BCCA7')
+    retriever = SpecCacheRetriever.new(file_basename: '7Nvce6pPniK3BCCA7')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
