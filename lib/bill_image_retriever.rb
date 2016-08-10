@@ -2,6 +2,7 @@ require 'tempfile'
 require 'grim'
 require 'open-uri'
 require 'aws-sdk'
+require_relative '../config/logger.rb'
 
 
 class BillImageRetriever
@@ -14,7 +15,7 @@ class BillImageRetriever
     puts "bucket: #{bucket}, region: #{region}, key: #{key}"
 
     file_basename = File.basename key
-    file_extension = File.extname  file_basename.downcase!
+    file_extension = File.extname file_basename.downcase!
     bill_id = File.basename file_basename, file_extension
 
     case file_extension
@@ -36,7 +37,7 @@ class BillImageRetriever
 
       image_file
     else
-      # logger.warning("Unknow data type")
+      LOGGER.warn("Unknow data type")
     end
   end
 end
