@@ -22,7 +22,7 @@ task :check do
   require 'colorize'
 
   process(:reviewed) do |recognition_result, bill|
-    attributes = %i(amounts invoiceDate)
+    attributes = %i(amounts invoiceDate vatNumber)
     correct_result = bill[:accountingRecord].slice(*attributes)
     id = recognition_result.delete(:id)
     if recognition_result == correct_result

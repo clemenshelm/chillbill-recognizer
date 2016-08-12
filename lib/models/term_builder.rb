@@ -20,7 +20,7 @@ class TermBuilder
     # puts "groups: #{matching_groups.inspect}"
 
     if matching_groups
-      @text = matching_groups.first
+      @text = Array(matching_groups).first
     end
   end
 
