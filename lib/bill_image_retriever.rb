@@ -18,12 +18,12 @@ class BillImageRetriever
     file_extension = File.extname file_basename.downcase!
     bill_id = File.basename file_basename, file_extension
 
+    image_file = Tempfile.new ['bill', file_extension]
+    s3 = Aws::S3::Client.new(region: region)
+    s3.get_object(bucket: bucket, key: key, response_target: image_file)
+
     case file_extension
     when ".pdf"
-      pdf_file = Tempfile.new ['bill', '.pdf']
-      s3 = Aws::S3::Client.new(region: region)
-      s3.get_object(bucket: bucket, key: key, response_target: pdf_file)
-
       image_file = Tempfile.new ['bill', '.png']
       pdf = Grim.reap(pdf_file.path)
       pdf[0].save(image_file.path, width: 3000, quality: 100)
@@ -31,10 +31,6 @@ class BillImageRetriever
 
       image_file
     when ".png", ".jpg", ".jpeg"
-      image_file = Tempfile.new ['bill', file_extension]
-      s3 = Aws::S3::Client.new(region: region)
-      s3.get_object(bucket: bucket, key: key, response_target: image_file)
-
       image_file
     else
       LOGGER.warn("Unknow data type")
