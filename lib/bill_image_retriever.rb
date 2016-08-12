@@ -16,7 +16,6 @@ class BillImageRetriever
 
     file_basename = File.basename key
     file_extension = File.extname file_basename.downcase!
-    bill_id = File.basename file_basename, file_extension
 
     image_file = Tempfile.new ['bill', file_extension]
     s3 = Aws::S3::Client.new(region: region)
