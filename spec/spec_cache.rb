@@ -19,7 +19,7 @@ module SpecCache
       s3.get_object(bucket: bucket, key: "#{file_basename}", response_target: path)
     end
 
-    file_extension = File.extname file_basename.downcase!
+    file_extension = File.extname file_basename.downcase
     case file_extension
     when ".pdf"
       bill_id = File.basename file_basename, file_extension
