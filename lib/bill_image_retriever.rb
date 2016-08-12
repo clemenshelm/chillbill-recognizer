@@ -14,8 +14,7 @@ class BillImageRetriever
     _, bucket, region, key = @url.match(%r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}).to_a
     puts "bucket: #{bucket}, region: #{region}, key: #{key}"
 
-    file_basename = File.basename key
-    file_extension = File.extname file_basename.downcase!
+    file_extension = File.extname key.downcase
 
     image_file = Tempfile.new ['bill', file_extension]
     s3 = Aws::S3::Client.new(region: region)

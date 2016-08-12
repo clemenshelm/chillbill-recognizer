@@ -276,7 +276,7 @@ describe 'Recognizing bills correctly' do
     # If it doesn't throw an exception, it works
   end
 
-  it 'recognizes the bill nHX9eYu9pwiFCjSoL', :focus do
+  it 'recognizes the bill nHX9eYu9pwiFCjSoL' do
     retriever = SpecCacheRetriever.new(file_basename: 'nHX9eYu9pwiFCjSoL.JPG')
     recognizer = BillRecognizer.new(retriever: retriever)
 
