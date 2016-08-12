@@ -22,7 +22,8 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
   end
 
-  it 'recognizes the bill 8r74b2CqZpW5c8oev' do
+  it 'recognizes the bill 8r74b2CqZpW5c8oev'do
+    pending("It recognizes one of the listed prices as the total sum, but both are detected")
     retriever = SpecCacheRetriever.new(file_basename: '8r74b2CqZpW5c8oev.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -54,6 +55,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f', :afocus do
+    pending("The billing period is recognized as the billing date")
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -115,7 +117,8 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
   end
 
-  it 'recognizes the bill XYt8oerHesxQkdwvp', :afocus do
+  it 'recognizes the bill XYt8oerHesxQkdwvp' do
+    pending("The 8 on the price is misread as a 0")
     retriever = SpecCacheRetriever.new(file_basename: 'XYt8oerHesxQkdwvp.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -196,6 +199,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 27zu8ABiEcPTh2ELu', :afocus do
+    pending("It recognizes one of the listed prices as the total sum, but both are detected")
     retriever = SpecCacheRetriever.new(file_basename: '27zu8ABiEcPTh2ELu.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 

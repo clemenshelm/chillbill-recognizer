@@ -22,16 +22,16 @@ class BillImageRetriever
 
     case file_extension
     when ".pdf"
-      image_file = Tempfile.new ['bill', '.png']
-      pdf = Grim.reap(pdf_file.path)
-      pdf[0].save(image_file.path, width: 3000, quality: 100)
-      pdf_file.close!
+      png_file = Tempfile.new ['bill', '.png']
+      pdf = Grim.reap(image_file.path)
+      pdf[0].save(png_file.path, width: 3000, quality: 100)
+      image_file.close!
 
-      image_file
+      png_file
     when ".png", ".jpg", ".jpeg"
       image_file
     else
-      LOGGER.warn("Unknow data type")
+      LOGGER.warn("Unknow data type, " + file_extension)
     end
   end
 end
