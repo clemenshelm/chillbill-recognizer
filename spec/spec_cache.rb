@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'open-uri'
+require_relative '../config/logger.rb'
 
 module SpecCache
   def cache_file(file_name)
@@ -10,26 +11,38 @@ module SpecCache
     file_path
   end
 
-  def cache_png(bill_id)
+  def cache_image(file_basename)
     bucket = 'chillbill-prod'
     region = 'eu-central-1'
-    pdf_path = cache_file("#{bill_id}.pdf") do |path|
+    image_path = cache_file("#{file_basename}") do |path|
       s3 = Aws::S3::Client.new(region: region)
-      s3.get_object(bucket: bucket, key: "#{bill_id}.pdf", response_target: path)
+      s3.get_object(bucket: bucket, key: "#{file_basename}", response_target: path)
     end
 
-    png_path = cache_file("#{bill_id}.png") do |path|
-      pdf = Grim.reap(pdf_path)
-      pdf[0].save(path, width: 3000, quality: 100)
+    file_extension = File.extname file_basename.downcase
+    case file_extension
+    when ".pdf"
+      bill_id = File.basename file_basename, file_extension
+      png_path = cache_file("#{bill_id}.png") do |path|
+        pdf = Grim.reap(image_path)
+        pdf[0].save(path, width: 3000, quality: 100)
+      end
+
+      # Put the PNG into a tempfile so it can savely be overwritten
+      # and the cached file won't be modified for sure.
+      tempfile = Tempfile.new(['cached', '.png'])
+      IO.copy_stream(png_path, tempfile)
+      # tempfile = Tempfile.new(['cached', '.pdf'])
+      # IO.copy_stream(image_path, tempfile)
+
+      tempfile
+
+    when ".png", ".jpeg", ".jpg"
+      tempfile = Tempfile.new(['cached', file_extension])
+      IO.copy_stream(image_path, tempfile)
+      tempfile
+    else
+      LOGGER.warn("Unknown data type")
     end
-
-    # Put the PNG into a tempfile so it can savely be overwritten
-    # and the cached file won't be modified for sure.
-    tempfile = Tempfile.new(['cached', '.png'])
-    IO.copy_stream(png_path, tempfile)
-    # tempfile = Tempfile.new(['cached', '.pdf'])
-    # IO.copy_stream(pdf_path, tempfile)
-
-    tempfile
   end
 end

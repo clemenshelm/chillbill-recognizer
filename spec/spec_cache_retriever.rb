@@ -3,11 +3,11 @@ require_relative './spec_cache'
 class SpecCacheRetriever
   include SpecCache
 
-  def initialize(bill_id:)
-    @bill_id = bill_id  
+  def initialize(file_basename:)
+    @file_basename = file_basename
   end
 
   def save
-    cache_png(@bill_id)
+    cache_image(@file_basename)
   end
 end
