@@ -32,6 +32,9 @@ gem 'aws-sdk', '~> 2'
 gem 'sqlite3'
 gem 'sequel'
 
+# A logger which does nothing is the default
+gem 'null-logger'
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output

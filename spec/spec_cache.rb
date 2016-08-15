@@ -1,8 +1,10 @@
 require 'fileutils'
 require 'open-uri'
-require_relative '../config/logger.rb'
+require_relative '../lib/logging.rb'
 
 module SpecCache
+  include Logging
+
   def cache_file(file_name)
     dir = File.expand_path("../../tmp/spec_cache/", __FILE__)
     FileUtils.mkdir_p dir
@@ -42,7 +44,7 @@ module SpecCache
       IO.copy_stream(image_path, tempfile)
       tempfile
     else
-      LOGGER.warn("Unknown data type")
+      logger.warn("Unknown data type")
     end
   end
 end

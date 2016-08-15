@@ -1,4 +1,7 @@
+require_relative '../logging'
+
 class TermBuilder
+  include Logging
   attr_reader :words
   attr_accessor :text
 
@@ -16,8 +19,8 @@ class TermBuilder
     @after_each_word.call(self) if @after_each_word
 
     matching_groups = text.scan(@regex).first
-    # puts "text: #{@text}"
-    # puts "groups: #{matching_groups.inspect}"
+    # logger.debug "text: #{@text}"
+    # logger.debug "groups: #{matching_groups.inspect}"
 
     if matching_groups
       @text = Array(matching_groups).first
