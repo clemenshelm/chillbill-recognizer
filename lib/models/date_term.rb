@@ -1,5 +1,6 @@
 require 'sequel'
 require_relative './term_builder'
+require_relative '../detectors/date_detector'
 
 # TODO unit test
 class DateTerm < Sequel::Model

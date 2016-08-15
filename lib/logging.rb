@@ -1,3 +1,5 @@
+require 'null_logger'
+
 module Logging
   class << self
     def logger

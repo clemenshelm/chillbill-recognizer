@@ -95,7 +95,7 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['IE6388047V']
   end
 
-  it "recognizes a VAT ID number where number is larger font", :focus do
+  it "recognizes a VAT ID number where number is larger font" do
     create(:word, text: 'Wien', left: 2229, right: 2293, top: 301, bottom: 327)
     create(:word, text: 'ATU', left: 2130, right: 2177, top: 339, bottom: 363)
     create(:word, text: '37893801', left: 2196, right: 2323, top: 338, bottom: 365)

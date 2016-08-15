@@ -88,7 +88,7 @@ describe DateDetector do
     expect(date_strings(dates)).to eq %w(2015-04-23 2016-03-11 2015-12-04)
   end
 
-  it 'does not recognize a number out of a date range', :focus do
+  it 'does not recognize a number out of a date range' do
     %w(41.14.122).map { |text| create(:word, text: text) }
 
     dates = DateDetector.filter
