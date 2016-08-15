@@ -94,7 +94,7 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vatNumber
+      vatNumber: vat_number
     }
   end
 

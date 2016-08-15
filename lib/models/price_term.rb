@@ -16,7 +16,7 @@ class PriceTerm < Sequel::Model
 
   def before_create
     @term_builder.pack!
-    self.text = @term_builder.text
+    self.text ||= @term_builder.text
   end
 
   def add_word(word)
