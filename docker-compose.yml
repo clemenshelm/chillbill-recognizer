@@ -1,0 +1,56 @@
+redis:
+  image: redis
+
+rediscli:
+  build: .
+  dockerfile: Dockerfile-redistools
+  links:
+    - redis
+  command: redis-cli -h redis
+
+sidekiq:
+  build: .
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
+  links:
+    - redis
+  env_file: .env
+  command: bundle exec sidekiq -r ./sidekiq.rb
+
+processor:
+  build: .
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
+  links:
+    - redis
+  env_file: .env
+  command: bundle exec rake process
+
+checker:
+  build: .
+  volumes:
+      - .:/myapp
+  volumes_from:
+    - bundle
+  links:
+    - redis
+  env_file: .env
+  command: bundle exec rake check
+
+tests:
+  build: .
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
+  env_file: .env-rspec
+
+# Data container to contain bundled gems
+bundle:
+  image: busybox
+  volumes:
+    - /bundle

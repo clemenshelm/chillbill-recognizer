@@ -1,0 +1,33 @@
+redis:
+  image: redis
+  mem_limit: 80000000
+  log_driver: awslogs
+  log_opt:
+    "awslogs-group": redis
+    "awslogs-region": eu-central-1
+
+sidekiq:
+  image: 175255700812.dkr.ecr.eu-west-1.amazonaws.com/recognizer-repo
+  links:
+    - redis
+  mem_limit: 2800000000
+  env_file:
+    - .env
+  log_driver: awslogs
+  log_opt:
+    "awslogs-group": sidekiq
+    "awslogs-region": eu-central-1
+  command: bundle exec sidekiq -r ./sidekiq.rb
+
+processor:
+  image: 175255700812.dkr.ecr.eu-west-1.amazonaws.com/recognizer-repo
+  mem_limit: 250000000
+  links:
+    - redis
+  env_file:
+    - .env
+  log_driver: awslogs
+  log_opt:
+    "awslogs-group": processor
+    "awslogs-region": eu-central-1
+  command: bundle exec rake process
