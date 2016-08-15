@@ -3,8 +3,11 @@ require 'metybur'
 require 'em-hiredis'
 require_relative '../sidekiq'
 require 'sidekiq/api'
+require_relative './logging'
 
 class Hub
+  include Logging
+
   def initialize(bills: 'unprocessed', config:)
     @bills = bills
     @config = config
@@ -16,7 +19,7 @@ class Hub
     EventMachine.run do
       redis = EM::Hiredis.connect 'redis://redis:6379'
       Sidekiq::Queue.new.clear # Delete all sidekiq jobs
-      puts 'running'
+      logger.debug 'running'
 
       Metybur.log_level = :debug
       meteor = Metybur.connect(
@@ -29,7 +32,7 @@ class Hub
 
       meteor.collection('bills')
         .on(:added) do |id, bill|
-          puts "bill #{id} was added: #{bill}"
+          logger.info "bill #{id} was added: #{bill}"
           bills[id] = bill
           RecognitionWorker.perform_async id, bill[:imageUrl]
         end

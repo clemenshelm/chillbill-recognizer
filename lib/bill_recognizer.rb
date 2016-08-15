@@ -16,9 +16,11 @@ require_relative './models/price_term'
 require_relative './models/date_term'
 require_relative './models/vat_number_term'
 require_relative './config'
+require_relative './logging'
 
 class BillRecognizer
   include Magick
+  include Logging
 
   def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
     @retriever = retriever || BillImageRetriever.new(url: image_url)
@@ -41,7 +43,7 @@ class BillRecognizer
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
     hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
       .force_encoding('UTF-8')
-    # puts hocr
+    # logger.debug hocr
 
     hocr_doc = Nokogiri::HTML(hocr)
     hocr_doc.css(".ocrx_word").each do |word_node|
@@ -52,11 +54,11 @@ class BillRecognizer
 
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
-    #  puts Word.map(&:text)
-    # puts Word.map { |word| "text: '#{word.text}', left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    # logger.debug Word.map(&:text)
+    logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
-    # puts price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
+    # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
@@ -92,7 +94,7 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number,
+      vatNumber: vatNumber
     }
   end
 

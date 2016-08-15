@@ -1,7 +1,7 @@
 require 'yaml'
 
 class Config
-  @config_hash = 
+  @config_hash =
     begin
       environment = ENV['RECOGNIZER_ENV'] || 'development'
       config_yaml = ERB.new(IO.read('config.yml')).result

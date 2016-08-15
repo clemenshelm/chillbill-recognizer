@@ -2,17 +2,19 @@ require 'tempfile'
 require 'grim'
 require 'open-uri'
 require 'aws-sdk'
-require_relative '../config/logger.rb'
+require_relative './logging.rb'
 
 
 class BillImageRetriever
+  include Logging
+
   def initialize(url:)
     @url = url
   end
 
   def save
     _, bucket, region, key = @url.match(%r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}).to_a
-    puts "bucket: #{bucket}, region: #{region}, key: #{key}"
+    logger.debug "bucket: #{bucket}, region: #{region}, key: #{key}"
 
     file_extension = File.extname key.downcase
 
@@ -31,7 +33,7 @@ class BillImageRetriever
     when ".png", ".jpg", ".jpeg"
       image_file
     else
-      LOGGER.warn("Unknow data type, " + file_extension)
+      logger.warn("Unknow data type, " + file_extension)
     end
   end
 end
