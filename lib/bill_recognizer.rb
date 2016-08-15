@@ -7,11 +7,14 @@ require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
+require_relative './calculations/vat_number_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
+require_relative './detectors/vat_number_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
+require_relative './models/vat_number_term'
 require_relative './config'
 require_relative './logging'
 
@@ -19,8 +22,9 @@ class BillRecognizer
   include Magick
   include Logging
 
-  def initialize(image_url: nil, retriever: nil)
+  def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
     @retriever = retriever || BillImageRetriever.new(url: image_url)
+    @customer_vat_number = customer_vat_number
   end
 
   def recognize
@@ -28,6 +32,7 @@ class BillRecognizer
     Word.dataset.delete
     PriceTerm.dataset.delete
     DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -64,6 +69,12 @@ class BillRecognizer
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
     end
 
+    vat_number_words = VatNumberDetector.filter
+    vat_number = VatNumberCalculation.new(
+      vat_number_words,
+      customer_vat_number: @customer_vat_number
+    ).vat_number
+
     #image_file.close
 
     return {} if net_amount.nil?
@@ -82,7 +93,8 @@ class BillRecognizer
 
     {
       amounts: [total: total, vatRate: vatRate],
-      invoiceDate: invoice_date
+      invoiceDate: invoice_date,
+      vatNumber: vatNumber
     }
   end
 
