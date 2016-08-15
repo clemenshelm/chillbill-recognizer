@@ -47,7 +47,7 @@ tests:
     - .:/myapp
   volumes_from:
     - bundle
-  env_file: .env
+  env_file: .env-rspec
 
 # Data container to contain bundled gems
 bundle:

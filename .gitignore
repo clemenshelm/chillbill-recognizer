@@ -1,5 +1,4 @@
 spec/image_fixtures/cache/*
 tmp/
 dump.rdb
-.env
-docker-compose-production.yml
+.env*
