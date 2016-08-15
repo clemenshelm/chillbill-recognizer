@@ -20,7 +20,8 @@ task :process => :setup_processing do
     include Logging
 
     id = recognition_result.delete :id
-    logger.info ["result for bill #{id}:", recognition_result].map(&:to_s).map(&:yellow)
+    logger.info ["result for bill #{id}:", recognition_result].map(&:to_s)
+      .map(&:yellow).join(' ')
     meteor.write_detection_result(id, recognition_result)
   end
 end
