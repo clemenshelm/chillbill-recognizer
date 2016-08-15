@@ -1,0 +1,15 @@
+tests:
+  build: .
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
+  environment:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+
+# Data container to contain bundled gems
+bundle:
+  image: busybox
+  volumes:
+    - /bundle
