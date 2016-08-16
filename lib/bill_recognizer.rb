@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'bigdecimal'
-require 'rmagick'
 require 'pry'
 require 'nokogiri'
 require_relative './boot'
@@ -17,9 +16,9 @@ require_relative './models/date_term'
 require_relative './models/vat_number_term'
 require_relative './config'
 require_relative './logging'
+require_relative './image_processor'
 
 class BillRecognizer
-  include Magick
   include Logging
 
   def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
@@ -101,16 +100,11 @@ class BillRecognizer
   private
 
   def preprocess(image_path)
-    image = Image.read(image_path)[0]
-    background = Image.new(image.columns, image.rows) do |image|
-      image.background_color = '#fff'
-    end
-    image = background.composite(image, Magick::NorthEastGravity, Magick::OverCompositeOp)
-    image.fuzz = "99%"
-    image = image.deskew(0.4)
-    image = image.normalize
-    image.level 0.6 * QuantumRange
-    image.trim!
-    image.write image_path
+    processor = ImageProcessor.new(image_path)
+      .apply_background('#fff')
+      .deskew
+      .normalize
+      .trim
+      .write!(image_path)
   end
 end
