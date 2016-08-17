@@ -209,7 +209,6 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill T26m53KtQ9JrGhb2T' do
-    pending("A bank number is recognized as a VAT ID no. because DE VATs are calculated first")
     retriever = SpecCacheRetriever.new(file_basename: 'T26m53KtQ9JrGhb2T.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
