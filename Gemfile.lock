@@ -124,6 +124,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     valvat (0.6.10)
+      savon ()>= 2.3.0)
     websocket-driver (0.6.2)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -147,10 +148,10 @@ DEPENDENCIES
   redis
   rmagick
   rspec
-  savon
   sequel
   sidekiq
   sqlite3
+  valvat
   websocket-driver (= 0.6.2)
 
 RUBY VERSION
