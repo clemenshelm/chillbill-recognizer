@@ -147,6 +147,7 @@ DEPENDENCIES
   redis
   rmagick
   rspec
+  savon
   sequel
   sidekiq
   sqlite3
