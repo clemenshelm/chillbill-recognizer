@@ -21,7 +21,7 @@ describe VatNumberDetector do
   end
 
   # Bill with two VATs, but this test works because of the data sample
-  it "recognizes an Austrian VAT ID number", :focus do
+  it "recognizes an Austrian VAT ID number" do
     create(:word, text: 'Umsatzsteuer-Identifikotionsnummer:', left: 1487, right: 2118, top: 3849, bottom: 3882)
     create(:word, text: 'ATU19420008', left: 2130, right: 2386, top: 3850, bottom: 3882)
     create(:word, text: 'ARA', left: 2416, right: 2492, top: 3850, bottom: 3881)
