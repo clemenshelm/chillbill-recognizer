@@ -15,7 +15,7 @@ class DateTerm < Sequel::Model
   def add_word(word)
     @term_builder.add_word(word)
 
-    self.text = @term_builder.text
+    self.text = @term_builder.extract_text
     self.first_word_id = @term_builder.words.first.id
     self.left = word.left
     self.top = word.top

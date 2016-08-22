@@ -16,7 +16,7 @@ class PriceTerm < Sequel::Model
 
   def add_word(word)
     @term_builder.add_word(word)
-    self.text = @term_builder.text
+    self.text = @term_builder.extract_text
     self.left = word.left
     self.top = word.top
     self.right = word.right
