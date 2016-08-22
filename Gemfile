@@ -35,6 +35,9 @@ gem 'sequel'
 # A logger which does nothing is the default
 gem 'null-logger'
 
+# Validates European VAT numbers
+gem 'valvat', '~> 0.6.10'
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output

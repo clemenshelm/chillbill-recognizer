@@ -11,14 +11,10 @@ class VatNumberTerm < Sequel::Model
     super
   end
 
-  def before_create
-    @term_builder.pack!
-    self.text ||= @term_builder.text
-  end
-
   def add_word(word)
     @term_builder.add_word(word)
 
+    self.text = @term_builder.extract_text
     self.left = word.left
     self.top = word.top
     self.right = word.right

@@ -31,19 +31,16 @@ class TermBuilder
     @text =~ @regex
   end
 
-  def pack!
-    catch(:done) do
-      (1..@words.length).each do |numwords|
-        available_words = @words[-numwords..-1]
-        builder = TermBuilder.new(regex: @regex, after_each_word: @after_each_word)
+  def extract_text
+    (1..@words.length).each do |numwords|
+      available_words = @words[-numwords..-1]
+      builder = TermBuilder.new(regex: @regex, after_each_word: @after_each_word)
 
-        available_words.each do |word|
-          builder.add_word(word)
+      available_words.each do |word|
+        builder.add_word(word)
 
-          if builder.valid?
-            @words = builder.words
-            throw :done
-          end
+        if builder.valid?
+          return builder.text
         end
       end
     end
