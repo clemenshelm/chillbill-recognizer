@@ -54,7 +54,7 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # logger.debug Word.map(&:text)
-    logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
@@ -73,6 +73,11 @@ class BillRecognizer
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
+
+    billing_period_words = BillingPeriodDetector.filter
+    billing_period = BillingPeriodCalculation.new(
+      billing_period_words
+    ).billing_period
 
     #image_file.close
 
@@ -93,7 +98,8 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
+      vatNumber: vat_number,
+      billingPeriod: billing_period
     }
   end
 

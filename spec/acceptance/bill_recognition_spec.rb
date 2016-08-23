@@ -51,7 +51,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
   end
 
-  it 'recognizes the bill Y8YpKWEJZFunbMymh' do
+  it 'recognizes the bill Y8YpKWEJZFunbMymh', :focus do
     pending("The bill is a vertical payment form. Make this work as well.")
     retriever = SpecCacheRetriever.new(file_basename: 'Y8YpKWEJZFunbMymh.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
