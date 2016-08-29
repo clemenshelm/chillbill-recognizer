@@ -79,7 +79,7 @@ GEM
       rb-inotify (>= 0.9.7)
     lumberjack (1.0.10)
     method_source (0.8.2)
-    metybur (0.3.2)
+    metybur (0.4.0)
       activesupport (>= 2.2.1)
       faye-websocket (~> 0.9)
     mini_portile2 (2.0.0)
@@ -163,7 +163,7 @@ DEPENDENCIES
   factory_girl (~> 4.0)
   grim
   guard-rspec
-  metybur
+  metybur (= 0.4.0)
   nokogiri
   null-logger
   pry
