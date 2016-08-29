@@ -10,7 +10,7 @@ sidekiq:
   image: 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-repo
   links:
     - redis
-  mem_limit: 2800000000
+  mem_limit: 3200000000
   env_file:
     - .env
   log_driver: awslogs
