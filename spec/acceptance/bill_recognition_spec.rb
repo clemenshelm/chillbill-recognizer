@@ -62,8 +62,8 @@ describe 'Recognizing bills correctly' do
     # No VAT Number
   end
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    pending("The billing period is recognized as the billing date")
+  it 'recognizes the bill ZkPkwYF8p6PPLbf7f', :focus do
+    pending("The UID number is detected to have a fullstop at the end")
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -72,9 +72,10 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 9487, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU45011703'
+    expect(bill_attributes[:billingPeriod]).to eq '01.03.2015 - 31.03.2015'
   end
 
-  it 'recognizes the bill 4WaHezqC7H7HgDzcy', :focus do
+  it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
     retriever = SpecCacheRetriever.new(file_basename: '4WaHezqC7H7HgDzcy.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 

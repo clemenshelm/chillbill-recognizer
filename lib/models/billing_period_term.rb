@@ -1,4 +1,5 @@
 require 'sequel'
+require_relative '../boot'
 require_relative './term_builder'
 require_relative './date_term'
 
@@ -18,5 +19,9 @@ class BillingPeriodTerm < Sequel::Model
     self.text = word.text
     self.to = word.to
     self.from = word.from
+  end
+
+  def to_s
+    text
   end
 end

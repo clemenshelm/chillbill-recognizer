@@ -16,6 +16,7 @@ require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
 require_relative './models/vat_number_term'
+require_relative './models/billing_period_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -34,6 +35,7 @@ class BillRecognizer
     PriceTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -56,30 +58,31 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # logger.debug Word.map(&:text)
-    puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    # puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
-    prices = PriceCalculation.new(price_words)
-    net_amount = prices.net_amount
-    vat_amount = prices.vat_amount
-
     date_words = DateDetector.filter
+    vat_number_words = VatNumberDetector.filter
+    billing_period_words = BillingPeriodDetector.filter
+
+    billing_period = BillingPeriodCalculation.new(
+      billing_period_words
+    ).invoice_billing_period
+
     dates = DateCalculation.new(date_words)
     if dates.invoice_date
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
     end
 
-    vat_number_words = VatNumberDetector.filter
+    prices = PriceCalculation.new(price_words)
+    net_amount = prices.net_amount
+    vat_amount = prices.vat_amount
+
     vat_number = VatNumberCalculation.new(
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
-
-    # billing_period_words = BillingPeriodDetector.filter
-    # billing_period = BillingPeriodCalculation.new(
-    #   billing_period_words
-    # ).billing_period
 
     #image_file.close
 
@@ -100,8 +103,8 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
-      # billingPeriod: billing_period
+      vatNumber: vat_number,
+      billingPeriod: billing_period
     }
   end
 
