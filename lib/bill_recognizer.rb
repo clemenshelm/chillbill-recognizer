@@ -7,9 +7,11 @@ require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
 require_relative './calculations/vat_number_calculation'
+require_relative './calculations/billing_period_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
+require_relative './detectors/billing_period_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -74,10 +76,10 @@ class BillRecognizer
       customer_vat_number: @customer_vat_number
     ).vat_number
 
-    billing_period_words = BillingPeriodDetector.filter
-    billing_period = BillingPeriodCalculation.new(
-      billing_period_words
-    ).billing_period
+    # billing_period_words = BillingPeriodDetector.filter
+    # billing_period = BillingPeriodCalculation.new(
+    #   billing_period_words
+    # ).billing_period
 
     #image_file.close
 
@@ -98,8 +100,8 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number,
-      billingPeriod: billing_period
+      vatNumber: vat_number
+      # billingPeriod: billing_period
     }
   end
 

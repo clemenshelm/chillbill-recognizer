@@ -1,9 +1,11 @@
 require 'sequel'
 require_relative './term_builder'
 require_relative '../detectors/date_detector'
+require_relative './dimensionable'
 
 # TODO unit test
-class DateTerm < Sequel::Model
+class DateTerm < Sequel::Model # one_to_many :from, class: BillingPeriodTerm
+  include Dimensionable
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
@@ -45,5 +47,4 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     end
   end
-
 end

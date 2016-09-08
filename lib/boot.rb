@@ -43,10 +43,8 @@ end
 DB.create_table :billing_period_terms do
   primary_key :id
   String :text
-  Integer :left
-  Integer :right
-  Integer :top
-  Integer :bottom
+  Integer :from_id
+  Integer :to_id
 end
 
 Sequel::Model.db = DB
