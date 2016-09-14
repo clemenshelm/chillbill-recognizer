@@ -329,7 +329,7 @@ describe 'Recognizing bills correctly' do
     # If it doesn't throw an exception, it works
   end
 
-  it 'recognizes the bill QgxpPEE8xGzFGos9x' do
+  it 'recognizes the bill QgxpPEE8xGzFGos9x' do # HDK
     pending("Recognition does not filter fundamental results(HKD)")
 
     retriever = SpecCacheRetriever.new(file_basename: 'QgxpPEE8xGzFGos9x.pdf')
@@ -338,7 +338,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
   end
 
-  it 'recognizes the bill w3kuRspvcGk6Wg4A7' do # Franken
+  it 'recognizes the bill w3kuRspvcGk6Wg4A7' do # CHF
     retriever = SpecCacheRetriever.new(file_basename: 'w3kuRspvcGk6Wg4A7.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -397,7 +397,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
   end
 
-  it 'recognizes the bill v93fPibm5dEDo3W3q'  do # TODO: Fix it
+  it 'recognizes the bill v93fPibm5dEDo3W3q' do # TODO: Fix it
 
     retriever = SpecCacheRetriever.new(file_basename: 'v93fPibm5dEDo3W3q.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -415,7 +415,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq "2015-09-16"
   end
 
-  it 'recognizes the bill AMNYTzGhqQs2vSutN', :focus do
+  it 'recognizes the bill AMNYTzGhqQs2vSutN' do
 
     retriever = SpecCacheRetriever.new(file_basename: 'AMNYTzGhqQs2vSutN.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)

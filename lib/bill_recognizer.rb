@@ -32,6 +32,7 @@ class BillRecognizer
     PriceTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -84,7 +85,7 @@ class BillRecognizer
 
     # Adapt recognition result to application schema
     # TODO: Let price calculation produce required format
-    subTotal = net_amount * 100 # Nettowert * 100
+    subTotal = net_amount * 100
     vatTotal = vat_amount * 100
     total = (subTotal + vatTotal).to_i
     vatRate =
@@ -93,7 +94,7 @@ class BillRecognizer
       else
         0
       end
-      
+
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
