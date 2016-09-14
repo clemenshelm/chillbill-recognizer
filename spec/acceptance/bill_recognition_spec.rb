@@ -112,6 +112,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 7482, vatRate: 0}]
+    expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU40495807'
   end
 
@@ -154,6 +155,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill F4QSZtMfaZKSuzTE2' do
+    pending("The bill's white background is lost during png conversion. This only affects the detection of the bottom of the bill.")
     retriever = SpecCacheRetriever.new(file_basename: 'F4QSZtMfaZKSuzTE2.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -161,8 +163,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 19296, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-23'
-    # The bill's white background is lost during png conversion. This only affects the detection of the bottom of the bill.
-    # expect(bill_attributes[:vatNumber]).to eq 'ATU68617133'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU68617133'
   end
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
@@ -264,6 +265,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
+    # expect(bill_attributes[:billingPeriod]).to eq '07.02.2016 - 10.03.2016'
   end
 
   it 'recognizes the bill Etn9rJm4BAa2vnjyq' do

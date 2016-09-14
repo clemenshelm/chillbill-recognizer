@@ -5,7 +5,12 @@ describe DateCalculation do
     DateTerm.dataset.delete
   end
 
-  it 'uses the first date as invoice date' do
+# This test is still broken:
+# Failure/Error: expect(dates.invoice_date).to eq DateTime.iso8601('2015-04-01')
+#    NoMethodError:
+#      undefined method `all' for [#<Double (anonymous)>, #<Double (anonymous)>]:Array
+#      Did you mean?  all?
+  it 'uses the first date as invoice date', :focus do
     words = %w(2015-04-01 2015-02-28)
       .map { |date_string| DateTime.iso8601(date_string) }
       .map { |datetime| double(to_datetime: datetime)  }
@@ -19,7 +24,7 @@ describe DateCalculation do
     expect(dates.invoice_date).to be_nil
   end
 
-  it 'ignores dates from a billing period', :focus do
+  it 'ignores dates from a billing period' do
     DateTerm.create(
       text: "01.03.2015",
       left: 591,
@@ -57,5 +62,28 @@ describe DateCalculation do
         DateTerm.dataset
       )
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
+  end
+
+  it "recognizes the first date as the invoice date" do
+      DateTerm.create(
+        text: '16.03.2016',
+        left: 1819,
+        right: 2026,
+        top: 498,
+        bottom: 529
+      )
+
+      DateTerm.create(
+        text: '21.03.2016',
+        left: 1816,
+        right: 2026,
+        top: 586,
+        bottom: 618
+        )
+
+        date_calculation = DateCalculation.new(
+          DateTerm.dataset
+        )
+    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
   end
 end
