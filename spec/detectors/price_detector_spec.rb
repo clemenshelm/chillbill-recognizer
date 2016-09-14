@@ -29,7 +29,7 @@ describe PriceDetector do
     create(:word, text: '5,1920')
 
     prices = PriceDetector.filter
-    expect(prices.map(&:text)).to be_empty
+    expect(prices.map(&:text)).to be_empty # hIER MIT ARRAYS
   end
 
   it 'finds prices that consist of 2 words' do

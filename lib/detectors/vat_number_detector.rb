@@ -10,7 +10,7 @@ class VatNumberDetector
   EU_VAT_REGEX = /EU[A-Z0-9]{9}/
 
   def self.filter
-    detected_vats = find_vat_numbers(VAT_REGEX)
+    detected_vats = find_vat_numbers(VAT_REGEX) # Finde die VAT Nummer
     detected_vats
       .select { |term| term.text[EU_VAT_REGEX] || Valvat.new(term.to_s).valid? }
       .each(&:save)

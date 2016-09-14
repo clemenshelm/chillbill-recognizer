@@ -54,11 +54,11 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # logger.debug Word.map(&:text)
-    logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
-    prices = PriceCalculation.new(price_words)
+    prices = PriceCalculation.new(price_words) # Gibt die Klasse für die Kalkulation
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
 
@@ -68,19 +68,23 @@ class BillRecognizer
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
     end
 
-    vat_number_words = VatNumberDetector.filter
+    vat_number_words = VatNumberDetector.filter # Filter für die VAT Nummber,
     vat_number = VatNumberCalculation.new(
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
 
+    currency_words = CurrencyDetector.filter
+    currency = CurrencyCalculation.new(currency_words)
+
+
     #image_file.close
 
-    return {} if net_amount.nil?
+    return {} if net_amount.nil?  # Wenn netto nicht enzhalten ist, dann gebe nichts zurück
 
     # Adapt recognition result to application schema
     # TODO: Let price calculation produce required format
-    subTotal = net_amount * 100
+    subTotal = net_amount * 100 # Nettowert * 100 TODO: What's that?
     vatTotal = vat_amount * 100
     total = (subTotal + vatTotal).to_i
     vatRate =
@@ -89,11 +93,12 @@ class BillRecognizer
       else
         0
       end
-
+      # Return
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
+      vatNumber: vat_number,
+      currencyCode: currency.iso
     }
   end
 

@@ -8,6 +8,6 @@ class SpecCacheRetriever
   end
 
   def save
-    cache_image(@file_basename)
+    cache_image(@file_basename) # Gibt ein Imagefile zurück
   end
 end
