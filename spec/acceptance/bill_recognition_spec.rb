@@ -371,7 +371,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:currencyCode]).to eq "GBP"
   end
 
-  it 'recognizes the bill AteChFJR5vhMCqppF', :focus do # HUF
+  it 'recognizes the bill AteChFJR5vhMCqppF' do # HUF
     pending("recognizer does not recognise HUF")
     retriever = SpecCacheRetriever.new(file_basename: 'AteChFJR5vhMCqppF.JPG')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -389,39 +389,39 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:currencyCode]).to eq "HRK"
   end
 
-  it 'recognizes the bill noLc4uSNHvo3mDrFM' do # Nicht korrekt erkannt
-
+  it 'recognizes the bill noLc4uSNHvo3mDrFM' do # Fix it
+    pending("Bill wasn't regocnizes correctly")
     retriever = SpecCacheRetriever.new(file_basename: 'noLc4uSNHvo3mDrFM.jpg')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
   end
 
-  it 'recognizes the bill v93fPibm5dEDo3W3q' do
+  it 'recognizes the bill v93fPibm5dEDo3W3q'  do # TODO: Fix it
 
     retriever = SpecCacheRetriever.new(file_basename: 'v93fPibm5dEDo3W3q.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:invoiceDate]).to eq ""
+    expect(bill_attributes[:invoiceDate]).to eq "2015-09-29"
   end
 
   it 'recognizes the bill J5AtFq7wLg9BGa56E' do
-
+    pending("Does not recognise invoice date!")
     retriever = SpecCacheRetriever.new(file_basename: 'J5AtFq7wLg9BGa56E.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
+    expect(bill_attributes[:invoiceDate]).to eq "2015-09-16"
   end
 
-  it 'recognizes the bill AMNYTzGhqQs2vSutN'  do
+  it 'recognizes the bill AMNYTzGhqQs2vSutN', :focus do
 
     retriever = SpecCacheRetriever.new(file_basename: 'AMNYTzGhqQs2vSutN.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
+    expect(bill_attributes[:invoiceDate]).to eq "2015-12-17"
   end
 
   it 'recognizes the bill sBLw8pTMLfXLNYoiz' do

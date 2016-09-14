@@ -128,7 +128,7 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'finds short German dates', :focus do
+  it 'finds short German dates' do
     # From bill v93fPibm5dEDo3W3q
     %w(29.09.2015 06.10.2015 29.9.2015 28.9.2016).each_with_index do |text, index|
       left = index * 100

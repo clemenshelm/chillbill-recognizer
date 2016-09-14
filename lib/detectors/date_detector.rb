@@ -11,7 +11,7 @@ class DateDetector
   FULL_ENGLISH_DATE_REGEX = /(\d+ March \d+)/
 
   def self.filter
-    end_number_with_period = -> (term) { term.text += '.' if term.text =~ /\d$/ } # Lambda function
+    end_number_with_period = -> (term) { term.text += '.' if term.text =~ /\d$/ }
     find_dates(SHORT_PERIOD_DATE_REGEX, after_each_word: end_number_with_period)
 
     find_dates(SHORT_SLASH_DATE_REGEX)

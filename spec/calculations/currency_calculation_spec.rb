@@ -3,7 +3,7 @@ require_relative '../../lib/calculations/currency_calculation'
 describe CurrencyCalculation do
   it 'uses the first currency' do
     words = %w(EUR USD CHF)
-      .map { |code| double(to_iso: code) } # Übergibt den code(EUR, USD, ...)
+      .map { |code| double(to_iso: code) }
 
     currency = CurrencyCalculation.new(words)
     expect(currency.iso).to eq "EUR"

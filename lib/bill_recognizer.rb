@@ -58,7 +58,7 @@ class BillRecognizer
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
-    prices = PriceCalculation.new(price_words) # Gibt die Klasse für die Kalkulation
+    prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
     vat_amount = prices.vat_amount
 
@@ -68,7 +68,7 @@ class BillRecognizer
       invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
     end
 
-    vat_number_words = VatNumberDetector.filter # Filter für die VAT Nummber,
+    vat_number_words = VatNumberDetector.filter
     vat_number = VatNumberCalculation.new(
       vat_number_words,
       customer_vat_number: @customer_vat_number
@@ -80,11 +80,11 @@ class BillRecognizer
 
     #image_file.close
 
-    return {} if net_amount.nil?  # Wenn netto nicht enzhalten ist, dann gebe nichts zurück
+    return {} if net_amount.nil?
 
     # Adapt recognition result to application schema
     # TODO: Let price calculation produce required format
-    subTotal = net_amount * 100 # Nettowert * 100 TODO: What's that?
+    subTotal = net_amount * 100 # Nettowert * 100
     vatTotal = vat_amount * 100
     total = (subTotal + vatTotal).to_i
     vatRate =
@@ -93,7 +93,7 @@ class BillRecognizer
       else
         0
       end
-      # Return
+      
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
