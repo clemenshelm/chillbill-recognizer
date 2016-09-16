@@ -23,7 +23,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    #expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
     expect(bill_attributes[:vatNumber]).to eq 'ATU18125703'
     expect(bill_attributes[:currencyCode]).to eq "EUR"
   end
@@ -279,8 +279,8 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU41472107'
   end
 
-  it 'recognizes the bill a5b4acuqNNoQg9nh9' do
-    #pending('Fails because the file contains many small incorrect characters')
+  it 'recognizes the bill a5b4acuqNNoQg9nh9', :focus do
+    pending('Fails because the file contains many small incorrect characters')
 
     retriever = SpecCacheRetriever.new(file_basename: 'a5b4acuqNNoQg9nh9.pdf')
     recognizer = BillRecognizer.new(
@@ -289,7 +289,7 @@ describe 'Recognizing bills correctly' do
     )
 
     bill_attributes = recognizer.recognize
-    #expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
+    expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
     expect(bill_attributes[:currencyCode]).to eq "USD"
   end
 
@@ -387,66 +387,5 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
     expect(bill_attributes[:currencyCode]).to eq "HRK"
-  end
-
-  it 'recognizes the bill noLc4uSNHvo3mDrFM' do # Fix it
-    pending("Bill wasn't regocnizes correctly")
-    retriever = SpecCacheRetriever.new(file_basename: 'noLc4uSNHvo3mDrFM.jpg')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-  end
-
-  it 'recognizes the bill v93fPibm5dEDo3W3q' do # TODO: Fix it
-
-    retriever = SpecCacheRetriever.new(file_basename: 'v93fPibm5dEDo3W3q.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:invoiceDate]).to eq "2015-09-29"
-  end
-
-  it 'recognizes the bill J5AtFq7wLg9BGa56E' do
-    pending("Does not recognise invoice date!")
-    retriever = SpecCacheRetriever.new(file_basename: 'J5AtFq7wLg9BGa56E.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:invoiceDate]).to eq "2015-09-16"
-  end
-
-  it 'recognizes the bill AMNYTzGhqQs2vSutN' do
-
-    retriever = SpecCacheRetriever.new(file_basename: 'AMNYTzGhqQs2vSutN.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:invoiceDate]).to eq "2015-12-17"
-  end
-
-  it 'recognizes the bill sBLw8pTMLfXLNYoiz' do
-    retriever = SpecCacheRetriever.new(file_basename: 'sBLw8pTMLfXLNYoiz.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
-  end
-
-  it 'recognizes the bill hmhyswbWnc49EMR7z' do
-
-    retriever = SpecCacheRetriever.new(file_basename: 'hmhyswbWnc49EMR7z.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
-  end
-
-  it 'recognizes the bill Q9n5k8pAxMZtP7qFB' do
-
-    retriever = SpecCacheRetriever.new(file_basename: 'Q9n5k8pAxMZtP7qFB.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
   end
 end

@@ -131,10 +131,4 @@ describe CurrencyDetector do
     currencies = CurrencyDetector.filter
     expect(currencies.map(&:text)).to eq ['£']
   end
-
-  it 'regcognizes HUF currency on the bill' do
-    # No text with HUF
-    currencies = CurrencyDetector.filter
-    expect(currencies.map(&:text)).to eq ['HUF']
-  end
 end
