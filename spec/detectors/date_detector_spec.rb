@@ -128,17 +128,6 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'finds short German dates' do
-    # From bill v93fPibm5dEDo3W3q
-    %w(29.09.2015 06.10.2015 29.9.2015 28.9.2016).each_with_index do |text, index|
-      left = index * 100
-      create(:word, text: text, left: left, right: left + 20)
-    end
-
-    dates = DateDetector.filter
-    expect(date_strings(dates)).to eq %w(2015-09-29 2015-10-06 2015-09-29 2016-09-28)
-  end
-
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
