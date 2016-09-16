@@ -279,7 +279,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU41472107'
   end
 
-  it 'recognizes the bill a5b4acuqNNoQg9nh9', :focus do
+  it 'recognizes the bill a5b4acuqNNoQg9nh9' do
     pending('Fails because the file contains many small incorrect characters')
 
     retriever = SpecCacheRetriever.new(file_basename: 'a5b4acuqNNoQg9nh9.pdf')
