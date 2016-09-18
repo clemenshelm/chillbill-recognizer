@@ -32,6 +32,7 @@ class BillRecognizer
     PriceTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -54,7 +55,7 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # logger.debug Word.map(&:text)
-    logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
@@ -73,6 +74,10 @@ class BillRecognizer
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
+
+    currency_words = CurrencyDetector.filter
+    currency = CurrencyCalculation.new(currency_words)
+
 
     #image_file.close
 
@@ -93,7 +98,8 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
+      vatNumber: vat_number,
+      currencyCode: currency.iso
     }
   end
 
