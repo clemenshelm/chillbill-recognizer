@@ -3,6 +3,7 @@ require_relative '../../lib/calculations/date_calculation'
 describe DateCalculation do
   before(:each) do
     DateTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
   end
 
   it 'returns nil if there is no invoice date candidate' do
@@ -11,7 +12,7 @@ describe DateCalculation do
   end
 
   it 'ignores dates from a billing period' do
-    DateTerm.create(
+    start_of_period = DateTerm.create(
       text: "01.03.2015",
       left: 591,
       right: 798,
@@ -20,7 +21,7 @@ describe DateCalculation do
       first_word_id: 19
     )
 
-    DateTerm.create(
+    end_of_period = DateTerm.create(
       text: "31.03.2015",
       left: 832,
       right: 1038,
@@ -40,8 +41,8 @@ describe DateCalculation do
 
     BillingPeriodTerm.create(
       text: "01.03.2015 - 31.03.2015",
-      from_id: 1,
-      to_id: 2
+      from: start_of_period,
+      to: end_of_period
       )
 
       date_calculation = DateCalculation.new(

@@ -11,6 +11,7 @@ class DateCalculation
     standalone_dates = @words.all.select do |term|
       term.started_periods.empty? && term.ended_periods.empty?
     end
+
     standalone_dates.first.to_datetime
   end
 end

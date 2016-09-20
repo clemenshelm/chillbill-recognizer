@@ -6,22 +6,17 @@ require_relative '../models/date_term'
 
 class BillingPeriodDetector
   def self.filter
-    Word.all.select do |term|
-      hyphen_word = Word.where(text: '-')
-      bis_word = Word.where(text: 'bis')
+    Word.where(text: ["-", "bis"]).all.select do |term|
+      from = DateTerm.right_before(term)
+      to = DateTerm.right_after(term)
 
-      if hyphen_word || bis_word
-        from = DateTerm.right_before(term)
-        to = DateTerm.right_after(term)
-
-        if from && to && from.text < to.text
-         term =  BillingPeriodTerm.new(
-          text: from.text + ' - ' + to.text,
-          from: from,
-          to: to
-          )
-          term.save
-        end
+      if from && to && from.text < to.text
+       term =  BillingPeriodTerm.new(
+        text: from.text + ' - ' + to.text,
+        from: from,
+        to: to
+        )
+        term.save
       end
     end
 

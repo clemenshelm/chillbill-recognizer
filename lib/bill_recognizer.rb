@@ -83,7 +83,6 @@ class BillRecognizer
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
-
     #image_file.close
 
     return {} if net_amount.nil?

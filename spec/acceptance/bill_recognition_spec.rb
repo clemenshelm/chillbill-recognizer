@@ -63,7 +63,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    # pending("The UID number is detected to have a fullstop at the end")
+    pending("The UID number is detected to have a fullstop at the end")
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -265,7 +265,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
-    # expect(bill_attributes[:billingPeriod]).to eq '07.02.2016 - 10.03.2016'
+    expect(bill_attributes[:billingPeriod]).to eq '07.02.2016 - 10.03.2016'
   end
 
   it 'recognizes the bill Etn9rJm4BAa2vnjyq' do
