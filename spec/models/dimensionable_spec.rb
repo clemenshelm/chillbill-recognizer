@@ -77,7 +77,7 @@ describe DateTerm do
     expect(result).to eq previous_term
   end
 
-  it "can detect the term after another term", :focus do
+  it "can detect the term after another term" do
 
     DateTerm.create(
       text: '10.04.2015',
