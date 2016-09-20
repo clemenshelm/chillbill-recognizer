@@ -17,7 +17,7 @@ describe PriceCalculation do
   end
 
   it 'calculates the sub total and the VAT total for a different bill' do
-    words = %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
+    %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
 
     prices = PriceCalculation.new(PriceTerm.dataset)
     expect(prices.net_amount).to eq BigDecimal('6.48')
