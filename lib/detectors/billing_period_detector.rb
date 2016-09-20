@@ -11,7 +11,6 @@ class BillingPeriodDetector
       bis_word = Word.where(text: 'bis')
 
       if hyphen_word || bis_word
-        binding.pry
         from = DateTerm.right_before(term)
         to = DateTerm.right_after(term)
 

@@ -12,7 +12,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq '2015-11-19'
   end
 
-  it 'recognizes the bill MM4o4pPK9Ttp2MqvJ', :focus do
+  it 'recognizes the bill MM4o4pPK9Ttp2MqvJ' do
     retriever = SpecCacheRetriever.new(file_basename: 'MM4o4pPK9Ttp2MqvJ.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 

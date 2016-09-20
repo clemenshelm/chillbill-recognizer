@@ -63,7 +63,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    pending("The UID number is detected to have a fullstop at the end")
+    # pending("The UID number is detected to have a fullstop at the end")
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 

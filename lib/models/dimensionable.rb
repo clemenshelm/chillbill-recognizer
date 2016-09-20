@@ -12,12 +12,13 @@ module Dimensionable
   end
 
   module ClassMethods
+
     def right_before(current)
       find {|previous| previous.right < current.left}
     end
 
     def right_after(current)
-      find {|following| following.left > current.right}
+      all.find {|following| (following.left > current.right) && (following.left - current.right) < (following.height * 1)}
     end
   end
 end

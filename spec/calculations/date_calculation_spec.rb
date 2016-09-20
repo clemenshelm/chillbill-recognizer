@@ -10,7 +10,7 @@ describe DateCalculation do
 #    NoMethodError:
 #      undefined method `all' for [#<Double (anonymous)>, #<Double (anonymous)>]:Array
 #      Did you mean?  all?
-  it 'uses the first date as invoice date', :focus do
+  it 'uses the first date as invoice date' do
     words = %w(2015-04-01 2015-02-28)
       .map { |date_string| DateTime.iso8601(date_string) }
       .map { |datetime| double(to_datetime: datetime)  }
