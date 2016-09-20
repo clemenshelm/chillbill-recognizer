@@ -30,6 +30,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 800, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-11-30'
+    expect(bill_attributes[:billingPeriod]).to eq '01.11.2015 - 30.11.2015'
   end
 
   it 'recognizes the bill 7Nvce6pPniK3BCCA7' do

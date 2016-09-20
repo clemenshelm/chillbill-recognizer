@@ -49,6 +49,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 1541, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
+    expect(bill_attributes[:billingPeriod]).to eq '28.02.2015 - 31.03.2015'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
@@ -175,6 +176,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
     expect(bill_attributes[:vatNumber]).to eq 'ATU68651513'
+    expect(bill_attributes[:billingPeriod]).to eq '01.03.2015 - 30.04.2015'
   end
 
   it 'recognizes the bill d8TPPMpm74BmyDsoT' do
@@ -230,6 +232,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 8697, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
+    expect(bill_attributes[:billingPeriod]).to eq '09.03.2016 - 09.03.2017'
   end
 
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
