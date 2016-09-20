@@ -36,6 +36,7 @@ class BillRecognizer
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
     BillingPeriodTerm.dataset.delete
+    CurrencyTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -83,6 +84,14 @@ class BillRecognizer
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
+<<<<<<< HEAD
+=======
+
+    currency_words = CurrencyDetector.filter
+    currency = CurrencyCalculation.new(currency_words)
+
+
+>>>>>>> 49ad21a31fcd38e9b906e1277d46e38b99841879
     #image_file.close
 
     return {} if net_amount.nil?
@@ -103,7 +112,11 @@ class BillRecognizer
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
+<<<<<<< HEAD
       billingPeriod: billing_period
+=======
+      currencyCode: currency.iso
+>>>>>>> 49ad21a31fcd38e9b906e1277d46e38b99841879
     }
   end
   private

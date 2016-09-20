@@ -28,7 +28,7 @@ class Hub
         password: @config['meteor']['password']
       )
 
-      meteor.subscribe("#{@bills}-bills")
+      meteor.subscribe("admin.bills.#{@bills}")
 
       meteor.collection('bills')
         .on(:added) do |id, bill|

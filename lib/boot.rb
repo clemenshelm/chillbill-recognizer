@@ -40,6 +40,7 @@ DB.create_table :vat_number_terms do
   Integer :bottom
 end
 
+<<<<<<< HEAD
 DB.create_table :billing_period_terms do
   primary_key :id
   String :text
@@ -47,4 +48,14 @@ DB.create_table :billing_period_terms do
   Integer :to_id
 end
 
+=======
+DB.create_table :currency_terms do
+  primary_key :id
+  String :text
+  Integer :left
+  Integer :right
+  Integer :top
+  Integer :bottom
+end
+>>>>>>> 49ad21a31fcd38e9b906e1277d46e38b99841879
 Sequel::Model.db = DB
