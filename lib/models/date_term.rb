@@ -10,7 +10,7 @@ class DateTerm < Sequel::Model
   require_relative './billing_period_term' # Loading it here resolves issues with the circular dependency
   one_to_many :started_periods, class: BillingPeriodTerm, key: :from_id
   one_to_many :ended_periods, class: BillingPeriodTerm, key: :to_id
-  include Dimensionable
+
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),

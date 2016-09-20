@@ -11,11 +11,12 @@ class BillingPeriodDetector
       to = DateTerm.right_after(term)
 
       if from && to && from.text < to.text
-       term =  BillingPeriodTerm.new(
-        text: from.text + ' - ' + to.text,
-        from: from,
-        to: to
+        term =  BillingPeriodTerm.new(
+          text: from.text + ' - ' + to.text,
+          from: from,
+          to: to
         )
+        
         term.save
       end
     end

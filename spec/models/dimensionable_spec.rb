@@ -69,7 +69,7 @@ describe DateTerm do
       right: 1038,
       top: 773,
       bottom: 809
-      )
+    )
 
     term = create(:word, text: '-', left: 809, right: 819, top: 794, bottom: 797)
 
@@ -109,7 +109,7 @@ describe DateTerm do
       right: 1038,
       top: 773,
       bottom: 809
-      )
+    )
 
     term = create(:word, text: '-', left: 809, right: 819, top: 794, bottom: 797)
 
