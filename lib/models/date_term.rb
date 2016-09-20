@@ -6,6 +6,7 @@ require_relative './dimensionable'
 
 # TODO unit test
 class DateTerm < Sequel::Model
+  include Dimensionable
   require_relative './billing_period_term' # Loading it here resolves issues with the circular dependency
   one_to_many :started_periods, class: BillingPeriodTerm, key: :from_id
   one_to_many :ended_periods, class: BillingPeriodTerm, key: :to_id
