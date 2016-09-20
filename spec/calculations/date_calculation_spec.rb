@@ -28,7 +28,7 @@ describe DateCalculation do
       top: 773,
       bottom: 809,
       first_word_id: 26
-      )
+    )
 
     DateTerm.create(
       text: "10.04.2015",
@@ -37,40 +37,40 @@ describe DateCalculation do
       top: 213,
       bottom: 248,
       first_word_id: 40
-      )
+    )
 
     BillingPeriodTerm.create(
       text: "01.03.2015 - 31.03.2015",
       from: start_of_period,
       to: end_of_period
-      )
+    )
 
-      date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
+    date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    )
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
   end
 
   it "recognizes the first date as the invoice date" do
-      DateTerm.create(
-        text: '16.03.2016',
-        left: 1819,
-        right: 2026,
-        top: 498,
-        bottom: 529
-      )
+    DateTerm.create(
+      text: '16.03.2016',
+      left: 1819,
+      right: 2026,
+      top: 498,
+      bottom: 529
+    )
 
-      DateTerm.create(
-        text: '21.03.2016',
-        left: 1816,
-        right: 2026,
-        top: 586,
-        bottom: 618
-        )
+    DateTerm.create(
+      text: '21.03.2016',
+      left: 1816,
+      right: 2026,
+      top: 586,
+      bottom: 618
+    )
 
-        date_calculation = DateCalculation.new(
-          DateTerm.dataset
-        )
+    date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    )
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
   end
 end
