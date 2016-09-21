@@ -41,6 +41,9 @@ gem 'valvat', '~> 0.6.10'
 # Ruby linter
 gem 'rubocop', '~> 0.43.0', require: false
 
+# RSpec linter
+gem 'rubocop-rspec', '~> 1.4'
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output
