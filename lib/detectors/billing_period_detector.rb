@@ -6,19 +6,18 @@ require_relative '../models/date_term'
 
 class BillingPeriodDetector
   def self.filter
-    Word.where(text: ["-", "bis"]).all.select do |term|
+    Word.where(text: ['-', 'bis']).all.select do |term|
       from = DateTerm.right_before(term)
       to = DateTerm.right_after(term)
 
-      if from && to && from.text < to.text
-        term =  BillingPeriodTerm.new(
-          text: from.text + ' - ' + to.text,
-          from: from,
-          to: to
-        )
-        
-        term.save
-      end
+      next unless from && to && from.text < to.text
+      term =  BillingPeriodTerm.new(
+        text: from.text + ' - ' + to.text,
+        from: from,
+        to: to
+      )
+
+      term.save
     end
 
     BillingPeriodTerm.dataset
