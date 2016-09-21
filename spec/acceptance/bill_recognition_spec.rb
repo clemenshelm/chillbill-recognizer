@@ -345,6 +345,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
     #expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
     expect(bill_attributes[:currencyCode]).to eq 'EUR'
+    expect(bill_attributes[:invoiceDate]).to eq '2015-09-06'
   end
 
   it 'recognizes the bill 4KGwfH74J25TQgMGX' do # CNY
@@ -387,5 +388,65 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
     expect(bill_attributes[:currencyCode]).to eq "HRK"
+  end
+
+  it 'recognizes the bill v93fPibm5dEDo3W3q' do
+    retriever = SpecCacheRetriever.new(file_basename: 'v93fPibm5dEDo3W3q.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-09-29"
+  end
+
+  it "recognizes the bill noLc4uSNHvo3mDrFM" do
+    pending("Does not recognize invoice date!")
+    retriever = SpecCacheRetriever.new(file_basename: 'noLc4uSNHvo3mDrFM.jpg')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-11-26"
+  end
+
+  it "recognizes the bill J5AtFq7wLg9BGa56E" do
+    pending("Does not recognize invoice date!")
+    retriever = SpecCacheRetriever.new(file_basename: 'J5AtFq7wLg9BGa56E.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2016-09-16"
+  end
+
+  it "recognizes the bill AMNYTzGhqQs2vSutN" do
+    retriever = SpecCacheRetriever.new(file_basename: 'AMNYTzGhqQs2vSutN.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-12-17"
+  end
+
+  it "recognizes the bill sBLw8pTMLfXLNYoiz" do
+    pending("Does not recognize invoice date!")
+    retriever = SpecCacheRetriever.new(file_basename: 'sBLw8pTMLfXLNYoiz.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-06-01"
+  end
+
+  it "recognizes the bill hmhyswbWnc49EMR7z" do
+    pending("Does not recognize invoice date!")
+    retriever = SpecCacheRetriever.new(file_basename: 'hmhyswbWnc49EMR7z.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-08-10"
+  end
+
+  it "recognizes the bill Q9n5k8pAxMZtP7qFB" do
+    retriever = SpecCacheRetriever.new(file_basename: 'Q9n5k8pAxMZtP7qFB.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:invoiceDate]).to eq "2015-06-03"
   end
 end

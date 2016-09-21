@@ -128,6 +128,30 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'ignore / for adresses' do
+    %w(1/7/11 29.09.2015 06.10.2015).each_with_index do |text, index|
+      left = index * 100
+      create(:word, text: text);
+    end
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2015-09-29', '2015-10-06']
+  end
+
+  it 'recognizes the date - format' do
+    create(:word, text: "2015-12-17")
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ["2015-12-17"]
+  end
+
+  it 'recognize english comma format' do
+    create_following_words(%w(Jul 01, 2015))
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq %w(2015-07-01)
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end

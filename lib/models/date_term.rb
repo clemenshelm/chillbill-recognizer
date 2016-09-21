@@ -4,9 +4,12 @@ require_relative '../detectors/date_detector'
 
 # TODO unit test
 class DateTerm < Sequel::Model
+  attr_reader :regex
+
   def initialize(attrs)
+    @regex = attrs.delete(:regex)
     @term_builder = TermBuilder.new(
-      regex: attrs.delete(:regex),
+      regex: @regex,
       after_each_word: attrs.delete(:after_each_word)
     )
     super
@@ -43,6 +46,10 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d.%m.%y')
     when DateDetector::SHORT_SLASH_DATE_REGEX
       DateTime.strptime(text, '%d/%m/%y')
+    when DateDetector::ISO_DATE_REGEX
+      DateTime.strptime(text, '%y-%m-%d')
+    when DateDetector::ENGLISH_COMMA_DATE_REGEX
+      DateTime.strptime(text, '%b %d, %Y')
     end
   end
 
