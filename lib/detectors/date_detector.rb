@@ -28,8 +28,10 @@ class DateDetector
 
     date_terms += find_dates(ENGLISH_COMMA_DATE_REGEX, after_each_word: end_word_with_space)
 
-    most_used_regex = date_terms.group_by(&:regex).sort{|regex, terms| terms.count}.last.first
-    date_terms.select{|term| term.regex == most_used_regex }.each(&:save)
+    most_used_regex = date_terms.group_by(&:regex).sort{|regex, terms| terms.count}
+    first_most_used_regex = most_used_regex.last.first
+
+    date_terms.select{|term| term.regex == first_most_used_regex }.each(&:save)
 
     DateTerm.order(:first_word_id)
   end
