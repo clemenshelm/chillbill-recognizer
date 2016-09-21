@@ -38,6 +38,9 @@ gem 'null-logger'
 # Validates European VAT numbers
 gem 'valvat', '~> 0.6.10'
 
+# Ruby linter
+gem 'rubocop', '~> 0.43.0', require: false
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output
@@ -50,5 +53,5 @@ end
 group :test do
   gem 'rspec'
   gem 'guard-rspec', require: false
-  gem 'factory_girl', "~> 4.0"
+  gem 'factory_girl', '~> 4.0'
 end
