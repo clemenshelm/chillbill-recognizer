@@ -8,7 +8,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 799, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 799, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-11-19'
   end
 
@@ -18,7 +18,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 36000, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 36_000, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-11-23'
   end
 
@@ -28,7 +28,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 800, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 800, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-11-30'
   end
 
@@ -38,7 +38,7 @@ describe 'Recognizing ChillBill’s bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 7507, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 7507, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-12-04'
   end
 end

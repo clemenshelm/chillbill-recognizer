@@ -2,7 +2,7 @@ require 'sequel'
 require_relative './term_builder'
 require_relative './dimensionable'
 
-# TODO unit test
+# TODO: unit test
 class PriceTerm < Sequel::Model
   include Dimensionable
 

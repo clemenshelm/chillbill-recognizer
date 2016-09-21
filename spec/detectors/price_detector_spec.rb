@@ -19,7 +19,7 @@ describe PriceDetector do
   end
 
   it "doesn't find words that contain no numbers" do
-    %w(/,v„ Sie,).each { |text| create(:word, text: text) }
+    %w(/,v„ Sie).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
     expect(prices).to be_empty
@@ -33,7 +33,7 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 2 words' do
-    create_following_words(%w(54, 00))
+    create_following_words(%w(54 00))
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(54,00)

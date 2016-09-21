@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
-  puts "loading support!!!"
+  puts 'loading support!!!'
 
   config.before(:suite) do
     begin

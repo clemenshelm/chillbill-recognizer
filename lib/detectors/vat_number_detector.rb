@@ -31,12 +31,8 @@ class VatNumberDetector
       end
       term.add_word(word)
       last_word = word
-      if term.valid?
-        term
-      end
+      term if term.valid?
     end
     terms.compact
   end
-
-
 end

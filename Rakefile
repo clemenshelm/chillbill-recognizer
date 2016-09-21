@@ -15,8 +15,8 @@ task :setup_processing do
 end
 
 desc 'Process unprocessed bills'
-task :process => :setup_processing do
-  process(:unprocessed) do |recognition_result, bill, meteor|
+task process: :setup_processing do
+  process(:unprocessed) do |recognition_result, _bill, meteor|
     include Logging
 
     id = recognition_result.delete :id
@@ -27,7 +27,7 @@ task :process => :setup_processing do
 end
 
 desc "Check which of the done bills weren't recognized correctly"
-task :check => :setup_processing do
+task check: :setup_processing do
   require 'colorize'
   require_relative './lib/logging'
 

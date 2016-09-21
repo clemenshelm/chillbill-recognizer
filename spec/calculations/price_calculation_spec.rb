@@ -8,8 +8,8 @@ describe PriceCalculation do
   end
 
   it 'calculates the sub total and the VAT total' do
-    %w(14.49 2.69 8.19 46.85 0.0 18.79 28.06 20.0 7.81 39.04 100.0).
-      each { |text| PriceTerm.create(text: text)  }
+    %w(14.49 2.69 8.19 46.85 0.0 18.79 28.06 20.0 7.81 39.04 100.0)
+      .each { |text| PriceTerm.create(text: text) }
 
     prices = PriceCalculation.new(PriceTerm.dataset)
     expect(prices.net_amount).to eq BigDecimal('39.04')
@@ -47,10 +47,10 @@ describe PriceCalculation do
   end
 
   it 'takes the highest right amount if there are multiple' do
-    PriceTerm.create(text: "190,00", left: 2706, top: 1559, right: 2824, bottom: 1596)
-    PriceTerm.create(text: "80,00", left: 2726, top: 1619, right: 2823, bottom: 1656)
-    PriceTerm.create(text: "80,00", left: 2724, top: 1680, right: 2823, bottom: 1717)
-    PriceTerm.create(text: "350,00", left: 657, top: 3397, right: 833, bottom: 3450)
+    PriceTerm.create(text: '190,00', left: 2706, top: 1559, right: 2824, bottom: 1596)
+    PriceTerm.create(text: '80,00', left: 2726, top: 1619, right: 2823, bottom: 1656)
+    PriceTerm.create(text: '80,00', left: 2724, top: 1680, right: 2823, bottom: 1717)
+    PriceTerm.create(text: '350,00', left: 657, top: 3397, right: 833, bottom: 3450)
 
     prices = PriceCalculation.new(PriceTerm.dataset)
     expect(prices.net_amount).to eq 350
@@ -58,22 +58,22 @@ describe PriceCalculation do
   end
 
   it 'takes the highes net amount and VAT amount if there are many possibilities' do
-    PriceTerm.create(text: "14,49", left: 2703, top: 1313, right: 2813, bottom: 1349)
-    PriceTerm.create(text: "14,49", left: 2704, top: 1433, right: 2813, bottom: 1469)
-    PriceTerm.create(text: "2,69", left: 2724, top: 1556, right: 2812, bottom: 1592)
-    PriceTerm.create(text: "8,19", left: 2725, top: 1676, right: 2812, bottom: 1712)
-    PriceTerm.create(text: "46,85", left: 2702, top: 1916, right: 2814, bottom: 1955)
-    PriceTerm.create(text: "46,85", left: 2701, top: 2037, right: 2812, bottom: 2133)
-    PriceTerm.create(text: "0,00", left: 2724, top: 2098, right: 2811, bottom: 2134)
-    PriceTerm.create(text: "46,85", left: 2702, top: 2104, right: 2894, bottom: 2293)
-    PriceTerm.create(text: "0,00", left: 2724, top: 2279, right: 2812, bottom: 2313)
-    PriceTerm.create(text: "46,85", left: 2701, top: 2399, right: 2814, bottom: 2437)
-    PriceTerm.create(text: "18,79", left: 2703, top: 2519, right: 2812, bottom: 2555)
-    PriceTerm.create(text: "28,06", left: 2701, top: 2580, right: 2812, bottom: 2615)
-    PriceTerm.create(text: "28,06", left: 2400, top: 2823, right: 2512, bottom: 2860)
-    PriceTerm.create(text: "20,00", left: 1937, top: 3426, right: 2049, bottom: 3460)
-    PriceTerm.create(text: "7,81", left: 2471, top: 3427, right: 2551, bottom: 3460)
-    PriceTerm.create(text: "39,04", left: 2702, top: 3425, right: 2812, bottom: 3460)
+    PriceTerm.create(text: '14,49', left: 2703, top: 1313, right: 2813, bottom: 1349)
+    PriceTerm.create(text: '14,49', left: 2704, top: 1433, right: 2813, bottom: 1469)
+    PriceTerm.create(text: '2,69', left: 2724, top: 1556, right: 2812, bottom: 1592)
+    PriceTerm.create(text: '8,19', left: 2725, top: 1676, right: 2812, bottom: 1712)
+    PriceTerm.create(text: '46,85', left: 2702, top: 1916, right: 2814, bottom: 1955)
+    PriceTerm.create(text: '46,85', left: 2701, top: 2037, right: 2812, bottom: 2133)
+    PriceTerm.create(text: '0,00', left: 2724, top: 2098, right: 2811, bottom: 2134)
+    PriceTerm.create(text: '46,85', left: 2702, top: 2104, right: 2894, bottom: 2293)
+    PriceTerm.create(text: '0,00', left: 2724, top: 2279, right: 2812, bottom: 2313)
+    PriceTerm.create(text: '46,85', left: 2701, top: 2399, right: 2814, bottom: 2437)
+    PriceTerm.create(text: '18,79', left: 2703, top: 2519, right: 2812, bottom: 2555)
+    PriceTerm.create(text: '28,06', left: 2701, top: 2580, right: 2812, bottom: 2615)
+    PriceTerm.create(text: '28,06', left: 2400, top: 2823, right: 2512, bottom: 2860)
+    PriceTerm.create(text: '20,00', left: 1937, top: 3426, right: 2049, bottom: 3460)
+    PriceTerm.create(text: '7,81', left: 2471, top: 3427, right: 2551, bottom: 3460)
+    PriceTerm.create(text: '39,04', left: 2702, top: 3425, right: 2812, bottom: 3460)
 
     prices = PriceCalculation.new(PriceTerm.dataset)
     expect(prices.net_amount).to eq BigDecimal('39.04')

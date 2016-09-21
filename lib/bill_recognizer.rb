@@ -42,15 +42,15 @@ class BillRecognizer
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
     hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
-      .force_encoding('UTF-8')
+           .force_encoding('UTF-8')
     # logger.debug hocr
 
     hocr_doc = Nokogiri::HTML(hocr)
-    hocr_doc.css(".ocrx_word").each do |word_node|
+    hocr_doc.css('.ocrx_word').each do |word_node|
       left, top, right, bottom = word_node[:title]
-        .match(/(\d+) (\d+) (\d+) (\d+);/)
-        .captures
-        .map(&:to_i)
+                                 .match(/(\d+) (\d+) (\d+) (\d+);/)
+                                 .captures
+                                 .map(&:to_i)
 
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
@@ -65,9 +65,7 @@ class BillRecognizer
 
     date_words = DateDetector.filter
     dates = DateCalculation.new(date_words)
-    if dates.invoice_date
-      invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
-    end
+    invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
 
     vat_number_words = VatNumberDetector.filter
     vat_number = VatNumberCalculation.new(
@@ -78,8 +76,7 @@ class BillRecognizer
     currency_words = CurrencyDetector.filter
     currency = CurrencyCalculation.new(currency_words)
 
-
-    #image_file.close
+    # image_file.close
 
     return {} if net_amount.nil?
 
@@ -89,7 +86,7 @@ class BillRecognizer
     vatTotal = vat_amount * 100
     total = (subTotal + vatTotal).to_i
     vatRate =
-      if subTotal != 0
+      if subTotal.nonzero?
         (vatTotal * 100 / subTotal).round
       else
         0
@@ -107,10 +104,10 @@ class BillRecognizer
 
   def preprocess(image_path)
     processor = ImageProcessor.new(image_path)
-      .apply_background('#fff')
-      .deskew
-      .normalize
-      .trim
-      .write!(image_path)
+                              .apply_background('#fff')
+                              .deskew
+                              .normalize
+                              .trim
+                              .write!(image_path)
   end
 end

@@ -3,7 +3,7 @@ class CurrencyCalculation
     @words = words
   end
 
-  def iso()
+  def iso
     return nil if @words.empty?
     @words.first.to_iso
   end

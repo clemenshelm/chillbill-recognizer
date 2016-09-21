@@ -3,8 +3,8 @@ require_relative '../../lib/calculations/date_calculation'
 describe DateCalculation do
   it 'uses the first date as invoice date' do
     words = %w(2015-04-01 2015-02-28)
-      .map { |date_string| DateTime.iso8601(date_string) }
-      .map { |datetime| double(to_datetime: datetime)  }
+            .map { |date_string| DateTime.iso8601(date_string) }
+            .map { |datetime| double(to_datetime: datetime) }
 
     dates = DateCalculation.new(words)
     expect(dates.invoice_date).to eq DateTime.iso8601('2015-04-01')

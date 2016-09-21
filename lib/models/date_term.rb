@@ -2,7 +2,7 @@ require 'sequel'
 require_relative './term_builder'
 require_relative '../detectors/date_detector'
 
-# TODO unit test
+# TODO: unit test
 class DateTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
@@ -33,9 +33,8 @@ class DateTerm < Sequel::Model
       DateTime.parse(text)
     when DateDetector::FULL_GERMAN_DATE_REGEX
       date_text = text.gsub(/März|Dezember/,
-        'März' => 'March',
-        'Dezember' => 'December'
-      )
+                            'März' => 'March',
+                            'Dezember' => 'December')
       DateTime.strptime(date_text, '%d. %B %Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
@@ -45,5 +44,4 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     end
   end
-
 end

@@ -36,7 +36,7 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq %w(2015-04-01 2015-02-28 2015-03-31
-      2015-02-27 2015-03-16)
+                                         2015-02-27 2015-03-16)
   end
 
   it 'detects dates spread over several words' do
@@ -80,9 +80,9 @@ describe DateDetector do
   end
 
   it 'detects full German dates' do
-    create_following_words(%w(Wien, 23. April 2015))
+    create_following_words(%w(Wien 23. April 2015))
     create_following_words(%w(11. März 2016))
-    create_following_words(%w(Freitag, 4. Dezember 2015))
+    create_following_words(%w(Freitag 4. Dezember 2015))
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq %w(2015-04-23 2016-03-11 2015-12-04)

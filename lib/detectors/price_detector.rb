@@ -32,9 +32,7 @@ class PriceDetector
 
       last_word = word
 
-      if term.valid?
-        term.save
-      end
+      term.save if term.valid?
     end
   end
 end

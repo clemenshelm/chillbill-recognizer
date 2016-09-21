@@ -23,7 +23,7 @@ class ImageProcessor
   end
 
   def normalize
-    process_image { |image| image.normalize }
+    process_image(&:normalize)
   end
 
   def improve_level
@@ -31,7 +31,7 @@ class ImageProcessor
   end
 
   def trim
-    @image.fuzz = "99%"
+    @image.fuzz = '99%'
     @image.trim!
     self
   end

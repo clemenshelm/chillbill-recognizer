@@ -7,7 +7,7 @@ class WordList
   def initialize(words)
     # Also allow single words
     words = Array(words)
-    
+
     @start = OpenStruct.new
     words.inject(@start) do |prev_item, word_item|
       word_item = WordListItem.new(word_item) unless word_item.respond_to? :next
@@ -17,7 +17,7 @@ class WordList
 
   def each
     item = @start
-    while item = item.next do
+    while item = item.next
       yield item
     end
   end
@@ -28,7 +28,7 @@ class WordList
     delegate text: :@word, bounding_box: :@word
 
     def initialize(word)
-      @word = word 
+      @word = word
     end
 
     def self_and_following

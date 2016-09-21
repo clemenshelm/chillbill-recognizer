@@ -2,16 +2,15 @@ require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
-
   it 'recognizes the bill m6jLaPhmWvuZZqSXy' do
     retriever = SpecCacheRetriever.new(file_basename: 'm6jLaPhmWvuZZqSXy.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 4685, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 4685, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-04'
-    expect(bill_attributes[:currencyCode]).to eq "EUR"
+    expect(bill_attributes[:currencyCode]).to eq 'EUR'
     # Recognizes VAT ID as "QTU..."
     # expect(bill_attributes[:vatNumber]).to eq 'ATU17008805'
   end
@@ -23,56 +22,55 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 7780, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 7780, vatRate: 20 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU18125703'
-    expect(bill_attributes[:currencyCode]).to eq "EUR"
+    expect(bill_attributes[:currencyCode]).to eq 'EUR'
   end
 
-
   it 'recognizes the bill 8r74b2CqZpW5c8oev' do
-    pending("It recognizes one of the listed prices as the total sum, but both are detected")
+    pending('It recognizes one of the listed prices as the total sum, but both are detected')
     retriever = SpecCacheRetriever.new(file_basename: '8r74b2CqZpW5c8oev.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 5400, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 5400, vatRate: 20 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU52569000'
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
-    pending("Uses 5,41 as net amount instead of 15,41")
+    pending('Uses 5,41 as net amount instead of 15,41')
 
     retriever = SpecCacheRetriever.new(file_basename: '4f5mhL6zBb3cyny7n.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 1541, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 1541, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
-    pending("The bill is a vertical payment form. Make this work as well.")
+    pending('The bill is a vertical payment form. Make this work as well.')
     retriever = SpecCacheRetriever.new(file_basename: 'Y8YpKWEJZFunbMymh.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:currencyCode]).to eq 'EUR'
-    expect(bill_attributes[:amounts]).to eq [{total: 3600, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 3600, vatRate: 0 }]
     # No VAT Number
   end
 
   it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
-    pending("The billing period is recognized as the billing date")
+    pending('The billing period is recognized as the billing date')
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 9487, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 9487, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU45011703'
   end
@@ -83,17 +81,17 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 8000, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 8000, vatRate: 0 }]
   end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
-    pending "Total amount of 350,00 is not recognized in payment form"
+    pending 'Total amount of 350,00 is not recognized in payment form'
     retriever = SpecCacheRetriever.new(file_basename: 'Ghy3MB6y9HeZg2iZB.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 35000, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 35_000, vatRate: 0 }]
   end
 
   it 'recognizes the bill dXNmKuRyhwYeNQjbb' do
@@ -102,18 +100,18 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 2734, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 2734, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-03'
   end
 
   it 'recognizes the bill JRTan9t5Fuo7qE3y4' do
-    pending("The bill has a price element that looks very much like a VAT.")
+    pending('The bill has a price element that looks very much like a VAT.')
     retriever = SpecCacheRetriever.new(file_basename: 'JRTan9t5Fuo7qE3y4.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 7482, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 7482, vatRate: 0 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU40495807'
   end
 
@@ -126,19 +124,19 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 2052, vatRate: 14}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 2052, vatRate: 14 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
     expect(bill_attributes[:vatNumber]).to eq 'ATU37893801'
   end
 
   it 'recognizes the bill XYt8oerHesxQkdwvp' do
-    pending("The 8 on the price is misread as a 0")
+    pending('The 8 on the price is misread as a 0')
     retriever = SpecCacheRetriever.new(file_basename: 'XYt8oerHesxQkdwvp.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 1028, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU37893801'
   end
@@ -149,7 +147,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 12842, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 12_842, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-13'
     # Ammersin has ATU incorrectly written as AUT on their bills
     # expect(bill_attributes[:vatNumber]).to eq 'ATU14464300'
@@ -161,20 +159,20 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 19296, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 19_296, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-23'
     # The bill's white background is lost during png conversion. This only affects the detection of the bottom of the bill.
     # expect(bill_attributes[:vatNumber]).to eq 'ATU68617133'
   end
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
-    pending("The bill has prices without decimal places. Make this work as well.")
+    pending('The bill has prices without decimal places. Make this work as well.')
     retriever = SpecCacheRetriever.new(file_basename: '7FDFZnmZmfMyxWZtG.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 1028, vatRate: 0 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU68651513'
   end
 
@@ -185,7 +183,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 114364, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 114_364, vatRate: 20 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU14464300'
   end
 
@@ -196,18 +194,18 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 41299, vatRate: 19}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 41_299, vatRate: 19 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU58058103'
   end
 
   it 'recognizes the bill YaCWsCoSEuJAr5gAZ' do
-    pending("Prices are correct, but prepended with an *")
+    pending('Prices are correct, but prepended with an *')
     retriever = SpecCacheRetriever.new(file_basename: 'YaCWsCoSEuJAr5gAZ.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 5915, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 5915, vatRate: 20 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU14221901'
   end
 
@@ -217,19 +215,19 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 426164, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 426_164, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-02-29'
     expect(bill_attributes[:vatNumber]).to eq 'ATU70156715'
   end
 
   it 'recognizes the bill 27zu8ABiEcPTh2ELu' do
-    pending("It recognizes one of the listed prices as the total sum, but both are detected")
+    pending('It recognizes one of the listed prices as the total sum, but both are detected')
     retriever = SpecCacheRetriever.new(file_basename: '27zu8ABiEcPTh2ELu.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 8697, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 8697, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
   end
 
@@ -239,7 +237,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 29674, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 29_674, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
   end
@@ -253,7 +251,7 @@ describe 'Recognizing bills correctly' do
     # TODO: The vatRate should be 10, but we don't recognize vatRates without
     # net amount yet.
     # expect(bill_attributes[:amounts]).to eq [{total: 29674, vatRate: 10}]
-    expect(bill_attributes[:amounts]).to eq [{total: 790, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 790, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
     expect(bill_attributes[:vatNumber]).to eq 'ATU57399425'
   end
@@ -264,7 +262,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 100_000, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
   end
 
@@ -274,7 +272,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{total: 323, vatRate: 20}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 323, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU41472107'
   end
@@ -290,7 +288,7 @@ describe 'Recognizing bills correctly' do
 
     bill_attributes = recognizer.recognize
     expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
-    expect(bill_attributes[:currencyCode]).to eq "USD"
+    expect(bill_attributes[:currencyCode]).to eq 'USD'
   end
 
   it 'recognizes a .png bill, 2bQxSCp4nprMZpiSf' do
@@ -300,7 +298,7 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
     # vatRate is not calculated correctly although net amount is recognized
     # expect(bill_attributes[:amounts]).to eq [{total: 449, vatRate: 20}]
-    expect(bill_attributes[:amounts]).to eq [{total: 449, vatRate: 0}]
+    expect(bill_attributes[:amounts]).to eq [{ total: 449, vatRate: 0 }]
     # date is incorrectly recognized as 201Eu01-26
     # expect(bill_attributes[:invoiceDate]).to eq '2016-01-26'
   end
@@ -330,7 +328,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill QgxpPEE8xGzFGos9x' do # HDK
-    pending("Recognition does not filter fundamental results(HKD)")
+    pending('Recognition does not filter fundamental results(HKD)')
 
     retriever = SpecCacheRetriever.new(file_basename: 'QgxpPEE8xGzFGos9x.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -343,7 +341,7 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    #expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
+    # expect(bill_attributes[:vatNumber]).to eq 'EU372001951'
     expect(bill_attributes[:currencyCode]).to eq 'EUR'
   end
 
@@ -360,24 +358,24 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "SEK"
+    expect(bill_attributes[:currencyCode]).to eq 'SEK'
   end
 
-  it 'recognizes the bill ntFGWi3wGTRvR6zqE' do  # GBP
+  it 'recognizes the bill ntFGWi3wGTRvR6zqE' do # GBP
     retriever = SpecCacheRetriever.new(file_basename: 'ntFGWi3wGTRvR6zqE.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "GBP"
+    expect(bill_attributes[:currencyCode]).to eq 'GBP'
   end
 
   it 'recognizes the bill AteChFJR5vhMCqppF' do # HUF
-    pending("recognizer does not recognise HUF")
+    pending('recognizer does not recognise HUF')
     retriever = SpecCacheRetriever.new(file_basename: 'AteChFJR5vhMCqppF.JPG')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "HUF"
+    expect(bill_attributes[:currencyCode]).to eq 'HUF'
   end
 
   it 'recognizes the bill xnh6PuihJcPYKdmer' do # HRK
@@ -386,6 +384,6 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-    expect(bill_attributes[:currencyCode]).to eq "HRK"
+    expect(bill_attributes[:currencyCode]).to eq 'HRK'
   end
 end
