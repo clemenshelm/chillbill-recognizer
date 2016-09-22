@@ -1,5 +1,6 @@
 require 'sequel'
 require_relative './term_builder'
+require_relative '../detectors/currency_detector'
 require_relative './dimensionable'
 
 class CurrencyTerm < Sequel::Model
@@ -26,24 +27,24 @@ class CurrencyTerm < Sequel::Model
     @term_builder.valid?
   end
 
-  def to_iso()
+  def to_iso
     case text
     when CurrencyDetector::EUR_CODE_REGEX
-      "EUR"
+      'EUR'
     when CurrencyDetector::USD_CODE_REGEX
-      "USD"
+      'USD'
     when CurrencyDetector::HKD_CODE_REGEX
-      "HKD"
+      'HKD'
     when CurrencyDetector::CHF_CODE_REGEX
-      "CHF"
+      'CHF'
     when CurrencyDetector::CNY_CODE_REGEX
-      "CNY"
+      'CNY'
     when CurrencyDetector::SEK_CODE_REGEX
-      "SEK"
+      'SEK'
     when CurrencyDetector::GBP_CODE_REGEX
-      "GBP"
+      'GBP'
     when CurrencyDetector::HUF_CODE_REGEX
-      "HUF"
+      'HUF'
     end
   end
 end

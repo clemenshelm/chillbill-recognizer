@@ -16,7 +16,7 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill H9WCDhBHp2N7xRLoA' do
-    pending "doesn't recognize total value 7,78"
+    pending ('does not recognize total value 7,78')
     retriever = SpecCacheRetriever.new(file_basename: 'H9WCDhBHp2N7xRLoA.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
