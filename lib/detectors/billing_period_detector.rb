@@ -10,7 +10,7 @@ class BillingPeriodDetector
       from = DateTerm.right_before(term)
       to = DateTerm.right_after(term)
 
-      next unless from && to && from.text < to.text
+      next unless from && to
       term =  BillingPeriodTerm.new(
         text: from.text + ' - ' + to.text,
         from: from,

@@ -73,7 +73,7 @@ class BillRecognizer
 
     billing_period = BillingPeriodCalculation.new(
       billing_period_words
-    ).invoice_billing_period
+    ).billing_period
 
     dates = DateCalculation.new(date_words)
     if dates.invoice_date

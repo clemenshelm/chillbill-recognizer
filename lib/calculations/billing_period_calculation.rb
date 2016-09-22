@@ -7,7 +7,7 @@ class BillingPeriodCalculation
     @words = words
   end
 
-  def invoice_billing_period
+  def billing_period
     return nil if @words.empty?
     @words.first.to_s
   end

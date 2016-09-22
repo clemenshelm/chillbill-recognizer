@@ -38,7 +38,7 @@ describe BillingPeriodDetector do
     expect(billing_periods.map(&:text)).to eq ['07.02.2016 - 10.03.2016']
   end
 
-  it "does not recognize an invoice date that is the same as part of the billing period as part of the billing period" do
+  it "it doesn't consider other dates as part of the billing period" do
     create(:word, text: 'Ausstellungsdatum:', left: 1298, right: 1735, top: 770, bottom: 817)
     create(:word, text: '30.11.2015', left: 1885, right: 2129, top: 770, bottom: 807)
     create(:word, text: 'EUR:', left: 1747, right: 1860, top: 1508, bottom: 1545)

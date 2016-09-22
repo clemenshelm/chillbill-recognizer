@@ -5,7 +5,7 @@ require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-describe DateTerm do
+describe Dimensionable do
   before(:each) do
     Word.dataset.delete
     BillingPeriodTerm.dataset.delete
