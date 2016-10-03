@@ -7,13 +7,16 @@ require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
 require_relative './calculations/vat_number_calculation'
+require_relative './calculations/iban_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
+require_relative './detectors/iban_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
 require_relative './models/vat_number_term'
+require_relative './models/iban_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -32,6 +35,7 @@ class BillRecognizer
     PriceTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    IbanTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -54,7 +58,8 @@ class BillRecognizer
       Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
     end
     # logger.debug Word.map(&:text)
-    logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    #logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
 
     price_words = PriceDetector.filter
     # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
@@ -74,6 +79,8 @@ class BillRecognizer
       customer_vat_number: @customer_vat_number
     ).vat_number
 
+    iban_numbers_words = IbanDetector.filter
+    iban_number = IbanCalculation.new(iban_numbers_words).iban_number
     #image_file.close
 
     return {} if net_amount.nil?
@@ -93,7 +100,8 @@ class BillRecognizer
     {
       amounts: [total: total, vatRate: vatRate],
       invoiceDate: invoice_date,
-      vatNumber: vat_number
+      vatNumber: vat_number,
+      ibanNumber: iban_number
     }
   end
 

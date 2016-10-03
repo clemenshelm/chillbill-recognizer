@@ -28,7 +28,7 @@ describe 'Recognizing bills correctly' do
 
 
   it 'recognizes the bill 8r74b2CqZpW5c8oev' do
-    pending("It recognizes one of the listed prices as the total sum, but both are detected")
+    pending("It recognizes one of the listed prices as the total sum, but both are detected. It does not recognize iban number as well")
     retriever = SpecCacheRetriever.new(file_basename: '8r74b2CqZpW5c8oev.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -36,6 +36,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 5400, vatRate: 20}]
     expect(bill_attributes[:vatNumber]).to eq 'ATU52569000'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT185600020141333306'
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
@@ -49,20 +50,22 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 1541, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT166000000002200114'
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
-    pending("The bill is a vertical payment form. Make this work as well.")
+    pending("The bill is a vertical payment form. Make this work as well. Recognizes does not recognize iban number on this bill")
     retriever = SpecCacheRetriever.new(file_basename: 'Y8YpKWEJZFunbMymh.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 3600, vatRate: 0}]
+    expect(bill_attributes[:ibanNumber]).to eq "AT736000000002386490"
     # No VAT Number
   end
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
+  it 'recognizes the bill ZkPkwYF8p6PPLbf7f'  do
     pending("The billing period is recognized as the billing date")
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -72,6 +75,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 9487, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU45011703'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT821200052844072305'
   end
 
   it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
@@ -81,16 +85,18 @@ describe 'Recognizing bills correctly' do
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 8000, vatRate: 0}]
+    expect(bill_attributes[:ibanNumber]).to eq "AT851100010687568500"
   end
 
   it 'recognizes the bill Ghy3MB6y9HeZg2iZB' do
-    pending "Total amount of 350,00 is not recognized in payment form"
+    pending "Total amount of 350,00 is not recognized in payment form. Detector recognizes 4 on iban number as l+."
     retriever = SpecCacheRetriever.new(file_basename: 'Ghy3MB6y9HeZg2iZB.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{total: 35000, vatRate: 0}]
+    expect(bill_attributes[:ibanNumber]).to eq "AT896000000007284025"
   end
 
   it 'recognizes the bill dXNmKuRyhwYeNQjbb' do
@@ -112,6 +118,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 7482, vatRate: 0}]
     expect(bill_attributes[:vatNumber]).to eq 'ATU40495807'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT892010040312416700'
   end
 
   it 'recognizes the bill aMajbm6LRwoy96xWa' do
@@ -162,6 +169,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-23'
     # The bill's white background is lost during png conversion. This only affects the detection of the bottom of the bill.
     # expect(bill_attributes[:vatNumber]).to eq 'ATU68617133'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT662081500006986731'
   end
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
@@ -173,6 +181,7 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 1028, vatRate: 0}]
     expect(bill_attributes[:vatNumber]).to eq 'ATU68651513'
+    expect(bill_attributes[:ibanNumber]).to eq "AT281200010011287801"
   end
 
   it 'recognizes the bill d8TPPMpm74BmyDsoT' do
@@ -217,6 +226,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 426164, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-02-29'
     expect(bill_attributes[:vatNumber]).to eq 'ATU70156715'
+    expect(bill_attributes[:ibanNumber]).to eq 'DE86512308006530481295'
   end
 
   it 'recognizes the bill 27zu8ABiEcPTh2ELu' do
@@ -239,6 +249,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 29674, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT431200010626827900'
   end
 
   it 'recognizes the bill iyt9vLXuFfJhJKwJ5' do
@@ -263,9 +274,11 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{total: 100000, vatRate: 0}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT092011182443989300'
   end
 
   it 'recognizes the bill Etn9rJm4BAa2vnjyq' do
+    pending("recognizer does not recognize iban number")
     retriever = SpecCacheRetriever.new(file_basename: 'Etn9rJm4BAa2vnjyq.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -274,6 +287,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{total: 323, vatRate: 20}]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU41472107'
+    expect(bill_attributes[:ibanNumber]).to eq 'AT761967500100912502'
   end
 
   it 'recognizes the bill a5b4acuqNNoQg9nh9' do
@@ -325,4 +339,118 @@ describe 'Recognizing bills correctly' do
     # If it doesn't throw an exception, it works
   end
 
+  it 'recognizes the bill MM4o4pPK9Ttp2MqvJ' do
+    retriever = SpecCacheRetriever.new(file_basename: 'MM4o4pPK9Ttp2MqvJ.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT251400002010023044"
+  end
+
+  it 'recognizes the bill xfkjpC4oR694RLaQ4' do
+    retriever = SpecCacheRetriever.new(file_basename: 'xfkjpC4oR694RLaQ4.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT361200052966001745"
+  end
+
+  it 'recognizes the bill 249d36tzwFBWjsrev' do
+    pending("error while opening and iban does not exists")
+    retriever = SpecCacheRetriever.new(file_basename: '249d36tzwFBWjsrev.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT251400002010023044"
+  end
+
+  it 'recognizes the bill 22uKq5q9pa39DRfNB' do
+    retriever = SpecCacheRetriever.new(file_basename: '22uKq5q9pa39DRfNB.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT815500010500004712"
+  end
+
+  it 'recognizes the bill 28YRpHtS7R3qwEfMR' do
+    retriever = SpecCacheRetriever.new(file_basename: '28YRpHtS7R3qwEfMR.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT821200052844072305"
+  end
+
+  it 'recognizes the bill 2SmZNKp2sb5j9H5Tr' do
+    retriever = SpecCacheRetriever.new(file_basename: '2SmZNKp2sb5j9H5Tr.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT631910000040666000"
+  end
+
+  it 'recognizes the bill 28fdHSL6w4YkD5DK6' do
+    retriever = SpecCacheRetriever.new(file_basename: '28fdHSL6w4YkD5DK6.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT762011131032711186"
+  end
+
+  it 'recognizes the bill 27XQiYsRgfuY8Qgkr' do
+    pending("does not recognize iban numbers")
+    retriever = SpecCacheRetriever.new(file_basename: '27XQiYsRgfuY8Qgkr.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT103225000000013300"
+  end
+
+  it 'recognizes the bill 36reqGNW2tEufnXJx' do
+    pending("recognizer recognizes 4 as 6")
+    retriever = SpecCacheRetriever.new(file_basename: '36reqGNW2tEufnXJx.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "DE84600700700163214000"
+  end
+
+  it 'recognizes the bill 6jwujKzunQ9Ni7EBg' do
+    retriever = SpecCacheRetriever.new(file_basename: '6jwujKzunQ9Ni7EBg.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT431200010626827900"
+  end
+
+  it 'recognizes the bill 4T67zD7Fc9gygc7Qy' do
+    retriever = SpecCacheRetriever.new(file_basename: '4T67zD7Fc9gygc7Qy.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT283200000003047222"
+  end
+
+  it 'recognizes the bill 3ajvp4ZMyx3FhFF2z' do
+    retriever = SpecCacheRetriever.new(file_basename: '3ajvp4ZMyx3FhFF2z.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "DE98100500006012320190"
+  end
+
+  it 'recognizes the bill 7YoE7K6hcRvMv3o4r' do
+    retriever = SpecCacheRetriever.new(file_basename: '7YoE7K6hcRvMv3o4r.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "HR0923600001101675865"
+  end
+
+  it 'recognizes the bill 2MXM3jkEPyDLd7yf2' do
+    retriever = SpecCacheRetriever.new(file_basename: '2MXM3jkEPyDLd7yf2.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+    expect(bill_attributes[:ibanNumber]).to eq "AT761967500100912501"
+  end
 end
