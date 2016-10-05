@@ -21,9 +21,10 @@ describe BillingPeriodDetector do
     create(:word, text: '31.03.2015', left: 832, right: 1038, top: 773, bottom: 809)
     create(:word, text: 'USt.', left: 1856, right: 1931, top: 934, bottom: 970)
 
-    DateDetector.filter
+    dates = DateDetector.filter
     billing_periods = BillingPeriodDetector.filter
-    expect(billing_periods.map(&:text)).to eq ['01.03.2015 - 31.03.2015']
+    expect(billing_periods.map(&:from)).to eq [dates.first]
+    expect(billing_periods.map(&:to)).to eq [dates.last]
   end
 
   it "Recognizes a billing period seperated by the word 'bis' " do
@@ -33,9 +34,10 @@ describe BillingPeriodDetector do
     create(:word, text: 'Gesamtbetragfbruttoj', left: 1348, right: 1948, top: 1240, bottom: 1301)
     create(:word, text: '1000,-', left: 2145, right: 2291, top: 1244, bottom: 1293)
 
-    DateDetector.filter
+    dates = DateDetector.filter
     billing_periods = BillingPeriodDetector.filter
-    expect(billing_periods.map(&:text)).to eq ['07.02.2016 - 10.03.2016']
+    expect(billing_periods.map(&:from)).to eq [dates.first]
+    expect(billing_periods.map(&:to)).to eq [dates.last]
   end
 
   it "it doesn't consider other dates as part of the billing period" do
@@ -43,12 +45,13 @@ describe BillingPeriodDetector do
     create(:word, text: '30.11.2015', left: 1885, right: 2129, top: 770, bottom: 807)
     create(:word, text: 'EUR:', left: 1747, right: 1860, top: 1508, bottom: 1545)
     create(:word, text: 'Work', left: 269, right: 393, top: 1194, bottom: 1230)
-    create(:word, text: '01.11.2015', left: 1301, right: 1546, top: 1194, bottom: 1230)
+    from_date =  create(:word, text: '01.11.2015', left: 1301, right: 1546, top: 1194, bottom: 1230)
     create(:word, text: '-', left: 1565, right: 1580, top: 1214, bottom: 1221)
-    create(:word, text: '30.11.2015', left: 1595, right: 1840, top: 1194, bottom: 1230)
+    to_date = create(:word, text: '30.11.2015', left: 1595, right: 1840, top: 1194, bottom: 1230)
 
     DateDetector.filter
     billing_periods = BillingPeriodDetector.filter
-    expect(billing_periods.map(&:text)).to eq ['01.11.2015 - 30.11.2015']
+    # binding.pry
+    expect(billing_periods.map(&:from_id)).to eq [from_date.id] #THIS IS BROKEN :<
   end
 end

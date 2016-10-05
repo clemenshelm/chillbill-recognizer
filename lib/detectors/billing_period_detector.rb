@@ -1,6 +1,5 @@
-require_relative '../../lib/boot'
+require_relative '../boot'
 require_relative '../word_list'
-require_relative './date_detector'
 require_relative '../models/billing_period_term'
 require_relative '../models/date_term'
 
@@ -12,7 +11,6 @@ class BillingPeriodDetector
 
       next unless from && to
       term =  BillingPeriodTerm.new(
-        text: from.text + ' - ' + to.text,
         from: from,
         to: to
       )

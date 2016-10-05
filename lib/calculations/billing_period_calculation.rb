@@ -1,6 +1,3 @@
-require_relative '../detectors/date_detector'
-require_relative '../models/billing_period_term'
-require_relative '../models/word'
 
 class BillingPeriodCalculation
   def initialize(words)
@@ -9,6 +6,6 @@ class BillingPeriodCalculation
 
   def billing_period
     return nil if @words.empty?
-    @words.first.to_s
+    @words.first.to_isoperiod
   end
 end

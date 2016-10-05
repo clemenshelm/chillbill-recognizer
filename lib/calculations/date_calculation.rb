@@ -1,5 +1,4 @@
 require_relative '../detectors/date_detector'
-require_relative '../boot'
 
 class DateCalculation
   def initialize(words)
