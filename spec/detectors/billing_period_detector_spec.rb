@@ -1,5 +1,6 @@
 require_relative '../../lib/boot'
 require_relative '../../lib/detectors/date_detector'
+require_relative '../../lib/models/date_term'
 require_relative '../../lib/detectors/billing_period_detector'
 require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
@@ -45,13 +46,13 @@ describe BillingPeriodDetector do
     create(:word, text: '30.11.2015', left: 1885, right: 2129, top: 770, bottom: 807)
     create(:word, text: 'EUR:', left: 1747, right: 1860, top: 1508, bottom: 1545)
     create(:word, text: 'Work', left: 269, right: 393, top: 1194, bottom: 1230)
-    from_date =  create(:word, text: '01.11.2015', left: 1301, right: 1546, top: 1194, bottom: 1230)
+    create(:word, text: '01.11.2015', left: 1301, right: 1546, top: 1194, bottom: 1230)
     create(:word, text: '-', left: 1565, right: 1580, top: 1214, bottom: 1221)
-    to_date = create(:word, text: '30.11.2015', left: 1595, right: 1840, top: 1194, bottom: 1230)
+    create(:word, text: '30.11.2015', left: 1595, right: 1840, top: 1194, bottom: 1230)
 
     DateDetector.filter
     billing_periods = BillingPeriodDetector.filter
-    # binding.pry
-    expect(billing_periods.map(&:from_id)).to eq [from_date.id] #THIS IS BROKEN :<
+    expect(billing_periods.first.from.to_datetime).to eq DateTime.iso8601('2015-11-01')
+    expect(billing_periods.first.to.to_datetime).to eq DateTime.iso8601('2015-11-30')
   end
 end
