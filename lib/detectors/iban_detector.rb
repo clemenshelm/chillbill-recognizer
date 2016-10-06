@@ -1,5 +1,3 @@
-require 'ostruct'
-require 'bigdecimal'
 require_relative '../models/iban_term'
 
 class IbanDetector

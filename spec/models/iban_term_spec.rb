@@ -2,7 +2,7 @@ require_relative '../../lib/boot'
 require_relative '../../lib/models/iban_term'
 
 describe IbanTerm do
-  it 'recognizes Austrain IBAN correctly'  do
+  it 'recognizes Austrian IBAN correctly'  do
     term = IbanTerm.new(text: 'AT185600020141333306')
     expect(term.to_s).to eq "AT185600020141333306"
   end
