@@ -40,7 +40,6 @@ describe DateCalculation do
     )
 
     BillingPeriodTerm.create(
-      text: "01.03.2015 - 31.03.2015",
       from: start_of_period,
       to: end_of_period
     )
