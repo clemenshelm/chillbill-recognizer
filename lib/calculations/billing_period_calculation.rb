@@ -7,7 +7,8 @@ class BillingPeriodCalculation
 
   def billing_period
     return nil if @words.empty?
-    { from: @words.first.from.to_datetime,
+    {
+      from: @words.first.from.to_datetime,
       to: @words.first.to.to_datetime
     }
   end

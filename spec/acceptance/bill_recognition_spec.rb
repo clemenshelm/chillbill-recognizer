@@ -69,7 +69,7 @@ describe 'Recognizing bills correctly' do
     # No VAT Number
   end
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do #THIS ONE PASSES :D
+  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
     pending('The UID number is detected to have a fullstop at the end')
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -278,7 +278,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU57399425'
   end
 
-  it 'recognizes the bill zcEkC9vgfcTv7DBwM' do #THIS ONE PASSES :D
+  it 'recognizes the bill zcEkC9vgfcTv7DBwM' do
     retriever = SpecCacheRetriever.new(file_basename: 'zcEkC9vgfcTv7DBwM.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
