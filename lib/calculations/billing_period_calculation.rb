@@ -1,3 +1,4 @@
+require_relative '../models/date_term'
 
 class BillingPeriodCalculation
   def initialize(words)
@@ -6,6 +7,8 @@ class BillingPeriodCalculation
 
   def billing_period
     return nil if @words.empty?
-    @words.first.to_isoperiod
+    { from: @words.first.from.to_datetime,
+      to: @words.first.to.to_datetime
+    }
   end
 end

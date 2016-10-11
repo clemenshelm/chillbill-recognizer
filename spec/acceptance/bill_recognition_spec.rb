@@ -38,7 +38,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU52569000'
   end
 
-  it 'recognizes the bill 4f5mhL6zBb3cyny7n', :focus do
+  it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
     # pending('Uses 5,41 as net amount instead of 15,41')
 
     retriever = SpecCacheRetriever.new(file_basename: '4f5mhL6zBb3cyny7n.pdf')
