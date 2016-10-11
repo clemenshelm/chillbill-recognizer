@@ -39,17 +39,22 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 4f5mhL6zBb3cyny7n' do
-    # pending('Uses 5,41 as net amount instead of 15,41')
+    pending(
+      'Uses 5,41 as net amount instead of 15,41
+      and there is a bis near the invoice date
+      that makes it seem like part of the billing period'
+      )
 
     retriever = SpecCacheRetriever.new(file_basename: '4f5mhL6zBb3cyny7n.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    # expect(bill_attributes[:amounts]).to eq [{ total: 1541, vatRate: 0 }]
+    expect(bill_attributes[:amounts]).to eq [{ total: 1541, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-01'
     expect(bill_attributes[:vatNumber]).to eq 'ATU16250401'
-    expect(bill_attributes[:billingPeriod]).to eq '28.02.2015 - 31.03.2015'
+    expect(bill_attributes[:billingPeriod][:from]).to eq DateTime.iso8601('2015-02-28')
+    expect(bill_attributes[:billingPeriod][:to]).to eq DateTime.iso8601('2015-03-31')
   end
 
   it 'recognizes the bill Y8YpKWEJZFunbMymh' do
@@ -64,7 +69,7 @@ describe 'Recognizing bills correctly' do
     # No VAT Number
   end
 
-  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do
+  it 'recognizes the bill ZkPkwYF8p6PPLbf7f' do #THIS ONE PASSES :D
     pending('The UID number is detected to have a fullstop at the end')
     retriever = SpecCacheRetriever.new(file_basename: 'ZkPkwYF8p6PPLbf7f.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
@@ -74,7 +79,8 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:amounts]).to eq [{ total: 9487, vatRate: 20 }]
     expect(bill_attributes[:invoiceDate]).to eq '2015-04-10'
     expect(bill_attributes[:vatNumber]).to eq 'ATU45011703'
-    expect(bill_attributes[:billingPeriod]).to eq '01.03.2015 - 31.03.2015'
+    expect(bill_attributes[:billingPeriod][:from]).to eq DateTime.iso8601('2015-03-01')
+    expect(bill_attributes[:billingPeriod][:to]).to eq DateTime.iso8601('2015-03-31')
   end
 
   it 'recognizes the bill 4WaHezqC7H7HgDzcy' do
@@ -169,15 +175,20 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 7FDFZnmZmfMyxWZtG' do
-    pending('The bill has prices without decimal places. Make this work as well.')
+    pending(
+      'The bill has prices without decimal places.
+       Make this work as well.
+       Also the billing period is not detected because 1 is read as l.'
+    )
     retriever = SpecCacheRetriever.new(file_basename: '7FDFZnmZmfMyxWZtG.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{ total: 1028, vatRate: 0 }]
+    # expect(bill_attributes[:amounts]).to eq [{ total: 1028, vatRate: 0 }]
     expect(bill_attributes[:vatNumber]).to eq 'ATU68651513'
-    expect(bill_attributes[:billingPeriod]).to eq '01.03.2015 - 30.04.2015'
+    expect(bill_attributes[:billingPeriod][:from]).to eq DateTime.iso8601('2015-03-01')
+    expect(bill_attributes[:billingPeriod][:to]).to eq DateTime.iso8601('2015-04-30')
   end
 
   it 'recognizes the bill d8TPPMpm74BmyDsoT' do
@@ -225,7 +236,12 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes the bill 27zu8ABiEcPTh2ELu' do
-    pending('It recognizes one of the listed prices as the total sum, but both are detected')
+    pending(
+      'It recognizes one of the listed prices as the total sum,
+      but both are detected.
+      There is a line break in the billing period.
+      It breaks detecting the period.'
+    )
     retriever = SpecCacheRetriever.new(file_basename: '27zu8ABiEcPTh2ELu.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -233,7 +249,8 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{ total: 8697, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-09'
-    expect(bill_attributes[:billingPeriod]).to eq '09.03.2016 - 09.03.2017'
+    expect(bill_attributes[:billingPeriod][:from]).to eq DateTime.iso8601('2016-03-09')
+    expect(bill_attributes[:billingPeriod][:to]).to eq DateTime.iso8601('2017-03-09')
   end
 
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
@@ -261,7 +278,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU57399425'
   end
 
-  it 'recognizes the bill zcEkC9vgfcTv7DBwM' do
+  it 'recognizes the bill zcEkC9vgfcTv7DBwM' do #THIS ONE PASSES :D
     retriever = SpecCacheRetriever.new(file_basename: 'zcEkC9vgfcTv7DBwM.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
@@ -269,7 +286,8 @@ describe 'Recognizing bills correctly' do
 
     expect(bill_attributes[:amounts]).to eq [{ total: 100_000, vatRate: 0 }]
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-11'
-    expect(bill_attributes[:billingPeriod]).to eq '07.02.2016 - 10.03.2016'
+    expect(bill_attributes[:billingPeriod][:from]).to eq DateTime.iso8601('2016-02-07')
+    expect(bill_attributes[:billingPeriod][:to]).to eq DateTime.iso8601('2016-03-10')
   end
 
   it 'recognizes the bill Etn9rJm4BAa2vnjyq' do

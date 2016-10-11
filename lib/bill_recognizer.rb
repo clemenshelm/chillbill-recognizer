@@ -36,9 +36,9 @@ class BillRecognizer
     # Make sure database is empty
     Word.dataset.delete
     PriceTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
     CurrencyTerm.dataset.delete
 
     # Download and convert image
@@ -92,7 +92,6 @@ class BillRecognizer
     currency = CurrencyCalculation.new(currency_words)
 
     #image_file.close
-
     return {} if net_amount.nil?
 
     # Adapt recognition result to application schema
