@@ -45,8 +45,6 @@ DB.create_table :billing_period_terms do
   foreign_key :from_id, :date_terms
   foreign_key :to_id, :date_terms
   String :text
-  # Integer :from_id
-  # Integer :to_id
 end
 
 DB.create_table :currency_terms do
