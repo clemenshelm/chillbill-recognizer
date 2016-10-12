@@ -1,12 +1,6 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/calculations/price_calculation'
-require_relative '../../lib/models/price_term'
 
 describe PriceCalculation do
-  before(:each) do
-    PriceTerm.dataset.delete
-  end
-
   it 'calculates the sub total and the VAT total' do
     %w(14.49 2.69 8.19 46.85 0.0 18.79 28.06 20.0 7.81 39.04 100.0).
       each { |text| PriceTerm.create(text: text)  }
@@ -17,7 +11,7 @@ describe PriceCalculation do
   end
 
   it 'calculates the sub total and the VAT total for a different bill' do
-    words = %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
+    %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
 
     prices = PriceCalculation.new(PriceTerm.dataset)
     expect(prices.net_amount).to eq BigDecimal('6.48')

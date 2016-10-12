@@ -1,9 +1,16 @@
 require 'sequel'
 require_relative './term_builder'
 require_relative '../detectors/date_detector'
+require_relative '../boot'
+require_relative './dimensionable'
 
 # TODO unit test
 class DateTerm < Sequel::Model
+  include Dimensionable
+  require_relative './billing_period_term' # Loading it here resolves issues with the circular dependency
+  one_to_many :started_periods, class: BillingPeriodTerm, key: :from_id
+  one_to_many :ended_periods, class: BillingPeriodTerm, key: :to_id
+
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
@@ -45,5 +52,4 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     end
   end
-
 end

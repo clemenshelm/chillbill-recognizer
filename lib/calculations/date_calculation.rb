@@ -7,6 +7,10 @@ class DateCalculation
 
   def invoice_date
     return nil if @words.empty?
-    @words.first.to_datetime
+    standalone_dates = @words.all.select do |term|
+      term.started_periods.empty? && term.ended_periods.empty?
+    end
+
+    standalone_dates.first.to_datetime
   end
 end

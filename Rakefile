@@ -34,7 +34,7 @@ task :check => :setup_processing do
   process(:reviewed) do |recognition_result, bill|
     include Logging
 
-    attributes = %i(amounts invoiceDate vatNumber)
+    attributes = %i(amounts invoiceDate vatNumber billingPeriod currencyCode)
     correct_result = bill[:accountingRecord].slice(*attributes)
     id = recognition_result.delete(:id)
     if recognition_result == correct_result
