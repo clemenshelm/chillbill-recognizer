@@ -3,15 +3,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe CurrencyDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it 'recognizes EUR currency on a bill' do
     create(:word, text: 'EUR', left: 777, right: 843, top: 778, bottom: 818)
     create(:word, text: '4,49', left: 943, right: 1037, top: 778, bottom: 824)

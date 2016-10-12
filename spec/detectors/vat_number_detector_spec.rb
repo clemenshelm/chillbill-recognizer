@@ -3,15 +3,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe VatNumberDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it 'recognizes an Austrian VAT ID number seperated by a space' do
     create(:word, text: 'Wien', left: 411, right: 485, top: 267, bottom: 297)
     create(:word, text: 'ATU', left: 298, right: 352, top: 311, bottom: 341)

@@ -4,15 +4,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it "Recognises the billing period from a bill" do
     create(:word, text: 'T-Mobile', left: 339, right: 599, top: 685, bottom: 740)
     create(:word, text: 'Rechnung', left: 623, right: 925, top: 685, bottom: 753)

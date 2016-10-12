@@ -3,15 +3,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
 describe DateDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it 'finds short German dates' do
     # From bill m6jLaPhmWvuZZqSXy
     %w(9025 0650/004/133 04.04.2015 13133).each_with_index do |text, index|

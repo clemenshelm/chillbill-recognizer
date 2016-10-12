@@ -82,5 +82,14 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.before(:each) do
+    Word.dataset.delete
+    PriceTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
+    DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
+  end
+
   config.include SpecCache
 end

@@ -2,15 +2,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodTerm do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it "sets the correct values for a billing period" do
     start_of_period = DateTerm.create(
       text: "01.03.2015",

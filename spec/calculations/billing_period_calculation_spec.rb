@@ -1,15 +1,6 @@
 require_relative '../../lib/calculations/billing_period_calculation'
 
 describe BillingPeriodCalculation do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it 'returns the billing period attributes in the correct format' do
     start_of_period = DateTerm.create(
       text: "01.03.2015",

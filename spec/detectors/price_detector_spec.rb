@@ -3,15 +3,6 @@ require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
 describe PriceDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-    BillingPeriodTerm.dataset.delete
-    DateTerm.dataset.delete
-    VatNumberTerm.dataset.delete
-    CurrencyTerm.dataset.delete
-  end
-
   it 'finds prices separated with a comma' do
     %w(C 14,49 4006972047414 2,69).each { |text| create(:word, text: text) }
 
