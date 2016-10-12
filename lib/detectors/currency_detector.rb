@@ -22,7 +22,7 @@ class CurrencyDetector
     find_currencies(GBP_CODE_REGEX)
     find_currencies(HUF_CODE_REGEX)
     find_currencies(HRK_CODE_REGEX)
-    
+
     CurrencyTerm.dataset
   end
 

@@ -1,4 +1,5 @@
 require 'valvat'
+require_relative '../word_list'
 require_relative '../models/vat_number_term'
 require_relative '../logging.rb'
 
