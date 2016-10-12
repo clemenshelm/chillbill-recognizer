@@ -1,7 +1,7 @@
 require_relative '../../lib/calculations/date_calculation'
 
 describe DateCalculation do
-it 'returns nil if there is no invoice date candidate' do
+  it 'returns nil if there is no invoice date candidate' do
     dates = DateCalculation.new([])
     expect(dates.invoice_date).to be_nil
   end
