@@ -1,4 +1,4 @@
-require_relative '../../lib/boot'
+require_relative '../boot'
 require_relative '../models/date_term'
 
 class DateDetector
@@ -37,9 +37,7 @@ class DateDetector
 
       last_word = word
 
-      if term.valid?
-        term.save
-      end
+      term.save if term.valid?
     end
   end
 end

@@ -40,6 +40,12 @@ DB.create_table :vat_number_terms do
   Integer :bottom
 end
 
+DB.create_table :billing_period_terms do
+  primary_key :id
+  foreign_key :from_id, :date_terms
+  foreign_key :to_id, :date_terms
+end
+
 DB.create_table :currency_terms do
   primary_key :id
   String :text

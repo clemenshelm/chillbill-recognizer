@@ -1,15 +1,8 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/detectors/date_detector'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
 describe DateDetector do
-  before(:each) do
-    Word.dataset.delete
-    DateTerm.dataset.delete
-  end
-
   it 'finds short German dates' do
     # From bill m6jLaPhmWvuZZqSXy
     %w(9025 0650/004/133 04.04.2015 13133).each_with_index do |text, index|
@@ -126,6 +119,30 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
+  end
+
+  it "detects the date in the dd/mm/yy format" do
+    create(:word, text: '7385622', left: 201, right: 340, top: 1396, bottom: 1426)
+    create(:word, text: '3670800', left: 480, right: 619, top: 1397, bottom: 1427)
+    create(:word, text: '1/03/16', left: 779, right: 895, top: 1397, bottom: 1427)
+    create(:word, text: 'lNTERNET', left: 1065, right: 1259, top: 1397, bottom: 1426)
+    create(:word, text: 'BO', left: 1312, right: 1367, top: 1397, bottom: 1426)
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-03-01']
+  end
+
+  it "detects multiple dates on a bill" do
+    create(:word, text: 'Datum', left: 1613, right: 1732, top: 497, bottom: 529)
+    create(:word, text: '16.03.2016', left: 1819, right: 2026, top: 498, bottom: 529)
+    create(:word, text: '5020', left: 352, right: 444, top: 531, bottom: 563)
+    create(:word, text: 'Salzburg', left: 459, right: 623, top: 530, bottom: 572)
+    create(:word, text: 'Fällig', left: 1636, right: 1732, top: 585, bottom: 626)
+    create(:word, text: '21.03.2016', left: 1816, right: 2026, top: 586, bottom: 618)
+    create(:word, text: 'Rechnung', left: 2, right: 190, top: 752, bottom: 793)
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ["2016-03-16", "2016-03-21"]
   end
 
   def date_strings(date_terms)
