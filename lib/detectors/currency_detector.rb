@@ -1,4 +1,3 @@
-require_relative '../word_list'
 require_relative '../models/currency_term'
 
 class CurrencyDetector
@@ -22,7 +21,7 @@ class CurrencyDetector
     find_currencies(GBP_CODE_REGEX)
     find_currencies(HUF_CODE_REGEX)
     find_currencies(HRK_CODE_REGEX)
-    
+
     CurrencyTerm.dataset
   end
 

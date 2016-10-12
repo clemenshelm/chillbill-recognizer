@@ -1,5 +1,4 @@
 require_relative '../boot'
-require_relative '../word_list'
 require_relative '../models/billing_period_term'
 require_relative '../models/date_term'
 
