@@ -1,11 +1,13 @@
 require_relative '../../lib/calculations/billing_period_calculation'
-require_relative '../../lib/models/date_term'
-require_relative '../../lib/models/billing_period_term'
 
 describe BillingPeriodCalculation do
   before(:each) do
+    Word.dataset.delete
+    PriceTerm.dataset.delete
     BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it 'returns the billing period attributes in the correct format' do

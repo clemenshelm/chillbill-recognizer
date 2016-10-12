@@ -1,13 +1,15 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/detectors/vat_number_detector'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe VatNumberDetector do
   before(:each) do
     Word.dataset.delete
+    PriceTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
+    DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it 'recognizes an Austrian VAT ID number seperated by a space' do

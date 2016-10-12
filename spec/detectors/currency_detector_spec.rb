@@ -1,13 +1,14 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/detectors/currency_detector'
-require_relative '../../lib/models/currency_term'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe CurrencyDetector do
   before(:each) do
     Word.dataset.delete
+    PriceTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
+    DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
     CurrencyTerm.dataset.delete
   end
 

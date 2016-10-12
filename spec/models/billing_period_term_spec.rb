@@ -1,15 +1,14 @@
-require_relative '../../lib/boot'
-require_relative '../../lib/models/billing_period_term'
-require_relative '../../lib/models/date_term'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodTerm do
   before(:each) do
     Word.dataset.delete
+    PriceTerm.dataset.delete
     BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it "sets the correct values for a billing period" do

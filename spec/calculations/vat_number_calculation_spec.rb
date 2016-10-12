@@ -1,10 +1,13 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/calculations/vat_number_calculation'
-require_relative '../../lib/models/vat_number_term'
 
 describe VatNumberCalculation do
   before(:each) do
+    Word.dataset.delete
+    PriceTerm.dataset.delete
+    BillingPeriodTerm.dataset.delete
+    DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it "ignores customer VAT ID numbers" do

@@ -2,8 +2,12 @@ require_relative '../../lib/calculations/date_calculation'
 
 describe DateCalculation do
   before(:each) do
+    Word.dataset.delete
+    PriceTerm.dataset.delete
     BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it 'returns nil if there is no invoice date candidate' do

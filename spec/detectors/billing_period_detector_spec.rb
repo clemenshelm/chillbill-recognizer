@@ -1,16 +1,16 @@
-require_relative '../../lib/boot'
 require_relative '../../lib/detectors/date_detector'
-require_relative '../../lib/models/date_term'
 require_relative '../../lib/detectors/billing_period_detector'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodDetector do
   before(:each) do
     Word.dataset.delete
+    PriceTerm.dataset.delete
     BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
+    VatNumberTerm.dataset.delete
+    CurrencyTerm.dataset.delete
   end
 
   it "Recognises the billing period from a bill" do
