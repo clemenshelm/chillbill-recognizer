@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'ostruct'
 require 'forwardable'
 
@@ -17,9 +18,7 @@ class WordList
 
   def each
     item = @start
-    while item = item.next do
-      yield item
-    end
+    yield item while item == item.next
   end
 
   class WordListItem

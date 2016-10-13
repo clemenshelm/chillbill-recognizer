@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rmagick'
 
 class ImageProcessor
@@ -12,10 +13,12 @@ class ImageProcessor
       image.background_color = color
     end
     process_image do |image|
-      background.composite(image, Magick::NorthEastGravity, Magick::OverCompositeOp)
+      background.composite(
+        image, Magick::NorthEastGravity, Magick::OverCompositeOp
+      )
     end
   ensure
-    background && background.destroy!
+    background&.destroy!
   end
 
   def deskew
@@ -23,15 +26,17 @@ class ImageProcessor
   end
 
   def normalize
-    process_image { |image| image.normalize }
+    process_image(&:normalize)
   end
 
   def improve_level
-    process_image { |image| image.level(0.1 * QuantumRange, 0.9 * QuantumRange, 1.5) }
+    process_image do |image|
+      image.level(0.1 * QuantumRange, 0.9 * QuantumRange, 1.5)
+    end
   end
 
   def trim
-    @image.fuzz = "99%"
+    @image.fuzz = '99%'
     @image.trim!
     self
   end
@@ -49,6 +54,6 @@ class ImageProcessor
     @image = yield @image
     self
   ensure
-    original_image && original_image.destroy!
+    original_image&.destroy!
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'valvat'
 require_relative '../word_list'
 require_relative '../models/vat_number_term'
@@ -18,9 +19,8 @@ class VatNumberDetector
     VatNumberTerm.dataset
   end
 
-  private
-
   def self.find_vat_numbers(regex, after_each_word: nil)
+    private
     term = VatNumberTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil
 
@@ -33,9 +33,7 @@ class VatNumberDetector
       term.add_word(word)
       last_word = word
 
-      if term.valid?
-        term
-      end
+      term if term.valid?
     end
 
     terms.compact

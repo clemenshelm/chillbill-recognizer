@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'eventmachine'
 require 'metybur'
 require 'em-hiredis'
@@ -13,7 +14,7 @@ class Hub
     @config = config
   end
 
-  def run(&bill_proc)
+  def run
     bills = {}
 
     EventMachine.run do
@@ -31,16 +32,16 @@ class Hub
       meteor.subscribe("admin.bills.#{@bills}")
 
       meteor.collection('bills')
-        .on(:added) do |id, bill|
-          logger.info "bill #{id} was added: #{bill}"
-          bills[id] = bill
-          RecognitionWorker.perform_async id, bill[:imageUrl]
-        end
+            .on(:added) do |id, bill|
+        logger.info "bill #{id} was added: #{bill}"
+        bills[id] = bill
+        RecognitionWorker.perform_async id, bill[:imageUrl]
+      end
 
       redis.pubsub.subscribe 'results' do |bill_json|
         recognition_result = JSON.parse bill_json, symbolize_names: true
         id = recognition_result[:id]
-        bill_proc.call(recognition_result, bills[id], meteor)
+        yield(recognition_result, bills[id], meteor)
       end
     end
   end

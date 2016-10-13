@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../lib/detectors/date_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
@@ -29,7 +30,7 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq %w(2015-04-01 2015-02-28 2015-03-31
-      2015-02-27 2015-03-16)
+                                         2015-02-27 2015-03-16)
   end
 
   it 'detects dates spread over several words' do
@@ -73,9 +74,9 @@ describe DateDetector do
   end
 
   it 'detects full German dates' do
-    create_following_words(%w(Wien, 23. April 2015))
+    create_following_words(%w(Wien 23. April 2015))
     create_following_words(%w(11. März 2016))
-    create_following_words(%w(Freitag, 4. Dezember 2015))
+    create_following_words(%w(Freitag 4. Dezember 2015))
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq %w(2015-04-23 2016-03-11 2015-12-04)
@@ -113,36 +114,152 @@ describe DateDetector do
 
   it 'does not recognize phone numbers as dates' do
     # From bill 7Nvce6pPniK3BCCA7
-    create(:word, text: '+43', left: 2018, right: 2087, top: 223, bottom: 257)
-    create(:word, text: '1', left: 2103, right: 2121, top: 223, bottom: 256)
-    create(:word, text: '2675366', left: 2137, right: 2303, top: 223, bottom: 257)
+    create(
+      :word,
+      text: '+43',
+      left: 2018,
+      right: 2087,
+      top: 223,
+      bottom: 257
+    )
+
+    create(
+      :word,
+      text: '1',
+      left: 2103,
+      right: 2121,
+      top: 223,
+      bottom: 256
+    )
+
+    create(
+      :word,
+      text: '2675366',
+      left: 2137,
+      right: 2303,
+      top: 223,
+      bottom: 257
+    )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
 
-  it "detects the date in the dd/mm/yy format" do
-    create(:word, text: '7385622', left: 201, right: 340, top: 1396, bottom: 1426)
-    create(:word, text: '3670800', left: 480, right: 619, top: 1397, bottom: 1427)
-    create(:word, text: '1/03/16', left: 779, right: 895, top: 1397, bottom: 1427)
-    create(:word, text: 'lNTERNET', left: 1065, right: 1259, top: 1397, bottom: 1426)
-    create(:word, text: 'BO', left: 1312, right: 1367, top: 1397, bottom: 1426)
+  it 'detects the date in the dd/mm/yy format' do
+    create(
+      :word,
+      text: '7385622',
+      left: 201,
+      right: 340,
+      top: 1396,
+      bottom: 1426
+    )
+
+    create(
+      :word,
+      text: '3670800',
+      left: 480,
+      right: 619,
+      top: 1397,
+      bottom: 1427
+    )
+    create(
+      :word,
+      text: '1/03/16',
+      left: 779,
+      right: 895,
+      top: 1397,
+      bottom: 1427
+    )
+
+    create(
+      :word,
+      text: 'lNTERNET',
+      left: 1065,
+      right: 1259,
+      top: 1397,
+      bottom: 1426
+    )
+
+    create(
+      :word,
+      text: 'BO',
+      left: 1312,
+      right: 1367,
+      top: 1397,
+      bottom: 1426
+    )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-03-01']
   end
 
-  it "detects multiple dates on a bill" do
-    create(:word, text: 'Datum', left: 1613, right: 1732, top: 497, bottom: 529)
-    create(:word, text: '16.03.2016', left: 1819, right: 2026, top: 498, bottom: 529)
-    create(:word, text: '5020', left: 352, right: 444, top: 531, bottom: 563)
-    create(:word, text: 'Salzburg', left: 459, right: 623, top: 530, bottom: 572)
-    create(:word, text: 'Fällig', left: 1636, right: 1732, top: 585, bottom: 626)
-    create(:word, text: '21.03.2016', left: 1816, right: 2026, top: 586, bottom: 618)
-    create(:word, text: 'Rechnung', left: 2, right: 190, top: 752, bottom: 793)
+  it 'detects multiple dates on a bill' do
+    create(
+      :word,
+      text: 'Datum',
+      left: 1613,
+      right: 1732,
+      top: 497,
+      bottom: 529
+    )
+
+    create(
+      :word,
+      text: '16.03.2016',
+      left: 1819,
+      right: 2026,
+      top: 498,
+      bottom: 529
+    )
+
+    create(
+      :word,
+      text: '5020',
+      left: 352,
+      right: 444,
+      top: 531,
+      bottom: 563
+    )
+
+    create(
+      :word,
+      text: 'Salzburg',
+      left: 459,
+      right: 623,
+      top: 530,
+      bottom: 572
+    )
+
+    create(
+      :word,
+      text: 'Fällig',
+      left: 1636,
+      right: 1732,
+      top: 585,
+      bottom: 626
+    )
+
+    create(
+      :word,
+      text: '21.03.2016',
+      left: 1816,
+      right: 2026,
+      top: 586,
+      bottom: 618
+    )
+
+    create(
+      :word,
+      text: 'Rechnung',
+      left: 2,
+      right: 190,
+      top: 752,
+      bottom: 793
+    )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ["2016-03-16", "2016-03-21"]
+    expect(date_strings(dates)).to eq ['2016-03-16', '2016-03-21']
   end
 
   def date_strings(date_terms)

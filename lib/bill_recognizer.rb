@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 require 'bigdecimal'
 require 'pry'
 require 'nokogiri'
@@ -48,24 +49,46 @@ class BillRecognizer
     # FileUtils.cp(image_file.path, './test.png')
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
-    hocr = `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
+    hocr =
+      `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c
+      tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
       .force_encoding('UTF-8')
     # logger.debug hocr
 
     hocr_doc = Nokogiri::HTML(hocr)
-    hocr_doc.css(".ocrx_word").each do |word_node|
+    hocr_doc.css('.ocrx_word').each do |word_node|
       left, top, right, bottom = word_node[:title]
-        .match(/(\d+) (\d+) (\d+) (\d+);/)
-        .captures
-        .map(&:to_i)
+                                 .match(/(\d+) (\d+) (\d+) (\d+);/)
+                                 .captures
+                                 .map(&:to_i)
 
-      Word.create(text: word_node.text, left: left, right: right, top: top, bottom: bottom)
+      Word.create(
+        text: word_node.text,
+        left: left,
+        right: right,
+        top: top,
+        bottom: bottom
+      )
     end
     # logger.debug Word.map(&:text)
-    # puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    # puts Word.map { |word|
+    #   "text: #{word.text},
+    #   left: #{word.left},
+    #   right: #{word.right},
+    #   top: #{word.top},
+    #   bottom: #{word.bottom}"
+    # }
 
     price_words = PriceDetector.filter
-    # logger.debug price_words.map { |word| "PriceTerm.create(text: '#{word.text}', left: '#{word.left}', right: '#{word.right}', top: '#{word.top}', bottom: '#{word.bottom}')" }
+    logger.debug price_words.map { |word|
+      "PriceTerm.create(
+        text: '#{word.text}',
+        left: '#{word.left}',
+        right: '#{word.right}',
+        top: '#{word.top}',
+        bottom: '#{word.bottom}'
+      )"
+    }
     date_words = DateDetector.filter
     vat_number_words = VatNumberDetector.filter
     billing_period_words = BillingPeriodDetector.filter
@@ -76,9 +99,7 @@ class BillRecognizer
     ).billing_period
 
     dates = DateCalculation.new(date_words)
-    if dates.invoice_date
-      invoice_date = dates.invoice_date.strftime('%Y-%m-%d')
-    end
+    invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
 
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
@@ -91,37 +112,38 @@ class BillRecognizer
 
     currency = CurrencyCalculation.new(currency_words)
 
-    #image_file.close
+    # image_file.close
     return {} if net_amount.nil?
 
     # Adapt recognition result to application schema
     # TODO: Let price calculation produce required format
-    subTotal = net_amount * 100
-    vatTotal = vat_amount * 100
-    total = (subTotal + vatTotal).to_i
-    vatRate =
-      if subTotal != 0
-        (vatTotal * 100 / subTotal).round
+    sub_total = net_amount * 100
+    vat_total = vat_amount * 100
+    total = (sub_total + vat_total).to_i
+    vat_rate =
+      if sub_total.nonzero?
+        (vat_total * 100 / sub_total).round
       else
         0
       end
 
     {
-      amounts: [total: total, vatRate: vatRate],
+      amounts: [total: total, vat_rate: vat_rate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
       currencyCode: currency.iso
     }
   end
+
   private
 
   def preprocess(image_path)
     ImageProcessor.new(image_path)
-      .apply_background('#fff')
-      .deskew
-      .normalize
-      .trim
-      .write!(image_path)
+                  .apply_background('#fff')
+                  .deskew
+                  .normalize
+                  .trim
+                  .write!(image_path)
   end
 end

@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodTerm do
-  it "sets the correct values for a billing period" do
+  it 'sets the correct values for a billing period' do
     start_of_period = DateTerm.create(
-      text: "01.03.2015",
+      text: '01.03.2015',
       left: 591,
       right: 798,
       top: 773,
@@ -13,7 +14,7 @@ describe BillingPeriodTerm do
     )
 
     end_of_period = DateTerm.create(
-      text: "31.03.2015",
+      text: '31.03.2015',
       left: 832,
       right: 1038,
       top: 773,

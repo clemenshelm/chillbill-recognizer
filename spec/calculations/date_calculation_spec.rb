@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../lib/calculations/date_calculation'
 
 describe DateCalculation do
@@ -8,7 +9,7 @@ describe DateCalculation do
 
   it 'ignores dates from a billing period' do
     start_of_period = DateTerm.create(
-      text: "01.03.2015",
+      text: '01.03.2015',
       left: 591,
       right: 798,
       top: 773,
@@ -17,7 +18,7 @@ describe DateCalculation do
     )
 
     end_of_period = DateTerm.create(
-      text: "31.03.2015",
+      text: '31.03.2015',
       left: 832,
       right: 1038,
       top: 773,
@@ -26,7 +27,7 @@ describe DateCalculation do
     )
 
     DateTerm.create(
-      text: "10.04.2015",
+      text: '10.04.2015',
       left: 2194,
       right: 2397,
       top: 213,
@@ -45,7 +46,7 @@ describe DateCalculation do
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
   end
 
-  it "recognizes the first date as the invoice date" do
+  it 'recognizes the first date as the invoice date' do
     DateTerm.create(
       text: '16.03.2016',
       left: 1819,

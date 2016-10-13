@@ -1,8 +1,8 @@
+# frozen_string_literal: true
 require 'sequel'
 require_relative './term_builder'
 
 class VatNumberTerm < Sequel::Model
-
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
