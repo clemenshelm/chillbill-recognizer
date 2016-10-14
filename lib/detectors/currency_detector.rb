@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../word_list'
 require_relative '../models/currency_term'
 
 class CurrencyDetector
