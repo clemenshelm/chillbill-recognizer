@@ -1,9 +1,11 @@
+# frozen_string_literal: true
 require 'ostruct'
 require 'bigdecimal'
 require_relative '../models/price_term'
 
 class PriceDetector
-  DECIMAL_PRICE_REGEX = /(?:^|[^\.\d])(€?\d{1,4}(?:\.\d{3})?+[,\.](?:\d{1,3}|-))(?:[^\.\d]|$)/
+  DECIMAL_PRICE_REGEX =
+    /(?:^|[^\.\d])(€?\d{1,4}(?:\.\d{3})?+[,\.](?:\d{1,3}|-))(?:[^\.\d]|$)/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
   SHORT_PRICE_REGEX = /(\d+€)/
 
@@ -18,9 +20,8 @@ class PriceDetector
     PriceTerm.dataset
   end
 
-  private
-
   def self.find_prices(regex, after_each_word: nil)
+    private
     term = PriceTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil
 
@@ -32,9 +33,7 @@ class PriceDetector
 
       last_word = word
 
-      if term.valid?
-        term.save
-      end
+      term.save if term.valid?
     end
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../boot'
 require_relative '../models/billing_period_term'
 require_relative '../models/date_term'
@@ -10,8 +11,7 @@ class BillingPeriodDetector
 
       next unless from && to
       term =  BillingPeriodTerm.new(
-        from: from,
-        to: to
+        from: from, to: to
       )
 
       term.save

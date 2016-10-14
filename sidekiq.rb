@@ -1,10 +1,12 @@
+# frozen_string_literal: true
 require 'sidekiq'
 require 'hiredis'
 require_relative 'lib/bill_recognizer'
 require_relative 'lib/logging'
 
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis' } # Run only 1 thread.
+  # Run only 1 thread.
+  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis' }
   puts 'Sidekiq client configured.'
 end
 

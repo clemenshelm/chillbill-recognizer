@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../detectors/date_detector'
 
 class DateCalculation

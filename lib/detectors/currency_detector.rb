@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+require_relative '../word_list'
 require_relative '../models/currency_term'
 
 class CurrencyDetector
-
   EUR_CODE_REGEX = /EUR|€/
   USD_CODE_REGEX = /USD|\$/
   HKD_CODE_REGEX = /HKD|\$/
@@ -25,9 +26,8 @@ class CurrencyDetector
     CurrencyTerm.dataset
   end
 
-private
-
   def self.find_currencies(regex, after_each_word: nil)
+    private
     term = CurrencyTerm.new(regex: regex, after_each_word: after_each_word)
 
     Word.each do |word|
@@ -37,9 +37,7 @@ private
 
       term.add_word(word)
 
-      if term.valid?
-        term.save
-      end
+      term.save if term.valid?
     end
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../lib/boot'
 require_relative '../../lib/models/price_term'
 
@@ -17,7 +18,7 @@ describe PriceTerm do
     expect(term.to_d).to eq 1000.00
   end
 
-  it 'recognizes a price with a dash as decimal places and leading euro symbol' do
+  it 'recognizes a price with a - as decimal places & leading euro symbol' do
     term = PriceTerm.new(text: '€1000,-')
     expect(term.to_d).to eq 1000.00
   end

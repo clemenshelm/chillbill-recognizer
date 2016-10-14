@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 ruby '2.3.1'
 
@@ -38,6 +39,9 @@ gem 'null-logger'
 # Validates European VAT numbers
 gem 'valvat', '~> 0.6.10'
 
+# Ruby linter
+gem 'rubocop', require: false
+
 group :development do
   gem 'rake'
   gem 'colorize' # Colorizes shell output
@@ -50,5 +54,5 @@ end
 group :test do
   gem 'rspec'
   gem 'guard-rspec', require: false
-  gem 'factory_girl', "~> 4.0"
+  gem 'factory_girl', '~> 4.0'
 end
