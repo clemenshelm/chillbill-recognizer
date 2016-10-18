@@ -128,7 +128,7 @@ class BillRecognizer
       end
 
     {
-      amounts: [total: total, vat_rate: vat_rate],
+      amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
