@@ -126,7 +126,7 @@ class BillRecognizer
       else
         0
       end
-
+    binding.pry
     {
       amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
