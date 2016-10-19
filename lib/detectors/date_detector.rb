@@ -8,7 +8,7 @@ class DateDetector
   SHORT_PERIOD_DATE_REGEX = /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.\d+)/
   SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d+)}
   FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|Dezember) \d+)/
-  FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May) \d+)/ #{}/(\d+ March \d+)/
+  FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May) \d+)/
 
   def self.filter
     end_number_with_period = lambda do |term|

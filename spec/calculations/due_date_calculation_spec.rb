@@ -28,31 +28,12 @@ describe DueDateCalculation do
       bottom: 1433
     )
 
-    create(
-      :word,
-      text: '30',
-      left: 323,
-      right: 379,
-      top: 1394,
-      bottom: 1433
-    )
-
-    create(
-      :word,
-      text: 'April',
-      left: 396,
-      right: 506,
-      top: 1391,
-      bottom: 1443
-    )
-
-    create(
-      :word,
-      text: '2015',
-      left: 528,
-      right: 644,
-      top: 1394,
-      bottom: 1433
+    DateTerm.new(
+      :text=>"30. April 2015",
+      :left=>529,
+      :right=>664,
+      :top=>1796,
+      :bottom=>1848,
     )
 
     create(
@@ -73,35 +54,16 @@ describe DueDateCalculation do
       bottom: 1519
     )
 
-    create(
-      :word,
-      text: '14',
-      left: 338,
-      right: 392,
-      top: 1480,
-      bottom: 1519
-    )
-
-    create(
-      :word,
-      text: 'May',
-      left: 413,
-      right: 516,
-      top: 1480,
-      bottom: 1529
-    )
-
-    create(
-      :word,
-      text: '2015',
-      left: 534,
-      right: 650,
-      top: 1480,
-      bottom: 1519
+    DateTerm.new(
+      :text=>"14 May 2015",
+      :left=>534,
+      :right=>650,
+      :top=>1480,
+      :bottom=>1519,
     )
 
     due_date_calculation = DueDateCalculation.new(
-      DateTerm.dataset
+      DueDateTerm.dataset
     )
     expect(due_date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
   end
