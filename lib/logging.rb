@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'null_logger'
 
 module Logging
@@ -6,9 +7,7 @@ module Logging
       @logger ||= NullLogger.new
     end
 
-    def logger=(logger)
-      @logger = logger
-    end
+    attr_writer :logger
   end
 
   # Addition

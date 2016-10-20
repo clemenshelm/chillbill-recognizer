@@ -1,16 +1,9 @@
-require_relative '../../lib/boot'
+# frozen_string_literal: true
 require_relative '../../lib/detectors/price_detector'
-require_relative '../../lib/models/word'
-require_relative '../../lib/models/price_term'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
 describe PriceDetector do
-  before(:each) do
-    Word.dataset.delete
-    PriceTerm.dataset.delete
-  end
-
   it 'finds prices separated with a comma' do
     %w(C 14,49 4006972047414 2,69).each { |text| create(:word, text: text) }
 
@@ -19,7 +12,7 @@ describe PriceDetector do
   end
 
   it "doesn't find words that contain no numbers" do
-    %w(/,v„ Sie,).each { |text| create(:word, text: text) }
+    %w(/,v„ Sie).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
     expect(prices).to be_empty
@@ -61,7 +54,14 @@ describe PriceDetector do
   end
 
   it "includes a word's bounding box" do
-    create(:word, text: '1.185,00', left: 2199, top: 1996, right: 2350, bottom: 2029)
+    create(
+      :word,
+      text: '1.185,00',
+      left: 2199,
+      top: 1996,
+      right: 2350,
+      bottom: 2029
+    )
 
     prices = PriceDetector.filter
     price = prices.first
@@ -90,7 +90,7 @@ describe PriceDetector do
     %w(3.551,37 4.261,64).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
-    price_strings = prices.map { |price| '%.2f' % price.to_d }
+    price_strings = prices.map { |price| format('%.2f', price.to_d) }
     expect(price_strings).to eq ['3551.37', '4261.64']
   end
 
@@ -99,7 +99,7 @@ describe PriceDetector do
     price_texts.each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
-    price_strings = prices.map { |price| '%.2f' % price.to_d }
+    price_strings = prices.map { |price| format('%.2f', price.to_d) }
     expect(price_strings).to eq price_texts
   end
 
@@ -107,7 +107,7 @@ describe PriceDetector do
     create(:word, text: '€86.97')
 
     prices = PriceDetector.filter
-    price_string = '%.2f' % prices.first.to_d
+    price_string = format('%.2f', prices.first.to_d)
     expect(price_string).to eq('86.97')
   end
 
@@ -115,26 +115,48 @@ describe PriceDetector do
     create(:word, text: '1000,-')
 
     prices = PriceDetector.filter
-    price_string = '%.2f' % prices.first.to_d
+    price_string = format('%.2f', prices.first.to_d)
     expect(price_string).to eq('1000.00')
   end
 
   it 'finds a price without decimal places with the currency name behind' do
     # from bill gANywe3fjvx98iPp2
-    create(:word, text: '360', left: 1048, right: 1134, top: 1826, bottom: 1859)
-    create(:word, text: 'Euro', left: 1160, right: 1260, top: 1826, bottom: 1859)
+    create(
+      :word,
+      text: '360',
+      left: 1048,
+      right: 1134,
+      top: 1826,
+      bottom: 1859
+    )
+
+    create(
+      :word,
+      text: 'Euro',
+      left: 1160,
+      right: 1260,
+      top: 1826,
+      bottom: 1859
+    )
 
     prices = PriceDetector.filter
-    price_string = '%.2f' % prices.first.to_d
+    price_string = format('%.2f', prices.first.to_d)
     expect(price_string).to eq('360.00')
   end
 
   it 'finds a price without decimal places with the currency symbol behind' do
     # from bill gANywe3fjvx98iPp2
-    create(:word, text: '300€', left: 1890, right: 2012, top: 1350, bottom: 1384)
+    create(
+      :word,
+      text: '300€',
+      left: 1890,
+      right: 2012,
+      top: 1350,
+      bottom: 1384
+    )
 
     prices = PriceDetector.filter
-    price_string = '%.2f' % prices.first.to_d
+    price_string = format('%.2f', prices.first.to_d)
     expect(price_string).to eq('300.00')
   end
 

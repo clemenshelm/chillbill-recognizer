@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'sequel'
 
 # create in-memory database
@@ -41,6 +42,21 @@ DB.create_table :vat_number_terms do
 end
 
 DB.create_table :iban_terms do
+  primary_key :id
+  String  :text
+  Integer :left
+  Integer :right
+  Integer :top
+  Integer :bottom
+end
+
+DB.create_table :billing_period_terms do
+  primary_key :id
+  foreign_key :from_id, :date_terms
+  foreign_key :to_id, :date_terms
+end
+
+DB.create_table :currency_terms do
   primary_key :id
   String :text
   Integer :left

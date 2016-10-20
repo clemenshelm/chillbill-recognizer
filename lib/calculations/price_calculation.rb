@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'bigdecimal'
 
 class PriceCalculation
@@ -32,13 +33,14 @@ class PriceCalculation
       # Sort smallest to largest. Otherwise the net amount is easily considered
       # the same as the total amount.
       remaining_prices.reverse.each do |net|
-        possible_vats = remaining_prices.select { |price| price <= (net * BigDecimal('0.2')).ceil(2) }
+        possible_vats = remaining_prices.select do |price|
+          price <= (net * BigDecimal('0.2')).ceil(2)
+        end
         possible_vats.each do |vat|
-          if net + vat == total_word.to_d
-            @net_amount = net
-            @vat_amount = vat
-            return
-          end
+          next unless net + vat == total_word.to_d
+          @net_amount = net
+          @vat_amount = vat
+          return
         end
       end
     end
@@ -47,13 +49,13 @@ class PriceCalculation
   def largest_net
     # TODO: This would probably be more robust if the net amount needed to be
     # significantly larger.
-    largest = @price_terms.sort_by { |word| word.height }.last
+    largest = @price_terms.sort_by(&:height).last
     @net_amount = largest.to_d
     @vat_amount = 0
   end
 
   def right_most_net
-    right_most = @price_terms.sort_by { |price| price.right }.last
+    right_most = @price_terms.sort_by(&:right).last
     @net_amount = BigDecimal.new(right_most.text.sub(',', '.'))
     @vat_amount = 0
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../logging'
 
 class TermBuilder
@@ -15,16 +16,13 @@ class TermBuilder
   def add_word(word)
     @words << word
     @text += word.text
-
-    @after_each_word.call(self) if @after_each_word
+    @after_each_word&.call(self)
 
     matching_groups = text.scan(@regex).first
     # logger.debug "text: #{@text}"
     # logger.debug "groups: #{matching_groups.inspect}"
 
-    if matching_groups
-      @text = Array(matching_groups).first
-    end
+    @text = Array(matching_groups).first if matching_groups
   end
 
   def valid?
@@ -34,14 +32,14 @@ class TermBuilder
   def extract_text
     (1..@words.length).each do |numwords|
       available_words = @words[-numwords..-1]
-      builder = TermBuilder.new(regex: @regex, after_each_word: @after_each_word)
+      builder = TermBuilder.new(
+        regex: @regex, after_each_word: @after_each_word
+      )
 
       available_words.each do |word|
         builder.add_word(word)
 
-        if builder.valid?
-          return builder.text
-        end
+        return builder.text if builder.valid?
       end
     end
   end

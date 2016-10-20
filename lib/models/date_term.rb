@@ -1,9 +1,18 @@
+# frozen_string_literal: true
 require 'sequel'
 require_relative './term_builder'
 require_relative '../detectors/date_detector'
+require_relative '../boot'
+require_relative './dimensionable'
 
-# TODO unit test
+# TODO: unit test
 class DateTerm < Sequel::Model
+  include Dimensionable
+  # Loading it here resolves issues with the circular dependency
+  require_relative './billing_period_term'
+  one_to_many :started_periods, class: BillingPeriodTerm, key: :from_id
+  one_to_many :ended_periods, class: BillingPeriodTerm, key: :to_id
+
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
@@ -33,9 +42,8 @@ class DateTerm < Sequel::Model
       DateTime.parse(text)
     when DateDetector::FULL_GERMAN_DATE_REGEX
       date_text = text.gsub(/März|Dezember/,
-        'März' => 'March',
-        'Dezember' => 'December'
-      )
+                            'März' => 'March',
+                            'Dezember' => 'December')
       DateTime.strptime(date_text, '%d. %B %Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
@@ -45,5 +53,4 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     end
   end
-
 end

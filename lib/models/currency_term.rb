@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'sequel'
 require_relative './term_builder'
+require_relative '../detectors/currency_detector'
 require_relative './dimensionable'
 
-# TODO: unit test
-class PriceTerm < Sequel::Model
+class CurrencyTerm < Sequel::Model
   include Dimensionable
 
   def initialize(attrs)
@@ -28,13 +28,24 @@ class PriceTerm < Sequel::Model
     @term_builder.valid?
   end
 
-  def to_d
-    # remove thousand separator, but keep comma
-    dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
-    # Replace commas with periods
-    dec_text.sub!(',', '.')
-    # Remove currency symbols
-    dec_text.sub!('€', '')
-    BigDecimal.new(dec_text)
+  def to_iso
+    case text
+    when CurrencyDetector::EUR_CODE_REGEX
+      'EUR'
+    when CurrencyDetector::USD_CODE_REGEX
+      'USD'
+    when CurrencyDetector::HKD_CODE_REGEX
+      'HKD'
+    when CurrencyDetector::CHF_CODE_REGEX
+      'CHF'
+    when CurrencyDetector::CNY_CODE_REGEX
+      'CNY'
+    when CurrencyDetector::SEK_CODE_REGEX
+      'SEK'
+    when CurrencyDetector::GBP_CODE_REGEX
+      'GBP'
+    when CurrencyDetector::HUF_CODE_REGEX
+      'HUF'
+    end
   end
 end

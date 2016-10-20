@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'yaml'
 
 class Config
@@ -9,6 +10,6 @@ class Config
     end
 
   def self.[](key)
-    @config_hash[key.to_s] 
+    @config_hash[key.to_s]
   end
 end
