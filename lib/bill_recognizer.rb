@@ -105,6 +105,7 @@ class BillRecognizer
     vat_number_words = VatNumberDetector.filter
     billing_period_words = BillingPeriodDetector.filter
     currency_words = CurrencyDetector.filter
+    iban_words = IbanDetector.filter
 
     billing_period = BillingPeriodCalculation.new(
       billing_period_words
@@ -122,8 +123,6 @@ class BillRecognizer
       customer_vat_number: @customer_vat_number
     ).vat_number
 
-
-    iban_words = IbanDetector.filter
     iban = IbanCalculation.new(iban_words).iban
     #image_file.close
 
@@ -148,9 +147,9 @@ class BillRecognizer
       amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
-      iban: iban,
       billingPeriod: billing_period,
-      currencyCode: currency.iso
+      currencyCode: currency.iso,
+      iban: iban
     }
   end
 
