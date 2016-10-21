@@ -4,7 +4,7 @@ require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-describe VatNumberDetector do
+describe IbanDetector do
   before(:each) do
     Word.dataset.delete
     IbanTerm.dataset.delete
@@ -16,8 +16,8 @@ describe VatNumberDetector do
     create(:word, text: "12000", left: 1497, right: 1631, top: 3025, bottom: 3061)
     create(:word, text: "10011287801", left: 1650, right: 1952, top: 3025, bottom: 3061)
 
-    iban_numbers = IbanDetector.filter
-    expect(iban_numbers.map(&:to_s)).to eq ['AT281200010011287801']
+    iban = IbanDetector.filter
+    expect(iban.map(&:to_s)).to eq ['AT281200010011287801']
   end
 
   it "recognizes separated IBAN"  do
@@ -26,8 +26,8 @@ describe VatNumberDetector do
     create(:word, text: "11000", left: 1258, right: 1484, top: 2537, bottom: 2605)
     create(:word, text: "10687568500", left: 1523, right: 2036, top: 2537, bottom: 2605)
 
-    iban_numbers = IbanDetector.filter
-    expect(iban_numbers.map(&:to_s)).to eq ['AT851100010687568500']
+    iban = IbanDetector.filter
+    expect(iban.map(&:to_s)).to eq ['AT851100010687568500']
   end
 
   it "recognizes Austrian IBAN number without space" do
@@ -36,8 +36,8 @@ describe VatNumberDetector do
     create(:word, text: 'ARA', left: 2416, right: 2492, top: 3850, bottom: 3881)
     create(:word, text: '94647', left: 2503, right: 2615, top: 3850, bottom: 3882)
 
-    iban_numbers = IbanDetector.filter
-    expect(iban_numbers.map(&:to_s)).to eq ['AT851100010687868500']
+    iban = IbanDetector.filter
+    expect(iban.map(&:to_s)).to eq ['AT851100010687868500']
   end
 
   it 'recognizes separated iban with four digits' do
@@ -47,8 +47,8 @@ describe VatNumberDetector do
     create(:word, text: '0001', left: 2503, right: 2615, top: 3850, bottom: 3882)
     create(:word, text: '3300', left: 2503, right: 2615, top: 3850, bottom: 3882)
 
-    term = IbanDetector.filter;
-    expect(term.map(&:to_s)).to eq ["AT103225000000013300"]
+    iban = IbanDetector.filter;
+    expect(iban.map(&:to_s)).to eq ["AT103225000000013300"]
   end
 
 end

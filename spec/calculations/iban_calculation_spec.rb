@@ -14,6 +14,6 @@ describe IbanCalculation do
     iban_calculation = IbanCalculation.new(
       IbanTerm.dataset
     )
-    expect(iban_calculation.iban_number).to eq 'AT851100010687868500'
+    expect(iban_calculation.iban).to eq 'AT851100010687868500'
   end
 end

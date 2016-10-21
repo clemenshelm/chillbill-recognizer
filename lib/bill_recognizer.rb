@@ -124,7 +124,7 @@ class BillRecognizer
 
 
     iban_words = IbanDetector.filter
-    iban = IbanCalculation.new(iban_numbers_words).iban_number
+    iban = IbanCalculation.new(iban_words).iban
     #image_file.close
 
     currency = CurrencyCalculation.new(currency_words)
@@ -148,7 +148,7 @@ class BillRecognizer
       amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
-      iban: iban
+      iban: iban,
       billingPeriod: billing_period,
       currencyCode: currency.iso
     }
