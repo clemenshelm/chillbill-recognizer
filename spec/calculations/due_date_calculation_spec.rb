@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require_relative '../../lib/calculations/due_date_calculation'
+require_relative '../support/factory_girl'
+require_relative '../factories'
 
 describe DueDateCalculation do
   it 'returns nil if there is no due date' do
@@ -8,7 +10,6 @@ describe DueDateCalculation do
   end
 
   it "calculates the due date from a bill" do
-    skip
     # From 7FDFZnmZmfMyxWZtG.pdf
     create(
       :word,
@@ -28,7 +29,7 @@ describe DueDateCalculation do
       bottom: 1433
     )
 
-    DateTerm.new(
+    DateTerm.create(
       :text=>"30. April 2015",
       :left=>529,
       :right=>664,
@@ -54,7 +55,7 @@ describe DueDateCalculation do
       bottom: 1519
     )
 
-    DateTerm.new(
+    DateTerm.create(
       :text=>"14 May 2015",
       :left=>534,
       :right=>650,
@@ -63,8 +64,8 @@ describe DueDateCalculation do
     )
 
     due_date_calculation = DueDateCalculation.new(
-      DueDateTerm.dataset
+      DateTerm.dataset
     )
-    expect(due_date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
+    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
   end
 end

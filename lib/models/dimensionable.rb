@@ -20,7 +20,8 @@ module Dimensionable
     def right_after(current)
       all.find do |following|
         (following.left > current.right) &&
-          (following.left - current.right) < following.height
+          (following.left - current.right) < (following.height * 10) &&
+            (current.bottom * 0.7) <  following.bottom < (current.bottom * 1.2)
       end
     end
   end
