@@ -27,7 +27,7 @@ module Dimensionable
       all.find do |following|
         (following.left > current.right) &&
           (following.left - current.right) < (following.height * 10) &&
-          ((following.bottom <= (current.bottom * 1.0)) &&
+          ((following.bottom <= (current.bottom * 1.02)) &&
           ((current.bottom * 0.95) <= following.bottom))
       end
     end
