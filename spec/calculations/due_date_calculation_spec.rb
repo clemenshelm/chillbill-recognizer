@@ -9,7 +9,7 @@ describe DueDateCalculation do
     expect(dates.due_date).to be_nil
   end
 
-  it "calculates the due date from a bill" do
+  it 'calculates the due date from a bill' do
     # From 7FDFZnmZmfMyxWZtG.pdf
     create(
       :word,
@@ -30,11 +30,11 @@ describe DueDateCalculation do
     )
 
     DateTerm.create(
-      :text=>"30. April 2015",
-      :left=>529,
-      :right=>664,
-      :top=>1796,
-      :bottom=>1848,
+      text: '30. April 2015',
+      left: 529,
+      right: 664,
+      top: 1796,
+      bottom: 1848
     )
 
     create(
@@ -56,11 +56,11 @@ describe DueDateCalculation do
     )
 
     DateTerm.create(
-      :text=>"14 May 2015",
-      :left=>534,
-      :right=>650,
-      :top=>1480,
-      :bottom=>1519,
+      text: '14 May 2015',
+      left: 534,
+      right: 650,
+      top: 1480,
+      bottom: 1519
     )
 
     due_date_calculation = DueDateCalculation.new(
