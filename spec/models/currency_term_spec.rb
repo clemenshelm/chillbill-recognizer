@@ -49,7 +49,6 @@ describe CurrencyTerm do
   end
 
   it 'recognizes HRK correctly' do
-    pending('detector cannot detect HRK yet')
     term = CurrencyTerm.new(text: 'HRK')
     expect(term.to_iso).to eq 'HRK'
   end
