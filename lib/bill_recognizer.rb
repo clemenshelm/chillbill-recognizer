@@ -79,8 +79,13 @@ class BillRecognizer
     end
     # logger.debug Word.map(&:text)
 
-    # logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
-    #puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    # logger.debug Word.map {
+    #  |word| "text: #{word.text},
+    #  left: #{word.left},
+    #  right: #{word.right},
+    #  top: #{word.top},
+    #  bottom: #{word.bottom}"
+    # }
 
     # puts Word.map { |word|
     #   "text: #{word.text},
@@ -89,7 +94,6 @@ class BillRecognizer
     #   top: #{word.top},
     #   bottom: #{word.bottom}"
     # }
-
 
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
@@ -119,13 +123,12 @@ class BillRecognizer
 
     vat_number = VatNumberCalculation.new(
       vat_number_words,
-      customer_vat_number: @customer_vat_number
+      customer_vat_number: sud
     ).vat_number
-
 
     iban_words = IbanDetector.filter
     iban = IbanCalculation.new(iban_words).iban
-    #image_file.close
+    # image_file.close
 
     currency = CurrencyCalculation.new(currency_words)
 
