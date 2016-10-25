@@ -70,6 +70,7 @@ describe DueDateCalculation do
   end
 
   it 'calculates the due date when the Zahlungstermin label is used' do
+    # From ZkPkwYF8p6PPLbf7f.png
     create(
       :word,
       text: 'Zahlungstermin',
