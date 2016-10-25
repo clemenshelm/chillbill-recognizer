@@ -127,8 +127,6 @@ class BillRecognizer
       customer_vat_number: sud
     ).vat_number
 
-    iban_words = IbanDetector.filter
-
     iban = IbanCalculation.new(iban_words).iban
     # image_file.close
 
