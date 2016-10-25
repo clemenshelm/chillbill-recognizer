@@ -77,6 +77,7 @@ class BillRecognizer
         bottom: bottom
       )
     end
+
     # logger.debug Word.map(&:text)
 
     # logger.debug Word.map {
