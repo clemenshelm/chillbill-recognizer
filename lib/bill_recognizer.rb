@@ -82,15 +82,15 @@ class BillRecognizer
     # }
 
     price_words = PriceDetector.filter
-    # logger.debug price_words.map { |word|
-    #   "PriceTerm.create(
-    #     text: '#{word.text}',
-    #     left: '#{word.left}',
-    #     right: '#{word.right}',
-    #     top: '#{word.top}',
-    #     bottom: '#{word.bottom}'
-    #   )"
-    # }
+    logger.debug price_words.map { |word|
+      "PriceTerm.create(
+        text: '#{word.text}',
+        left: '#{word.left}',
+        right: '#{word.right}',
+        top: '#{word.top}',
+        bottom: '#{word.bottom}'
+      )"
+    }
     date_words = DateDetector.filter
     vat_number_words = VatNumberDetector.filter
     billing_period_words = BillingPeriodDetector.filter

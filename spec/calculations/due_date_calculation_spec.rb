@@ -66,6 +66,7 @@ describe DueDateCalculation do
     due_date_calculation = DueDateCalculation.new(
       DateTerm.dataset
     )
+
     expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
   end
 
