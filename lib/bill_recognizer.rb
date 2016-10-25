@@ -72,11 +72,13 @@ class BillRecognizer
     end
     # logger.debug Word.map(&:text)
     # puts Word.map { |word|
-    #   "text: #{word.text},
+    #   "
+    #   text: \'#{word.text}\',
     #   left: #{word.left},
     #   right: #{word.right},
     #   top: #{word.top},
-    #   bottom: #{word.bottom}"
+    #   bottom: #{word.bottom}
+    #   "
     # }
 
     price_words = PriceDetector.filter

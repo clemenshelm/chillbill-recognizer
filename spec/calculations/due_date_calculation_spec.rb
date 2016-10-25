@@ -68,4 +68,47 @@ describe DueDateCalculation do
     )
     expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
   end
+
+  it "calculates the due date when the Zahlungstermin label is used" do
+
+    create(
+      :word,
+      text: 'Zahlungstermin',
+      left: 1558,
+      right: 1839,
+      top: 274,
+      bottom: 317
+    )
+
+    create(
+      :word,
+      text: 'Rechnungszeitraum:',
+      left: 206,
+      right: 575,
+      top: 774,
+      bottom: 816
+    )
+
+    DateTerm.create(
+      text: '10.04.2015',
+      left: 2194,
+      right: 2397,
+      top: 213,
+      bottom: 248
+    )
+
+    DateTerm.create(
+      text: '15.04.2015',
+      left: 2194,
+      right: 2397,
+      top: 274,
+      bottom: 309
+    )
+
+    due_date_calculation = DueDateCalculation.new(
+      DateTerm.dataset
+    )
+
+    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-04-15')
+  end
 end
