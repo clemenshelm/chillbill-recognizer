@@ -69,8 +69,7 @@ describe DueDateCalculation do
     expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
   end
 
-  it "calculates the due date when the Zahlungstermin label is used" do
-
+  it 'calculates the due date when the Zahlungstermin label is used' do
     create(
       :word,
       text: 'Zahlungstermin',
