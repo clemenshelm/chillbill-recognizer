@@ -10,6 +10,7 @@ require_relative './calculations/date_calculation'
 require_relative './calculations/vat_number_calculation'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
+require_relative './calculations/due_date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
@@ -114,6 +115,8 @@ class BillRecognizer
 
     currency = CurrencyCalculation.new(currency_words)
 
+    due_date = DueDateCalculation.new(date_words)
+
     # image_file.close
     return {} if net_amount.nil?
 
@@ -134,7 +137,8 @@ class BillRecognizer
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
-      currencyCode: currency.iso
+      currencyCode: currency.iso,
+      dueDate: due_date
     }
   end
 
