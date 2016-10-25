@@ -124,7 +124,7 @@ class BillRecognizer
 
     vat_number = VatNumberCalculation.new(
       vat_number_words,
-      customer_vat_number: sud
+      customer_vat_number: @customer_vat_number
     ).vat_number
 
     iban = IbanCalculation.new(iban_words).iban
