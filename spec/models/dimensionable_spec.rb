@@ -180,7 +180,6 @@ describe Dimensionable do
       bottom: 2430
     )
 
-
     following_word = create(
       :word,
       text: 'Augsten',

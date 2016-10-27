@@ -13,15 +13,14 @@ class DueDateCalculation
     # Find due date label
     due_word = Word.where(text: %w(Due Zahlungstermin))
 
-    if due_word.any?
-      due_date_label = Word.right_after(due_word.first)
+    return nil unless due_word.any?
+    due_date_label = Word.right_after(due_word.first)
 
-      date_after_label = if due_date_label
-                           DateTerm.right_after(due_date_label)
-                         else
-                           DateTerm.right_after(due_word.first)
-                         end
-      date_after_label.to_datetime
-    end
+    date_after_label = if due_date_label
+                         DateTerm.right_after(due_date_label)
+                       else
+                         DateTerm.right_after(due_word.first)
+                       end
+    date_after_label.to_datetime
   end
 end
