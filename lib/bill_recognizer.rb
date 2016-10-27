@@ -8,6 +8,11 @@ require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
 require_relative './calculations/vat_number_calculation'
+require_relative './calculations/iban_calculation'
+require_relative './detectors/price_detector'
+require_relative './detectors/date_detector'
+require_relative './detectors/vat_number_detector'
+require_relative './detectors/iban_detector'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
 require_relative './detectors/price_detector'
@@ -19,6 +24,7 @@ require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
 require_relative './models/vat_number_term'
+require_relative './models/iban_term'
 require_relative './models/billing_period_term'
 require_relative './models/currency_term'
 require_relative './config'
@@ -40,6 +46,7 @@ class BillRecognizer
     BillingPeriodTerm.dataset.delete
     DateTerm.dataset.delete
     VatNumberTerm.dataset.delete
+    IbanTerm.dataset.delete
     CurrencyTerm.dataset.delete
 
     # Download and convert image
@@ -70,7 +77,17 @@ class BillRecognizer
         bottom: bottom
       )
     end
+
     # logger.debug Word.map(&:text)
+
+    # logger.debug Word.map {
+    #  |word| "text: #{word.text},
+    #  left: #{word.left},
+    #  right: #{word.right},
+    #  top: #{word.top},
+    #  bottom: #{word.bottom}"
+    # }
+
     # puts Word.map { |word|
     #   "text: #{word.text},
     #   left: #{word.left},
@@ -93,6 +110,7 @@ class BillRecognizer
     vat_number_words = VatNumberDetector.filter
     billing_period_words = BillingPeriodDetector.filter
     currency_words = CurrencyDetector.filter
+    iban_words = IbanDetector.filter
 
     billing_period = BillingPeriodCalculation.new(
       billing_period_words
@@ -109,6 +127,8 @@ class BillRecognizer
       vat_number_words,
       customer_vat_number: @customer_vat_number
     ).vat_number
+
+    iban = IbanCalculation.new(iban_words).iban
 
     currency = CurrencyCalculation.new(currency_words)
 
@@ -132,7 +152,8 @@ class BillRecognizer
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
-      currencyCode: currency.iso
+      currencyCode: currency.iso,
+      iban: iban
     }
   end
 
