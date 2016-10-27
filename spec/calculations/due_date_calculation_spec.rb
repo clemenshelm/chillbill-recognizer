@@ -83,11 +83,11 @@ describe DueDateCalculation do
 
     create(
       :word,
-      text: 'Rechnungszeitraum:',
-      left: 206,
-      right: 575,
-      top: 774,
-      bottom: 816
+      text: 'Rechnungsdatum',
+      left: 1560,
+      right: 1878,
+      top: 214,
+      bottom: 256
     )
 
     DateTerm.create(
