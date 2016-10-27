@@ -46,6 +46,8 @@ class CurrencyTerm < Sequel::Model
       'GBP'
     when CurrencyDetector::HUF_CODE_REGEX
       'HUF'
+    when CurrencyDetector::HRK_CODE_REGEX
+      'HRK'
     end
   end
 end
