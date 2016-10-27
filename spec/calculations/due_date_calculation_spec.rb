@@ -114,6 +114,7 @@ describe DueDateCalculation do
   end
 
   it 'does not use a non due-date date' do
+    # From BYnCDzw7nNMFergRW.pdf
     create(
       :word,
       text: 'Datum',
