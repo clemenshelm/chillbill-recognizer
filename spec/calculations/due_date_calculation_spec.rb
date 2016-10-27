@@ -112,4 +112,29 @@ describe DueDateCalculation do
 
     expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-04-15')
   end
+
+  it 'does not use a non due-date date' do
+    create(
+      :word,
+      text: 'Datum',
+      left: 1613,
+      right: 1732,
+      top: 497,
+      bottom: 529
+    )
+
+    DateTerm.create(
+      text: '16.03.2016',
+      left: 1819,
+      right: 2026,
+      top: 498,
+      bottom: 529
+    )
+
+    due_date_calculation = DueDateCalculation.new(
+      DateTerm.dataset
+    )
+
+    expect(due_date_calculation.due_date).to be_nil
+  end
 end
