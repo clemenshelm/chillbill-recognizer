@@ -129,7 +129,6 @@ class BillRecognizer
     ).vat_number
 
     iban = IbanCalculation.new(iban_words).iban
-    # image_file.close
 
     currency = CurrencyCalculation.new(currency_words)
 

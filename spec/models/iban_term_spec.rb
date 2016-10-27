@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../lib/boot'
 require_relative '../../lib/models/iban_term'
 
 describe IbanTerm do

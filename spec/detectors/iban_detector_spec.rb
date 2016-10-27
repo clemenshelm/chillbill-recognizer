@@ -1,16 +1,9 @@
 # frozen_string_literal: true
-require_relative '../../lib/boot'
 require_relative '../../lib/detectors/iban_detector'
-require_relative '../../lib/models/word'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe IbanDetector do
-  before(:each) do
-    Word.dataset.delete
-    IbanTerm.dataset.delete
-  end
-
   it 'recognizes IBAN seperated by a space' do
     create(
       :word,
