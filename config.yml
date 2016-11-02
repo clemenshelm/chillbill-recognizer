@@ -10,7 +10,7 @@ development:
 
 production:
   <<: *default
-  url: 'https://my.chillbill.co/websocket'
+  url: 'wss://chillbill-web.herokuapp.com/websocket'
   meteor:
     email: <%= ENV['METEOR_EMAIL'] %>
     password: <%= ENV['METEOR_PASSWORD'] %>
