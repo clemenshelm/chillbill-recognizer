@@ -18,6 +18,14 @@ module Dimensionable
     end
 
     def right_after(current)
+      # Finds word right after on the same line
+      all.find do |following|
+        (following.left > current.right) &&
+          (following.left - current.right) < (following.height * 10) &&
+          following.bottom == current.bottom
+      end
+
+      # Finds word right after a little above or below
       all.find do |following|
         (following.left > current.right) &&
           (following.left - current.right) < (following.height * 10.145) &&
