@@ -41,8 +41,10 @@ task check: :setup_processing do
       vatNumber
       billingPeriod
       currencyCode
+      dueDate
       iban
     )
+
     correct_result = bill[:accountingRecord].slice(*attributes)
     id = recognition_result.delete(:id)
     if recognition_result == correct_result

@@ -142,4 +142,54 @@ describe Dimensionable do
     result = DateTerm.right_after(term)
     expect(result).to eq nil
   end
+
+  it 'can detect a word right after another on the same line' do
+    # From BYnCDzw7nNMFergRW.pdf
+
+    first_word = create(
+      :word,
+      text: 'Herzlichen',
+      left: 2,
+      right: 197,
+      top: 2223,
+      bottom: 2256
+    )
+
+    following_word = create(
+      :word,
+      text: 'Dank',
+      left: 215,
+      right: 310,
+      top: 2223,
+      bottom: 2256
+    )
+
+    result = Word.right_after(first_word)
+    expect(result).to eq following_word
+  end
+
+  it 'can detect a word right after another, slightly below' do
+    # From BYnCDzw7nNMFergRW.pdf
+
+    first_word = create(
+      :word,
+      text: 'Michael',
+      left: 170,
+      right: 310,
+      top: 2397,
+      bottom: 2430
+    )
+
+    following_word = create(
+      :word,
+      text: 'Augsten',
+      left: 326,
+      right: 479,
+      top: 2397,
+      bottom: 2439
+    )
+
+    result = Word.right_after(first_word)
+    expect(result).to eq following_word
+  end
 end
