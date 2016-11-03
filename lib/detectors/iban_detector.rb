@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../models/iban_term'
 
 class IbanDetector
@@ -6,15 +7,14 @@ class IbanDetector
   HR_IBAN_REGEX = /HR[0-9]{19}/
 
   def self.filter
-    iban_detected = find_iban(AT_IBAN_REGEX)
-    iban_detected = find_iban(DE_IBAN_REGEX)
-    iban_detected = find_iban(HR_IBAN_REGEX)
+    find_iban(AT_IBAN_REGEX)
+    find_iban(DE_IBAN_REGEX)
+    find_iban(HR_IBAN_REGEX)
     IbanTerm.dataset
   end
 
-  private
-
   def self.find_iban(regex, after_each_word: nil)
+    private
     term = IbanTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil
 
@@ -26,9 +26,7 @@ class IbanDetector
 
       last_word = word
 
-      if term.valid?
-        term.save
-      end
+      term.save if term.valid?
     end
   end
 end

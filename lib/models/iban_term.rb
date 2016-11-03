@@ -1,8 +1,8 @@
+# frozen_string_literal: true
 require 'sequel'
 require_relative './term_builder'
 require_relative './dimensionable'
 
-# TODO unit test
 class IbanTerm < Sequel::Model
   include Dimensionable
 
@@ -28,6 +28,6 @@ class IbanTerm < Sequel::Model
   end
 
   def to_s
-    text.gsub(" ", "")
+    text.delete(' ')
   end
 end

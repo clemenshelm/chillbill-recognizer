@@ -5,6 +5,7 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodDetector do
+  # From ZkPkwYF8p6PPLbf7f.pdf
   it 'Recognises the billing period from a bill' do
     create(
       :word,

@@ -15,6 +15,7 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
+require_relative './calculations/due_date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
@@ -77,19 +78,26 @@ class BillRecognizer
         bottom: bottom
       )
     end
+
     # logger.debug Word.map(&:text)
 
-    # logger.debug Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
-    #puts Word.map { |word| "text: #{word.text}, left: #{word.left}, right: #{word.right}, top: #{word.top}, bottom: #{word.bottom}" }
+    # logger.debug Word.map {
+    #  |word| "text: #{word.text},
+    #  left: #{word.left},
+    #  right: #{word.right},
+    #  top: #{word.top},
+    #  bottom: #{word.bottom}"
+    # }
 
     # puts Word.map { |word|
-    #   "text: #{word.text},
+    #   "
+    #   text: \'#{word.text}\',
     #   left: #{word.left},
     #   right: #{word.right},
     #   top: #{word.top},
-    #   bottom: #{word.bottom}"
+    #   bottom: #{word.bottom}
+    #   "
     # }
-
 
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
@@ -105,6 +113,7 @@ class BillRecognizer
     vat_number_words = VatNumberDetector.filter
     billing_period_words = BillingPeriodDetector.filter
     currency_words = CurrencyDetector.filter
+    iban_words = IbanDetector.filter
 
     billing_period = BillingPeriodCalculation.new(
       billing_period_words
@@ -122,12 +131,11 @@ class BillRecognizer
       customer_vat_number: @customer_vat_number
     ).vat_number
 
-
-    iban_words = IbanDetector.filter
-    iban = IbanCalculation.new(iban_numbers_words).iban_number
-    #image_file.close
+    iban = IbanCalculation.new(iban_words).iban
 
     currency = CurrencyCalculation.new(currency_words)
+
+    due_date = DueDateCalculation.new(date_words)
 
     # image_file.close
     return {} if net_amount.nil?
@@ -148,9 +156,10 @@ class BillRecognizer
       amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
       vatNumber: vat_number,
-      iban: iban
       billingPeriod: billing_period,
-      currencyCode: currency.iso
+      currencyCode: currency.iso,
+      dueDate: due_date,
+      iban: iban
     }
   end
 
