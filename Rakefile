@@ -74,8 +74,16 @@ def process(bill_kind, &bill_proc)
   hub.run(&bill_proc)
 end
 
+desc 'Increment recognizer version number'
+task :increment_version do
+  require 'YAML'
+  data = YAML.load_file "lib/version.yml"
+   data["Version"] += 1
+   File.open("lib/version.yml", 'w') { |f| YAML.dump(data, f) }
+end
+
 desc 'Pushes newest docker image to ECS repository'
-task :deploy do
+task :push_image => [:increment_version] do
   sh "(aws ecr get-login --region eu-central-1) | /bin/bash
 
       docker build -t recognizer-repo .
@@ -86,8 +94,13 @@ task :deploy do
 end
 
 desc 'Restart task on ECS'
-task :restart_task do
-  sh "aws ecs stop-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/chillbill --task arn:aws:ecs:eu-central-1:175255700812:task/8f739435-ca79-43fb-84f1-869f5455d3eb
+task :restart_task => [:push_image] do
+  sh "aws ecs stop-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/ChillBill --task arn:aws:ecs:eu-central-1:175255700812:task/8f739435-ca79-43fb-84f1-869f5455d3eb
 
-      aws ecs start-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/chillbill --task-definition arn:aws:ecs:eu-central-1:175255700812:task/ecscompose-recognizer:32 --container-instances arn:aws:ecs:eu-central-1:175255700812x:container-instance/f8742655-f231-48ed-ab0d-a2aa92d94117"
+      aws ecs start-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/ChillBill --task-definition arn:aws:ecs:eu-central-1:175255700812:task-definition/ecscompose-recognizer:32 --container-instances arn:aws:ecs:eu-central-1:175255700812:container-instance/f8742655-f231-48ed-ab0d-a2aa92d94117"
+end
+
+desc 'Increments recognizer version number and deploys newest version'
+task :deploy => [:restart_task] do
+  sh "Newest version successfully deployed!"
 end
