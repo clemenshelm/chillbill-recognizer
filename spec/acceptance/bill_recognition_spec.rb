@@ -3,15 +3,16 @@ require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
-  it 'recognizes the bill BYnCDzw7nNMFergRW' do
-    retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
+  it 'recognizes the bill ymX6CL8ssqDsF2WJv' do
+    retriever = SpecCacheRetriever.new(file_basename: 'ymX6CL8ssqDsF2WJv.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
-    expect(bill_attributes[:amounts]).to eq [{ total: 29_674, vatRate: 20 }]
-    expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
-    expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
-    expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
+    expect(bill_attributes[:amounts]).to eq [{ total: 4799, vatRate: 0 }]
+    expect(bill_attributes[:invoiceDate]).to eq '2016-08-13'
+    expect(bill_attributes[:vatNumber]).to eq 'IE6364992H'
+    # expect(bill_attributes[:iban]).to eq ''
+    # There is no IBAN number
   end
 end
