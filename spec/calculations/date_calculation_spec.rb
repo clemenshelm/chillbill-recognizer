@@ -78,14 +78,6 @@ describe DateCalculation do
       bottom: 529
     )
 
-    DateTerm.create(
-      text: '13/08/16',
-      left: 1819,
-      right: 2026,
-      top: 498,
-      bottom: 529
-    )
-
     date_calculation = DateCalculation.new(
       DateTerm.dataset
     )
