@@ -43,6 +43,7 @@ task check: :setup_processing do
       currencyCode
       dueDate
       iban
+      version
     )
 
     correct_result = bill[:accountingRecord].slice(*attributes)
