@@ -153,7 +153,7 @@ class BillRecognizer
         0
       end
 
-    version_data = YAML.load_file "lib/version.yml"
+    version_data = YAML.load_file 'lib/version.yml'
     version = version_data['Version']
 
     {

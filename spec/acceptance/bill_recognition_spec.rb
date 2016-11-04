@@ -13,5 +13,6 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
+    expect(bill_attributes[:version]).to eq 1
   end
 end
