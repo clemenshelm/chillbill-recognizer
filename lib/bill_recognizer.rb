@@ -71,10 +71,10 @@ class BillRecognizer
                                  .captures
                                  .map(&:to_i)
 
-      left = (left / @width.to_f)
-      right = (right / @width.to_f)
-      top = (top / @height.to_f)
-      bottom = (bottom / @height.to_f)
+      left /= @width.to_f
+      right /= @width.to_f
+      top /= @height.to_f
+      bottom /= @height.to_f
 
       Word.create(
         text: word_node.text,

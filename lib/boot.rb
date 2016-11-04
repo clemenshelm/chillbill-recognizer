@@ -29,7 +29,7 @@ DB.create_table :date_terms do
   Float :right
   Float :top
   Float :bottom
-  Float :first_word_id
+  Integer :first_word_id
 end
 
 DB.create_table :vat_number_terms do
