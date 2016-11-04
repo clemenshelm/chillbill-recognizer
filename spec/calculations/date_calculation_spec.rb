@@ -68,4 +68,19 @@ describe DateCalculation do
     )
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
   end
+
+  it 'recognizes first date as a long slash date regex' do
+    DateTerm.create(
+      text: '13/08/2016',
+      left: 1819,
+      right: 2026,
+      top: 498,
+      bottom: 529
+    )
+
+    date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    )
+    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
+  end
 end

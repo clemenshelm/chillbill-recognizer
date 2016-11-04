@@ -106,10 +106,12 @@ describe DateDetector do
   it 'keeps the natural word order' do
     create_following_words(%w(09 March 2016))
     create(:word, text: '1/03/16')
+    create(:word, text: '15/06/2015')
     create_following_words(%w(09 March 2016))
 
+    word_order = %w(2016-03-09 2016-03-01 2015-06-15 2016-03-09)
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq %w(2016-03-09 2016-03-01 2016-03-09)
+    expect(date_strings(dates)).to eq word_order
   end
 
   it 'does not recognize phone numbers as dates' do
@@ -192,6 +194,38 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-03-01']
+  end
+
+  it 'detects the date in the dd/mm/yyyy format' do
+    create(
+      :word,
+      text: '7385622',
+      left: 201,
+      right: 340,
+      top: 1396,
+      bottom: 1426
+    )
+
+    create(
+      :word,
+      text: '3670800',
+      left: 480,
+      right: 619,
+      top: 1397,
+      bottom: 1427
+    )
+
+    create(
+      :word,
+      text: '12/03/2016',
+      left: 779,
+      right: 895,
+      top: 1397,
+      bottom: 1427
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-03-12']
   end
 
   it 'detects multiple dates on a bill' do
