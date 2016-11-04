@@ -11,12 +11,11 @@ class DueDateCalculation
     return nil if @words.empty?
 
     # Find due date label
-    due_word = Word.where(text: %w(Due Zahlungstermin))
+    due_word = Word.where(text: %w(Due Zahlungstermin Zahlungsziel:))
 
     return nil unless due_word.any?
     due_date_label = Word.right_after(due_word.first)
-
-    date_after_label = if due_date_label
+    date_after_label = if due_date_label.text == %w(due)
                          DateTerm.right_after(due_date_label)
                        else
                          DateTerm.right_after(due_word.first)

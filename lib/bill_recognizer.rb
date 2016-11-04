@@ -133,9 +133,9 @@ class BillRecognizer
 
     iban = IbanCalculation.new(iban_words).iban
 
-    currency = CurrencyCalculation.new(currency_words)
+    currency = CurrencyCalculation.new(currency_words).iso
 
-    due_date = DueDateCalculation.new(date_words)
+    due_date = DueDateCalculation.new(date_words).due_date
 
     # image_file.close
     return {} if net_amount.nil?
@@ -157,7 +157,7 @@ class BillRecognizer
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
-      currencyCode: currency.iso,
+      currencyCode: currency,
       dueDate: due_date,
       iban: iban
     }

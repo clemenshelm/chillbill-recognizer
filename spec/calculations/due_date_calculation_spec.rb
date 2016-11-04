@@ -138,4 +138,30 @@ describe DueDateCalculation do
 
     expect(due_date_calculation.due_date).to be_nil
   end
+
+  it "calculates the due date when the Zahlungsziel label is used" do
+    # From fGHCBxN6cbksNrHpo.pdf
+    create(
+      :word,
+      text: 'Zahlungsziel:',
+      left: 1839,
+      right: 2132,
+      top: 651,
+      bottom: 699
+    )
+
+    DateTerm.create(
+      text: '18.10.2016',
+      left: 2154,
+      right: 2398,
+      top: 652,
+      bottom: 689
+    )
+
+    due_date_calculation = DueDateCalculation.new(
+      DateTerm.dataset
+    )
+
+    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2016-10-18')
+  end
 end
