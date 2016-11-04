@@ -108,5 +108,5 @@ end
 
 desc 'Increments recognizer version number and deploys newest version'
 task :deploy => [:restart_task] do
-  p "Newest version successfully deployed!"
+  p "Newest recognizer version successfully deployed!"
 end
