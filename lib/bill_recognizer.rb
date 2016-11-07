@@ -53,6 +53,7 @@ class BillRecognizer
     # Download and convert image
     image_file = @retriever.save
     preprocess image_file.path
+
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
 
@@ -69,6 +70,11 @@ class BillRecognizer
                                  .match(/(\d+) (\d+) (\d+) (\d+);/)
                                  .captures
                                  .map(&:to_i)
+
+      left /= @width.to_f
+      right /= @width.to_f
+      top /= @height.to_f
+      bottom /= @height.to_f
 
       Word.create(
         text: word_node.text,
@@ -89,15 +95,15 @@ class BillRecognizer
     #  bottom: #{word.bottom}"
     # }
 
-    # puts Word.map { |word|
-    #   "
-    #   text: \'#{word.text}\',
-    #   left: #{word.left},
-    #   right: #{word.right},
-    #   top: #{word.top},
-    #   bottom: #{word.bottom}
-    #   "
-    # }
+    #  puts Word.map { |word|
+    #         "
+    #         text: \'#{word.text}\',
+    #         left: #{word.left},
+    #         right: #{word.right},
+    #         top: #{word.top},
+    #         bottom: #{word.bottom}
+    #         "
+    #       }
 
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
@@ -166,11 +172,15 @@ class BillRecognizer
   private
 
   def preprocess(image_path)
-    ImageProcessor.new(image_path)
-                  .apply_background('#fff')
-                  .deskew
-                  .normalize
-                  .trim
-                  .write!(image_path)
+    image = ImageProcessor.new(image_path)
+
+    @width = image.image_width
+    @height = image.image_height
+
+    image.apply_background('#fff')
+         .deskew
+         .normalize
+         .trim
+         .write!(image_path)
   end
 end
