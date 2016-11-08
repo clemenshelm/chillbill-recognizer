@@ -141,7 +141,8 @@ class BillRecognizer
 
     currency = CurrencyCalculation.new(currency_words)
 
-    due_date = DueDateCalculation.new(date_words).due_date.strftime('%Y-%m-%d')
+    due_datetime = DueDateCalculation.new(date_words).due_date
+    due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
 
     # image_file.close
     return {} if net_amount.nil?
