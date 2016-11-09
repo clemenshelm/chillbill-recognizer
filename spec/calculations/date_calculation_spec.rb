@@ -3,7 +3,6 @@ require_relative '../../lib/calculations/date_calculation'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-
 describe DateCalculation do
   it 'returns nil if there is no invoice date candidate' do
     dates = DateCalculation.new([])
@@ -222,7 +221,7 @@ describe DateCalculation do
     expect(due_date_calculation).to be_nil
   end
 
-  it "calculates the due date when the Zahlungsziel label is used" do
+  it 'calculates the due date when the Zahlungsziel label is used' do
     # From fGHCBxN6cbksNrHpo.pdf
     create(
       :word,
