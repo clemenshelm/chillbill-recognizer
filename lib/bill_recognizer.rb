@@ -135,7 +135,7 @@ class BillRecognizer
 
     currency = CurrencyCalculation.new(currency_words).iso
 
-    due_date = DueDateCalculation.new(date_words).due_date
+    due_date = DateCalculation.new(date_words).due_date
 
     # image_file.close
     return {} if net_amount.nil?

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require_relative '../../lib/calculations/due_date_calculation'
+require_relative '../../lib/calculations/date_calculation'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-describe DueDateCalculation do
+describe DateCalculation do
   it 'returns nil if there is no due date' do
-    dates = DueDateCalculation.new([])
-    expect(dates.due_date).to be_nil
+    dates = DateCalculation.new([]).due_date
+    expect(dates).to be_nil
   end
 
   it 'calculates the due date from a bill' do
@@ -63,11 +63,11 @@ describe DueDateCalculation do
       bottom: 1519
     )
 
-    due_date_calculation = DueDateCalculation.new(
+    due_date_calculation = DateCalculation.new(
       DateTerm.dataset
-    )
+    ).due_date
 
-    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
+    expect(due_date_calculation).to eq DateTime.iso8601('2015-05-14')
   end
 
   it 'calculates the due date when the Zahlungstermin label is used' do
@@ -106,11 +106,11 @@ describe DueDateCalculation do
       bottom: 309
     )
 
-    due_date_calculation = DueDateCalculation.new(
+    due_date_calculation = DateCalculation.new(
       DateTerm.dataset
-    )
+    ).due_date
 
-    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-04-15')
+    expect(due_date_calculation).to eq DateTime.iso8601('2015-04-15')
   end
 
   it 'does not use a non due-date date' do
@@ -132,11 +132,11 @@ describe DueDateCalculation do
       bottom: 529
     )
 
-    due_date_calculation = DueDateCalculation.new(
+    due_date_calculation = DateCalculation.new(
       DateTerm.dataset
-    )
+    ).due_date
 
-    expect(due_date_calculation.due_date).to be_nil
+    expect(due_date_calculation).to be_nil
   end
 
   it "calculates the due date when the Zahlungsziel label is used" do
@@ -158,10 +158,10 @@ describe DueDateCalculation do
       bottom: 689
     )
 
-    due_date_calculation = DueDateCalculation.new(
+    due_date_calculation = DateCalculation.new(
       DateTerm.dataset
-    )
+    ).due_date
 
-    expect(due_date_calculation.due_date).to eq DateTime.iso8601('2016-10-18')
+    expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
   end
 end
