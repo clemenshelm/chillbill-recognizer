@@ -25,11 +25,12 @@ class DateCalculation
 
     return nil unless due_word.any?
     due_date_label = Word.right_after(due_word.first)
-    date_after_label = if due_date_label.text == %w(due)
-                         DateTerm.right_after(due_date_label)
-                       else
-                         DateTerm.right_after(due_word.first)
+    date_after_label = if due_date_label.nil?
+                          DateTerm.right_after(due_word.first)
+                       elsif due_date_label.text == "Date:"
+                          DateTerm.right_after(due_date_label)
                        end
+                       
     date_after_label.to_datetime
   end
 end
