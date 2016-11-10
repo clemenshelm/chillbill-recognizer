@@ -15,7 +15,6 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
-require_relative './calculations/due_date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
@@ -95,15 +94,15 @@ class BillRecognizer
     #  bottom: #{word.bottom}"
     # }
 
-    #  puts Word.map { |word|
-    #         "
-    #         text: \'#{word.text}\',
-    #         left: #{word.left},
-    #         right: #{word.right},
-    #         top: #{word.top},
-    #         bottom: #{word.bottom}
-    #         "
-    #       }
+    # puts Word.map { |word|
+    #        "
+    #        text: \'#{word.text}\',
+    #        left: #{word.left},
+    #        right: #{word.right},
+    #        top: #{word.top},
+    #        bottom: #{word.bottom}
+    #        "
+    #      }
 
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
@@ -139,9 +138,9 @@ class BillRecognizer
 
     iban = IbanCalculation.new(iban_words).iban
 
-    currency = CurrencyCalculation.new(currency_words)
+    currency = CurrencyCalculation.new(currency_words).iso
 
-    due_datetime = DueDateCalculation.new(date_words).due_date
+    due_datetime = DateCalculation.new(date_words).due_date
     due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
 
     # image_file.close
@@ -164,7 +163,7 @@ class BillRecognizer
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
-      currencyCode: currency.iso,
+      currencyCode: currency,
       dueDate: due_date,
       iban: iban
     }
