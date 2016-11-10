@@ -120,12 +120,14 @@ class BillRecognizer
     currency_words = CurrencyDetector.filter
     iban_words = IbanDetector.filter
 
-    billing_period = BillingPeriodCalculation.new(
+    calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
     ).billing_period
-    billing_period.from.strftime('%Y-%m-%d') if billing_period
-    billing_period.to.strftime('%Y-%m-%d') if billing_period
 
+    billing_period = calculated_billing_period.update(
+      calculated_billing_period
+    ) { |_key, value| value.strftime('%Y-%m-%d') } if calculated_billing_period
+    
     dates = DateCalculation.new(date_words)
     invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
 
