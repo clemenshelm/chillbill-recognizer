@@ -123,6 +123,8 @@ class BillRecognizer
     billing_period = BillingPeriodCalculation.new(
       billing_period_words
     ).billing_period
+    billing_period.from.strftime('%Y-%m-%d') if billing_period
+    billing_period.to.strftime('%Y-%m-%d') if billing_period
 
     dates = DateCalculation.new(date_words)
     invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
