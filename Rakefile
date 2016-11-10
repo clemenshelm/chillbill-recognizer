@@ -96,11 +96,8 @@ end
 
 desc 'Restart task on ECS'
 task :restart_task do
-  system_task = "tasks=$(aws ecs list-tasks --cluster ChillBill)
-                runningtask=$(echo $tasks | tr -d \"\ {}\" | cut -d \"[\" -f2 | cut -d \"]\" -f1)
-                runningtask=$(sed -e 's/^\"//' -e 's/\"$//' <<<\"$runningtask\")
-                echo $runningtask"
-  running_task = `#{system_task}`
+  tasks = `aws ecs list-tasks --cluster ChillBill --region eu-central-1`
+  running_task = tasks.match(/task\/(\w+\W\w+\W\w+\W\w+\W\w+)/)[1]
 
   all_revisions = `aws ecs list-task-definitions --region eu-central-1`
   all_revision_numbers = all_revisions.scan(/recognizer:(\d+)/).flatten
