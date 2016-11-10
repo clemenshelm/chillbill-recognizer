@@ -95,19 +95,22 @@ task :push_image => [:increment_version] do
 end
 
 desc 'Restart task on ECS'
-task :restart_task => [:push_image] do
+task :restart_task do
   system_task = "tasks=$(aws ecs list-tasks --cluster ChillBill)
                 runningtask=$(echo $tasks | tr -d \"\ {}\" | cut -d \"[\" -f2 | cut -d \"]\" -f1)
                 runningtask=$(sed -e 's/^\"//' -e 's/\"$//' <<<\"$runningtask\")
                 echo $runningtask"
   running_task = `#{system_task}`
 
-  sh "aws ecs stop-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/ChillBill --task #{running_task}
+  all_revisions = `aws ecs list-task-definitions --region eu-central-1`
+  all_revision_numbers = all_revisions.scan(/recognizer:(\d+)/).flatten
+  latest_revision = all_revision_numbers.map {|num| num.to_i}.sort.last
 
-      aws ecs start-task --cluster arn:aws:ecs:eu-central-1:175255700812:cluster/ChillBill --task-definition arn:aws:ecs:eu-central-1:175255700812:task-definition/ecscompose-recognizer:32 --container-instances arn:aws:ecs:eu-central-1:175255700812:container-instance/f8742655-f231-48ed-ab0d-a2aa92d94117"
+  sh "aws ecs stop-task --cluster ChillBill --task #{running_task}
+      aws ecs run-task --cluster ChillBill --task-definition ecscompose-recognizer:#{latest_revision} --count 1"
 end
 
 desc 'Increments recognizer version number and deploys newest version'
-task :deploy => [:restart_task] do
+task :deploy => [:push_image, :restart_task] do
   p "Newest recognizer version successfully deployed!"
 end

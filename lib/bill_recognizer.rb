@@ -16,7 +16,6 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
-require_relative './calculations/due_date_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
@@ -54,6 +53,7 @@ class BillRecognizer
     # Download and convert image
     image_file = @retriever.save
     preprocess image_file.path
+
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
 
@@ -70,6 +70,11 @@ class BillRecognizer
                                  .match(/(\d+) (\d+) (\d+) (\d+);/)
                                  .captures
                                  .map(&:to_i)
+
+      left /= @width.to_f
+      right /= @width.to_f
+      top /= @height.to_f
+      bottom /= @height.to_f
 
       Word.create(
         text: word_node.text,
@@ -91,14 +96,14 @@ class BillRecognizer
     # }
 
     # puts Word.map { |word|
-    #   "
-    #   text: \'#{word.text}\',
-    #   left: #{word.left},
-    #   right: #{word.right},
-    #   top: #{word.top},
-    #   bottom: #{word.bottom}
-    #   "
-    # }
+    #        "
+    #        text: \'#{word.text}\',
+    #        left: #{word.left},
+    #        right: #{word.right},
+    #        top: #{word.top},
+    #        bottom: #{word.bottom}
+    #        "
+    #      }
 
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
@@ -134,9 +139,10 @@ class BillRecognizer
 
     iban = IbanCalculation.new(iban_words).iban
 
-    currency = CurrencyCalculation.new(currency_words)
+    currency = CurrencyCalculation.new(currency_words).iso
 
-    due_date = DueDateCalculation.new(date_words)
+    due_datetime = DateCalculation.new(date_words).due_date
+    due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
 
     # image_file.close
     return {} if net_amount.nil?
@@ -161,7 +167,7 @@ class BillRecognizer
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
-      currencyCode: currency.iso,
+      currencyCode: currency,
       dueDate: due_date,
       iban: iban,
       version: version
@@ -171,11 +177,15 @@ class BillRecognizer
   private
 
   def preprocess(image_path)
-    ImageProcessor.new(image_path)
-                  .apply_background('#fff')
-                  .deskew
-                  .normalize
-                  .trim
-                  .write!(image_path)
+    image = ImageProcessor.new(image_path)
+
+    @width = image.image_width
+    @height = image.image_height
+
+    image.apply_background('#fff')
+         .deskew
+         .normalize
+         .trim
+         .write!(image_path)
   end
 end
