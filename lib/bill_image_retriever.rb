@@ -35,7 +35,7 @@ class BillImageRetriever
     when '.png', '.jpg', '.jpeg'
       image_file
     else
-      logger.warn('Unknow data type, ' + file_extension)
+      raise 'Unknown data type, ' + file_extension
     end
   end
 end
