@@ -3,6 +3,7 @@
 require 'bigdecimal'
 require 'pry'
 require 'nokogiri'
+require 'yaml'
 require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
@@ -162,6 +163,9 @@ class BillRecognizer
         0
       end
 
+    version_data = YAML.load_file 'lib/version.yml'
+    version = version_data['Version']
+
     {
       amounts: [total: total, vatRate: vat_rate],
       invoiceDate: invoice_date,
@@ -169,7 +173,8 @@ class BillRecognizer
       billingPeriod: billing_period,
       currencyCode: currency,
       dueDate: due_date,
-      iban: iban
+      iban: iban,
+      version: version
     }
   end
 
