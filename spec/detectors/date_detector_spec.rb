@@ -296,7 +296,9 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-03-16', '2016-03-21']
   end
 
-  it "detects October" do
+  it 'detects October' do
+    # From m4F2bLmpKn7wPqM7q.pdf
+
     create(
       :word,
       text: '27',
