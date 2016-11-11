@@ -43,6 +43,7 @@ task check: :setup_processing do
       currencyCode
       dueDate
       iban
+      version
     )
 
     correct_result = bill[:accountingRecord].slice(*attributes)
@@ -72,4 +73,41 @@ def process(bill_kind, &bill_proc)
 
   hub = Hub.new(bills: bill_kind, config: config)
   hub.run(&bill_proc)
+end
+
+desc 'Increment recognizer version number'
+task :increment_version do
+  require 'YAML'
+  data = YAML.load_file "lib/version.yml"
+  data["Version"] += 1
+  File.open("lib/version.yml", 'w') { |f| YAML.dump(data, f) }
+end
+
+desc 'Pushes newest docker image to ECS repository'
+task :push_image => [:increment_version] do
+  sh "(aws ecr get-login --region eu-central-1) | /bin/bash
+
+      docker build -t recognizer-repo .
+
+      docker tag recognizer-repo:latest 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-repo:latest
+
+      docker push 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-repo:latest"
+end
+
+desc 'Restart task on ECS'
+task :restart_task do
+  tasks = `aws ecs list-tasks --cluster ChillBill --region eu-central-1`
+  running_task = tasks.match(/task\/(\w+\W\w+\W\w+\W\w+\W\w+)/)[1]
+
+  all_revisions = `aws ecs list-task-definitions --region eu-central-1`
+  all_revision_numbers = all_revisions.scan(/recognizer:(\d+)/).flatten
+  latest_revision = all_revision_numbers.map {|num| num.to_i}.sort.last
+
+  sh "aws ecs stop-task --cluster ChillBill --task #{running_task}
+      aws ecs run-task --cluster ChillBill --task-definition ecscompose-recognizer:#{latest_revision} --count 1"
+end
+
+desc 'Increments recognizer version number and deploys newest version'
+task :deploy => [:push_image, :restart_task] do
+  p "Newest recognizer version successfully deployed!"
 end
