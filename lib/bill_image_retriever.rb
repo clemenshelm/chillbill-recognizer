@@ -36,6 +36,11 @@ class BillImageRetriever
       image_file
     else
       raise 'Unknown data type, ' + file_extension
+      #empty recognition result
+      #within this file but out of here extend the StandardError class to have our own custom
+      #error message UnprocessableFileError or something
+      #throw an exception that gets rescued in the bill recognizer.
+      #rescue returns a KeyValueError 
     end
   end
 end
