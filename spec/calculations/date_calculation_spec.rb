@@ -9,6 +9,44 @@ describe DateCalculation do
     expect(dates.invoice_date).to be_nil
   end
 
+  it "calculates a due date that is written as prompt" do
+    # From ZqMX24iDMxxst5cnP.pdf
+    DateTerm.create(
+     text: '21.09.2016',
+     left: 0.7513333333333333,
+     right: 0.833,
+     top: 0.264075382803298,
+     bottom: 0.272791519434629
+    )
+
+    create(
+      :word,
+      text: 'Zahlungsziel:',
+      left: 0.0003333333333333333,
+      right: 0.09666666666666666,
+      top: 0.5762073027090695,
+      bottom: 0.5872791519434629
+    )
+
+    create(
+      :word,
+      text: 'prompt',
+      left: 0.11866666666666667,
+      right: 0.16933333333333334,
+      top: 0.5769140164899882,
+      bottom: 0.5872791519434629
+    )
+
+    due_date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    ).invoice_date
+    due_date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    ).due_date
+
+    expect(due_date_calculation).to eq DateTime.iso8601('2016-09-21')
+  end
+
   it 'ignores dates from a billing period' do
     start_of_period = DateTerm.create(
       text: '01.03.2015',

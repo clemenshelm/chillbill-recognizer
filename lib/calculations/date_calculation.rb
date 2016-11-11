@@ -25,11 +25,15 @@ class DateCalculation
 
     return nil unless due_word.any?
     due_date_label = Word.right_after(due_word.first)
-    date_after_label = if due_date_label.nil? || due_date_label.text != 'Date:'
-                         DateTerm.right_after(due_word.first)
-                       else
-                         DateTerm.right_after(due_date_label)
-                       end
-    date_after_label.to_datetime
+    # binding.pry
+    if due_date_label.text == 'Date:'
+      DateTerm.right_after(due_date_label).to_datetime
+    elsif due_date_label.text == 'prompt'
+      @words.invoice_date
+    else
+      DateTerm.right_after(due_word.first).to_datetime
+    end
+    # binding.pry
+    # date_after_label.to_datetime
   end
 end
