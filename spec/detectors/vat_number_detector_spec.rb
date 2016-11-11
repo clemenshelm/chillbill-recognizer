@@ -4,6 +4,12 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe VatNumberDetector do
+  it 'returns an empty dataset if there are no words' do
+    # From PYdefyzCHkSp9atMY.jpg
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to eq []
+  end
+
   it 'recognizes an Austrian VAT ID number seperated by a space' do
     create(
       :word,
