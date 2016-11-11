@@ -128,7 +128,7 @@ class BillRecognizer
     billing_period = calculated_billing_period.update(
       calculated_billing_period
     ) { |_key, value| value.strftime('%Y-%m-%d') } if calculated_billing_period
-    
+
     dates = DateCalculation.new(date_words)
     invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
 
