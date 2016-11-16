@@ -10,17 +10,18 @@ require_relative './calculations/price_calculation'
 require_relative './calculations/date_calculation'
 require_relative './calculations/vat_number_calculation'
 require_relative './calculations/iban_calculation'
-require_relative './detectors/price_detector'
-require_relative './detectors/date_detector'
-require_relative './detectors/vat_number_detector'
-require_relative './detectors/iban_detector'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
+require_relative './detectors/iban_detector'
+require_relative './detectors/price_detector'
+require_relative './detectors/date_detector'
+require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
+require_relative './detectors/due_date_label_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -28,6 +29,7 @@ require_relative './models/vat_number_term'
 require_relative './models/iban_term'
 require_relative './models/billing_period_term'
 require_relative './models/currency_term'
+require_relative './models/due_date_label_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -49,6 +51,7 @@ class BillRecognizer
     VatNumberTerm.dataset.delete
     IbanTerm.dataset.delete
     CurrencyTerm.dataset.delete
+    DueDateLabelTerm.dataset.delete
 
     # Download and convert image
     image_file = @retriever.save
@@ -119,6 +122,7 @@ class BillRecognizer
     billing_period_words = BillingPeriodDetector.filter
     currency_words = CurrencyDetector.filter
     iban_words = IbanDetector.filter
+    DueDateLabelDetector.filter
 
     calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
