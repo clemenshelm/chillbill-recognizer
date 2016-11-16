@@ -104,7 +104,6 @@ class BillRecognizer
     #        bottom: #{word.bottom}
     #        "
     #      }
-
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
       "PriceTerm.create(
