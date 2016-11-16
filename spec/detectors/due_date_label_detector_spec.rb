@@ -100,6 +100,6 @@ describe DueDateLabelDetector do
     )
 
     due_date_labels = DueDateLabelDetector.filter
-    expect(due_date_labels.map(&:to_s)).to eq ['Due Date:']
+    expect(due_date_labels.map(&:to_s)).to eq ['DueDate:']
   end
 end

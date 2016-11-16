@@ -3,7 +3,7 @@ require_relative '../models/due_date_label_term'
 
 class DueDateLabelDetector
   DUE_DATE_LABELS =
-    /(?:^|(?<= ))(Zahlungstermin|Due\ Date:|Zahlungsziel:)(?:(?= )|$)/
+    /(?:^|(?<= ))(Zahlungstermin|DueDate:|Zahlungsziel:)(?:(?= )|$)/
 
   def self.filter
     find_due_date_labels(DUE_DATE_LABELS)
