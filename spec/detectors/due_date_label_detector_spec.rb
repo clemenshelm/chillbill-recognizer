@@ -71,6 +71,7 @@ describe DueDateLabelDetector do
   end
 
   it "detects the due date label 'Due Date:'" do
+    # From 7FDFZnmZmfMyxWZtG.pdf
     create(
       :word,
       text: 'Due',

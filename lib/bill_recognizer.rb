@@ -95,16 +95,15 @@ class BillRecognizer
     #  bottom: #{word.bottom}"
     # }
 
-    puts Word.map { |word|
-           "
-           text: \'#{word.text}\',
-           left: #{word.left},
-           right: #{word.right},
-           top: #{word.top},
-           bottom: #{word.bottom}
-           "
-         }
-
+    # puts Word.map { |word|
+    #        "
+    #        text: \'#{word.text}\',
+    #        left: #{word.left},
+    #        right: #{word.right},
+    #        top: #{word.top},
+    #        bottom: #{word.bottom}
+    #        "
+    #      }
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
       "PriceTerm.create(
