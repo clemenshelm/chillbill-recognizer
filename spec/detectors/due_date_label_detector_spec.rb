@@ -98,5 +98,8 @@ describe DueDateLabelDetector do
       top: 1480,
       bottom: 1519
     )
+
+    due_date_labels = DueDateLabelDetector.filter
+    expect(due_date_labels.map(&:to_s)).to eq ['Due Date:']
   end
 end
