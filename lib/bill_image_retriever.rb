@@ -11,6 +11,12 @@ require_relative './logging.rb'
     def initialize(bill)
       @bill = bill
     end
+    # 
+    # begin
+    #   raise UnprocessableFileError.new(bill), "Unprocessable file"
+    # rescue UnprocessableFileError => e
+    #   puts "Unprocessable file" + e.bill
+    # end
   end
 
 class BillImageRetriever
@@ -43,11 +49,7 @@ class BillImageRetriever
     when '.png', '.jpg', '.jpeg'
       image_file
     else
-      begin
-        raise UnprocessableFileError.new(file_extension), "Unprocessable file"
-      rescue UnprocessableFileError => e
-        puts "Unprocessable file" + e.bill
-      end
+      raise UnprocessableFileError.new(url)
       # raise 'Unknown data type, ' + file_extension
       #empty recognition result
       #within this file but out of here extend the StandardError class to have our own custom
