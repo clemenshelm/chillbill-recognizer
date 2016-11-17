@@ -97,6 +97,7 @@ RSpec.configure do |config|
     VatNumberTerm.dataset.delete
     CurrencyTerm.dataset.delete
     IbanTerm.dataset.delete
+    DueDateLabelTerm.dataset.delete
   end
 
   config.include SpecCache

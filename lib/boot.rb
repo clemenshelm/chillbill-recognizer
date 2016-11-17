@@ -65,4 +65,13 @@ DB.create_table :currency_terms do
   Float :bottom
 end
 
+DB.create_table :due_date_label_terms do
+  primary_key :id
+  String :text
+  Float :left
+  Float :right
+  Float :top
+  Float :bottom
+end
+
 Sequel::Model.db = DB
