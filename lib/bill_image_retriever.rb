@@ -5,19 +5,13 @@ require 'open-uri'
 require 'aws-sdk'
 require_relative './logging.rb'
 
-  class UnprocessableFileError < StandardError
-    attr_reader :bill
-
-    def initialize(bill)
-      @bill = bill
-    end
-    # 
-    # begin
-    #   raise UnprocessableFileError.new(bill), "Unprocessable file"
-    # rescue UnprocessableFileError => e
-    #   puts "Unprocessable file" + e.bill
-    # end
+class UnprocessableFileError < StandardError
+  attr_reader :extension
+  def initialize(message="Unprocessable file type: ", extension)
+    @extension = extension
+    super(message + extension)
   end
+end
 
 class BillImageRetriever
   include Logging
@@ -49,13 +43,7 @@ class BillImageRetriever
     when '.png', '.jpg', '.jpeg'
       image_file
     else
-      raise UnprocessableFileError.new(url)
-      # raise 'Unknown data type, ' + file_extension
-      #empty recognition result
-      #within this file but out of here extend the StandardError class to have our own custom
-      #error message UnprocessableFileError or something
-      #throw an exception that gets rescued in the bill recognizer.
-      #rescue returns a KeyValueError
+      raise UnprocessableFileError.new("Unprocessable file type: ", file_extension)
     end
   end
 end
