@@ -11,6 +11,8 @@ class ErrorThrowingRetriever
 
   def save
     file_extension = File.extname @file_basename.downcase
-    raise UnprocessableFileError.new("Unprocessable file type: ", file_extension)
+    raise UnprocessableFileError.new(
+      'Unprocessable file type: ', file_extension
+    )
   end
 end

@@ -18,5 +18,4 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
   end
-
 end
