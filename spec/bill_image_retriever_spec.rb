@@ -11,7 +11,7 @@ describe BillImageRetriever do
 
     download = BillImageRetriever.new url: file_url
 
-    expect(lambda {download.save}).to raise_error(UnprocessableFileError, 'Unknown data type, .p7s')
+    expect{download.save}.to raise_error(UnprocessableFileError)
   end
 
   it 'saves a pdf bill as an image' do

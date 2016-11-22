@@ -4,8 +4,10 @@ require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
-    retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
+    retriever = SpecCacheRetriever.new(file_basename: 'xcaEpkmTauDsZz9fk.p7s')
     recognizer = BillRecognizer.new(retriever: retriever)
+
+    # expect{recognizer.recognize}. to raise_error(UnprocessableFileError)
 
     bill_attributes = recognizer.recognize
 
@@ -16,4 +18,5 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
   end
+
 end
