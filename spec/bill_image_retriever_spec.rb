@@ -4,7 +4,7 @@ require 'grim'
 require_relative '../lib/bill_image_retriever'
 
 describe BillImageRetriever do
-  it 'denies a bill of an unknown format', :focus do
+  it 'denies a bill of an unknown format' do
     file_id = 'xcaEpkmTauDsZz9fk'
     file_url =
       "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.p7s"

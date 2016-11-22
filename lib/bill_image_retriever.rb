@@ -7,7 +7,7 @@ require_relative './logging.rb'
 
 class UnprocessableFileError < StandardError
   attr_reader :extension
-  def initialize(message="Unprocessable file type: ", extension)
+  def initialize(extension, message = 'Unprocessable file type: ')
     @extension = extension
     super(message + extension)
   end
@@ -43,7 +43,7 @@ class BillImageRetriever
     when '.png', '.jpg', '.jpeg'
       image_file
     else
-      raise UnprocessableFileError.new("Unprocessable file type: ", file_extension)
+      raise UnprocessableFileError, file_extension
     end
   end
 end
