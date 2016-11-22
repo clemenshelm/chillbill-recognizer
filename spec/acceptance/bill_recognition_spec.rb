@@ -7,8 +7,6 @@ describe 'Recognizing bills correctly' do
     retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
-    # expect{recognizer.recognize}. to raise_error(UnprocessableFileError)
-
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:amounts]).to eq [{ total: 29_674, vatRate: 20 }]
