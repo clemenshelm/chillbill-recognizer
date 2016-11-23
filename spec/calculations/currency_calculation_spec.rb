@@ -36,10 +36,8 @@ describe CurrencyCalculation do
       bottom: 0.4056537102473498
     )
 
-
     currency = CurrencyCalculation.new(CurrencyTerm.dataset).iso
-    expect(currency).to eq 'Ft.'
-
+    expect(currency).to eq 'HUF'
   end
 
   it 'returns nil if there is no currency code' do

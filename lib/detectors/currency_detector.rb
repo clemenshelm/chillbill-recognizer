@@ -9,7 +9,7 @@ class CurrencyDetector
   CNY_CODE_REGEX = /CNY/
   SEK_CODE_REGEX = /SEK/
   GBP_CODE_REGEX = /GBP|£/
-  HUF_CODE_REGEX = /HUF/
+  HUF_CODE_REGEX = /HUF|Ft./
   HRK_CODE_REGEX = /HRK/
 
   def self.filter
