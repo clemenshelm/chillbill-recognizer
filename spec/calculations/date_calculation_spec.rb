@@ -148,7 +148,7 @@ describe DateCalculation do
 
     DueDateLabelDetector.filter
     due_date_calculation = DateCalculation.new(
-      DueDateLabelTerm.dataset
+      DateTerm.dataset
     )
 
     expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
@@ -190,7 +190,7 @@ describe DateCalculation do
     )
 
     due_date_calculation = DateCalculation.new(
-      DueDateLabelTerm.dataset
+      DateTerm.dataset
     ).due_date
 
     expect(due_date_calculation).to eq DateTime.iso8601('2015-04-15')
@@ -241,7 +241,7 @@ describe DateCalculation do
     )
 
     due_date_calculation = DateCalculation.new(
-      DueDateLabelTerm.dataset
+      DateTerm.dataset
     ).due_date
 
     expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
