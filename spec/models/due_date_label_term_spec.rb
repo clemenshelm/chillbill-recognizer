@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require_relative '../../lib/boot'
-require_relative '../../lib/models/due_date_label_term'
 
 describe DueDateLabelTerm do
   it 'detects a due date label correctly' do
