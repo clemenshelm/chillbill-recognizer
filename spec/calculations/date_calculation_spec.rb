@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require_relative '../../lib/calculations/date_calculation'
+require_relative '../../lib/detectors/due_date_label_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
@@ -145,6 +146,7 @@ describe DateCalculation do
       bottom: 1519
     )
 
+    DueDateLabelDetector.filter
     due_date_calculation = DateCalculation.new(
       DateTerm.dataset
     )
@@ -154,8 +156,7 @@ describe DateCalculation do
 
   it 'calculates the due date when the Zahlungstermin label is used' do
     # From ZkPkwYF8p6PPLbf7f.png
-    create(
-      :word,
+    DueDateLabelTerm.create(
       text: 'Zahlungstermin',
       left: 1558,
       right: 1839,
@@ -223,8 +224,7 @@ describe DateCalculation do
 
   it 'calculates the due date when the Zahlungsziel label is used' do
     # From fGHCBxN6cbksNrHpo.pdf
-    create(
-      :word,
+    DueDateLabelTerm.create(
       text: 'Zahlungsziel:',
       left: 1839,
       right: 2132,

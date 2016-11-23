@@ -18,18 +18,7 @@ class DateCalculation
   end
 
   def due_date
-    return nil if @words.empty?
-
-    # Find due date label
-    due_word = Word.where(text: %w(Due Zahlungstermin Zahlungsziel:))
-
-    return nil unless due_word.any?
-    due_date_label = Word.right_after(due_word.first)
-    date_after_label = if due_date_label.nil? || due_date_label.text != 'Date:'
-                         DateTerm.right_after(due_word.first)
-                       else
-                         DateTerm.right_after(due_date_label)
-                       end
-    date_after_label.to_datetime
+    return nil if DueDateLabelTerm.empty?
+    DateTerm.right_after(DueDateLabelTerm.first).to_datetime
   end
 end
