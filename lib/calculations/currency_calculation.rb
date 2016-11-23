@@ -6,6 +6,6 @@ class CurrencyCalculation
 
   def iso
     return nil if @words.empty?
-    @words.first.to_iso
+    @words.last.to_iso
   end
 end
