@@ -54,7 +54,14 @@ class BillRecognizer
     DueDateLabelTerm.dataset.delete
 
     # Download and convert image
-    image_file = @retriever.save
+    begin
+      image_file = @retriever.save
+    rescue UnprocessableFileError => e
+      return {
+        error: e.to_s
+      }
+    end
+
     preprocess image_file.path
 
     # FileUtils.rm('./test.png')
