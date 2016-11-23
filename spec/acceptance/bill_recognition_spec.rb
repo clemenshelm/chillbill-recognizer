@@ -4,7 +4,7 @@ require_relative '../../lib/bill_recognizer'
 
 describe 'Recognizing bills correctly' do
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
-    retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
+    retriever = SpecCacheRetriever.new(file_basename: 'bsg8XJqLBJSt2dXeH.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
