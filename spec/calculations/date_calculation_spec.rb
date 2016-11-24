@@ -87,6 +87,21 @@ describe DateCalculation do
     expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
   end
 
+  it 'recognizes first date as a long hyphen date regex' do
+    DateTerm.create(
+      text: '28-08-2016',
+      left: 1819,
+      right: 2026,
+      top: 498,
+      bottom: 529
+    )
+
+    date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    )
+    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-28')
+  end
+
   it 'returns nil if there is no due date' do
     dates = DateCalculation.new([]).due_date
     expect(dates).to be_nil
