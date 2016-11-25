@@ -10,6 +10,7 @@ class DateDetector
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
   FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|Dezember) \d+)/
   FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
+  FULL_YEAR_DATE_REGEX = /\d{4}\.\d{2}\.\d{2}/
 
   def self.filter
     end_number_with_period = lambda do |term|
@@ -19,6 +20,7 @@ class DateDetector
 
     find_dates(SHORT_SLASH_DATE_REGEX)
     find_dates(LONG_SLASH_DATE_REGEX)
+    find_dates(FULL_YEAR_DATE_REGEX)
 
     end_word_with_space = -> (term) { term.text += ' ' }
     find_dates(FULL_GERMAN_DATE_REGEX, after_each_word: end_word_with_space)
