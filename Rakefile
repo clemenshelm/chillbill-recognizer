@@ -27,41 +27,6 @@ task process: :setup_processing do
   end
 end
 
-desc "Check which of the done bills weren't recognized correctly"
-task check: :setup_processing do
-  require 'colorize'
-  require_relative './lib/logging'
-
-  process(:reviewed) do |recognition_result, bill|
-    include Logging
-
-    attributes = %i(
-      amounts
-      invoiceDate
-      vatNumber
-      billingPeriod
-      currencyCode
-      dueDate
-      iban
-      version
-    )
-
-    correct_result = bill[:accountingRecord].slice(*attributes)
-    id = recognition_result.delete(:id)
-    if recognition_result == correct_result
-      logger.info "✔︎ bill #{id}".green
-    else
-      logger.info [
-        "✘ bill #{id}",
-        'recognition result:',
-        recognition_result,
-        'correct result',
-        correct_result
-      ].map(&:to_s).map(&:red).join(' ')
-    end
-  end
-end
-
 def process(bill_kind, &bill_proc)
   require 'erb'
   require 'yaml'
