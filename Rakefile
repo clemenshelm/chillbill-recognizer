@@ -97,14 +97,16 @@ end
 desc 'Restart task on ECS'
 task :restart_task do
   tasks = `aws ecs list-tasks --cluster ChillBill --region eu-central-1`
-  running_task = tasks.match(/task\/(\w+\W\w+\W\w+\W\w+\W\w+)/)[1]
+  running_tasks = tasks.match(/task\/(\w+\W\w+\W\w+\W\w+\W\w+)/)
+  if running_tasks
+    sh "aws ecs stop-task --cluster ChillBill --task #{running_tasks[0]} --region eu-central-1"
+  end
 
   all_revisions = `aws ecs list-task-definitions --region eu-central-1`
   all_revision_numbers = all_revisions.scan(/recognizer:(\d+)/).flatten
   latest_revision = all_revision_numbers.map {|num| num.to_i}.sort.last
 
-  sh "aws ecs stop-task --cluster ChillBill --task #{running_task}
-      aws ecs run-task --cluster ChillBill --task-definition ecscompose-recognizer:#{latest_revision} --count 1"
+  sh "aws ecs run-task --cluster ChillBill --task-definition ecscompose-recognizer:#{latest_revision} --count 1 --region eu-central-1"
 end
 
 desc 'Increments recognizer version number and deploys newest version'
