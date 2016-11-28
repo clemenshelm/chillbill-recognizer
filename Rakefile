@@ -17,7 +17,7 @@ end
 
 desc 'Process unprocessed bills'
 task process: :setup_processing do
-  process(:unprocessed) do |recognition_result, _bill, meteor|
+  process(:unprocessed, :unprocessed) do |recognition_result, _bill, meteor|
     include Logging
 
     id = recognition_result.delete :id
@@ -27,7 +27,19 @@ task process: :setup_processing do
   end
 end
 
-def process(bill_kind, &bill_proc)
+desc 'Reprocess bills from older versions of the processor'
+task reprocess: :setup_processing do
+  process(:outdated_processing, :reprocess) do |recognition_result, _bill, meteor|
+    include Logging
+
+    id = recognition_result.delete :id
+    logger.info ["result for bill #{id}:", recognition_result].map(&:to_s)
+      .map(&:yellow).join(' ')
+    meteor.write_detection_result(id, recognition_result)
+  end
+end
+
+def process(bill_kind, &bill_proc, queue)
   require 'erb'
   require 'yaml'
   require_relative 'lib/hub'
@@ -36,7 +48,7 @@ def process(bill_kind, &bill_proc)
   config_yaml = ERB.new(IO.read('config.yml')).result
   config = YAML.load(config_yaml)[environment].freeze
 
-  hub = Hub.new(bills: bill_kind, config: config)
+  hub = Hub.new(bills: bill_kind, config: config, queue: queue)
   hub.run(&bill_proc)
 end
 
