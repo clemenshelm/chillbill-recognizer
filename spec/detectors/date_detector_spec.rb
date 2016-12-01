@@ -329,6 +329,22 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-27']
   end
 
+  it 'detects dd-mm-yyyy format' do
+    # From mMHiT2b3C5fgYqBzY.pdf
+
+    create(
+      :word,
+      text: '30-09-2016',
+      left: 0.0003333333333333333,
+      right: 0.014,
+      top: 0.5585394581861013,
+      bottom: 0.5656065959952886
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-09-30']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
