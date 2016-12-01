@@ -329,7 +329,7 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-27']
   end
 
-  it 'detects yyyy/mm/dd regex' do
+  it 'detects yyyy.mm.dd regex' do
     # From bsg8XJqLBJSt2dXeH.pdf
     create(
       :word,
