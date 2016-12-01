@@ -168,8 +168,8 @@ class BillRecognizer
       # TODO: Let price calculation produce required format
       sub_total = net_amount * 100
       vat_total = vat_amount * 100
-      amounts[0]['total'] = (sub_total + vat_total).to_i
-      amounts[0]['vat_rate'] =
+      amounts[0][:total] = (sub_total + vat_total).to_i
+      amounts[0][:vatRate] =
         if sub_total.nonzero?
           (vat_total * 100 / sub_total).round
         else
