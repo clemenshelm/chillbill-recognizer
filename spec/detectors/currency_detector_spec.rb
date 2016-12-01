@@ -463,4 +463,28 @@ describe CurrencyDetector do
     currencies = CurrencyDetector.filter
     expect(currencies.map(&:to_iso)).to eq ['HUF']
   end
+
+  it "detects EUR as Euro on a bill" do
+    # From
+    create(
+      :word,
+      text: 'Summe',
+      left: 0.584,
+      right: 0.6416666666666667,
+      top: 0.9112789051439358,
+      bottom: 0.9202453987730062
+    )
+
+    create(
+      :word,
+      text: 'Euro',
+      left: 0.648,
+      right: 0.6816666666666666,
+      top: 0.9112789051439358,
+      bottom: 0.9202453987730062
+    )
+
+    currencies = CurrencyDetector.filter
+    expect(currencies.map(&:to_iso)).to eq ['EUR']
+  end
 end
