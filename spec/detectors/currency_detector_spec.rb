@@ -464,7 +464,7 @@ describe CurrencyDetector do
     expect(currencies.map(&:to_iso)).to eq ['HUF']
   end
 
-  it "detects EUR as Euro on a bill" do
+  it 'detects EUR as Euro on a bill' do
     # From mMHiT2b3C5fgYqBzY
     create(
       :word,
