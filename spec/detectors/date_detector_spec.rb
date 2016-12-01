@@ -329,7 +329,6 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-27']
   end
 
-<<<<<<< HEAD
   it 'detects yyyy.mm.dd regex' do
     # From bsg8XJqLBJSt2dXeH.pdf
     create(
@@ -343,7 +342,8 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-10-01']
-=======
+  end
+
   it 'detects dd-mm-yyyy format' do
     # From mMHiT2b3C5fgYqBzY.pdf
 
@@ -358,7 +358,6 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-09-30']
->>>>>>> 5710fcc3c13b5b32022f0f1fc450bbb869a68988
   end
 
   def date_strings(date_terms)

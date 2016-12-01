@@ -53,13 +53,10 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     when DateDetector::LONG_SLASH_DATE_REGEX
       DateTime.strptime(text, '%d/%m/%Y')
-<<<<<<< HEAD
     when DateDetector::LONG_HUNGARIAN_DATE_REGEX
       DateTime.strptime(text, '%Y.%m.%d')
-=======
     when DateDetector::LONG_HYPHEN_DATE_REGEX
       DateTime.strptime(text, '%d-%m-%Y')
->>>>>>> 5710fcc3c13b5b32022f0f1fc450bbb869a68988
     end
   end
 end
