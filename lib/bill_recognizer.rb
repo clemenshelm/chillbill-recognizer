@@ -158,10 +158,7 @@ class BillRecognizer
     due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
 
     # image_file.close
-    amounts = [
-      total: 'Not detected',
-      vatRate: 'Not detected'
-    ]
+    amounts = Array.new(1) { Hash.new }
 
     unless net_amount.nil?
       # Adapt recognition result to application schema
