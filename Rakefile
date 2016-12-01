@@ -17,7 +17,7 @@ end
 
 desc 'Process unprocessed bills'
 task process: :setup_processing do
-  process(:unprocessed, :unprocessed) do |recognition_result, _bill, meteor|
+  process(:unprocessed, :to_process_queue) do |recognition_result, _bill, meteor|
     include Logging
 
     id = recognition_result.delete :id
@@ -29,7 +29,7 @@ end
 
 desc 'Reprocess bills from older versions of the processor'
 task reprocess: :setup_processing do
-  process(:outdated_processing, :reprocess) do |recognition_result, _bill, meteor|
+  process(:outdated_processing, :to_reprocess_queue) do |recognition_result, _bill, meteor|
     include Logging
 
     id = recognition_result.delete :id
@@ -39,7 +39,7 @@ task reprocess: :setup_processing do
   end
 end
 
-def process(bill_kind, &bill_proc, queue)
+def process(bill_kind, queue, &bill_proc)
   require 'erb'
   require 'yaml'
   require_relative 'lib/hub'

@@ -37,7 +37,7 @@ class Hub
             .on(:added) do |id, bill|
         logger.info "bill #{id} was added: #{bill}"
         bills[id] = bill
-        RecognitionWorker.perform_async id, bill[:imageUrl], :queue
+        RecognitionWorker.perform_async id, bill[:imageUrl], queue
       end
 
       redis.pubsub.subscribe 'results' do |bill_json|
