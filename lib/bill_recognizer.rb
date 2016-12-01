@@ -105,15 +105,15 @@ class BillRecognizer
     #  bottom: #{word.bottom}"
     # }
 
-    puts Word.map { |word|
-           "
-           text: \'#{word.text}\',
-           left: #{word.left},
-           right: #{word.right},
-           top: #{word.top},
-           bottom: #{word.bottom}
-           "
-         }
+    # puts Word.map { |word|
+    #        "
+    #        text: \'#{word.text}\',
+    #        left: #{word.left},
+    #        right: #{word.right},
+    #        top: #{word.top},
+    #        bottom: #{word.bottom}
+    #        "
+    #      }
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
       "PriceTerm.create(
@@ -159,17 +159,17 @@ class BillRecognizer
 
     # image_file.close
     amounts = [
-      total: "Not detected",
-      vatRate: "Not detected"
+      total: 'Not detected',
+      vatRate: 'Not detected'
     ]
 
-    if !net_amount.nil?
+    unless net_amount.nil?
       # Adapt recognition result to application schema
       # TODO: Let price calculation produce required format
       sub_total = net_amount * 100
       vat_total = vat_amount * 100
-      amounts[total] = (sub_total + vat_total).to_i
-      amounts[vat_rate] =
+      amounts[0]['total'] = (sub_total + vat_total).to_i
+      amounts[0]['vat_rate'] =
         if sub_total.nonzero?
           (vat_total * 100 / sub_total).round
         else
