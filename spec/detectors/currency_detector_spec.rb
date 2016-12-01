@@ -465,7 +465,7 @@ describe CurrencyDetector do
   end
 
   it "detects EUR as Euro on a bill" do
-    # From
+    # From mMHiT2b3C5fgYqBzY
     create(
       :word,
       text: 'Summe',
