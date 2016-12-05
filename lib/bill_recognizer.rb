@@ -69,8 +69,8 @@ class BillRecognizer
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
     hocr =
-      `tesseract "#{image_file.path}" stdout -c tessedit_create_hocr=1 -c
-      tessedit_char_whitelist="#{Config[:tesseract_whitelist]}" -l eng+deu`
+      `tesseract "#{image_file.path}" stdout -l eng+deu -c tessedit_create_hocr=1 -c
+      tessedit_char_whitelist="#{Config[:tesseract_whitelist]}"`
       .force_encoding('UTF-8')
     # logger.debug hocr
 
@@ -184,7 +184,7 @@ class BillRecognizer
       currencyCode: currency,
       dueDate: due_date,
       iban: iban,
-      versionNumber: version
+      recognizerVersion: version
     }
   end
 
