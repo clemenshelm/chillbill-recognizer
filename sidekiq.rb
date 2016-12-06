@@ -3,6 +3,7 @@ require 'sidekiq'
 require 'hiredis'
 require_relative 'lib/bill_recognizer'
 require_relative 'lib/logging'
+require 'timeout'
 
 Sidekiq.configure_client do |config|
   # Run only 1 thread.
@@ -23,8 +24,10 @@ class RecognitionWorker
   def perform(id, bill_image_url)
     logger.info "performing recognition on #{bill_image_url}"
     Logging.logger = logger
+
     recognizer = BillRecognizer.new(image_url: bill_image_url)
-    bill_attributes = recognizer.recognize
+    timeout_in_secs = 200
+    bill_attributes = Timeout.timeout(timeout_in_secs) { recognizer.recognize }
     bill_attributes[:id] = id
     logger.info bill_attributes
     REDIS.publish 'results', bill_attributes.to_json
