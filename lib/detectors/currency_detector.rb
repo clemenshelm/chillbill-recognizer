@@ -2,7 +2,7 @@
 require_relative '../models/currency_term'
 
 class CurrencyDetector
-  EUR_CODE_REGEX = /EUR|€/
+  EUR_CODE_REGEX = /EUR|€|Euro/
   USD_CODE_REGEX = /USD|\$/
   HKD_CODE_REGEX = /HKD|\$/
   CHF_CODE_REGEX = /CHF/

@@ -184,7 +184,7 @@ class BillRecognizer
       currencyCode: currency,
       dueDate: due_date,
       iban: iban,
-      version: version
+      versionNumber: version
     }
   end
 
