@@ -26,7 +26,7 @@ class RecognitionWorker
     Logging.logger = logger
 
     recognizer = BillRecognizer.new(image_url: bill_image_url)
-    timeout_in_secs = 120
+    timeout_in_secs = 200
     bill_attributes = Timeout.timeout(timeout_in_secs) { recognizer.recognize }
     bill_attributes[:id] = id
     logger.info bill_attributes
