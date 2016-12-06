@@ -27,7 +27,7 @@ class RecognitionWorker
 
     recognizer = BillRecognizer.new(image_url: bill_image_url)
     timeout_in_secs = 120
-    bill_attributes = Timeout::timeout(timeout_in_secs) { recognizer.recognize }
+    bill_attributes = Timeout.timeout(timeout_in_secs) { recognizer.recognize }
     bill_attributes[:id] = id
     logger.info bill_attributes
     REDIS.publish 'results', bill_attributes.to_json
