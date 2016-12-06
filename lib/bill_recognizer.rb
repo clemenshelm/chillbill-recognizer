@@ -68,10 +68,12 @@ class BillRecognizer
     # FileUtils.cp(image_file.path, './test.png')
 
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
+    tesseract_config = {
+      tessedit_create_hocr: 1,
+      tessedit_char_whitelist: %("#{Config[:tesseract_whitelist]}")
+    }.map { |k, v| "-c #{k}=#{v}" }.join(' ')
     hocr =
-      `tesseract "#{image_file.path}" stdout -l eng+deu
-      -c tessedit_create_hocr=1
-      -c tessedit_char_whitelist="#{Config[:tesseract_whitelist]}"`
+      `tesseract "#{image_file.path}" stdout -l eng+deu #{tesseract_config}`
       .force_encoding('UTF-8')
     # logger.debug hocr
 
