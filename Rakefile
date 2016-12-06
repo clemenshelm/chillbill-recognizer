@@ -99,7 +99,7 @@ task :restart_task do
   tasks = `aws ecs list-tasks --cluster ChillBill --region eu-central-1`
   running_tasks = tasks.match(/task\/(\w+\W\w+\W\w+\W\w+\W\w+)/)
   if running_tasks
-    sh "aws ecs stop-task --cluster ChillBill --task #{running_tasks[0]} --region eu-central-1"
+    sh "aws ecs stop-task --cluster ChillBill --task #{running_tasks[1]} --region eu-central-1"
   end
 
   all_revisions = `aws ecs list-task-definitions --region eu-central-1`
