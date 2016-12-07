@@ -10,6 +10,7 @@ class DateDetector
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
   FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|Dezember) \d+)/
   FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
+  LONG_HUNGARIAN_DATE_REGEX = /\d{4}\.(?:#{months})\.(?:#{days})/
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-\d{4}$)/
 
   def self.filter
@@ -20,6 +21,7 @@ class DateDetector
 
     find_dates(SHORT_SLASH_DATE_REGEX)
     find_dates(LONG_SLASH_DATE_REGEX)
+    find_dates(LONG_HUNGARIAN_DATE_REGEX)
     find_dates(LONG_HYPHEN_DATE_REGEX)
 
     end_word_with_space = -> (term) { term.text += ' ' }
