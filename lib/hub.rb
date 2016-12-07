@@ -38,7 +38,7 @@ class Hub
         bills[id] = bill
 
         Sidekiq::Client.enqueue_to(
-          :queue, RecognitionWorker, id, bill[:imageUrl]
+          @queue, RecognitionWorker, id, bill[:imageUrl]
         )
       end
 

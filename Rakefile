@@ -29,7 +29,7 @@ end
 
 desc 'Reprocess bills from older versions of the processor'
 task reprocess: :setup_processing do
-  process(:outdated_processing, :to_reprocess_queue) do |recognition_result, _bill, meteor|
+  process(:toReprocess, :to_reprocess_queue) do |recognition_result, _bill, meteor|
     include Logging
 
     id = recognition_result.delete :id
