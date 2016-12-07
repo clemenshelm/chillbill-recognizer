@@ -56,7 +56,7 @@ desc 'Increment recognizer version number'
 task :increment_version do
   require 'YAML'
   data = YAML.load_file "lib/version.yml"
-  data["versionNumber"] += 1
+  data["Version"] += 1
   File.open("lib/version.yml", 'w') { |f| YAML.dump(data, f) }
 end
 
