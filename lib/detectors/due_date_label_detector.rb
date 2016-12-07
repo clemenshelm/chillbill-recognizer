@@ -31,11 +31,3 @@ class DueDateLabelDetector
     end
   end
 end
-
-# ONE_WORD_LABELS =
-#   /(?:^|(?<= ))(Zahlungstermin|Zahlungsziel:)(?:(?= )|$)/
-# MULTIPLE_WORD_LABELS = /(Due Date:)/
-#
-# def self.filter
-#   find_due_date_labels(DUE_DATE_LABELS)
-#   find_due_date_labels(DUE_DATE_LABELS, after_each_word: end_word_with_space)
