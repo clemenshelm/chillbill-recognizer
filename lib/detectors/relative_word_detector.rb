@@ -1,15 +1,15 @@
 # frozen_string_literal: true
-require_relative '../models/due_date_label_term'
+require_relative '../models/relative_word_term'
 
-class DueDateLabelDetector
+class RelativeWordDetector
   RELATIVE_WORDS = /(prompt)/
 
   def self.filter
-    find_due_date_labels(RELATIVE_WORDS)
+    find_relative_words(RELATIVE_WORDS)
     RelativeWordTerm.dataset
   end
 
-  def self.find_due_date_labels(regex, after_each_word: nil)
+  def self.find_relative_words(regex, after_each_word: nil)
     private
     term = RelativeWordTerm.new(regex: regex, after_each_word: after_each_word)
     last_word = nil

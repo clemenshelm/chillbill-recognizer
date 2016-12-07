@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require_relative '../../lib/detectors/iban_detector'
+require_relative '../../lib/detectors/relative_word_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-describe IbanDetector do
-  it 'recognizes IBAN seperated by a space' do
+describe RelativeWordDetector do
+  it 'detects the relative word prompt' do
     create(
       :word,
       text: 'Zahlungsziel:',
@@ -32,7 +32,7 @@ describe IbanDetector do
       bottom: 0.5820965842167256
     )
 
-    relative_words = RelativeWordsDetector.filter
+    relative_words = RelativeWordDetector.filter
     expect(relative_words.map(&:to_s)).to eq ['prompt']
   end
 end
