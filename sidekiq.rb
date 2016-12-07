@@ -21,8 +21,7 @@ REDIS = Redis.new(driver: :hiredis, host: 'redis')
 class RecognitionWorker
   include Sidekiq::Worker
 
-  def perform(id, bill_image_url, queue)
-    sidekiq_options queue: queue
+  def perform(id, bill_image_url)
     logger.info "performing recognition on #{bill_image_url}"
     Logging.logger = logger
 

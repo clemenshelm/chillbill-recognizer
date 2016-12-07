@@ -31,13 +31,13 @@ class Hub
       )
 
       meteor.subscribe("admin.bills.#{@bills}")
-      meteor.subscribe('admin.bills.toReprocess')
 
       meteor.collection('bills')
             .on(:added) do |id, bill|
         logger.info "bill #{id} was added: #{bill}"
         bills[id] = bill
-        RecognitionWorker.perform_async id, bill[:imageUrl], queue
+
+        RecognitionWorker.perform_async id, bill[:imageUrl]
       end
 
       redis.pubsub.subscribe 'results' do |bill_json|
