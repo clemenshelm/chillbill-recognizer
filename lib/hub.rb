@@ -37,7 +37,9 @@ class Hub
         logger.info "bill #{id} was added: #{bill}"
         bills[id] = bill
 
-        RecognitionWorker.perform_async id, bill[:imageUrl]
+        Sidekiq::Client.enqueue_to(
+          :queue, RecognitionWorker, id, bill[:imageUrl]
+        )
       end
 
       redis.pubsub.subscribe 'results' do |bill_json|
