@@ -24,12 +24,12 @@ Lint/PercentStringArray:
 
 # Offense count: 8
 Metrics/AbcSize:
-  Max: 93
+  Max: 95
 
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 114
+  Max: 117
 
 # Offense count: 3
 Metrics/CyclomaticComplexity:
@@ -38,7 +38,7 @@ Metrics/CyclomaticComplexity:
 # Offense count: 12
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 96
+  Max: 99
 
 # Offense count: 1
 Metrics/PerceivedComplexity:
