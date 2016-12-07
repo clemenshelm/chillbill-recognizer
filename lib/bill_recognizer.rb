@@ -157,30 +157,30 @@ class BillRecognizer
     iban = IbanCalculation.new(iban_words).iban
 
     currency = CurrencyCalculation.new(currency_words).iso
-
     due_datetime = DateCalculation.new(date_words).due_date
     due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
 
     # image_file.close
-    return {} if net_amount.nil?
+    amounts = []
 
-    # Adapt recognition result to application schema
-    # TODO: Let price calculation produce required format
-    sub_total = net_amount * 100
-    vat_total = vat_amount * 100
-    total = (sub_total + vat_total).to_i
-    vat_rate =
-      if sub_total.nonzero?
-        (vat_total * 100 / sub_total).round
-      else
-        0
-      end
+    unless net_amount.nil?
+      # Adapt recognition result to application schema
+      # TODO: Let price calculation produce required format
+      sub_total = net_amount * 100
+      vat_total = vat_amount * 100
+
+      amounts << { total: (sub_total + vat_total).to_i, vatRate:
+        if sub_total.nonzero?
+          (vat_total * 100 / sub_total).round
+        else
+          0
+        end }
+    end
 
     version_data = YAML.load_file 'lib/version.yml'
     version = version_data['Version']
-
     {
-      amounts: [total: total, vatRate: vat_rate],
+      amounts: amounts,
       invoiceDate: invoice_date,
       vatNumber: vat_number,
       billingPeriod: billing_period,
