@@ -1,2 +1,6 @@
 ---
 :concurrency: 1
+
+:queues:
+  - to_process_queue
+  - to_reprocess_queue

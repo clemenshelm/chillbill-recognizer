@@ -30,16 +30,16 @@ processor:
   env_file: .env
   command: bundle exec rake process
 
-checker:
+reprocessor:
   build: .
   volumes:
-      - .:/myapp
+    - .:/myapp
   volumes_from:
     - bundle
   links:
     - redis
   env_file: .env
-  command: bundle exec rake check
+  command: bundle exec rake reprocess
 
 tests:
   build: .
