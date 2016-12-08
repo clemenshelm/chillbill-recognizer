@@ -16,7 +16,7 @@ class CurrencyDetector
                 HUF_SYMBOLS + HRK_SYMBOLS
 
   def self.filter
-    currencies_regex = /#{ALL_SYMBOLS.map{ |s| Regexp.quote(s) }.join('|')}/
+    currencies_regex = /#{ALL_SYMBOLS.map { |s| Regexp.quote(s) }.join('|')}/
     find_currencies(currencies_regex)
 
     CurrencyTerm.dataset
