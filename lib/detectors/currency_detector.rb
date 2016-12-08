@@ -2,7 +2,7 @@
 require_relative '../models/currency_term'
 
 class CurrencyDetector
-  EUR_SYMBOLS = %w(EUR € EURO).freeze
+  EUR_SYMBOLS = %w(EUR € Euro).freeze
   USD_SYMBOLS = %w(USD $).freeze
   HKD_SYMBOLS = %w(HKD $).freeze
   CHF_SYMBOLS = %w(CHF).freeze
@@ -16,7 +16,7 @@ class CurrencyDetector
                 HUF_SYMBOLS + HRK_SYMBOLS
 
   def self.filter
-    currencies_regex = /#{Regexp.quote(ALL_SYMBOLS.join('|'))}/
+    currencies_regex = /#{ALL_SYMBOLS.map{ |s| Regexp.quote(s) }.join('|')}/
     find_currencies(currencies_regex)
 
     CurrencyTerm.dataset
