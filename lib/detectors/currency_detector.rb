@@ -2,18 +2,18 @@
 require_relative '../models/currency_term'
 
 class CurrencyDetector
-  EUR_SYMBOLS = %w(EUR € EURO)
-  USD_SYMBOLS = %w(USD $)
-  HKD_SYMBOLS = %w(HKD $)
-  CHF_SYMBOLS = %w(CHF)
-  CNY_SYMBOLS = %w(CNY)
-  SEK_SYMBOLS = %w(SEK)
-  GBP_SYMBOLS = %w(GBP £)
-  HUF_SYMBOLS = %w(HUF Ft.)
-  HRK_SYMBOLS = %w(HRK)
+  EUR_SYMBOLS = %w(EUR € EURO).freeze
+  USD_SYMBOLS = %w(USD $).freeze
+  HKD_SYMBOLS = %w(HKD $).freeze
+  CHF_SYMBOLS = %w(CHF).freeze
+  CNY_SYMBOLS = %w(CNY).freeze
+  SEK_SYMBOLS = %w(SEK).freeze
+  GBP_SYMBOLS = %w(GBP £).freeze
+  HUF_SYMBOLS = %w(HUF Ft.).freeze
+  HRK_SYMBOLS = %w(HRK).freeze
   ALL_SYMBOLS = EUR_SYMBOLS + USD_SYMBOLS + HKD_SYMBOLS +
-    CHF_SYMBOLS + CNY_SYMBOLS + SEK_SYMBOLS + GBP_SYMBOLS +
-    HUF_SYMBOLS + HRK_SYMBOLS
+                CHF_SYMBOLS + CNY_SYMBOLS + SEK_SYMBOLS + GBP_SYMBOLS +
+                HUF_SYMBOLS + HRK_SYMBOLS
 
   def self.filter
     currencies_regex = /#{Regexp.quote(ALL_SYMBOLS.join('|'))}/
