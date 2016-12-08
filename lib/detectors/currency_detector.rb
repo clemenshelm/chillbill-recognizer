@@ -2,25 +2,22 @@
 require_relative '../models/currency_term'
 
 class CurrencyDetector
-  EUR_CODE_REGEX = /EUR|€|Euro/
-  USD_CODE_REGEX = /USD|\$/
-  HKD_CODE_REGEX = /HKD|\$/
-  CHF_CODE_REGEX = /CHF/
-  CNY_CODE_REGEX = /CNY/
-  SEK_CODE_REGEX = /SEK/
-  GBP_CODE_REGEX = /GBP|£/
-  HUF_CODE_REGEX = /HUF|Ft./
-  HRK_CODE_REGEX = /HRK/
+  EUR_SYMBOLS = %w(EUR € EURO)
+  USD_SYMBOLS = %w(USD $)
+  HKD_SYMBOLS = %w(HKD $)
+  CHF_SYMBOLS = %w(CHF)
+  CNY_SYMBOLS = %w(CNY)
+  SEK_SYMBOLS = %w(SEK)
+  GBP_SYMBOLS = %w(GBP £)
+  HUF_SYMBOLS = %w(HUF Ft.)
+  HRK_SYMBOLS = %w(HRK)
+  ALL_SYMBOLS = EUR_SYMBOLS + USD_SYMBOLS + HKD_SYMBOLS +
+    CHF_SYMBOLS + CNY_SYMBOLS + SEK_SYMBOLS + GBP_SYMBOLS +
+    HUF_SYMBOLS + HRK_SYMBOLS
 
   def self.filter
-    find_currencies(EUR_CODE_REGEX)
-    find_currencies(USD_CODE_REGEX)
-    find_currencies(CHF_CODE_REGEX)
-    find_currencies(CNY_CODE_REGEX)
-    find_currencies(SEK_CODE_REGEX)
-    find_currencies(GBP_CODE_REGEX)
-    find_currencies(HUF_CODE_REGEX)
-    find_currencies(HRK_CODE_REGEX)
+    currencies_regex = /#{Regexp.quote(ALL_SYMBOLS.join('|'))}/
+    find_currencies(currencies_regex)
 
     CurrencyTerm.dataset
   end
