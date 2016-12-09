@@ -42,4 +42,9 @@ describe PriceTerm do
     term = PriceTerm.new(text: '€1480,50')
     expect(term.to_d).to eq 1480.50
   end
+
+  it 'expext price to have space in betweeen' do
+    term = PriceTerm.new(text: '11 038')
+    expect(term.to_d).to eq 11_038
+  end
 end
