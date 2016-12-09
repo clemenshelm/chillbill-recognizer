@@ -2,7 +2,7 @@
 require 'sequel'
 require_relative './term_builder'
 
-class RelativeWordTerm < Sequel::Model
+class RelativeDateTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),

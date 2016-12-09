@@ -74,7 +74,7 @@ DB.create_table :due_date_label_terms do
   Float :bottom
 end
 
-DB.create_table :relative_word_terms do
+DB.create_table :relative_date_terms do
   primary_key :id
   String :text
   Float :left
