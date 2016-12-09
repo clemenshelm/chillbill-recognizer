@@ -5,6 +5,7 @@ require_relative '../factories'
 
 describe RelativeWordDetector do
   it 'detects the relative word prompt' do
+    # From ZqMX24iDMxxst5cnP.pdf
     create(
       :word,
       text: 'Zahlungsziel:',
