@@ -50,7 +50,6 @@ GEM
       websocket-driver (>= 0.5.1)
     ffi (1.9.10)
     formatador (0.2.5)
-    grim (1.2.0)
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -174,7 +173,6 @@ DEPENDENCIES
   em-hiredis
   eventmachine (= 1.0.8)
   factory_girl (~> 4.0)
-  grim
   guard-rspec
   metybur (= 0.4.3)
   nokogiri

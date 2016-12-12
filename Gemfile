@@ -17,9 +17,6 @@ gem 'sidekiq'
 gem 'em-hiredis' # Inside event machine
 gem 'redis'      # and outside
 
-# Grim extracts pdf pages as images
-gem 'grim'
-
 # RMagick improves the image for OCR
 gem 'rmagick'
 

@@ -2,6 +2,7 @@
 require 'fileutils'
 require 'open-uri'
 require_relative '../lib/logging.rb'
+require 'rmagick'
 
 module SpecCache
   include Logging
@@ -31,8 +32,14 @@ module SpecCache
     when '.pdf'
       bill_id = File.basename file_basename, file_extension
       png_path = cache_file("#{bill_id}.png") do |path|
-        pdf = Grim.reap(image_path)
-        pdf[0].save(path, width: 3000, quality: 100)
+        image = Magick::Image.read(image_path) { self.density = "300.0x300.0" }[0]
+        image.change_geometry('3000x3000^') do |cols, rows, img|
+          img.resize!(cols, rows)
+        end
+        gray_image = image.quantize(256, Magick::GRAYColorspace)
+        image.destroy!
+        gray_image.write(path)
+        gray_image.destroy!
       end
 
       # Put the PNG into a tempfile so it can savely be overwritten

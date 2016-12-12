@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'tempfile'
-require 'grim'
 require 'open-uri'
 require 'aws-sdk'
+require 'rmagick'
 require_relative './logging.rb'
 
 class UnprocessableFileError < StandardError
@@ -35,8 +35,16 @@ class BillImageRetriever
     case file_extension
     when '.pdf'
       png_file = Tempfile.new ['bill', '.png']
-      pdf = Grim.reap(image_file.path)
-      pdf[0].save(png_file.path, width: 3000, quality: 100)
+      im = Magick::Image.read(image_file.path)
+      im[0].write(png_file.path)
+      image = Magick::Image.read(image_file.path) { self.density = "300.0x300.0" }[0]
+      image.change_geometry('3000x3000^') do |cols, rows, img|
+        img.resize!(cols, rows)
+      end
+      gray_image = image.quantize(256, Magick::GRAYColorspace)
+      image.destroy!
+      gray_image.write(png_file.path)
+      gray_image.destroy!
       image_file.close!
 
       png_file
