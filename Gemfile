@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 # Connects to meteor
-gem 'metybur', '0.4.0'
+gem 'metybur', '0.4.3'
 # There were problems with newer versions of these gems. Somehow the bill id
 # didn't get passed when calling meteor.write_detection_result.
 # TODO: Investigate this issue before updating.
