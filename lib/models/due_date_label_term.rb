@@ -6,7 +6,8 @@ class DueDateLabelTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
-      after_each_word: attrs.delete(:after_each_word)
+      after_each_word: attrs.delete(:after_each_word),
+      max_words: attrs.delete(:max_words)
     )
     super
   end
