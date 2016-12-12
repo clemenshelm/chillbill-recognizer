@@ -6,17 +6,22 @@ class TermBuilder
   attr_reader :words
   attr_accessor :text
 
-  def initialize(regex:, after_each_word:)
+  def initialize(regex:, after_each_word:, max_words: nil)
     @regex = regex
     @after_each_word = after_each_word
+    @max_words = max_words || Float::INFINITY
     @words = []
     @text = ''
   end
 
   def add_word(word)
+    @words.shift until @words.length < @max_words
     @words << word
-    @text += word.text
-    @after_each_word&.call(self)
+    @text = ''
+    @words.each do |w|
+      @text += w.text
+      @after_each_word&.call(self)
+    end
 
     matching_groups = text.scan(@regex).first
     # logger.debug "text: #{@text}"

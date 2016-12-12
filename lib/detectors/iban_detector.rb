@@ -15,12 +15,20 @@ class IbanDetector
 
   def self.find_iban(regex, after_each_word: nil)
     private
-    term = IbanTerm.new(regex: regex, after_each_word: after_each_word)
+    term = IbanTerm.new(
+      regex: regex,
+      after_each_word: after_each_word,
+      max_words: 5
+    )
     last_word = nil
 
     Word.each do |word|
       if term.exists? || (last_word && !word.follows(last_word))
-        term = IbanTerm.new(regex: regex, after_each_word: after_each_word)
+        term = IbanTerm.new(
+          regex: regex,
+          after_each_word: after_each_word,
+          max_words: 5
+        )
       end
       term.add_word(word)
 
