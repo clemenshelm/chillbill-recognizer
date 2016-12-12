@@ -18,8 +18,8 @@ class TermBuilder
     @words.shift until @words.length < @max_words
     @words << word
     @text = ''
-    @words.each do |word|
-      @text += word.text
+    @words.each do |w|
+      @text += w.text
       @after_each_word&.call(self)
     end
 

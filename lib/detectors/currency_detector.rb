@@ -27,9 +27,7 @@ class CurrencyDetector
     term = CurrencyTerm.new(regex: regex, max_words: 1)
 
     Word.each do |word|
-      if term.exists?
-        term = CurrencyTerm.new(regex: regex, max_words: 1)
-      end
+      term = CurrencyTerm.new(regex: regex, max_words: 1) if term.exists?
 
       term.add_word(word)
 
