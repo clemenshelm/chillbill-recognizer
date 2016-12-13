@@ -144,7 +144,7 @@ class BillRecognizer
     ) { |_key, value| value.strftime('%Y-%m-%d') } if calculated_billing_period
 
     dates = DateCalculation.new(date_words)
-    invoice_date = dates.invoice_date.strftime('%Y-%m-%d') if dates.invoice_date
+    invoice_date = dates.invoice_date if dates.invoice_date
 
     prices = PriceCalculation.new(price_words)
     net_amount = prices.net_amount
@@ -158,8 +158,10 @@ class BillRecognizer
     iban = IbanCalculation.new(iban_words).iban
 
     currency = CurrencyCalculation.new(currency_words).iso
-    due_datetime = DateCalculation.new(date_words).due_date
+    due_datetime = DateCalculation.new(date_words).due_date(invoice_date)
     due_date = due_datetime.strftime('%Y-%m-%d') if due_datetime
+
+    invoice_date = invoice_date.strftime('%Y-%m-%d')
 
     # image_file.close
     amounts = []
