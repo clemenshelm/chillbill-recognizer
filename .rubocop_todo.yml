@@ -24,7 +24,7 @@ Lint/PercentStringArray:
 
 # Offense count: 8
 Metrics/AbcSize:
-  Max: 95
+  Max: 96
 
 # Offense count: 1
 # Configuration parameters: CountComments.

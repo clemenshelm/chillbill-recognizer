@@ -7,7 +7,8 @@ class ImageProcessor
   def initialize(image_path)
     begin
       original_image = Image.read(image_path)[0]
-      min_dimension = [original_image.page.width, original_image.page.height].min
+      page = original_image.page
+      min_dimension = [page.width, page.height].min
     ensure
       original_image&.destroy!
     end
@@ -57,7 +58,7 @@ class ImageProcessor
     self
   end
 
-  def write!(image_path)
+  def write_png!
     png_file = Tempfile.new ['bill', '.png']
     @image.write png_file.path
     return png_file

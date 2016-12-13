@@ -201,6 +201,6 @@ class BillRecognizer
          .deskew
          .normalize
          .trim
-         .write!(image_path)
+         .write_png!
   end
 end
