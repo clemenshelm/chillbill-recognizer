@@ -41,6 +41,30 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2015-04-10']
   end
 
+  it 'detects dates spread over several words with periods recognized' do
+    # From bill a8sPrtNYneSzxram9
+    create(
+      :word,
+      text: '22.1',
+      left: 0.7833769633507853,
+      right: 0.8069371727748691,
+      top: 0.2835337650323774,
+      bottom: 0.2918593894542091
+    )
+
+    create(
+      :word,
+      text: '1.2016',
+      left: 0.8125,
+      right: 0.8524214659685864,
+      top: 0.2835337650323774,
+      bottom: 0.29162812210915817
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-11-22']
+  end
+
   it 'does not detect words as date with too much space in between' do
     # From bill gANywe3fjvx98iPp2
     # Horizontal gap

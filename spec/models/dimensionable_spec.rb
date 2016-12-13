@@ -121,6 +121,27 @@ describe Dimensionable do
     expect(result).to eq following_term
   end
 
+  it 'detects a term further away' do
+    label = DueDateLabelTerm.create(
+      text: 'Zahlungstermin',
+      left: 0.5700261780104712,
+      right: 0.6659031413612565,
+      top: 0.2837650323774283,
+      bottom: 0.2937095282146161
+    )
+
+    date = DateTerm.create(
+      text: '22.11.2016',
+      left: 0.8125,
+      right: 0.8524214659685864,
+      top: 0.2835337650323774,
+      bottom: 0.29162812210915817
+    )
+
+    following_term = DateTerm.right_after(label)
+    expect(following_term).to eq date
+  end
+
   it 'does not detect a term very far to the right of the current term' do
     DateTerm.create(
       text: '15.04.2015',
