@@ -32,7 +32,7 @@ module SpecCache
     when '.pdf'
       bill_id = File.basename file_basename, file_extension
       png_path = cache_file("#{bill_id}.png") do |path|
-        image = Magick::Image.read(image_path) { self.density = "300.0x300.0" }[0]
+        image = Magick::Image.read(image_path) { self.density = '300x300' }[0]
         image.change_geometry('3000x3000^') do |cols, rows, img|
           img.resize!(cols, rows)
         end
