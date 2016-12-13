@@ -22,7 +22,7 @@ class DateCalculation
     return nil if DueDateLabelTerm.empty?
     due_date = DateTerm.right_after(DueDateLabelTerm.first)
     if due_date
-      due_date.to_datetime
+      DateTerm.right_after(DueDateLabelTerm.first).to_datetime
     else
       RelativeDateCalculation.new(
         RelativeDateTerm.dataset
