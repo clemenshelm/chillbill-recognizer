@@ -9,9 +9,10 @@ require_relative './logging'
 class Hub
   include Logging
 
-  def initialize(bills: 'unprocessed', config:)
+  def initialize(bills: 'unprocessed', config:, queue:)
     @bills = bills
     @config = config
+    @queue = queue
   end
 
   def run
@@ -35,7 +36,10 @@ class Hub
             .on(:added) do |id, bill|
         logger.info "bill #{id} was added: #{bill}"
         bills[id] = bill
-        RecognitionWorker.perform_async id, bill[:imageUrl]
+
+        Sidekiq::Client.enqueue_to(
+          @queue, RecognitionWorker, id, bill[:imageUrl]
+        )
       end
 
       redis.pubsub.subscribe 'results' do |bill_json|

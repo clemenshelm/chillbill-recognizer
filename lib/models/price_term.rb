@@ -10,7 +10,8 @@ class PriceTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
-      after_each_word: attrs.delete(:after_each_word)
+      after_each_word: attrs.delete(:after_each_word),
+      max_words: attrs.delete(:max_words)
     )
     super
   end
@@ -33,6 +34,8 @@ class PriceTerm < Sequel::Model
     dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
     # Replace commas with periods
     dec_text.sub!(',', '.')
+    # Replace space
+    dec_text.sub!(' ', '')
     # Remove currency symbols
     dec_text.sub!('€', '')
     BigDecimal.new(dec_text)

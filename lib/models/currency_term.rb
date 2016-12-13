@@ -10,7 +10,8 @@ class CurrencyTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
-      after_each_word: attrs.delete(:after_each_word)
+      after_each_word: attrs.delete(:after_each_word),
+      max_words: attrs.delete(:max_words)
     )
     super
   end
@@ -30,23 +31,23 @@ class CurrencyTerm < Sequel::Model
 
   def to_iso
     case text
-    when CurrencyDetector::EUR_CODE_REGEX
+    when *CurrencyDetector::EUR_SYMBOLS
       'EUR'
-    when CurrencyDetector::USD_CODE_REGEX
+    when *CurrencyDetector::USD_SYMBOLS
       'USD'
-    when CurrencyDetector::HKD_CODE_REGEX
+    when *CurrencyDetector::HKD_SYMBOLS
       'HKD'
-    when CurrencyDetector::CHF_CODE_REGEX
+    when *CurrencyDetector::CHF_SYMBOLS
       'CHF'
-    when CurrencyDetector::CNY_CODE_REGEX
+    when *CurrencyDetector::CNY_SYMBOLS
       'CNY'
-    when CurrencyDetector::SEK_CODE_REGEX
+    when *CurrencyDetector::SEK_SYMBOLS
       'SEK'
-    when CurrencyDetector::GBP_CODE_REGEX
+    when *CurrencyDetector::GBP_SYMBOLS
       'GBP'
-    when CurrencyDetector::HUF_CODE_REGEX
+    when *CurrencyDetector::HUF_SYMBOLS
       'HUF'
-    when CurrencyDetector::HRK_CODE_REGEX
+    when *CurrencyDetector::HRK_SYMBOLS
       'HRK'
     end
   end

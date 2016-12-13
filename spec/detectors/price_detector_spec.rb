@@ -160,6 +160,13 @@ describe PriceDetector do
     expect(price_string).to eq('300.00')
   end
 
+  it 'finds hungarian price that consist of 2 words' do
+    # from bill Thzi7n3qdSk4awip2
+    create_following_words(%w(11 038))
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['11 038']
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
