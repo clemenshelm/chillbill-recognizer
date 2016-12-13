@@ -18,15 +18,16 @@ class DateCalculation
     standalone_dates.first.to_datetime
   end
 
-  def due_date(invoice_date = nil)
+  def due_date
     return nil if DueDateLabelTerm.empty?
     due_date = DateTerm.right_after(DueDateLabelTerm.first)
     if due_date
       DateTerm.right_after(DueDateLabelTerm.first).to_datetime
     else
+      date_relative_to = invoice_date
       RelativeDateCalculation.new(
         RelativeDateTerm.dataset
-      ).relative_date(invoice_date)
+      ).relative_date(date_relative_to)
     end
   end
 end

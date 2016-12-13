@@ -274,13 +274,9 @@ describe DateCalculation do
       bottom: 0.5872791519434629
     )
 
-    invoice_date = DateCalculation.new(
-      DateTerm.dataset
-    ).invoice_date
-
     due_date = DateCalculation.new(
       DateTerm.dataset
-    ).due_date(invoice_date)
+    ).due_date
 
     expect(due_date).to eq DateTime.iso8601('2016-09-21')
   end
