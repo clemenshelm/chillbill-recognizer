@@ -2,6 +2,7 @@
 require_relative '../detectors/date_detector'
 require_relative '../models/date_term'
 require_relative '../models/dimensionable'
+require_relative '../calculations/relative_date_calculation'
 
 class DateCalculation
   def initialize(words)
@@ -17,8 +18,12 @@ class DateCalculation
     standalone_dates.first.to_datetime
   end
 
-  def due_date
+  def due_date(invoice_date = nil)
     return nil if DueDateLabelTerm.empty?
-    DateTerm.right_after(DueDateLabelTerm.first).to_datetime
+    DateTerm.right_after(DueDateLabelTerm.first) ?
+     DateTerm.right_after(DueDateLabelTerm.first).to_datetime :
+      RelativeDateCalculation.new(
+        RelativeDateTerm.dataset
+      ).relative_date(invoice_date)
   end
 end

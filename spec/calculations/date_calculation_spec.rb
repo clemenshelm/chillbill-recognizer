@@ -246,4 +246,42 @@ describe DateCalculation do
 
     expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
   end
+
+  it 'calculates the due date when it is written as prompt' do
+    # From ZqMX24iDMxxst5cnP.pdf
+
+    DateTerm.create(
+      text: '21.09.2016',
+      left: 0.3403333333333333,
+      right: 0.422,
+      top: 0.264075382803298,
+      bottom: 0.272791519434629
+    )
+
+    DueDateLabelTerm.create(
+      text: 'Zahlungsziel:',
+      left: 0.0003333333333333333,
+      right: 0.09666666666666666,
+      top: 0.5762073027090695,
+      bottom: 0.5872791519434629
+    )
+
+    RelativeDateTerm.create(
+      text: 'prompt',
+      left: 0.11866666666666667,
+      right: 0.16933333333333334,
+      top: 0.5769140164899882,
+      bottom: 0.5872791519434629
+    )
+
+    invoice_date = DateCalculation.new(
+      DateTerm.dataset
+    ).invoice_date
+
+    due_date = DateCalculation.new(
+      DateTerm.dataset
+    ).due_date(invoice_date)
+
+    expect(due_date).to eq DateTime.iso8601('2016-09-21')
+  end
 end

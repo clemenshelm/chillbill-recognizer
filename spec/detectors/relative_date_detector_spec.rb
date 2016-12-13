@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require_relative '../../lib/detectors/relative_word_detector'
+require_relative '../../lib/detectors/relative_date_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories'
 
-describe RelativeWordDetector do
+describe RelativeDateDetector do
   it 'detects the relative word prompt' do
     # From ZqMX24iDMxxst5cnP.pdf
     create(
@@ -33,7 +33,7 @@ describe RelativeWordDetector do
       bottom: 0.5820965842167256
     )
 
-    relative_words = RelativeWordDetector.filter
+    relative_words = RelativeDateDetector.filter
     expect(relative_words.map(&:to_s)).to eq ['prompt']
   end
 end

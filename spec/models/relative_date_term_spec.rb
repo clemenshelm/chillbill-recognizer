@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_relative '../../lib/boot'
 
-describe RelativeWordTerm do
+describe RelativeDateTerm do
   it 'detects a relative word correctly' do
     term = RelativeDateTerm.new(
       text: 'prompt',
