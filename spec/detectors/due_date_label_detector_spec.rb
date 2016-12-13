@@ -104,6 +104,7 @@ describe DueDateLabelDetector do
   end
 
   it 'detects the due date label Fällig' do
+    # From BYnCDzw7nNMFergRW.pdf
     create(
       :word,
       text: 'Fällig',
