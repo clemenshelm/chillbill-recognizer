@@ -5,7 +5,15 @@ class ImageProcessor
   include Magick
 
   def initialize(image_path)
-    @image = Image.read(image_path)[0]
+    begin
+      original_image = Image.read(image_path)[0]
+      min_dimension = [original_image.page.width, original_image.page.height].min
+    ensure
+      original_image&.destroy!
+    end
+    # This will give us an image with at least 3000px on each dimension
+    density = 220_000.0 / min_dimension
+    @image = Image.read(image_path) { self.density = density }[0]
   end
 
   def apply_background(color)
@@ -44,13 +52,15 @@ class ImageProcessor
   end
 
   def trim
-    @image.fuzz = '99%'
+    @image.fuzz = '80%'
     @image.trim!
     self
   end
 
   def write!(image_path)
-    @image.write image_path
+    png_file = Tempfile.new ['bill', '.png']
+    @image.write png_file.path
+    return png_file
   ensure
     @image.destroy!
   end

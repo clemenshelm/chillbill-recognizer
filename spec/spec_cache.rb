@@ -29,29 +29,7 @@ module SpecCache
 
     file_extension = File.extname file_basename.downcase
     case file_extension
-    when '.pdf'
-      bill_id = File.basename file_basename, file_extension
-      png_path = cache_file("#{bill_id}.png") do |path|
-        image = Magick::Image.read(image_path) { self.density = '300x300' }[0]
-        image.change_geometry('3000x3000^') do |cols, rows, img|
-          img.resize!(cols, rows)
-        end
-        gray_image = image.quantize(256, Magick::GRAYColorspace)
-        image.destroy!
-        gray_image.write(path)
-        gray_image.destroy!
-      end
-
-      # Put the PNG into a tempfile so it can savely be overwritten
-      # and the cached file won't be modified for sure.
-      tempfile = Tempfile.new(['cached', '.png'])
-      IO.copy_stream(png_path, tempfile)
-      # tempfile = Tempfile.new(['cached', '.pdf'])
-      # IO.copy_stream(image_path, tempfile)
-
-      tempfile
-
-    when '.png', '.jpeg', '.jpg'
+    when '.pdf', '.png', '.jpeg', '.jpg'
       tempfile = Tempfile.new(['cached', file_extension])
       IO.copy_stream(image_path, tempfile)
       tempfile
