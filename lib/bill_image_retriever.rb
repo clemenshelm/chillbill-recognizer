@@ -15,6 +15,7 @@ end
 
 class BillImageRetriever
   include Logging
+  include Magick
 
   def initialize(url:)
     @url = url
@@ -35,9 +36,9 @@ class BillImageRetriever
     case file_extension
     when '.pdf'
       png_file = Tempfile.new ['bill', '.png']
-      im = Magick::Image.read(image_file.path)
+      im = Image.read(image_file.path)
       im[0].write(png_file.path)
-      image = Magick::Image.read(image_file.path) { self.density = "300.0x300.0" }[0]
+      image = Image.read(image_file.path) { self.density = '300x300' }[0]
       image.change_geometry('3000x3000^') do |cols, rows, img|
         img.resize!(cols, rows)
       end
