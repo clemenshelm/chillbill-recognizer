@@ -64,7 +64,7 @@ class BillRecognizer
       }
     end
 
-    preprocess image_file.path
+    png_file = preprocess(image_file.path)
 
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
@@ -75,7 +75,7 @@ class BillRecognizer
       tessedit_char_whitelist: %("#{Config[:tesseract_whitelist]}")
     }.map { |k, v| "-c #{k}=#{v}" }.join(' ')
     hocr =
-      `tesseract "#{image_file.path}" stdout -l eng+deu #{tesseract_config}`
+      `tesseract "#{png_file.path}" stdout -l eng+deu #{tesseract_config}`
       .force_encoding('UTF-8')
     # logger.debug hocr
 
@@ -204,6 +204,6 @@ class BillRecognizer
          .deskew
          .normalize
          .trim
-         .write!(image_path)
+         .write_png!
   end
 end
