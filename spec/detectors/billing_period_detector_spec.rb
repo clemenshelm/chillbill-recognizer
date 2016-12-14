@@ -204,7 +204,7 @@ describe BillingPeriodDetector do
     )
   end
 
-  it 'does prefers from dates closer to the separator' do
+  it 'prefers from dates closer to the separator' do
     # From 3EagyvJYF2RJhNTQC.pdf
     create(
       :word,
