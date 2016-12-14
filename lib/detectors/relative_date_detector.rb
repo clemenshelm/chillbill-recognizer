@@ -9,25 +9,27 @@ class RelativeDateDetector
     RelativeDateTerm.dataset
   end
 
-  def self.find_relative_words(regex, after_each_word: nil)
+  class << self
     private
-    term = RelativeDateTerm.new(
-      regex: regex, after_each_word: after_each_word, max_words: 1
-    )
-    last_word = nil
-
-    Word.each do |word|
-      if term.exists? || (last_word && !word.follows(last_word))
+      def find_relative_words(regex, after_each_word: nil)
         term = RelativeDateTerm.new(
           regex: regex, after_each_word: after_each_word, max_words: 1
         )
+        last_word = nil
+
+        Word.each do |word|
+          if term.exists? || (last_word && !word.follows(last_word))
+            term = RelativeDateTerm.new(
+              regex: regex, after_each_word: after_each_word, max_words: 1
+            )
+          end
+
+          term.add_word(word)
+
+          last_word = word
+
+          term.save if term.valid?
+        end
       end
-
-      term.add_word(word)
-
-      last_word = word
-
-      term.save if term.valid?
-    end
   end
 end
