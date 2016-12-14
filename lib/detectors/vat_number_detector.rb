@@ -19,31 +19,36 @@ class VatNumberDetector
     VatNumberTerm.dataset
   end
 
-  def self.find_vat_numbers(regex, after_each_word: nil)
+  class << self
     private
-    term = VatNumberTerm.new(
-      regex: regex,
-      after_each_word: after_each_word,
-      max_words: 2
-    )
-    last_word = nil
 
-    median_height = Word.map(&:height).sort[Word.count / 2]
-    terms = Word.where('bottom - top <= ?', median_height * 1.15).map do |word|
-      if term.valid? || (last_word && !word.follows(last_word))
+      def find_vat_numbers(regex, after_each_word: nil)
         term = VatNumberTerm.new(
           regex: regex,
           after_each_word: after_each_word,
           max_words: 2
         )
+        last_word = nil
+
+        median_height = Word.map(&:height).sort[Word.count / 2]
+        terms = Word.where(
+          'bottom - top <= ?', median_height * 1.15
+        ).map do |word|
+          if term.valid? || (last_word && !word.follows(last_word))
+            term = VatNumberTerm.new(
+              regex: regex,
+              after_each_word: after_each_word,
+              max_words: 2
+            )
+          end
+
+          term.add_word(word)
+          last_word = word
+
+          term if term.valid?
+        end
+
+        terms.compact
       end
-
-      term.add_word(word)
-      last_word = word
-
-      term if term.valid?
-    end
-
-    terms.compact
   end
 end

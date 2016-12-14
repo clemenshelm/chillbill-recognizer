@@ -22,16 +22,19 @@ class CurrencyDetector
     CurrencyTerm.dataset
   end
 
-  def self.find_currencies(regex)
+  class << self
     private
-    term = CurrencyTerm.new(regex: regex, max_words: 1)
 
-    Word.each do |word|
-      term = CurrencyTerm.new(regex: regex, max_words: 1) if term.exists?
+      def find_currencies(regex)
+        term = CurrencyTerm.new(regex: regex, max_words: 1)
 
-      term.add_word(word)
+        Word.each do |word|
+          term = CurrencyTerm.new(regex: regex, max_words: 1) if term.exists?
 
-      term.save if term.valid?
-    end
+          term.add_word(word)
+
+          term.save if term.valid?
+        end
+      end
   end
 end

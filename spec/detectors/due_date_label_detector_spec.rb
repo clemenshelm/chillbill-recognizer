@@ -102,4 +102,37 @@ describe DueDateLabelDetector do
     due_date_labels = DueDateLabelDetector.filter
     expect(due_date_labels.map(&:to_s)).to eq ['Due Date:']
   end
+
+  it 'detects the due date label Fällig' do
+    # From BYnCDzw7nNMFergRW.pdf
+    create(
+      :word,
+      text: 'Fällig',
+      left: 0.5454842931937173,
+      right: 0.5772251308900523,
+      top: 0.13806660499537465,
+      bottom: 0.14731729879740982
+    )
+
+    create(
+      :word,
+      text: '21.03.2016',
+      left: 0.6053664921465969,
+      right: 0.675065445026178,
+      top: 0.13806660499537465,
+      bottom: 0.14546716003700277
+    )
+
+    create(
+      :word,
+      text: 'Rechnung',
+      left: 0.000981675392670157,
+      right: 0.0631544502617801,
+      top: 0.17738205365402404,
+      bottom: 0.1866327474560592
+    )
+
+    due_date_labels = DueDateLabelDetector.filter
+    expect(due_date_labels.map(&:to_s)).to eq ['Fällig']
+  end
 end

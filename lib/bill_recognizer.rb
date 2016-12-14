@@ -22,6 +22,7 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
+require_relative './detectors/relative_date_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -52,6 +53,7 @@ class BillRecognizer
     IbanTerm.dataset.delete
     CurrencyTerm.dataset.delete
     DueDateLabelTerm.dataset.delete
+    RelativeDateTerm.dataset.delete
 
     # Download and convert image
     begin
@@ -114,7 +116,6 @@ class BillRecognizer
     #       bottom: #{word.bottom}
     #       "
     #     }
-    #      }
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
       "PriceTerm.create(
@@ -131,6 +132,7 @@ class BillRecognizer
     currency_words = CurrencyDetector.filter
     iban_words = IbanDetector.filter
     DueDateLabelDetector.filter
+    RelativeDateDetector.filter
 
     calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
