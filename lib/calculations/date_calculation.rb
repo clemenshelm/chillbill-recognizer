@@ -14,7 +14,8 @@ class DateCalculation
       term.started_periods.empty? && term.ended_periods.empty?
     end
 
-    standalone_dates.first.to_datetime
+    invoiceDate = standalone_dates.first || BillingPeriodTerm.first.to
+    invoiceDate.to_datetime
   end
 
   def due_date
