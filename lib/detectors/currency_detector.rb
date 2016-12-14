@@ -24,6 +24,7 @@ class CurrencyDetector
 
   class << self
     private
+
       def find_currencies(regex)
         term = CurrencyTerm.new(regex: regex, max_words: 1)
 

@@ -11,6 +11,7 @@ class RelativeDateDetector
 
   class << self
     private
+
       def find_relative_words(regex, after_each_word: nil)
         term = RelativeDateTerm.new(
           regex: regex, after_each_word: after_each_word, max_words: 1

@@ -44,6 +44,7 @@ class DateDetector
 
   class << self
     private
+
       def find_dates(regex, after_each_word: nil, max_words: nil)
         term = DateTerm.new(
           regex: regex,

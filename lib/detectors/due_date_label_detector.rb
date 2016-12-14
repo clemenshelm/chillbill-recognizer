@@ -16,6 +16,7 @@ class DueDateLabelDetector
 
   class << self
     private
+
       def find_due_date_labels(regex, after_each_word: nil)
         term = DueDateLabelTerm.new(
           regex: regex, after_each_word: after_each_word, max_words: 2

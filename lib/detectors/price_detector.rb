@@ -34,6 +34,7 @@ class PriceDetector
 
   class << self
     private
+
       def find_prices(regex, after_each_word: nil, max_words: nil)
         term = PriceTerm.new(
           regex: regex,

@@ -15,6 +15,7 @@ class IbanDetector
 
   class << self
     private
+
       def find_iban(regex, after_each_word: nil)
         term = IbanTerm.new(
           regex: regex,
