@@ -276,7 +276,7 @@ describe Dimensionable do
         bottom: 0.30279898218829515
       )
 
-      following_word = create(
+      create(
         :word,
         text: '2016.11.23.',
         left: 0.6195616617598954,
