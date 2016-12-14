@@ -20,7 +20,7 @@ class Hub
 
     EventMachine.run do
       redis = EM::Hiredis.connect 'redis://redis:6379'
-      Sidekiq::Queue.new.clear # Delete all sidekiq jobs
+      Sidekiq::Queue.all.map(&:💣) # Delete all sidekiq jobs
       logger.debug 'running'
 
       Metybur.log_level = :debug
@@ -38,7 +38,11 @@ class Hub
         bills[id] = bill
 
         Sidekiq::Client.enqueue_to(
-          @queue, RecognitionWorker, id, bill[:imageUrl]
+          @queue,
+          RecognitionWorker,
+          id,
+          bill[:imageUrl],
+          bill[:customerVatNumber]
         )
       end
 
