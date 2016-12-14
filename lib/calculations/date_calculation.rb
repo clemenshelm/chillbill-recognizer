@@ -15,15 +15,17 @@ class DateCalculation
       term.started_periods.empty? && term.ended_periods.empty?
     end
 
-    standalone_dates.first.to_datetime
+    invoice_date = standalone_dates.first || BillingPeriodTerm.first.to
+    invoice_date.to_datetime
   end
 
   def due_date
     return nil if DueDateLabelTerm.empty?
-    due_date = DateTerm.right_after(DueDateLabelTerm.first)
-    if due_date
-      DateTerm.right_after(DueDateLabelTerm.first).to_datetime
-    else
+    due_date_term = DateTerm.right_after(DueDateLabelTerm.first)
+    due_date_term ||= DateTerm.below(DueDateLabelTerm.first)
+    due_date = due_date_term&.to_datetime
+
+    due_date || begin
       date_relative_to = invoice_date
       RelativeDateCalculation.new(
         RelativeDateTerm.dataset
