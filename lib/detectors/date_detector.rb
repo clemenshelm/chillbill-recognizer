@@ -42,28 +42,31 @@ class DateDetector
     DateTerm.order(:first_word_id)
   end
 
-  def self.find_dates(regex, after_each_word: nil, max_words: nil)
+  class << self
     private
-    term = DateTerm.new(
-      regex: regex,
-      after_each_word: after_each_word,
-      max_words: max_words
-    )
-    last_word = nil
 
-    Word.each do |word|
-      if term.exists? || (last_word && !word.follows(last_word))
+      def find_dates(regex, after_each_word: nil, max_words: nil)
         term = DateTerm.new(
           regex: regex,
           after_each_word: after_each_word,
           max_words: max_words
         )
+        last_word = nil
+
+        Word.each do |word|
+          if term.exists? || (last_word && !word.follows(last_word))
+            term = DateTerm.new(
+              regex: regex,
+              after_each_word: after_each_word,
+              max_words: max_words
+            )
+          end
+          term.add_word(word)
+
+          last_word = word
+
+          term.save if term.valid?
+        end
       end
-      term.add_word(word)
-
-      last_word = word
-
-      term.save if term.valid?
-    end
   end
 end
