@@ -29,50 +29,76 @@ describe Dimensionable do
     expect(term.height).to eq 36
   end
 
-  it 'can detect the term before another term' do
-    DateTerm.create(
-      text: '10.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 213,
-      bottom: 248
-    )
+  describe '#right_before' do
+    it 'can detect the term before another term' do
+      DateTerm.create(
+        text: '10.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 213,
+        bottom: 248
+      )
 
-    DateTerm.create(
-      text: '15.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 274,
-      bottom: 309
-    )
+      DateTerm.create(
+        text: '15.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 274,
+        bottom: 309
+      )
 
-    previous_term = DateTerm.create(
-      text: '01.03.2015',
-      left: 591,
-      right: 798,
-      top: 773,
-      bottom: 809
-    )
+      previous_term = DateTerm.create(
+        text: '01.03.2015',
+        left: 591,
+        right: 798,
+        top: 773,
+        bottom: 809
+      )
 
-    DateTerm.create(
-      text: '31.03.2015',
-      left: 832,
-      right: 1038,
-      top: 773,
-      bottom: 809
-    )
+      DateTerm.create(
+        text: '31.03.2015',
+        left: 832,
+        right: 1038,
+        top: 773,
+        bottom: 809
+      )
 
-    term = create(
-      :word,
-      text: '-',
-      left: 809,
-      right: 819,
-      top: 794,
-      bottom: 797
-    )
+      term = create(
+        :word,
+        text: '-',
+        left: 809,
+        right: 819,
+        top: 794,
+        bottom: 797
+      )
 
-    result = DateTerm.right_before(term)
-    expect(result).to eq previous_term
+      result = DateTerm.right_before(term)
+      expect(result).to eq previous_term
+    end
+
+    it 'does not consider items on another line' do
+      # From 3EagyvJYF2RJhNTQC.pdf
+      create(
+        :word,
+        text: '01.06.2016',
+        left: 0.07395287958115183,
+        right: 0.16393979057591623,
+        top: 0.22664199814986125,
+        bottom: 0.23566142460684553
+      )
+
+      hyphen = create(
+        :word,
+        text: '-',
+        left: 0.18259162303664922,
+        right: 0.18848167539267016,
+        top: 0.4114246068455134,
+        bottom: 0.4128122109158187
+      )
+
+      result = Word.right_before(hyphen)
+      expect(result).to be_nil
+    end
   end
 
   it 'can detect the term after another term' do

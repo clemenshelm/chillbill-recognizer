@@ -203,4 +203,50 @@ describe BillingPeriodDetector do
       '2015-11-30'
     )
   end
+
+  it 'does prefers from dates closer to the separator' do
+    # From 3EagyvJYF2RJhNTQC.pdf
+    create(
+      :word,
+      text: '01.06.2016',
+      left: 0.07395287958115183,
+      right: 0.16393979057591623,
+      top: 0.22664199814986125,
+      bottom: 0.23566142460684553
+    )
+
+    create(
+      :word,
+      text: '(01.05.2016',
+      left: 0.07984293193717278,
+      right: 0.17670157068062828,
+      top: 0.40564292321924145,
+      bottom: 0.41720629047178537
+    )
+
+    create(
+      :word,
+      text: '-',
+      left: 0.18259162303664922,
+      right: 0.18848167539267016,
+      top: 0.4114246068455134,
+      bottom: 0.4128122109158187
+    )
+
+    create(
+      :word,
+      text: '31.05.2016)',
+      left: 0.1943717277486911,
+      right: 0.29090314136125656,
+      top: 0.40564292321924145,
+      bottom: 0.41720629047178537
+    )
+
+    DateDetector.filter
+    billing_periods = BillingPeriodDetector.filter
+
+    expect(billing_periods.first.from.to_datetime).to eq DateTime.iso8601(
+      '2016-05-01'
+    )
+  end
 end
