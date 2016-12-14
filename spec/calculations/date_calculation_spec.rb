@@ -246,4 +246,37 @@ describe DateCalculation do
 
     expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
   end
+
+  it 'identifies a due date when "Zahlungstermin" is written above' do
+    # From xAkCJuSGM8A4ZGoSy.pdf
+    DueDateLabelTerm.create(
+      text: 'Zahlungstermin',
+      left: 0.7877003598298986,
+      right: 0.8815832515538109,
+      top: 0.2933148276659727,
+      bottom: 0.30279898218829515
+    )
+
+    DateTerm.create(
+      text: '2016.11.23.',
+      left: 0.6195616617598954,
+      right: 0.6977428851815506,
+      top: 0.31690955355077494,
+      bottom: 0.32523710386305804
+    )
+
+    DateTerm.create(
+      text: '2016.12.09.',
+      left: 0.7955511939810271,
+      right: 0.8740595354923127,
+      top: 0.3164469118667592,
+      bottom: 0.3250057830210502
+    )
+
+    due_date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    ).due_date
+
+    expect(due_date_calculation).to eq DateTime.iso8601('2016-12-09')
+  end
 end

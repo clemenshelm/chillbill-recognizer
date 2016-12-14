@@ -25,5 +25,11 @@ module Dimensionable
           (following.bottom >= (current.bottom - following.height)))
       end
     end
+
+    def below(current)
+      all.find do |lower|
+        lower.right > current.left && lower != current
+      end
+    end
   end
 end

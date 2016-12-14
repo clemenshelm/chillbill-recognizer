@@ -213,4 +213,54 @@ describe Dimensionable do
     result = Word.right_after(first_word)
     expect(result).to eq following_word
   end
+
+  describe '#below' do
+    it 'detects a word on a line further down the page' do
+      # From xAkCJuSGM8A4ZGoSy.pdf
+      first_word = create(
+        :word,
+        text: 'Zahlungstermin',
+        left: 0.7877003598298986,
+        right: 0.8815832515538109,
+        top: 0.2933148276659727,
+        bottom: 0.30279898218829515
+      )
+
+      following_word = create(
+        :word,
+        text: '2016.12.09.',
+        left: 0.7955511939810271,
+        right: 0.8740595354923127,
+        top: 0.3164469118667592,
+        bottom: 0.3250057830210502
+      )
+
+      result = Word.below(first_word)
+      expect(result).to eq following_word
+    end
+
+    it 'does not detect a word shifted horizontally' do
+      # From xAkCJuSGM8A4ZGoSy.pdf
+      first_word = create(
+        :word,
+        text: 'Zahlungstermin',
+        left: 0.7877003598298986,
+        right: 0.8815832515538109,
+        top: 0.2933148276659727,
+        bottom: 0.30279898218829515
+      )
+
+      following_word = create(
+        :word,
+        text: '2016.11.23.',
+        left: 0.6195616617598954,
+        right: 0.6977428851815506,
+        top: 0.31690955355077494,
+        bottom: 0.32523710386305804
+      )
+
+      result = Word.below(first_word)
+      expect(result).to be_nil
+    end
+  end
 end
