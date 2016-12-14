@@ -21,11 +21,15 @@ REDIS = Redis.new(driver: :hiredis, host: 'redis')
 class RecognitionWorker
   include Sidekiq::Worker
 
-  def perform(id, bill_image_url)
-    logger.info "performing recognition on #{bill_image_url}"
+  def perform(id, image_url, customer_vat_number)
+    logger.info "performing recognition on #{image_url}"
+    logger.info "for VAT number #{customer_vat_number}"
     Logging.logger = logger
 
-    recognizer = BillRecognizer.new(image_url: bill_image_url)
+    recognizer = BillRecognizer.new(
+      image_url: image_url,
+      customer_vat_number: customer_vat_number
+    )
     timeout_in_secs = 200
     bill_attributes = Timeout.timeout(timeout_in_secs) { recognizer.recognize }
     bill_attributes[:id] = id
