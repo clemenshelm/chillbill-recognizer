@@ -22,6 +22,7 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
+require_relative './detectors/relative_date_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -52,6 +53,7 @@ class BillRecognizer
     IbanTerm.dataset.delete
     CurrencyTerm.dataset.delete
     DueDateLabelTerm.dataset.delete
+    RelativeDateTerm.dataset.delete
 
     # Download and convert image
     begin
@@ -62,7 +64,7 @@ class BillRecognizer
       }
     end
 
-    preprocess image_file.path
+    png_file = preprocess(image_file.path)
 
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
@@ -73,7 +75,7 @@ class BillRecognizer
       tessedit_char_whitelist: %("#{Config[:tesseract_whitelist]}")
     }.map { |k, v| "-c #{k}=#{v}" }.join(' ')
     hocr =
-      `tesseract "#{image_file.path}" stdout -l eng+deu #{tesseract_config}`
+      `tesseract "#{png_file.path}" stdout -l eng+deu #{tesseract_config}`
       .force_encoding('UTF-8')
     # logger.debug hocr
 
@@ -97,9 +99,6 @@ class BillRecognizer
         bottom: bottom
       )
     end
-
-    # logger.debug Word.map(&:text)
-
     # logger.debug Word.map {
     #  |word| "text: #{word.text},
     #  left: #{word.left},
@@ -109,14 +108,14 @@ class BillRecognizer
     # }
 
     # puts Word.map { |word|
-    #        "
-    #        text: \'#{word.text}\',
-    #        left: #{word.left},
-    #        right: #{word.right},
-    #        top: #{word.top},
-    #        bottom: #{word.bottom}
-    #        "
-    #      }
+    #       "
+    #       text: \'#{word.text}\',
+    #       left: #{word.left},
+    #       right: #{word.right},
+    #       top: #{word.top},
+    #       bottom: #{word.bottom}
+    #       "
+    #     }
     price_words = PriceDetector.filter
     logger.debug price_words.map { |word|
       "PriceTerm.create(
@@ -133,6 +132,7 @@ class BillRecognizer
     currency_words = CurrencyDetector.filter
     iban_words = IbanDetector.filter
     DueDateLabelDetector.filter
+    RelativeDateDetector.filter
 
     calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
@@ -203,6 +203,6 @@ class BillRecognizer
          .deskew
          .normalize
          .trim
-         .write!(image_path)
+         .write_png!
   end
 end

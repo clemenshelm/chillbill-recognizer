@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'open-uri'
-require 'grim'
 require_relative '../lib/bill_image_retriever'
 
 describe BillImageRetriever do

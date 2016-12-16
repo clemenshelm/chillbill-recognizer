@@ -16,7 +16,8 @@ class DateTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
-      after_each_word: attrs.delete(:after_each_word)
+      after_each_word: attrs.delete(:after_each_word),
+      max_words: attrs.delete(:max_words)
     )
     super
   end
@@ -30,6 +31,10 @@ class DateTerm < Sequel::Model
     self.top = word.top
     self.right = word.right
     self.bottom = word.bottom
+  end
+
+  def words
+    @term_builder.words.dup
   end
 
   def valid?

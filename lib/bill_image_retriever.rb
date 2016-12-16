@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'tempfile'
-require 'grim'
 require 'open-uri'
 require 'aws-sdk'
+require 'rmagick'
 require_relative './logging.rb'
 
 class UnprocessableFileError < StandardError
@@ -15,6 +15,7 @@ end
 
 class BillImageRetriever
   include Logging
+  include Magick
 
   def initialize(url:)
     @url = url
@@ -33,14 +34,7 @@ class BillImageRetriever
     s3.get_object(bucket: bucket, key: key, response_target: image_file)
 
     case file_extension
-    when '.pdf'
-      png_file = Tempfile.new ['bill', '.png']
-      pdf = Grim.reap(image_file.path)
-      pdf[0].save(png_file.path, width: 3000, quality: 100)
-      image_file.close!
-
-      png_file
-    when '.png', '.jpg', '.jpeg'
+    when '.pdf', '.png', '.jpg', '.jpeg'
       image_file
     else
       raise UnprocessableFileError, file_extension

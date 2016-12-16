@@ -2,6 +2,7 @@
 require 'fileutils'
 require 'open-uri'
 require_relative '../lib/logging.rb'
+require 'rmagick'
 
 module SpecCache
   include Logging
@@ -28,23 +29,7 @@ module SpecCache
 
     file_extension = File.extname file_basename.downcase
     case file_extension
-    when '.pdf'
-      bill_id = File.basename file_basename, file_extension
-      png_path = cache_file("#{bill_id}.png") do |path|
-        pdf = Grim.reap(image_path)
-        pdf[0].save(path, width: 3000, quality: 100)
-      end
-
-      # Put the PNG into a tempfile so it can savely be overwritten
-      # and the cached file won't be modified for sure.
-      tempfile = Tempfile.new(['cached', '.png'])
-      IO.copy_stream(png_path, tempfile)
-      # tempfile = Tempfile.new(['cached', '.pdf'])
-      # IO.copy_stream(image_path, tempfile)
-
-      tempfile
-
-    when '.png', '.jpeg', '.jpg'
+    when '.pdf', '.png', '.jpeg', '.jpg'
       tempfile = Tempfile.new(['cached', file_extension])
       IO.copy_stream(image_path, tempfile)
       tempfile
