@@ -41,8 +41,9 @@ class DateTerm < Sequel::Model
     when /\d+\.\d+\.\d{4}/
       DateTime.parse(text)
     when DateDetector::FULL_GERMAN_DATE_REGEX
-      date_text = text.gsub(/März|Dezember/,
+      date_text = text.gsub(/März|Oktober|Dezember/,
                             'März' => 'March',
+                            'Oktober' => 'October',
                             'Dezember' => 'December')
       DateTime.strptime(date_text, '%d. %B %Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
