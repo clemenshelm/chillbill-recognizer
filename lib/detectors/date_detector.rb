@@ -12,7 +12,6 @@ class DateDetector
   FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
   LONG_HUNGARIAN_DATE_REGEX = /\d{4}\.(?:#{months})\.(?:#{days})/
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-\d{4}$)/
-  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|Oktober|Dezember) \d+)/
 
   def self.filter
     end_number_with_period = lambda do |term|

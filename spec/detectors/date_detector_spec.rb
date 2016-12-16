@@ -103,10 +103,11 @@ describe DateDetector do
     create_following_words(%w(Freitag 4. Dezember 2015))
     # from bill yiaGswKDskiLNkafN.pdf
     create_following_words(%w(01. September 2016))
-
+    # from bill CuJiDWLneTaSFin4P
+    create_following_words(%w(03. Oktober 2016))
     dates = DateDetector.filter
     expect(date_strings(dates))
-      .to eq %w(2015-04-23 2016-03-11 2015-12-04 2016-09-01)
+      .to eq %w(2015-04-23 2016-03-11 2015-12-04 2016-09-01 2016-10-03)
   end
 
   it 'does not recognize a number out of a date range' do
@@ -385,39 +386,6 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-09-30']
-  end
-
-  it 'detects Oktober' do
-    # from bill  CuJiDWLneTaSFin4P
-    create(
-      :word,
-      text: '3.',
-      left: 0.6783333333333333,
-      right: 0.69,
-      top: 0.3250883392226148,
-      bottom: 0.33404004711425206
-    )
-
-    create(
-      :word,
-      text: 'Oktober',
-      left: 0.6966666666666667,
-      right: 0.756,
-      top: 0.3250883392226148,
-      bottom: 0.33451118963486454
-    )
-
-    create(
-      :word,
-      text: '2016',
-      left: 0.7603333333333333,
-      right: 0.7963333333333333,
-      top: 0.3253239104829211,
-      bottom: 0.33451118963486454
-    )
-
-    dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
   def date_strings(date_terms)
