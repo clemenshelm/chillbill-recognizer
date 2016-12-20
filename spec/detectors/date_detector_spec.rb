@@ -387,6 +387,21 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-09-30']
   end
 
+  it 'detects short english date' do
+    # From 8XJegsB4tn8XRuZpp.pdf
+    create(
+      :word,
+      text: '03-Oct-2016',
+      left: 0.7594895287958116,
+      right: 0.8403141361256544,
+      top: 0.06452358926919519,
+      bottom: 0.07238667900092507
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-10-03']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
