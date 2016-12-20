@@ -33,6 +33,10 @@ class DateTerm < Sequel::Model
     self.bottom = word.bottom
   end
 
+  def words
+    @term_builder.words.dup
+  end
+
   def valid?
     @term_builder.valid?
   end

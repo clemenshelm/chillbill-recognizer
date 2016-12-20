@@ -5,6 +5,8 @@ class ImageProcessor
   include Magick
 
   def initialize(image_path)
+    # Only read first page of bill
+    image_path = "#{image_path}[0]"
     begin
       original_image = Image.read(image_path)[0]
       page = original_image.page

@@ -10,81 +10,112 @@ describe DateCalculation do
     expect(dates.invoice_date).to be_nil
   end
 
-  it 'ignores dates from a billing period' do
-    start_of_period = DateTerm.create(
-      text: '01.03.2015',
-      left: 591,
-      right: 798,
-      top: 773,
-      bottom: 809,
-      first_word_id: 19
-    )
+  describe '#invoiceDate' do
+    it 'ignores dates from a billing period if there are other dates' do
+      start_of_period = DateTerm.create(
+        text: '01.03.2015',
+        left: 591,
+        right: 798,
+        top: 773,
+        bottom: 809,
+        first_word_id: 19
+      )
 
-    end_of_period = DateTerm.create(
-      text: '31.03.2015',
-      left: 832,
-      right: 1038,
-      top: 773,
-      bottom: 809,
-      first_word_id: 26
-    )
+      end_of_period = DateTerm.create(
+        text: '31.03.2015',
+        left: 832,
+        right: 1038,
+        top: 773,
+        bottom: 809,
+        first_word_id: 26
+      )
 
-    DateTerm.create(
-      text: '10.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 213,
-      bottom: 248,
-      first_word_id: 40
-    )
+      DateTerm.create(
+        text: '10.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 213,
+        bottom: 248,
+        first_word_id: 40
+      )
 
-    BillingPeriodTerm.create(
-      from: start_of_period,
-      to: end_of_period
-    )
+      BillingPeriodTerm.create(
+        from: start_of_period,
+        to: end_of_period
+      )
 
-    date_calculation = DateCalculation.new(
-      DateTerm.dataset
-    )
-    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
-  end
+      date_calculation = DateCalculation.new(
+        DateTerm.dataset
+      )
+      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
+    end
 
-  it 'recognizes the first date as the invoice date' do
-    DateTerm.create(
-      text: '16.03.2016',
-      left: 1819,
-      right: 2026,
-      top: 498,
-      bottom: 529
-    )
+    it 'takes the end date of the billing period if there are no other dates' do
+      # From 98xawHkEKTwMSqdLa.pdf
+      start_of_period = DateTerm.create(
+        text: '01.02.2016',
+        left: 0.1822386679000925,
+        right: 0.23543015726179464,
+        top: 0.12369109947643979,
+        bottom: 0.1354712041884817
+      )
 
-    DateTerm.create(
-      text: '21.03.2016',
-      left: 1816,
-      right: 2026,
-      top: 586,
-      bottom: 618
-    )
+      end_of_period = DateTerm.create(
+        text: '29.02.2016',
+        left: 0.2574005550416281,
+        right: 0.31036077705827936,
+        top: 0.12369109947643979,
+        bottom: 0.1354712041884817
+      )
 
-    date_calculation = DateCalculation.new(
-      DateTerm.dataset
-    )
-    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
-  end
+      BillingPeriodTerm.create(
+        from: start_of_period,
+        to: end_of_period
+      )
 
-  it 'recognizes first date as a long slash date regex' do
-    DateTerm.create(
-      text: '13/08/2016',
-      left: 1819,
-      right: 2026,
-      top: 498,
-      bottom: 529
-    )
+      date_calculation = DateCalculation.new(
+        DateTerm.dataset
+      )
+      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-02-29')
+    end
 
-    date_calculation = DateCalculation.new(
-      DateTerm.dataset
-    )
-    expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
+    it 'recognizes the first date as the invoice date' do
+      DateTerm.create(
+        text: '16.03.2016',
+        left: 1819,
+        right: 2026,
+        top: 498,
+        bottom: 529
+      )
+
+      DateTerm.create(
+        text: '21.03.2016',
+        left: 1816,
+        right: 2026,
+        top: 586,
+        bottom: 618
+      )
+
+      date_calculation = DateCalculation.new(
+        DateTerm.dataset
+      )
+      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
+    end
+
+    it 'recognizes first date as a long slash date regex' do
+      DateTerm.create(
+        text: '13/08/2016',
+        left: 1819,
+        right: 2026,
+        top: 498,
+        bottom: 529
+      )
+
+      date_calculation = DateCalculation.new(
+        DateTerm.dataset
+      )
+      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
+    end
   end
 
   it 'returns nil if there is no due date' do
@@ -245,6 +276,39 @@ describe DateCalculation do
     ).due_date
 
     expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
+  end
+
+  it 'identifies a due date when "Zahlungstermin" is written above' do
+    # From xAkCJuSGM8A4ZGoSy.pdf
+    DueDateLabelTerm.create(
+      text: 'Zahlungstermin',
+      left: 0.7877003598298986,
+      right: 0.8815832515538109,
+      top: 0.2933148276659727,
+      bottom: 0.30279898218829515
+    )
+
+    DateTerm.create(
+      text: '2016.11.23.',
+      left: 0.6195616617598954,
+      right: 0.6977428851815506,
+      top: 0.31690955355077494,
+      bottom: 0.32523710386305804
+    )
+
+    DateTerm.create(
+      text: '2016.12.09.',
+      left: 0.7955511939810271,
+      right: 0.8740595354923127,
+      top: 0.3164469118667592,
+      bottom: 0.3250057830210502
+    )
+
+    due_date_calculation = DateCalculation.new(
+      DateTerm.dataset
+    ).due_date
+
+    expect(due_date_calculation).to eq DateTime.iso8601('2016-12-09')
   end
 
   it 'calculates the due date when it is written as prompt' do
