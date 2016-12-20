@@ -45,11 +45,7 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 10
 
-<<<<<<< HEAD
-# Offense count: 16
-=======
 # Offense count: 17
->>>>>>> fc9031362a12bf0fb0dc822e7c3ac50512efddf2
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 104
