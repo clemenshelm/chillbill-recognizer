@@ -7,7 +7,7 @@ class VatNumberDetector
   include Logging
 
   VAT_REGEX = /[A-Z]{2}[A-Z0-9]{2,12}/
-  EU_VAT_REGEX = /EU[A-Z0-9]{9}/
+  EU_VAT_REGEX = /EU[0-9]{9}/
 
   def self.filter
     return VatNumberTerm.dataset if Word.all.empty?
