@@ -2,8 +2,7 @@
 require_relative '../models/invoice_date_label_term'
 
 class InvoiceDateLabelDetector
-  INVOICE_DATE_LABELS =
-    /(Rechnungsdatum:)/
+  INVOICE_DATE_LABELS = /Rechnungsdatum:/
 
   def self.filter
     find_invoice_date_labels(INVOICE_DATE_LABELS)

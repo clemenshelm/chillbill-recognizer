@@ -2,7 +2,7 @@
 require_relative '../../lib/boot'
 
 describe InvoiceDateLabelTerm do
-  it 'detects a due date label correctly' do
+  it 'detects a invoice date label correctly' do
     # From cAfvoH3zHjxmp88Ls.pdf
     term = InvoiceDateLabelTerm.new(
       text: 'Rechnungsdatum:',
