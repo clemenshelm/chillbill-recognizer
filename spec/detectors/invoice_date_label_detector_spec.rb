@@ -4,7 +4,7 @@ require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
 describe InvoiceDateLabelDetector do
-  it "detects the invoice date label 'Rechnungsdatum'" do
+  it "detects the invoice date label 'Rechnungsdatum:'" do
     # From cAfvoH3zHjxmp88Ls.pdf
     create(
       :word,
@@ -34,6 +34,6 @@ describe InvoiceDateLabelDetector do
     )
 
     invoice_date_labels = InvoiceDateLabelDetector.filter
-    expect(invoice_date_labels.map(&:to_s)).to eq ['Zahlungstermin']
+    expect(invoice_date_labels.map(&:to_s)).to eq ['Rechnungsdatum:']
   end
 end
