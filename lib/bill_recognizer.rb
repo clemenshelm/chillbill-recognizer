@@ -23,6 +23,7 @@ require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
 require_relative './detectors/relative_date_detector'
+require_relative './detectors/invoice_date_label_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -54,6 +55,7 @@ class BillRecognizer
     CurrencyTerm.dataset.delete
     DueDateLabelTerm.dataset.delete
     RelativeDateTerm.dataset.delete
+    InvoiceDateLabelTerm.dataset.delete
 
     # Download and convert image
     begin
@@ -133,6 +135,7 @@ class BillRecognizer
     iban_words = IbanDetector.filter
     DueDateLabelDetector.filter
     RelativeDateDetector.filter
+    InvoiceDateLabelDetector.filter
 
     calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
