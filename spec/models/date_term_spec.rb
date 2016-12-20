@@ -24,6 +24,7 @@ describe DateTerm do
   end
 
   it 'recognizes dates in the short english format' do
+    # From 8XJegsB4tn8XRuZpp.pdf
     term = DateTerm.new(text: '03-Oct-2016')
     expect(term.to_datetime).to eq DateTime.iso8601('2016-10-03')
   end
