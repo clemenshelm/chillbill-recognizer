@@ -24,6 +24,8 @@ require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
 require_relative './detectors/relative_date_detector'
 require_relative './detectors/invoice_date_label_detector'
+require_relative './detectors/billing_start_label_detector'
+require_relative './detectors/billing_end_label_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -32,6 +34,8 @@ require_relative './models/iban_term'
 require_relative './models/billing_period_term'
 require_relative './models/currency_term'
 require_relative './models/due_date_label_term'
+require_relative './models/billing_start_label_term'
+require_relative './models/billing_end_label_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -56,6 +60,8 @@ class BillRecognizer
     DueDateLabelTerm.dataset.delete
     RelativeDateTerm.dataset.delete
     InvoiceDateLabelTerm.dataset.delete
+    BillingStartLabelTerm.dataset.delete
+    BillingEndLabelTerm.dataset.delete
 
     # Download and convert image
     begin
@@ -136,6 +142,8 @@ class BillRecognizer
     DueDateLabelDetector.filter
     RelativeDateDetector.filter
     InvoiceDateLabelDetector.filter
+    BillingStartLabelDetector.filter
+    BillingEndLabelDetector.filter
 
     calculated_billing_period = BillingPeriodCalculation.new(
       billing_period_words
