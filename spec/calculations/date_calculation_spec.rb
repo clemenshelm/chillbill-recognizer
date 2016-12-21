@@ -344,4 +344,38 @@ describe DateCalculation do
 
     expect(due_date).to eq DateTime.iso8601('2016-09-21')
   end
+
+  it "detects the invoice date labeled with 'Rechnungsdatum:'" do
+    # From cAfvoH3zHjxmp88Ls.pdf
+    InvoiceDateLabelTerm.create(
+      text: 'Rechnungsdatum:',
+      left: 0.08115183246073299,
+      right: 0.20157068062827224,
+      top: 0.44912118408880664,
+      bottom: 0.45837187789084183
+    )
+
+    create(
+      :word,
+      text: 'I',
+      left: 0.23756544502617802,
+      right: 0.23821989528795812,
+      top: 0.4588344125809436,
+      bottom: 0.4592969472710453
+    )
+
+    DateTerm.create(
+      text: '28.10.2016',
+      left: 0.24770942408376964,
+      right: 0.324934554973822,
+      top: 0.44912118408880664,
+      bottom: 0.4569842738205365
+    )
+
+    invoice_date = DateCalculation.new(
+      DateTerm.dataset
+    ).invoice_date
+
+    expect(invoice_date).to eq DateTime.iso8601('2016-10-28')
+  end
 end
