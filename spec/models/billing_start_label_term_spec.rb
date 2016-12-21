@@ -5,7 +5,7 @@ describe BillingStartLabelTerm do
   it 'detects a billing start label correctly' do
     # From m4F2bLmpKn7wPqM7q.pdf
     term = BillingStartLabelTerm.new(
-      text: "Billing Start:",
+      text: 'Billing Start:',
       left: 0.4525523560209424,
       right: 0.4849476439790576,
       top: 0.1593432007400555,
