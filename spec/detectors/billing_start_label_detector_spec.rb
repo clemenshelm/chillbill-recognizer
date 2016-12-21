@@ -3,7 +3,7 @@ require_relative '../../lib/detectors/billing_start_label_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
-describe DueDateLabelDetector do
+describe BillingStartLabelDetector do
   it "detects the billing start label 'Billing Start:'" do
     # From m4F2bLmpKn7wPqM7q.pdf
     create(
@@ -24,7 +24,7 @@ describe DueDateLabelDetector do
       bottom: 0.16651248843663274
     )
 
-    due_date_labels = DueDateLabelDetector.filter
-    expect(due_date_labels.map(&:to_s)).to eq ['Billing Start:']
+    billing_start_labels = BillingStartLabelDetector.filter
+    expect(billing_start_labels.map(&:to_s)).to eq ['Billing Start:']
   end
 end
