@@ -43,6 +43,7 @@ describe BillingPeriodCalculation do
   end
 
   it 'detects the billing period using billing period labels' do
+    # From m4F2bLmpKn7wPqM7q.pdf
     BillingStartLabelTerm.create(
       text: 'Billing Start:',
       left: 0.4525523560209424,
