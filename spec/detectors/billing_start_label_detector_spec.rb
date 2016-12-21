@@ -25,6 +25,7 @@ describe BillingStartLabelDetector do
     )
 
     billing_start_labels = BillingStartLabelDetector.filter
+    binding.pry
     expect(billing_start_labels.map(&:to_s)).to eq ['Billing Start:']
   end
 end
