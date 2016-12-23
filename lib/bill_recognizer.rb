@@ -73,7 +73,6 @@ class BillRecognizer
       }
     end
 
-
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
 
