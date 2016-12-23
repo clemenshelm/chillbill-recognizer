@@ -7,6 +7,7 @@ class DateDetector
   days = ((1..9).map { |n| "0?#{n}" } + (10..31).to_a).join('|')
   SHORT_PERIOD_DATE_REGEX = /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.\d+)/
   SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{2}$)}
+  SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
   FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|September|Oktober|Dezember) \d+)/
   FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
@@ -29,6 +30,7 @@ class DateDetector
       max_words: 3
     )
     find_dates(words, SHORT_SLASH_DATE_REGEX, max_words: 1)
+    find_dates(words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_HYPHEN_DATE_REGEX, max_words: 1)

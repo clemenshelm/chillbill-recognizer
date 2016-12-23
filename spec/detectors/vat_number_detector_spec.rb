@@ -497,4 +497,45 @@ describe VatNumberDetector do
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq ['ATU37893801']
   end
+
+  it 'ignores EUR with digits following' do
+    create(
+      :word,
+      text: 'EUR',
+      left: 0.2911350997710173,
+      right: 0.31076218514883874,
+      top: 0.684941013185288,
+      bottom: 0.6914179967615082
+    )
+
+    create(
+      :word,
+      text: '101,13',
+      left: 0.3274452077199869,
+      right: 0.3680078508341511,
+      top: 0.6842470506592644,
+      bottom: 0.6930372426555632
+    )
+
+    create(
+      :word,
+      text: '17087073',
+      left: 0.1318285901210337,
+      right: 0.18776578344782466,
+      top: 0.6983576220217441,
+      bottom: 0.7057598889659958
+    )
+
+    create(
+      :word,
+      text: '072001',
+      left: 0.19659797186784428,
+      right: 0.23748773307163887,
+      top: 0.6983576220217441,
+      bottom: 0.7057598889659958
+    )
+
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to eq []
+  end
 end

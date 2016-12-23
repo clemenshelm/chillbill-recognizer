@@ -14,8 +14,11 @@ class DateCalculation
     standalone_dates = @words.all.select do |term|
       term.started_periods.empty? && term.ended_periods.empty?
     end
-
-    invoice_date = standalone_dates.first || BillingPeriodTerm.first.to
+    labeled_invoice_date = DateTerm.right_after(
+      InvoiceDateLabelTerm.first
+    ) unless InvoiceDateLabelTerm.empty?
+    invoice_date = labeled_invoice_date || standalone_dates.first ||
+                   BillingPeriodTerm.first.to
     invoice_date.to_datetime
   end
 

@@ -51,6 +51,10 @@ class DateTerm < Sequel::Model
                             'Oktober' => 'October',
                             'Dezember' => 'December')
       DateTime.strptime(date_text, '%d. %B %Y')
+    when DateDetector::SHORT_ENGLISH_DATE_REGEX
+      date_text = text.gsub(/Oct/,
+                            'Oct' => 'October')
+      DateTime.strptime(date_text, '%d-%B-%Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
     when DateDetector::SHORT_PERIOD_DATE_REGEX
