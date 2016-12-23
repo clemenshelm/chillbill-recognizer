@@ -9,8 +9,8 @@ describe DateTerm do
   end
 
   it 'recognizes dates in full german format' do
-    term = DateTerm.new(text: '23. Oktober 2015')
-    expect(term.to_datetime).to eq DateTime.iso8601('2015-10-23')
+    term = DateTerm.new(text: '23. April 2015')
+    expect(term.to_datetime).to eq DateTime.iso8601('2015-04-23')
   end
 
   it 'recognizes dates in the dd/mm/yy format' do
@@ -21,6 +21,11 @@ describe DateTerm do
   it 'recognizes dates in the dd/mm/yyyy format' do
     term = DateTerm.new(text: '12/03/2016')
     expect(term.to_datetime).to eq DateTime.iso8601('2016-03-12')
+  end
+
+  it 'recognizes dates in the d. mm yyyy format' do
+    term = DateTerm.new(text: '3. Oktober 2016')
+    expect(term.to_datetime).to eq DateTime.iso8601('2016-10-03')
   end
 
   it 'recognizes dates in the short english format' do

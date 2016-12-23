@@ -104,7 +104,7 @@ describe DateDetector do
     # from bill yiaGswKDskiLNkafN.pdf
     create_following_words(%w(01. September 2016))
     # from bill CuJiDWLneTaSFin4P
-    create_following_words(%w(03. Oktober 2016))
+    create_following_words(%w(3. Oktober 2016))
     dates = DateDetector.filter
     expect(date_strings(dates))
       .to eq %w(2015-04-23 2016-03-11 2015-12-04 2016-09-01 2016-10-03)
