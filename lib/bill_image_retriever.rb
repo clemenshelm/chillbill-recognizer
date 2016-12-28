@@ -7,9 +7,10 @@ require_relative './logging.rb'
 
 class UnprocessableFileError < StandardError
   attr_reader :extension
-  def initialize(extension, message = 'Unprocessable file type: ')
-    @extension = extension
-    super(message + extension)
+  def initialize(file, message = 'Unprocessable file type: ')
+    extension = file[:extension]
+    version_message = ". Recognizer version: " + file[:version]
+    super(message + extension + version_message)
   end
 end
 
@@ -37,7 +38,14 @@ class BillImageRetriever
     when '.pdf', '.png', '.jpg', '.jpeg'
       image_file
     else
-      raise UnprocessableFileError, file_extension
+      require 'yaml'
+      data = YAML.load_file('lib/version.yml')
+      recognizer_version = data["Version"]
+      failing_file = {
+        extension: file_extension,
+        version: recognizer_version.to_s
+      }
+      raise UnprocessableFileError, failing_file
     end
   end
 end
