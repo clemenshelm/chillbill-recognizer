@@ -9,7 +9,7 @@ class UnprocessableFileError < StandardError
   attr_reader :extension
   def initialize(file, message = 'Unprocessable file type: ')
     extension = file[:extension]
-    version_message = ". Recognizer version: " + file[:version]
+    version_message = '. Recognizer version: ' + file[:version]
     super(message + extension + version_message)
   end
 end
@@ -40,7 +40,7 @@ class BillImageRetriever
     else
       require 'yaml'
       data = YAML.load_file('lib/version.yml')
-      recognizer_version = data["Version"]
+      recognizer_version = data['Version']
       failing_file = {
         extension: file_extension,
         version: recognizer_version.to_s
