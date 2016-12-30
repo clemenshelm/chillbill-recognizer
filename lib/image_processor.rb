@@ -10,7 +10,9 @@ class ImageProcessor
     image_path = "#{image_path}[0]"
     begin
       original_image = Image.read(image_path)[0]
-      raise InvalidImage, 'Cannot read image.' unless original_image
+      unless original_image
+        raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
+      end
       page = original_image.page
       min_dimension = [page.width, page.height].min
     ensure

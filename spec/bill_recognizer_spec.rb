@@ -17,6 +17,6 @@ describe 'BillRecognizer' do
     retriever = SpecCacheRetriever.new(file_basename: '5CCkGCCprokPBy2o6.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
-    expect(recognizer.recognize[:error]).to eq 'Cannot read image.'
+    expect(recognizer.recognize[:error]).to start_with 'Cannot read image.'
   end
 end
