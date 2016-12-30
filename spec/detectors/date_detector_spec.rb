@@ -419,7 +419,7 @@ describe DateDetector do
   end
 
   it "does not detect short period super future dates" do
-    #From
+    #From FsZPCR9omH4SAvJ7m.pdf
     create(
       :word,
       text: '25.1',
