@@ -402,6 +402,21 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
+  it "does not detect other numbers as super future dates" do
+    # From Sqc9ixBz4g8mDCdJK.pdf
+    create(
+      :word,
+      text: '0211-20160901-01-4844',
+      left: 0.149869109947644,
+      right: 0.5981675392670157,
+      top: 0.6031074835283705,
+      bottom: 0.6171698298751106
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
