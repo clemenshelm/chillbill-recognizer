@@ -418,7 +418,7 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it "does not detects short period super future dates" do
+  it "does not detect short period super future dates" do
     #From
     create(
       :word,
@@ -437,7 +437,22 @@ describe DateDetector do
       top: 0.6729879740980573,
       bottom: 0.6833950046253469
     )
-    
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
+  it "does not detect long hungarian super future dates" do
+    # From 3KdmxTXLCTMdyeduw.pdf
+    create(
+      :word,
+      text: 'l111115153115.11.15',
+      left: 0.0,
+      right: 0.12401832460732984,
+      top: 0.13058578374623755,
+      bottom: 0.1535077564250984
+    )
+
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
