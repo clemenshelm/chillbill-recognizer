@@ -402,7 +402,7 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
-  it "does not detect other numbers as super future dates" do
+  it 'does not detect other numbers as super future dates' do
     # From Sqc9ixBz4g8mDCdJK.pdf
     create(
       :word,
