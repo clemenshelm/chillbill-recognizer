@@ -8,13 +8,12 @@ class DateDetector
   SHORT_PERIOD_DATE_REGEX =
     /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.([2][0]\d{2}|\d{2}))/
   SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{2}$)}
-  SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-[2][0]\d{2}$)/
-  LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/[2][0]\d{2}$)}
-  FULL_GERMAN_DATE_REGEX =
-    /(\d+\. (?:März|April|September|Dezember) ([2][0]\d{2}|\d{2}))/
-  FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) ([2][0]\d{2}|\d{2}))/
-  LONG_HUNGARIAN_DATE_REGEX = /[2][0]\d{2}\.(?:#{months})\.(?:#{days})/
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-[2][0]\d{2}$)/
+  SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
+  LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
+  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|September|Oktober|Dezember) \d+)/
+  FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
+  LONG_HUNGARIAN_DATE_REGEX = /\d{4}\.(?:#{months})\.(?:#{days})/
 
   def self.filter
     end_number_with_period = lambda do |term|
