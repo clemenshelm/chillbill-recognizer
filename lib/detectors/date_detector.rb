@@ -6,7 +6,7 @@ class DateDetector
   months = ((1..9).map { |n| "0?#{n}" } + (10..12).to_a).join('|')
   days = ((1..9).map { |n| "0?#{n}" } + (10..31).to_a).join('|')
   SHORT_PERIOD_DATE_REGEX =
-    /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.([2][0]\d{2}|\d{2}))/
+    /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.([2][0]\d{2}|[1]\d))/
   SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{2}$)}
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-[2][0]\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/

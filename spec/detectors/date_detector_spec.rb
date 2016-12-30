@@ -418,6 +418,30 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it "does not detects short period super future dates" do
+    #From
+    create(
+      :word,
+      text: '25.1',
+      left: 0.10598626104023552,
+      right: 0.1377167157343801,
+      top: 0.6734505087881592,
+      bottom: 0.6836262719703978
+    )
+
+    create(
+      :word,
+      text: '1.2816',
+      left: 0.14327772325809618,
+      right: 0.1959437356885836,
+      top: 0.6729879740980573,
+      bottom: 0.6833950046253469
+    )
+    
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
