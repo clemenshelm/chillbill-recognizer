@@ -214,6 +214,7 @@ class BillRecognizer
          .deskew
          .normalize
          .trim
+         .improve_level
          .write_png!
   end
 end

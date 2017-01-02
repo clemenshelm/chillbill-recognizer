@@ -61,7 +61,7 @@ class ImageProcessor
   end
 
   def write_png!
-    png_file = Tempfile.new ['bill', '.png']
+    png_file = Tempfile.new ['bill', '.png'], '.'
     @image.write png_file.path
     return png_file
   ensure
