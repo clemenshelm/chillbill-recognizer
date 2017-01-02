@@ -1,3 +1,6 @@
 tests:
   build: .
-  env_file: .env-rspec
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
