@@ -1,6 +1,6 @@
 - name: rubocop
   service: tests
-  command: rubocop
+  command: bundle exec rubocop
 
 - name: rspec
   service: tests
