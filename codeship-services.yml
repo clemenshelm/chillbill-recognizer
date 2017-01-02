@@ -4,3 +4,9 @@ tests:
     - .:/myapp
   volumes_from:
     - bundle
+
+# Data container to contain bundled gems
+bundle:
+  image: busybox
+  volumes:
+    - /bundle
