@@ -249,4 +249,48 @@ describe BillingPeriodDetector do
       '2016-05-01'
     )
   end
+
+  it 'detects the billing period using billing period labels' do
+    # From m4F2bLmpKn7wPqM7q.pdf
+    BillingStartLabelTerm.create(
+      text: 'Billing Start:',
+      left: 0.4525523560209424,
+      right: 0.4849476439790576,
+      top: 0.1593432007400555,
+      bottom: 0.16651248843663274
+    )
+
+    DateTerm.create(
+      text: '22 October 2016',
+      left: 0.5788612565445026,
+      right: 0.6070026178010471,
+      top: 0.1593432007400555,
+      bottom: 0.16628122109158186
+    )
+
+    BillingEndLabelTerm.create(
+      text: 'Billing End:',
+      left: 0.45287958115183247,
+      right: 0.4800392670157068,
+      top: 0.17437557816836263,
+      bottom: 0.18131359851988899
+    )
+
+    DateTerm.create(
+      text: '27 October 2016',
+      left: 0.5788612565445026,
+      right: 0.6070026178010471,
+      top: 0.17414431082331175,
+      bottom: 0.1810823311748381
+    )
+
+    billing_periods = BillingPeriodDetector.filter
+
+    expect(billing_periods.first.from.to_datetime).to eq DateTime.iso8601(
+      '2016-10-22'
+    )
+    expect(billing_periods.first.to.to_datetime).to eq DateTime.iso8601(
+      '2016-10-27'
+    )
+  end
 end

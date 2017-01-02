@@ -9,8 +9,8 @@ class DateDetector
   SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{2}$)}
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
-  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|September|Dezember) \d+)/
-  FULL_ENGLISH_DATE_REGEX = /(\d+ (?:March|May|October) \d+)/
+  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|September|Oktober|Dezember) \d+)/
+  FULL_ENGLISH_DATE_REGEX = /(\d{2} (?:March|May|October) \d{4})/
   LONG_HUNGARIAN_DATE_REGEX = /\d{4}\.(?:#{months})\.(?:#{days})/
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-\d{4}$)/
 
