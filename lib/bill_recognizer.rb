@@ -63,13 +63,18 @@ class BillRecognizer
     BillingStartLabelTerm.dataset.delete
     BillingEndLabelTerm.dataset.delete
 
+    # Fetch current recognizer version
+    version_data = YAML.load_file 'lib/version.yml'
+    version = version_data['Version']
+
     # Download and convert image
     begin
       image_file = @retriever.save
       png_file = preprocess(image_file.path)
     rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
       return {
-        error: e.to_s
+        error: e.to_s,
+        recognizerVersion: version
       }
     end
 
@@ -187,8 +192,6 @@ class BillRecognizer
         end }
     end
 
-    version_data = YAML.load_file 'lib/version.yml'
-    version = version_data['Version']
     {
       amounts: amounts,
       invoiceDate: invoice_date,

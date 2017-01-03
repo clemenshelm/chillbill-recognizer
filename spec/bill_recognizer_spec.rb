@@ -5,14 +5,15 @@ require_relative '../lib/bill_recognizer.rb'
 describe 'BillRecognizer' do
   it 'rejects bill with unknown file formats' do
     retriever = ErrorThrowingRetriever.new(
-      file_basename: 'xcaEpkmTauDsZz9fk.p7s',
-      recognizer_version: '13'
+      file_basename: 'xcaEpkmTauDsZz9fk.p7s'
     )
     recognizer = BillRecognizer.new(retriever: retriever)
 
-    expect(
-      recognizer.recognize[:error]
-    ).to eq 'Unprocessable file type: .p7s. Recognizer version: 13'
+    version_data = YAML.load_file './lib/version.yml'
+    version = version_data['Version']
+
+    expect(recognizer.recognize[:error]).to eq 'Unprocessable file type: .p7s'
+    expect(recognizer.recognize[:recognizerVersion]).to eq version
   end
 
   it 'reports when a bill cannot be read' do
