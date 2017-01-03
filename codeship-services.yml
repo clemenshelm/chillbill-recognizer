@@ -1,0 +1,4 @@
+tests:
+  build: .
+  encrypted_env_file: env-rspec.encrypted
+  cashed: true
