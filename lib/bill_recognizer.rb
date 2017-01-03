@@ -66,13 +66,12 @@ class BillRecognizer
     # Download and convert image
     begin
       image_file = @retriever.save
-    rescue UnprocessableFileError => e
+      png_file = preprocess(image_file.path)
+    rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
       return {
         error: e.to_s
       }
     end
-
-    png_file = preprocess(image_file.path)
 
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
@@ -214,6 +213,7 @@ class BillRecognizer
          .deskew
          .normalize
          .trim
+         .improve_level
          .write_png!
   end
 end
