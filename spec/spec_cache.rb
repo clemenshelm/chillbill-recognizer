@@ -18,7 +18,14 @@ module SpecCache
   def cache_image(file_basename)
     bucket = 'chillbill-prod'
     region = 'eu-central-1'
-    image_path = cache_file(file_basename.to_s) do |path|
+    file_extension = File.extname file_basename.downcase
+
+    image_path = get_image_path(bucket, region, file_basename)
+    create_tempfile(image_path, file_extension)
+  end
+
+  def get_image_path(bucket, region, file_basename)
+    cache_file(file_basename.to_s) do |path|
       s3 = Aws::S3::Client.new(region: region)
       s3.get_object(
         bucket: bucket,
@@ -26,8 +33,9 @@ module SpecCache
         response_target: path
       )
     end
+  end
 
-    file_extension = File.extname file_basename.downcase
+  def create_tempfile(image_path, file_extension)
     case file_extension
     when '.pdf', '.png', '.jpeg', '.jpg'
       tempfile = Tempfile.new(['cached', file_extension])
