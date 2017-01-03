@@ -7,12 +7,12 @@ require 'timeout'
 
 Sidekiq.configure_client do |config|
   # Run only 1 thread.
-  config.redis = { namespace: 'jobs', size: 1, url: 'redis://redis' }
+  config.redis = { size: 1, url: 'redis://redis' }
   puts 'Sidekiq client configured.'
 end
 
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: 'jobs', url: 'redis://redis' }
+  config.redis = { url: 'redis://redis' }
   puts 'Sidekiq server configured.'
 end
 
