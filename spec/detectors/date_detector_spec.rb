@@ -403,6 +403,60 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
+  it 'does not detect other numbers as super future dates' do
+    # From Sqc9ixBz4g8mDCdJK.pdf
+    create(
+      :word,
+      text: '0211-20160901-01-4844',
+      left: 0.149869109947644,
+      right: 0.5981675392670157,
+      top: 0.6031074835283705,
+      bottom: 0.6171698298751106
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
+  it 'does not detect short period super future dates' do
+    # From FsZPCR9omH4SAvJ7m.pdf
+    create(
+      :word,
+      text: '25.1',
+      left: 0.10598626104023552,
+      right: 0.1377167157343801,
+      top: 0.6734505087881592,
+      bottom: 0.6836262719703978
+    )
+
+    create(
+      :word,
+      text: '1.2816',
+      left: 0.14327772325809618,
+      right: 0.1959437356885836,
+      top: 0.6729879740980573,
+      bottom: 0.6833950046253469
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
+  it 'does not detect long hungarian super future dates' do
+    # From 3KdmxTXLCTMdyeduw.pdf
+    create(
+      :word,
+      text: 'l111115153115.11.15',
+      left: 0.0,
+      right: 0.12401832460732984,
+      top: 0.13058578374623755,
+      bottom: 0.1535077564250984
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
   it "doesn't detect the end of an invoice number as part of the date" do
     create(
       :word,
