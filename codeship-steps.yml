@@ -1,0 +1,8 @@
+- type: parallel
+  services:
+  - tests
+  steps:
+  - name: rubocop
+    command: bundle exec rubocop
+  - name: rspec
+    command: bundle exec rspec

@@ -2,6 +2,7 @@
 require 'rmagick'
 
 class ImageProcessor
+  class InvalidImage < StandardError; end
   include Magick
 
   def initialize(image_path)
@@ -9,6 +10,9 @@ class ImageProcessor
     image_path = "#{image_path}[0]"
     begin
       original_image = Image.read(image_path)[0]
+      unless original_image
+        raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
+      end
       page = original_image.page
       min_dimension = [page.width, page.height].min
     ensure
