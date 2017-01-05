@@ -402,6 +402,30 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
+  it 'detects date without time' do
+    # From bsg8XJqLBJSt2dXeH.pdf
+    create(
+      :word,
+      text: '2016.11.04',
+      left: 0.8226666666666667,
+      right: 0.893,
+      top: 0.1608951707891637,
+      bottom: 0.16772673733804475
+    )
+
+    create(
+      :word,
+      text: '09:40:02',
+      left: 0.8226666666666667,
+      right: 0.893,
+      top: 0.1608951707891637,
+      bottom: 0.16772673733804475
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-11-04']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end

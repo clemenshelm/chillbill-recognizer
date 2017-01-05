@@ -22,17 +22,19 @@ class DateDetector
     words = Word.all
 
     result_words = find_dates(words, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    words -= result_words
+    hungarian_date = find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
+    words -= result_words + hungarian_date
+
     find_dates(
       words,
       SHORT_PERIOD_DATE_REGEX,
       after_each_word: end_number_with_period,
       max_words: 3
     )
+
     find_dates(words, SHORT_SLASH_DATE_REGEX, max_words: 1)
     find_dates(words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_SLASH_DATE_REGEX, max_words: 1)
-    find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
 
     end_word_with_space = -> (term) { term.text += ' ' }
