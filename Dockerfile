@@ -1,10 +1,7 @@
 # Mostly taken from http://blog.giantswarm.io/getting-started-with-microservices-using-ruby-on-rails-and-docker/
 FROM ruby:2.3.1
 
-RUN apt-get update &&  apt-get install -y \
-  ghostscript=9.06~dfsg-2+deb8u1 \
-  tesseract-ocr=3.03.03-1 \
-  tesseract-ocr-deu=3.02-2 
+RUN apt-get update &&  apt-get install -y ghostscript tesseract-ocr tesseract-ocr-deu
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
