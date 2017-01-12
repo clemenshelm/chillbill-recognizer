@@ -23,8 +23,8 @@ class DateDetector
     words = Word.all
 
     result_words = find_dates(words, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    hungarian_date = find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
-    words -= (result_words + hungarian_date)
+    hungarian_dates = find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
+    words -= (result_words + hungarian_dates)
 
     find_dates(
       words,
