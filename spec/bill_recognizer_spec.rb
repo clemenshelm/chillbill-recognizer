@@ -9,7 +9,11 @@ describe 'BillRecognizer' do
     )
     recognizer = BillRecognizer.new(retriever: retriever)
 
+    version_data = YAML.load_file './lib/version.yml'
+    version = version_data['Version']
+
     expect(recognizer.recognize[:error]).to eq 'Unprocessable file type: .p7s'
+    expect(recognizer.recognize[:recognizerVersion]).to eq version
   end
 
   it 'reports when a bill cannot be read' do
