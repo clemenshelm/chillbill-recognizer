@@ -22,9 +22,7 @@ class RecognitionWorker
   include Sidekiq::Worker
 
   def perform(id, image_url, customer_vat_number)
-    logger.info "performing recognition on #{image_url}"
-    logger.info "for VAT number #{customer_vat_number}"
-    Logging.logger = logger
+    log(image_url, customer_vat_number)
 
     recognizer = BillRecognizer.new(
       image_url: image_url,
@@ -35,5 +33,11 @@ class RecognitionWorker
     bill_attributes[:id] = id
     logger.info bill_attributes
     REDIS.publish 'results', bill_attributes.to_json
+  end
+
+  def log(image_url, customer_vat_number)
+    logger.info "performing recognition on #{image_url}"
+    logger.info "for VAT number #{customer_vat_number}"
+    Logging.logger = logger
   end
 end
