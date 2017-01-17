@@ -29,17 +29,22 @@ class BillImageRetriever
 
     file_extension = File.extname key.downcase
 
-    image_file = Tempfile.new ['bill', file_extension]
-    s3 = Aws::S3::Client.new(region: region)
-    s3.get_object(bucket: bucket, key: key, response_target: image_file)
+    @image_file = Tempfile.new ['bill', file_extension]
+
+    get_bill_from_s3(region, bucket, key)
 
     determine_extension_validity(file_extension)
+  end
+
+  def get_bill_from_s3(region, bucket, key)
+    s3 = Aws::S3::Client.new(region: region)
+    s3.get_object(bucket: bucket, key: key, response_target: @image_file)
   end
 
   def determine_extension_validity(file_extension)
     case file_extension
     when '.pdf', '.png', '.jpg', '.jpeg'
-      image_file
+      @image_file
     else
       raise UnprocessableFileError, file_extension
     end
