@@ -273,29 +273,33 @@ class BillRecognizer
     # logger.debug hocr
   end
 
-  def create_word(word_node, left, right, top, bottom)
+  def create_word(word_node, adjusted_word)
     Word.create(
       text: word_node.text,
-      left: left,
-      right: right,
-      top: top,
-      bottom: bottom
+      left: adjusted_word[:left],
+      right: adjusted_word[:right],
+      top: adjusted_word[:top],
+      bottom: adjusted_word[:bottom]
     )
   end
 
-  def extract_hocr_words
+  def extract_hocr_words(hocr_doc)
     hocr_doc.css('.ocrx_word').each do |word_node|
       left, top, right, bottom = word_node[:title]
                                  .match(/(\d+) (\d+) (\d+) (\d+);/)
                                  .captures
                                  .map(&:to_i)
-
-      left /= @width.to_f
-      right /= @width.to_f
-      top /= @height.to_f
-      bottom /= @height.to_f
-
-      create_word(word_node, left, right, top, bottom)
+      adjusted_word = adjust_word_attributes(left, top, right, bottom)
+      create_word(word_node, adjusted_word)
     end
+  end
+
+  def adjust_word_attributes(left, top, right, bottom)
+    {
+      left: left / @width.to_f,
+      right: right / @width.to_f,
+      top: top / @height.to_f,
+      bottom: bottom / @height.to_f
+    }
   end
 end
