@@ -33,6 +33,10 @@ class BillImageRetriever
     s3 = Aws::S3::Client.new(region: region)
     s3.get_object(bucket: bucket, key: key, response_target: image_file)
 
+    determine_extension_validity(file_extension)
+  end
+
+  def determine_extension_validity(file_extension)
     case file_extension
     when '.pdf', '.png', '.jpg', '.jpeg'
       image_file
