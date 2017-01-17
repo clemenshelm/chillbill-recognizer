@@ -403,6 +403,30 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
+  it 'detects date without time' do
+    # From 6qsXsgdKapRAhiS9b.pdf
+    create(
+      :word,
+      text: '2016.11.04',
+      left: 0.8226666666666667,
+      right: 0.893,
+      top: 0.1608951707891637,
+      bottom: 0.16772673733804475
+    )
+
+    create(
+      :word,
+      text: '09:40:02',
+      left: 0.8226666666666667,
+      right: 0.893,
+      top: 0.1608951707891637,
+      bottom: 0.16772673733804475
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-11-04']
+  end
+
   it 'does not detect other numbers as super future dates' do
     # From Sqc9ixBz4g8mDCdJK.pdf
     create(

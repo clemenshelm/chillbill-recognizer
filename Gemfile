@@ -27,8 +27,8 @@ gem 'nokogiri'
 gem 'aws-sdk', '~> 2'
 
 # Database to store and retrieve words from
-gem 'sqlite3'
 gem 'sequel'
+gem 'sqlite3'
 
 # A logger which does nothing is the default
 gem 'null-logger'
@@ -40,8 +40,8 @@ gem 'valvat', '~> 0.6.10'
 gem 'rubocop', require: false
 
 group :development do
-  gem 'rake'
   gem 'colorize' # Colorizes shell output
+  gem 'rake'
 end
 
 group :development, :test do
@@ -49,7 +49,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec'
-  gem 'guard-rspec', require: false
   gem 'factory_girl', '~> 4.0'
+  gem 'guard-rspec', require: false
+  gem 'rspec'
 end
