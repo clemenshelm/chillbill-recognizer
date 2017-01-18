@@ -58,6 +58,20 @@ class BillRecognizer
     RelativeDateTerm
   ].freeze
 
+  DETECTORS = [
+    PriceDetector,
+    DateDetector,
+    VatNumberDetector,
+    BillingPeriodDetector,
+    CurrencyDetector,
+    IbanDetector,
+    DueDateLabelDetector,
+    RelativeDateDetector,
+    InvoiceDateLabelDetector,
+    BillingStartLabelDetector,
+    BillingEndLabelDetector
+  ].freeze
+
   def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
     @retriever = retriever || BillImageRetriever.new(url: image_url)
     @customer_vat_number = customer_vat_number
@@ -73,11 +87,10 @@ class BillRecognizer
     # FileUtils.rm('./test.png')
     # FileUtils.cp(image_file.path, './test.png')
     hocr(png_file)
-    filtered_words = filter_bill_attribute_words
-    log_price_words(filtered_words[:price_words])
-    filter_labels
+    filter_words
+    log_price_words
 
-    calculate_attributes(filtered_words, version)
+    calculate_attributes(version)
   end
 
   private
@@ -185,19 +198,12 @@ class BillRecognizer
     )
   end
 
-  def filter_bill_attribute_words
-    {
-      price_words: PriceDetector.filter,
-      date_words: DateDetector.filter,
-      vat_number_words: VatNumberDetector.filter,
-      billing_period_words: BillingPeriodDetector.filter,
-      currency_words: CurrencyDetector.filter,
-      iban_words: IbanDetector.filter
-    }
+  def filter_words
+    DETECTORS.each(&:filter)
   end
 
-  def log_price_words(price_words)
-    logger.debug price_words.map { |word|
+  def log_price_words
+    logger.debug PriceTerm.map { |word|
       "PriceTerm.create(
         text: '#{word.text}',
         left: '#{word.left}',
@@ -206,14 +212,6 @@ class BillRecognizer
         bottom: '#{word.bottom}'
       )"
     }
-  end
-
-  def filter_labels
-    DueDateLabelDetector.filter
-    RelativeDateDetector.filter
-    InvoiceDateLabelDetector.filter
-    BillingStartLabelDetector.filter
-    BillingEndLabelDetector.filter
   end
 
   def calculate_attributes(version)
