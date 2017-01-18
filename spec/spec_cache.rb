@@ -22,7 +22,7 @@ module SpecCache
       download_from_s3(path, file_basename)
     end
 
-    create_tempfile(image_path, file_extension)
+    copy_to_tempfile(image_path, file_extension)
   end
 
   def download_from_s3(path, file_basename)
@@ -34,7 +34,7 @@ module SpecCache
     )
   end
 
-  def create_tempfile(image_path, file_extension)
+  def copy_to_tempfile(image_path, file_extension)
     case file_extension
     when '.pdf', '.png', '.jpeg', '.jpg'
       tempfile = Tempfile.new(['cached', file_extension])
