@@ -20,11 +20,15 @@ describe VatNumberCalculation do
     )
 
     vat_number_calculation = VatNumberCalculation.new(
-      VatNumberTerm.dataset,
       customer_vat_number: 'ATU67760915'
     )
     vat_number_calculation.vat_number
 
     expect(vat_number_calculation.vat_number).to eq 'EU372001951'
+  end
+
+  it 'returns nil if there is no vat number' do
+    vat_number = VatNumberCalculation.new(customer_vat_number: '')
+    expect(vat_number.vat_number).to be_nil
   end
 end

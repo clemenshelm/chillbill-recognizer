@@ -21,14 +21,12 @@ describe BillingPeriodCalculation do
       first_word_id: 26
     )
 
-    billing_period_terms = [BillingPeriodTerm.create(
+    BillingPeriodTerm.create(
       from: start_of_period,
       to: end_of_period
-    )]
+    )
 
-    calculated_billing_period = BillingPeriodCalculation.new(
-      billing_period_terms
-    ).billing_period
+    calculated_billing_period = BillingPeriodCalculation.new.billing_period
     expect(calculated_billing_period[:from]).to eq DateTime.iso8601(
       '2015-03-01'
     )
@@ -38,7 +36,7 @@ describe BillingPeriodCalculation do
   end
 
   it 'returns nil if there is no billing period' do
-    billing_period = BillingPeriodCalculation.new([])
+    billing_period = BillingPeriodCalculation.new
     expect(billing_period.billing_period).to be_nil
   end
 end

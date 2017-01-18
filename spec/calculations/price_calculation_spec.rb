@@ -6,7 +6,7 @@ describe PriceCalculation do
     %w(14.49 2.69 8.19 46.85 0.0 18.79 28.06 20.0 7.81 39.04 100.0)
       .each { |text| PriceTerm.create(text: text) }
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('39.04')
     expect(prices.vat_amount).to eq BigDecimal('7.81')
   end
@@ -14,7 +14,7 @@ describe PriceCalculation do
   it 'calculates the sub total and the VAT total for a different bill' do
     %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('6.48')
     expect(prices.vat_amount).to eq BigDecimal('1.3')
   end
@@ -36,7 +36,7 @@ describe PriceCalculation do
       bottom: 2030
     )
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('15.41')
     expect(prices.vat_amount).to eq 0
   end
@@ -90,7 +90,7 @@ describe PriceCalculation do
       bottom: 2443
     )
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('80.00')
     expect(prices.vat_amount).to eq 0
   end
@@ -128,7 +128,7 @@ describe PriceCalculation do
       bottom: 3450
     )
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq 350
     expect(prices.vat_amount).to eq 0
   end
@@ -262,13 +262,13 @@ describe PriceCalculation do
       bottom: 3460
     )
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('39.04')
     expect(prices.vat_amount).to eq BigDecimal('7.81')
   end
 
   it 'sets the prices to nil if there are no words' do
-    prices = PriceCalculation.new([])
+    prices = PriceCalculation.new
     expect(prices.net_amount).to be_nil
     expect(prices.vat_amount).to be_nil
   end
@@ -298,7 +298,7 @@ describe PriceCalculation do
       bottom: '2101'
     )
 
-    prices = PriceCalculation.new(PriceTerm.dataset)
+    prices = PriceCalculation.new
     expect(prices.net_amount).to eq BigDecimal('86.97')
     expect(prices.vat_amount).to eq BigDecimal('0')
   end
