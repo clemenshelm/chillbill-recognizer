@@ -80,15 +80,19 @@ class BillRecognizer
   def recognize
     empty_database
     version = fetch_recognizer_version
+
+    begin
     png_file = download_and_convert_image(version)
 
-    return png_file if png_file.is_a?(Hash)
+    rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
+      return {
+        error: e.to_s,
+        recognizerVersion: version
+      }
+    end
 
-    # FileUtils.rm('./test.png')
-    # FileUtils.cp(image_file.path, './test.png')
-    hocr(png_file)
+    recognize_words(png_file)
     filter_words
-    log_price_words
 
     calculate_attributes(version)
   end
@@ -107,12 +111,6 @@ class BillRecognizer
   def download_and_convert_image(version)
     image_file = @retriever.save
     preprocess(image_file.path)
-
-  rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
-    return {
-      error: e.to_s,
-      recognizerVersion: version
-    }
   end
 
   def preprocess(image_path)
@@ -129,19 +127,12 @@ class BillRecognizer
          .write_png!
   end
 
-  def hocr(png_file)
+  def recognize_words(png_file)
     ENV['TESSDATA_PREFIX'] = '.' # must be specified
-    hocr = configure_hocr(png_file)
+    hocr = perform_ocr(png_file)
 
     hocr_doc = Nokogiri::HTML(hocr)
-    extract_hocr_words(hocr_doc)
-    # logger.debug Word.map {
-    #  |word| "text: #{word.text},
-    #  left: #{word.left},
-    #  right: #{word.right},
-    #  top: #{word.top},
-    #  bottom: #{word.bottom}"
-    # }
+    create_words_from_hocr(hocr_doc)
 
     # puts Word.map { |word|
     #   "
@@ -154,11 +145,10 @@ class BillRecognizer
     # }
   end
 
-  def configure_hocr(png_file)
+  def perform_ocr(png_file)
     tesseract_config = configure_tessarect
     `tesseract "#{png_file.path}" stdout -l eng+deu #{tesseract_config}`
       .force_encoding('UTF-8')
-    # logger.debug hocr
   end
 
   def configure_tessarect
@@ -168,7 +158,7 @@ class BillRecognizer
     }.map { |k, v| "-c #{k}=#{v}" }.join(' ')
   end
 
-  def extract_hocr_words(hocr_doc)
+  def create_words_from_hocr(hocr_doc)
     hocr_doc.css('.ocrx_word').each do |word_node|
       left, top, right, bottom = word_node[:title]
                                  .match(/(\d+) (\d+) (\d+) (\d+);/)
@@ -202,21 +192,9 @@ class BillRecognizer
     DETECTORS.each(&:filter)
   end
 
-  def log_price_words
-    logger.debug PriceTerm.map { |word|
-      "PriceTerm.create(
-        text: '#{word.text}',
-        left: '#{word.left}',
-        right: '#{word.right}',
-        top: '#{word.top}',
-        bottom: '#{word.bottom}'
-      )"
-    }
-  end
-
   def calculate_attributes(version)
     {
-      amounts: calculate_amounts(calculate_prices),
+      amounts: calculate_amounts,
       invoiceDate: calculate_invoice_date,
       vatNumber: calculate_vat_number,
       billingPeriod: calculate_billing_period,
@@ -227,13 +205,13 @@ class BillRecognizer
     }
   end
 
-  def calculate_amounts(calculated_prices)
+  def calculate_amounts
     amounts = []
-    return amounts if calculated_prices[:net_amount].nil?
-    totals = calculate_totals(calculated_prices)
+    prices = calculate_prices
+    return amounts if prices[:net_amount].nil?
     amounts << {
-      total: (totals[:sub_total] + totals[:vat_total]).to_i,
-      vatRate: calculate_vat_rate(totals)
+      total: (prices[:net_amount] + prices[:vat_amount]).to_i,
+      vatRate: calculate_vat_rate(prices)
     }
   end
 
@@ -245,18 +223,9 @@ class BillRecognizer
     }
   end
 
-  def calculate_totals(calculated_prices)
-    # Adapt recognition result to application schema
-    # TODO: Let price calculation produce required format
-    {
-      sub_total: calculated_prices[:net_amount] * 100,
-      vat_total: calculated_prices[:vat_amount] * 100
-    }
-  end
-
-  def calculate_vat_rate(totals)
-    if totals[:sub_total].nonzero?
-      (totals[:vat_total] * 100 / totals[:sub_total]).round
+  def calculate_vat_rate(prices)
+    if prices[:net_amount].nonzero?
+      (prices[:vat_amount] * 100 / prices[:net_amount]).round
     else
       0
     end

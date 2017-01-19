@@ -28,7 +28,7 @@ describe VatNumberCalculation do
   end
 
   it 'returns nil if there is no vat number' do
-    vat_number = VatNumberCalculation.new(customer_vat_number: '')
+    vat_number = VatNumberCalculation.new(customer_vat_number: nil)
     expect(vat_number.vat_number).to be_nil
   end
 end

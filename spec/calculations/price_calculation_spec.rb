@@ -7,16 +7,16 @@ describe PriceCalculation do
       .each { |text| PriceTerm.create(text: text) }
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('39.04')
-    expect(prices.vat_amount).to eq BigDecimal('7.81')
+    expect(prices.net_amount).to eq BigDecimal('3904.0')
+    expect(prices.vat_amount).to eq BigDecimal('781.0')
   end
 
   it 'calculates the sub total and the VAT total for a different bill' do
     %w(1.0 5.19 7.78 6.48 1.3).map { |text| PriceTerm.create(text: text) }
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('6.48')
-    expect(prices.vat_amount).to eq BigDecimal('1.3')
+    expect(prices.net_amount).to eq BigDecimal('648.0')
+    expect(prices.vat_amount).to eq BigDecimal('130.0')
   end
 
   it 'takes the right amount if there is no VAT' do
@@ -37,7 +37,7 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('15.41')
+    expect(prices.net_amount).to eq BigDecimal('1541')
     expect(prices.vat_amount).to eq 0
   end
 
@@ -91,7 +91,7 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('80.00')
+    expect(prices.net_amount).to eq BigDecimal('8000')
     expect(prices.vat_amount).to eq 0
   end
 
@@ -129,7 +129,7 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq 350
+    expect(prices.net_amount).to eq 35000.0
     expect(prices.vat_amount).to eq 0
   end
 
@@ -263,8 +263,8 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('39.04')
-    expect(prices.vat_amount).to eq BigDecimal('7.81')
+    expect(prices.net_amount).to eq BigDecimal('3904.0')
+    expect(prices.vat_amount).to eq BigDecimal('781.0')
   end
 
   it 'sets the prices to nil if there are no words' do
@@ -299,7 +299,7 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq BigDecimal('86.97')
+    expect(prices.net_amount).to eq BigDecimal('8697.0')
     expect(prices.vat_amount).to eq BigDecimal('0')
   end
 

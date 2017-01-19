@@ -5,13 +5,13 @@ class PriceCalculation
   def net_amount
     return nil if PriceTerm.empty?
     calculate unless @net_amount
-    @net_amount
+    @net_amount * 100
   end
 
   def vat_amount
     return nil if PriceTerm.empty?
     calculate unless @vat_amount
-    @vat_amount
+    @vat_amount * 100
   end
 
   private
