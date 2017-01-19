@@ -151,7 +151,7 @@ describe DateCalculation do
       expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
     end
   end
-  
+
   describe '#dueDate' do
     it 'returns nil if there is no due date' do
       dates = DateCalculation.new([]).due_date
