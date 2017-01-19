@@ -29,20 +29,23 @@ class PriceCalculation
   def net_and_vat
     # Sort largest to smallest, because we want to find the higest total amount.
     @price_terms.sort_by(&:to_d).reverse.each do |total_word|
-      remaining_prices = (@price_terms.all - [total_word]).map(&:to_d)
+      @remaining_prices = (@price_terms.all - [total_word]).map(&:to_d)
       # Sort smallest to largest. Otherwise the net amount is easily considered
       # the same as the total amount.
-      remaining_prices.reverse.each do |net|
-        possible_vats = remaining_prices.select do |price|
-          price <= (net * BigDecimal('0.2')).ceil(2)
-        end
-        possible_vats.each do |vat|
+      @remaining_prices.reverse.each do |net|
+        calculate_possible_vats(net).each do |vat|
           next unless net + vat == total_word.to_d
           @net_amount = net
           @vat_amount = vat
           return
         end
       end
+    end
+  end
+
+  def calculate_possible_vats(net)
+    @remaining_prices.select do |price|
+      price <= (net * BigDecimal('0.2')).ceil(2)
     end
   end
 
