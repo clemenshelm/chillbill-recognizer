@@ -23,7 +23,7 @@ class DateCalculation
   end
 
   def find_labeled_invoice_date
-    return false if InvoiceDateLabelTerm.empty?
+    return nil if InvoiceDateLabelTerm.empty?
     DateTerm.right_after(InvoiceDateLabelTerm.first)
   end
 
