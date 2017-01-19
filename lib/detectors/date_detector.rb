@@ -11,7 +11,8 @@ class DateDetector
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-20\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
-  FULL_GERMAN_DATE_REGEX = /(\d+\. (?:März|April|September|Oktober|Dezember) \d+)/
+  FULL_GERMAN_DATE_REGEX =
+    /(\d+\. (?:März|April|September|Oktober|Dezember) \d+)/
   FULL_ENGLISH_DATE_REGEX = /(\d{2} (?:March|May|October) \d{4})/
   LONG_HUNGARIAN_DATE_REGEX = /20\d{2}\.(?:#{months})\.(?:#{days})/
 
@@ -38,7 +39,7 @@ class DateDetector
     find_dates(words, LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
 
-    end_word_with_space = -> (term) { term.text += ' ' }
+    end_word_with_space = ->(term) { term.text += ' ' }
     find_dates(
       words,
       FULL_GERMAN_DATE_REGEX,
