@@ -10,16 +10,21 @@ class DateCalculation
   end
 
   def invoice_date
-    return nil if @words.empty?
-    standalone_dates = @words.all.select do |term|
-      term.started_periods.empty? && term.ended_periods.empty?
-    end
-    labeled_invoice_date = DateTerm.right_after(
-      InvoiceDateLabelTerm.first
-    ) unless InvoiceDateLabelTerm.empty?
-    invoice_date = labeled_invoice_date || standalone_dates.first ||
+    return nil if DateTerm.empty?
+    invoice_date = find_standalone_dates.first || find_labeled_invoice_date ||
                    BillingPeriodTerm.first.to
     invoice_date.to_datetime
+  end
+
+  def find_standalone_dates
+    DateTerm.all.select do |term|
+      term.started_periods.empty? && term.ended_periods.empty?
+    end
+  end
+
+  def find_labeled_invoice_date
+    return nil if InvoiceDateLabelTerm.empty?
+    DateTerm.right_after(InvoiceDateLabelTerm.first)
   end
 
   def due_date
