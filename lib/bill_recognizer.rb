@@ -207,25 +207,17 @@ class BillRecognizer
 
   def calculate_amounts
     amounts = []
-    prices = calculate_prices
-    return amounts if prices[:net_amount].nil?
+    prices = PriceCalculation.new
+    return amounts if prices.net_amount.nil?
     amounts << {
-      total: (prices[:net_amount] + prices[:vat_amount]).to_i,
+      total: (prices.net_amount + prices.vat_amount).to_i,
       vatRate: calculate_vat_rate(prices)
     }
   end
 
-  def calculate_prices
-    prices = PriceCalculation.new
-    {
-      net_amount: prices.net_amount,
-      vat_amount: prices.vat_amount
-    }
-  end
-
   def calculate_vat_rate(prices)
-    if prices[:net_amount].nonzero?
-      (prices[:vat_amount] * 100 / prices[:net_amount]).round
+    if prices.net_amount.nonzero?
+      (prices.vat_amount * 100 / prices.net_amount).round
     else
       0
     end
