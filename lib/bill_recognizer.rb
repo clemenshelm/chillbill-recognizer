@@ -82,7 +82,7 @@ class BillRecognizer
     version = fetch_recognizer_version
 
     begin
-    png_file = download_and_convert_image(version)
+      png_file = download_and_convert_image(version)
 
     rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
       return {
@@ -108,7 +108,7 @@ class BillRecognizer
     version_data['Version']
   end
 
-  def download_and_convert_image(version)
+  def download_and_convert_image(_version)
     image_file = @retriever.save
     preprocess(image_file.path)
   end

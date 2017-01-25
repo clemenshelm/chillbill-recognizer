@@ -129,7 +129,7 @@ describe PriceCalculation do
     )
 
     prices = PriceCalculation.new
-    expect(prices.net_amount).to eq 35000.0
+    expect(prices.net_amount).to eq 35_000.0
     expect(prices.vat_amount).to eq 0
   end
 
