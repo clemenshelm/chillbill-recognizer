@@ -33,18 +33,17 @@ class PriceCalculation
       # Sort smallest to largest. Otherwise the net amount is easily considered
       # the same as the total amount.
       @remaining_prices.reverse.each do |net|
-        calculate_net_and_vat(total_word, net)
+        calculate_and_assign_net_and_vat(total_word, net)
         break if @net_amount
       end
     end
   end
 
-  def calculate_net_and_vat(total_word, net)
+  def calculate_and_assign_net_and_vat(total_word, net)
     calculate_possible_vats(net).each do |vat|
       next unless net + vat == total_word.to_d
       @vat_amount = vat
       @net_amount = net
-      # binding.pry
     end
   end
 
