@@ -539,7 +539,8 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq []
   end
 
-  it 'recognizes a German VAT ID number broken by several spaces', :focus do
+  it 'recognizes a German VAT ID number broken by several spaces' do
+    # from bill mqJFF5BbAgGSr4pqX
     create(
       :word,
       text: 'DE',
