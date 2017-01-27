@@ -26,7 +26,23 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 2 words' do
-    create_following_words(%w(54, 00))
+    create(
+      :word,
+      text: '54,',
+      left: 0.3864528795811518,
+      right: 0.41393979057591623,
+      top: 0.23037740217642974,
+      bottom: 0.2394072702014355
+    )
+
+    create(
+      :word,
+      text: '00',
+      left: 0.42179319371727747,
+      right: 0.44960732984293195,
+      top: 0.23014586709886548,
+      bottom: 0.23871266496874277
+    )
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq %w(54,00)
