@@ -8,20 +8,19 @@ class ImageProcessor
   def initialize(image_path)
     begin
       # Only read first page of bill
-      original_image = Image.read("#{image_path}[0]")[0]
-      unless original_image
+      @original_image = Image.read("#{image_path}[0]")[0]
+      unless @original_image
         raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
       end
-      density = calculate_density(original_image)
+      density = calculate_density
     ensure
-      original_image&.destroy!
+      @original_image&.destroy!
     end
-
     @image = Image.read(image_path) { self.density = density }[0]
   end
 
-  def calculate_density(original_image)
-    page = original_image.page
+  def calculate_density
+    page = @original_image.page
     min_dimension = [page.width, page.height].min
     # This will give us an image with at least 3000px on each dimension
     220_000.0 / min_dimension
