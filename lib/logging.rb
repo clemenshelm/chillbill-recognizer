@@ -13,9 +13,8 @@ module Logging
   # Addition
   def self.included(base)
     class << base
-      def logger
-        Logging.logger
-      end
+      logger = -> { Logging.logger }
+      logger
     end
   end
 
