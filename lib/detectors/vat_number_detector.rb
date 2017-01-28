@@ -6,7 +6,7 @@ require_relative '../logging.rb'
 class VatNumberDetector
   include Logging
 
-  VAT_REGEX = /[A-Z]{2}[A-Z0-9]{2,12}/
+  VAT_REGEX = /[A-Z]{2}[A-Z0-9]{7,12}/
   EU_VAT_REGEX = /EU[0-9]{9}/
 
   def self.filter
@@ -26,7 +26,7 @@ class VatNumberDetector
         term = VatNumberTerm.new(
           regex: regex,
           after_each_word: after_each_word,
-          max_words: 2
+          max_words: 4
         )
         last_word = nil
 
@@ -38,7 +38,7 @@ class VatNumberDetector
             term = VatNumberTerm.new(
               regex: regex,
               after_each_word: after_each_word,
-              max_words: 2
+              max_words: 4
             )
           end
 

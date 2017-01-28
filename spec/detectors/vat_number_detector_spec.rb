@@ -538,4 +538,46 @@ describe VatNumberDetector do
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq []
   end
+
+  it 'recognizes a German VAT ID number broken by several spaces' do
+    # from bill mqJFF5BbAgGSr4pqX
+    create(
+      :word,
+      text: 'DE',
+      left: 0.5245418848167539,
+      right: 0.5379581151832461,
+      top: 0.8617735586941422,
+      bottom: 0.8673304005556842
+    )
+
+    create(
+      :word,
+      text: '147',
+      left: 0.5431937172774869,
+      right: 0.5592277486910995,
+      top: 0.8617735586941422,
+      bottom: 0.8673304005556842
+    )
+
+    create(
+      :word,
+      text: '645',
+      left: 0.5641361256544503,
+      right: 0.581479057591623,
+      top: 0.8617735586941422,
+      bottom: 0.8673304005556842
+    )
+
+    create(
+      :word,
+      text: '058',
+      left: 0.5857329842931938,
+      right: 0.6030759162303665,
+      top: 0.8617735586941422,
+      bottom: 0.8673304005556842
+    )
+
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to eq ['DE147645058']
+  end
 end
