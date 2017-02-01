@@ -37,14 +37,15 @@ describe RelativeDateCalculation do
       top: 0.5769140164899882,
       bottom: 0.5872791519434629
     )
-    invoice_date = DateCalculation.new(
-      DateTerm.dataset
-    ).due_date
+    invoice_date = DateCalculation.new.due_date
 
-    relative_date = RelativeDateCalculation.new(
-      RelativeDateTerm.dataset
-    ).relative_date(invoice_date)
+    relative_date = RelativeDateCalculation.new.relative_date(invoice_date)
 
     expect(relative_date).to eq invoice_date
+  end
+
+  it 'returns nil if there are no relative dates' do
+    relative_dates = RelativeDateCalculation.new
+    expect(relative_dates.relative_date([])).to be_nil
   end
 end

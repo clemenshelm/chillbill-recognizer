@@ -36,12 +36,12 @@ describe CurrencyCalculation do
       bottom: 0.4056537102473498
     )
 
-    currency = CurrencyCalculation.new(CurrencyTerm.dataset).iso
+    currency = CurrencyCalculation.new.iso
     expect(currency).to eq 'HUF'
   end
 
   it 'returns nil if there is no currency code' do
-    currency = CurrencyCalculation.new([])
+    currency = CurrencyCalculation.new
     expect(currency.iso).to be_nil
   end
 end

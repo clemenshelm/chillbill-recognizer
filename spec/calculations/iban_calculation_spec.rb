@@ -19,9 +19,12 @@ describe IbanCalculation do
       bottom: 36
     )
 
-    iban_calculation = IbanCalculation.new(
-      IbanTerm.dataset
-    )
+    iban_calculation = IbanCalculation.new
     expect(iban_calculation.iban).to eq 'AT851100010687868500'
+  end
+
+  it 'returns nil if there is no iban' do
+    iban = IbanCalculation.new
+    expect(iban.iban).to be_nil
   end
 end
