@@ -17,6 +17,8 @@ class BillImageRetriever
   include Logging
   include Magick
 
+  VALID_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'].freeze
+
   def initialize(url:)
     _, @bucket, @region, @key = url.match(
       %r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}
@@ -39,11 +41,7 @@ class BillImageRetriever
   end
 
   def determine_extension_validity
-    case @file_extension
-    when '.pdf', '.png', '.jpg', '.jpeg'
-      return
-    else
-      raise UnprocessableFileError, @file_extension
-    end
+    return raise UnprocessableFileError, @file_extension unless
+      VALID_EXTENSIONS.include?(@file_extension)
   end
 end
