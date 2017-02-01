@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 class CurrencyCalculation
-  def initialize(words)
-    @words = words
-  end
-
   def iso
-    return nil if @words.empty?
-    @words.last.to_iso
+    return nil if CurrencyTerm.empty?
+    CurrencyTerm.last.to_iso
   end
 end
