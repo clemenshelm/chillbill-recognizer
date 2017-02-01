@@ -5,10 +5,6 @@ require_relative '../models/dimensionable'
 require_relative '../calculations/relative_date_calculation'
 
 class DateCalculation
-  def initialize(words)
-    @words = words
-  end
-
   def invoice_date
     return nil if DateTerm.empty?
     invoice_date = find_standalone_dates.first || find_labeled_invoice_date ||
