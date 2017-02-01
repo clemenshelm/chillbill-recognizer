@@ -7,7 +7,7 @@ require_relative '../factories'
 describe DateCalculation do
   describe '#invoiceDate' do
     it 'returns nil if there is no invoice date candidate' do
-      dates = DateCalculation.new([])
+      dates = DateCalculation.new
       expect(dates.invoice_date).to be_nil
     end
 
@@ -38,9 +38,7 @@ describe DateCalculation do
         bottom: 0.4569842738205365
       )
 
-      invoice_date = DateCalculation.new(
-        DateTerm.dataset
-      ).invoice_date
+      invoice_date = DateCalculation.new.invoice_date
 
       expect(invoice_date).to eq DateTime.iso8601('2016-10-28')
     end
@@ -78,10 +76,8 @@ describe DateCalculation do
         to: end_of_period
       )
 
-      date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
-      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2015-04-10')
+      date_calculation = DateCalculation.new.invoice_date
+      expect(date_calculation).to eq DateTime.iso8601('2015-04-10')
     end
 
     it 'takes the end date of the billing period if there are no other dates' do
@@ -107,10 +103,8 @@ describe DateCalculation do
         to: end_of_period
       )
 
-      date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
-      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-02-29')
+      date_calculation = DateCalculation.new.invoice_date
+      expect(date_calculation).to eq DateTime.iso8601('2016-02-29')
     end
 
     it 'recognizes the first date as the invoice date' do
@@ -130,10 +124,8 @@ describe DateCalculation do
         bottom: 618
       )
 
-      date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
-      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-03-16')
+      date_calculation = DateCalculation.new.invoice_date
+      expect(date_calculation).to eq DateTime.iso8601('2016-03-16')
     end
 
     it 'recognizes first date as a long slash date regex' do
@@ -145,16 +137,14 @@ describe DateCalculation do
         bottom: 529
       )
 
-      date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
-      expect(date_calculation.invoice_date).to eq DateTime.iso8601('2016-08-13')
+      date_calculation = DateCalculation.new.invoice_date
+      expect(date_calculation).to eq DateTime.iso8601('2016-08-13')
     end
   end
 
   describe '#dueDate' do
     it 'returns nil if there is no due date' do
-      dates = DateCalculation.new([]).due_date
+      dates = DateCalculation.new.due_date
       expect(dates).to be_nil
     end
 
@@ -213,11 +203,9 @@ describe DateCalculation do
       )
 
       DueDateLabelDetector.filter
-      due_date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      )
+      due_date_calculation = DateCalculation.new.due_date
 
-      expect(due_date_calculation.due_date).to eq DateTime.iso8601('2015-05-14')
+      expect(due_date_calculation).to eq DateTime.iso8601('2015-05-14')
     end
 
     it 'calculates the due date when the Zahlungstermin label is used' do
@@ -255,9 +243,7 @@ describe DateCalculation do
         bottom: 309
       )
 
-      due_date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      ).due_date
+      due_date_calculation = DateCalculation.new.due_date
 
       expect(due_date_calculation).to eq DateTime.iso8601('2015-04-15')
     end
@@ -281,9 +267,7 @@ describe DateCalculation do
         bottom: 529
       )
 
-      due_date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      ).due_date
+      due_date_calculation = DateCalculation.new.due_date
 
       expect(due_date_calculation).to be_nil
     end
@@ -306,9 +290,7 @@ describe DateCalculation do
         bottom: 689
       )
 
-      due_date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      ).due_date
+      due_date_calculation = DateCalculation.new.due_date
 
       expect(due_date_calculation).to eq DateTime.iso8601('2016-10-18')
     end
@@ -339,9 +321,7 @@ describe DateCalculation do
         bottom: 0.3250057830210502
       )
 
-      due_date_calculation = DateCalculation.new(
-        DateTerm.dataset
-      ).due_date
+      due_date_calculation = DateCalculation.new.due_date
 
       expect(due_date_calculation).to eq DateTime.iso8601('2016-12-09')
     end
@@ -373,9 +353,7 @@ describe DateCalculation do
         bottom: 0.5872791519434629
       )
 
-      due_date = DateCalculation.new(
-        DateTerm.dataset
-      ).due_date
+      due_date = DateCalculation.new.due_date
 
       expect(due_date).to eq DateTime.iso8601('2016-09-21')
     end
