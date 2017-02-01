@@ -17,23 +17,21 @@ class DateDetector
   LONG_HUNGARIAN_DATE_REGEX = /20\d{2}\.(?:#{months})\.(?:#{days})/
 
   def self.filter
-    words = Word.all
-    reduced_words = words - find_short_period_and_hungarian_dates(words)
+    reduced_words = find_short_period_dates_and_reduce_words
     find_long_dates_with_periods(reduced_words)
     find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
+    find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
 
     find_multi_word_dates(reduced_words)
 
     DateTerm.order(:first_word_id)
   end
 
-  def self.find_short_period_and_hungarian_dates(words)
-    result_words = find_dates(words, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    hungarian_dates = find_dates(words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
-    result_words + hungarian_dates
+  def self.find_short_period_dates_and_reduce_words
+    Word.all - find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
   end
 
   def self.find_long_dates_with_periods(words)
