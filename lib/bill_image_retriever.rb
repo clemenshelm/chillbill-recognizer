@@ -17,27 +17,31 @@ class BillImageRetriever
   include Logging
   include Magick
 
+  VALID_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'].freeze
+
   def initialize(url:)
-    @url = url
+    _, @bucket, @region, @key = url.match(
+      %r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}
+    ).to_a
+    logger.debug "bucket: #{@bucket}, region: #{@region}, key: #{@key}"
+
+    @file_extension = File.extname @key.downcase
   end
 
   def save
-    _, bucket, region, key = @url.match(
-      %r{^https://([^\.]+)\.s3[-\.]([^\.]+).amazonaws.com/(.+)$}
-    ).to_a
-    logger.debug "bucket: #{bucket}, region: #{region}, key: #{key}"
+    determine_extension_validity
+    download_bill_from_s3
+  end
 
-    file_extension = File.extname key.downcase
+  def download_bill_from_s3
+    @image_file = Tempfile.new ['bill', @file_extension]
+    s3 = Aws::S3::Client.new(region: @region)
+    s3.get_object(bucket: @bucket, key: @key, response_target: @image_file)
+    @image_file
+  end
 
-    image_file = Tempfile.new ['bill', file_extension]
-    s3 = Aws::S3::Client.new(region: region)
-    s3.get_object(bucket: bucket, key: key, response_target: image_file)
-
-    case file_extension
-    when '.pdf', '.png', '.jpg', '.jpeg'
-      image_file
-    else
-      raise UnprocessableFileError, file_extension
-    end
+  def determine_extension_validity
+    return raise UnprocessableFileError, @file_extension unless
+      VALID_EXTENSIONS.include?(@file_extension)
   end
 end
