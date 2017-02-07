@@ -16,16 +16,9 @@ class CurrencyCalculation
   def find_most_counted_currency_term
     return nil if CurrencyTerm.empty?
 
-    currency_occur_hash = CurrencyTerm.all.group_by(&:to_iso)
-                                      .map do |currency, occurence|
-      { currency: currency, occur: occurence.size }
-    end
-
-    most_appeared_currency = currency_occur_hash
-                             .max_by { |currency| currency[:occur] }[:currency]
-
-    CurrencyTerm.all.select do |currency|
-      return currency if currency.to_iso.equal?(most_appeared_currency)
-    end
+    CurrencyTerm.all
+                .group_by(&:to_iso)
+                .max_by { |_, currencies| currencies.size }
+                .last.first
   end
 end
