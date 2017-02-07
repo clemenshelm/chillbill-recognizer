@@ -511,6 +511,38 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'ignores everything after year on german regex' do
+    # from bill RrBd9cGaygBn6Zyhw.PDF
+    create(
+      :word,
+      text: '24.',
+      left: 0.2406801831262263,
+      right: 0.2593198168737737,
+      top: 0.33032824780397596,
+      bottom: 0.3391123439667129
+    )
+
+    create(
+      :word,
+      text: 'September',
+      left: 0.2668410725964683,
+      right: 0.3456507521255723,
+      top: 0.33032824780397596,
+      bottom: 0.3418862690707351
+    )
+    create(
+      :word,
+      text: '20161Eine',
+      left: 0.35186396337475473,
+      right: 0.4251144538914323,
+      top: 0.3298659269533056,
+      bottom: 0.3402681460933888
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-09-24']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
