@@ -511,6 +511,47 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it "doesn't detect a year that is too short" do
+    create(
+      :word,
+      text: '30.',
+      left: 0.5107913669064749,
+      right: 0.5336821451929366,
+      top: 0.18631530282015718,
+      bottom: 0.19579288025889968
+    )
+
+    create(
+      :word,
+      text: 'September',
+      left: 0.5405493786788751,
+      right: 0.6324395029431,
+      top: 0.18539066111881647,
+      bottom: 0.19879796578825706
+    )
+
+    create(
+      :word,
+      text: '203',
+      left: 0.6383257030739045,
+      right: 0.6644865925441465,
+      top: 0.18631530282015718,
+      bottom: 0.19579288025889968
+    )
+
+    create(
+      :word,
+      text: '6',
+      left: 0.6690647482014388,
+      right: 0.6782210595160235,
+      top: 0.18631530282015718,
+      bottom: 0.19579288025889968
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
   it 'ignores everything after year on german regex' do
     # from bill RrBd9cGaygBn6Zyhw.PDF
     create(
@@ -521,7 +562,6 @@ describe DateDetector do
       top: 0.33032824780397596,
       bottom: 0.3391123439667129
     )
-
     create(
       :word,
       text: 'September',
