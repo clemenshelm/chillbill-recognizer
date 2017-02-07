@@ -2,7 +2,7 @@
 require_relative '../../lib/calculations/currency_calculation'
 
 describe CurrencyCalculation do
-  it 'uses the last currency detected' do
+  it 'detects currency codes which appears most in bill' do
     # From bsg8XJqLBJSt2dXeH.pdf
 
     PriceTerm.create(
