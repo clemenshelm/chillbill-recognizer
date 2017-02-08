@@ -6,21 +6,23 @@ class ImageProcessor
   include Magick
 
   def initialize(image_path)
-    # Only read first page of bill
-    image_path = "#{image_path}[0]"
     begin
-      original_image = Image.read(image_path)[0]
+      # Only read first page of bill
+      original_image = Image.read("#{image_path}[0]")[0]
       unless original_image
         raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
       end
-      page = original_image.page
-      min_dimension = [page.width, page.height].min
+      density = calculate_density(original_image.page)
     ensure
       original_image&.destroy!
     end
-    # This will give us an image with at least 3000px on each dimension
-    density = 220_000.0 / min_dimension
     @image = Image.read(image_path) { self.density = density }[0]
+  end
+
+  def calculate_density(page)
+    min_dimension = [page.width, page.height].min
+    # This will give us an image with at least 3000px on each dimension
+    220_000.0 / min_dimension
   end
 
   def apply_background(color)
