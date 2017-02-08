@@ -5,9 +5,11 @@ require_relative '../models/date_term'
 class DateDetector
   months = ((1..9).map { |n| "0?#{n}" } + (10..12).to_a).join('|')
   days = ((1..9).map { |n| "0?#{n}" } + (10..31).to_a).join('|')
+
   SHORT_PERIOD_DATE_REGEX =
     /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.((?:20)?1\d))/
-  SHORT_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{2}$)}
+  SHORT_SLASH_DATE_REGEX = %r{((#{days})/(#{months})/\d{2}$)}
+  LONG_YEAR_SLASH_REGEX = %r{\d{4}/(?:#{months})/(?:#{days})$}
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-20\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
@@ -19,19 +21,21 @@ class DateDetector
   def self.filter
     reduced_words = find_short_period_dates_and_reduce_words
     find_long_dates_with_periods(reduced_words)
+
     find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
-
     find_multi_word_dates(reduced_words)
 
     DateTerm.order(:first_word_id)
   end
 
   def self.find_short_period_dates_and_reduce_words
-    Word.all - find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
+    words = find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
+    words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
+    Word.all - words
   end
 
   def self.find_long_dates_with_periods(words)
@@ -81,7 +85,6 @@ class DateDetector
             affected_words += term.words
           end
         end
-
         affected_words
       end
 

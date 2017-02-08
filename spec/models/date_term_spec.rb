@@ -33,4 +33,10 @@ describe DateTerm do
     term = DateTerm.new(text: '03-Oct-2016')
     expect(term.to_datetime).to eq DateTime.iso8601('2016-10-03')
   end
+
+  it 'recognizes dates in format yyyy/mm/dd' do
+    # From SaJwGfhgFR6FxCoxe.pdf
+    term = DateTerm.new(text: '2016/12/14')
+    expect(term.to_datetime).to eq DateTime.iso8601('2016-12-14')
+  end
 end
