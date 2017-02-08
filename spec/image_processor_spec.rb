@@ -50,7 +50,7 @@ describe ImageProcessor do
     expect(height).to eq 3024
   end
 
-  it "gets the height of a bill's first page" do
+  it "gets the width of a bill's first page" do
     file_id = 'gCQ76uE6qLYhEdsY9'
     file_url =
       "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.JPG"
