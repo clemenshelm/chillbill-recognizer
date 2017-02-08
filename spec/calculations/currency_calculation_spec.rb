@@ -2,8 +2,16 @@
 require_relative '../../lib/calculations/currency_calculation'
 
 describe CurrencyCalculation do
-  it 'uses the last currency detected' do
+  it 'detects currency code which appear most often in bill' do
     # From bsg8XJqLBJSt2dXeH.pdf
+
+    PriceTerm.create(
+      text: '9900',
+      left: 0.6596858638743456,
+      right: 0.6848821989528796,
+      top: 0.6588806660499538,
+      bottom: 0.6648936170212766
+    )
     CurrencyTerm.create(
       text: 'EUR',
       left: 0.5556666666666666,
@@ -38,6 +46,37 @@ describe CurrencyCalculation do
 
     currency = CurrencyCalculation.new.iso
     expect(currency).to eq 'HUF'
+  end
+
+  it 'detects correct currency after first price' do
+    # From 6rYBRincCdkNbCeRB.pdf
+
+    PriceTerm.create(
+      text: '20,54',
+      left: 0.7735602094240838,
+      right: 0.819371727748691,
+      top: 0.4405642923219241,
+      bottom: 0.45166512488436633
+    )
+
+    CurrencyTerm.create(
+      text: '€',
+      left: 0.8255890052356021,
+      right: 0.8354057591623036,
+      top: 0.4405642923219241,
+      bottom: 0.45004625346901017
+    )
+
+    CurrencyTerm.create(
+      text: '£0.00',
+      left: 0.5765706806282722,
+      right: 0.6220549738219895,
+      top: 0.5640610545790934,
+      bottom: 0.5740055504162812
+    )
+
+    currency = CurrencyCalculation.new.iso
+    expect(currency).to eq 'EUR'
   end
 
   it 'returns nil if there is no currency code' do
