@@ -43,6 +43,11 @@ describe PriceTerm do
     expect(term.to_d).to eq 1480.50
   end
 
+  it 'finds a price with comma, period and a leading currency symbol' do
+    term = PriceTerm.new(text: '€1,202.16')
+    expect(term.to_d).to eq 1202.16
+  end
+
   it 'expext price to have space in betweeen' do
     term = PriceTerm.new(text: '11 038')
     expect(term.to_d).to eq 11_038

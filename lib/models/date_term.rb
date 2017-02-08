@@ -59,6 +59,8 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d %B %Y')
     when DateDetector::SHORT_PERIOD_DATE_REGEX
       DateTime.strptime(text, '%d.%m.%y')
+    when DateDetector::LONG_YEAR_SLASH_REGEX
+      DateTime.strptime(text, '%Y/%m/%d')
     when DateDetector::SHORT_SLASH_DATE_REGEX
       DateTime.strptime(text, '%d/%m/%y')
     when DateDetector::LONG_SLASH_DATE_REGEX

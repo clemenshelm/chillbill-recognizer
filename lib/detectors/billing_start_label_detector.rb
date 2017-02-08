@@ -5,7 +5,7 @@ class BillingStartLabelDetector
   BILLING_START_LABELS = /(Billing Start:)/
 
   def self.filter
-    end_word_with_space = -> (term) { term.text += ' ' }
+    end_word_with_space = ->(term) { term.text += ' ' }
     find_billing_start_labels(
       BILLING_START_LABELS,
       after_each_word: end_word_with_space

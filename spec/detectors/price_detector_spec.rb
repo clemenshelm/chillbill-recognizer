@@ -167,6 +167,31 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['11 038']
   end
 
+  it 'detects price with , separator' do
+    # from bill fP5Y5WXQGoF45YePr
+
+    create(
+      :word,
+      text: '€1',
+      left: 0.788027477919529,
+      right: 0.8004579653254825,
+      top: 0.39532731899144113,
+      bottom: 0.4022669442516771
+    )
+
+    create(
+        :word,
+        text: ',202.16',
+        left: 0.8043833824010468,
+        right: 0.8472358521426235,
+        top: 0.39555863983344897,
+        bottom: 0.4034235484617164
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['€1,202.16']
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
