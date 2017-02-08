@@ -116,8 +116,6 @@ class BillRecognizer
   def preprocess(image_path)
     image = ImageProcessor.new(image_path)
 
-    @width = image.image_width
-    @height = image.image_height
     @orientation = image.get_orientation
 
     image.correct_orientation
@@ -127,6 +125,9 @@ class BillRecognizer
          .trim
          .improve_level
          .write_png!
+
+    @width = image.image_width
+    @height = image.image_height
   end
 
   def recognize_words(png_file)
