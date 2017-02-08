@@ -167,7 +167,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['11 038']
   end
 
-  it 'detects price with , separator' do
+  it 'detects price with comma and period separator' do
     # from bill fP5Y5WXQGoF45YePr
 
     create(
@@ -180,12 +180,12 @@ describe PriceDetector do
     )
 
     create(
-        :word,
-        text: ',202.16',
-        left: 0.8043833824010468,
-        right: 0.8472358521426235,
-        top: 0.39555863983344897,
-        bottom: 0.4034235484617164
+      :word,
+      text: ',202.16',
+      left: 0.8043833824010468,
+      right: 0.8472358521426235,
+      top: 0.39555863983344897,
+      bottom: 0.4034235484617164
     )
 
     prices = PriceDetector.filter
