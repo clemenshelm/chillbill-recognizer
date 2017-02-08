@@ -32,7 +32,7 @@ describe ImageProcessor do
     download = BillImageRetriever.new(url: file_url)
     image_file = download.save
     image = ImageProcessor.new(image_file.path)
-    orientation = image.get_orientation
+    orientation = image.calculate_orientation
 
     expect(orientation).to eq 1
   end

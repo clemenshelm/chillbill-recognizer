@@ -116,7 +116,7 @@ class BillRecognizer
   def preprocess(image_path)
     image = ImageProcessor.new(image_path)
 
-    @orientation = image.get_orientation
+    @orientation = image.calculate_orientation
 
     image.correct_orientation
          .apply_background('#fff')
