@@ -175,7 +175,7 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'detects the date in the dd/mm/yy format', :focus do
+  it 'detects the date in the dd/mm/yy format' do
     create(
       :word,
       text: '7385622',
@@ -403,23 +403,24 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
-  it 'detects date format yyyy/mm/yy', :focus do
+  it 'detects date format yyyy/mm/yy' do
+    # from bill SaJwGfhgFR6FxCoxe
     create(
-    :word,
-    text: 'Datum:',
-    left: 0.4787303664921466,
-    right: 0.6217277486910995,
-    top: 0.34183874786268575,
-    bottom: 0.3597264237800868
+      :word,
+      text: 'Datum:',
+      left: 0.4787303664921466,
+      right: 0.6217277486910995,
+      top: 0.34183874786268575,
+      bottom: 0.3597264237800868
     )
 
     create(
-    :word,
-    text: '2016/12/14',
-    left: 0.6613219895287958,
-    right: 0.9234293193717278,
-    top: 0.3332894909903985,
-    bottom: 0.3559121399447586
+      :word,
+      text: '2016/12/14',
+      left: 0.6613219895287958,
+      right: 0.9234293193717278,
+      top: 0.3332894909903985,
+      bottom: 0.3559121399447586
     )
 
     dates = DateDetector.filter
