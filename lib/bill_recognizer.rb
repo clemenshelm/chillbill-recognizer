@@ -118,8 +118,10 @@ class BillRecognizer
 
     @width = image.image_width
     @height = image.image_height
+    @orientation = image.get_orientation
 
-    image.apply_background('#fff')
+    image.correct_orientation
+         .apply_background('#fff')
          .deskew
          .normalize
          .trim
@@ -201,6 +203,7 @@ class BillRecognizer
       currencyCode: calculate_currency,
       dueDate: calculate_due_date,
       iban: calculate_iban,
+      orientation: @orientation,
       recognizerVersion: version
     }
   end

@@ -25,6 +25,16 @@ class ImageProcessor
     220_000.0 / min_dimension
   end
 
+  def get_orientation
+    orientation = @image.get_exif_by_entry('Orientation')
+    orientation.last.last
+  end
+
+  def correct_orientation
+    @image.auto_orient!
+    self
+  end
+
   def apply_background(color)
     background = Image.new(@image.columns, @image.rows) do |image|
       image.background_color = color
