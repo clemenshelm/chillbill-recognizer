@@ -27,7 +27,7 @@ class ImageProcessor
 
   def get_orientation
     orientation = @image.get_exif_by_entry('Orientation')
-    orientation.last.last
+    orientation.first.last
   end
 
   def correct_orientation
