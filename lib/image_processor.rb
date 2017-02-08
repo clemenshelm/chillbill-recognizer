@@ -27,7 +27,16 @@ class ImageProcessor
 
   def get_orientation
     orientation = @image.get_exif_by_entry('Orientation')
-    orientation.first.last
+    case orientation.first.last
+    when "1"
+      0
+    when "6"
+      1
+    when "3"
+      2
+    when "8"
+      3
+    end
   end
 
   def correct_orientation
@@ -77,7 +86,7 @@ class ImageProcessor
   end
 
   def write_png!
-    png_file = Tempfile.new ['bill', '.png'], '.'
+    png_file = Tempfile.new ['bill', '.png']
     @image.write png_file.path
     return png_file
   ensure
