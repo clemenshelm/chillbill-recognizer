@@ -138,13 +138,13 @@ class BillRecognizer
     create_words_from_hocr(hocr_doc)
 
     # puts Word.map { |word|
-    #   "
-    #   text: \'#{word.text}\',
-    #   left: #{word.left},
-    #   right: #{word.right},
-    #   top: #{word.top},
-    #   bottom: #{word.bottom}
-    #   "
+    #  "
+    #  text: \'#{word.text}\',
+    #  left: #{word.left},
+    #  right: #{word.right},
+    #  top: #{word.top},
+    #  bottom: #{word.bottom}
+    #  "
     # }
   end
 

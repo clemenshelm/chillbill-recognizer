@@ -6,7 +6,7 @@ class DueDateLabelDetector
     /(Zahlungstermin|Due Date:|Zahlungsziel:|Fällig)/
 
   def self.filter
-    end_word_with_space = -> (term) { term.text += ' ' }
+    end_word_with_space = ->(term) { term.text += ' ' }
     find_due_date_labels(
       DUE_DATE_LABELS,
       after_each_word: end_word_with_space

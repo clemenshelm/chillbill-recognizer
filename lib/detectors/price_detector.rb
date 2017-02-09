@@ -13,7 +13,7 @@ class PriceDetector
   def self.filter
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
 
-    end_word_with_space = -> (term) { term.text += ' ' }
+    end_word_with_space = ->(term) { term.text += ' ' }
 
     find_prices(
       HUNGARIAN_PRICE_REGEX,
