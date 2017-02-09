@@ -118,16 +118,16 @@ class BillRecognizer
 
     @orientation = image.calculate_orientation
 
-    image.correct_orientation
-         .apply_background('#fff')
+    image = image.correct_orientation
+    @width = image.image_width
+    @height = image.image_height
+
+    image.apply_background('#fff')
          .deskew
          .normalize
          .trim
          .improve_level
          .write_png!
-
-    @width = image.image_width
-    @height = image.image_height
   end
 
   def recognize_words(png_file)

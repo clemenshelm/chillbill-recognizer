@@ -62,4 +62,30 @@ describe ImageProcessor do
 
     expect(width).to eq 4032
   end
+
+  it "gets the height of a bill's first page after fixing the orientation" do
+    file_id = 'gCQ76uE6qLYhEdsY9'
+    file_url =
+      "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.JPG"
+
+    download = BillImageRetriever.new(url: file_url)
+    image_file = download.save
+    image = ImageProcessor.new(image_file.path).correct_orientation
+    height = image.image_height
+
+    expect(height).to eq 4032
+  end
+
+  it "gets the width of a bill's first page after fixing the orientation" do
+    file_id = 'gCQ76uE6qLYhEdsY9'
+    file_url =
+      "https://chillbill-prod.s3-eu-central-1.amazonaws.com/#{file_id}.JPG"
+
+    download = BillImageRetriever.new(url: file_url)
+    image_file = download.save
+    image = ImageProcessor.new(image_file.path).correct_orientation
+    width = image.image_width
+
+    expect(width).to eq 3024
+  end
 end

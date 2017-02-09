@@ -4,7 +4,8 @@ require 'rmagick'
 class ImageProcessor
   class InvalidImage < StandardError; end
   include Magick
-
+  attr_reader :image_width
+  attr_reader :image_height
   def initialize(image_path)
     begin
       # Only read first page of bill
@@ -13,6 +14,8 @@ class ImageProcessor
         raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
       end
       density = calculate_density(original_image.page)
+      @image_width = original_image.page.width
+      @image_height = original_image.page.height
     ensure
       original_image&.destroy!
     end
@@ -41,6 +44,8 @@ class ImageProcessor
 
   def correct_orientation
     @image.auto_orient!
+    @image_width = @image.page.width
+    @image_height = @image.page.height
     self
   end
 
@@ -57,13 +62,13 @@ class ImageProcessor
     background&.destroy!
   end
 
-  def image_width
-    @image.page.width
-  end
-
-  def image_height
-    @image.page.height
-  end
+  # def image_width
+  #   @image.page.width
+  # end
+  #
+  # def image_height
+  #   @image.page.height
+  # end
 
   def deskew
     process_image { |image| image.deskew(0.4) }
