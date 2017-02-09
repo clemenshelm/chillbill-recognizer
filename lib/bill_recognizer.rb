@@ -204,7 +204,7 @@ class BillRecognizer
       currencyCode: calculate_currency,
       dueDate: calculate_due_date,
       iban: calculate_iban,
-      orientation: @orientation,
+      clockwiseRotationsRequired: @orientation,
       recognizerVersion: version
     }
   end

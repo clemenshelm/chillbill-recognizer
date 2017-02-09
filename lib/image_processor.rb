@@ -31,14 +31,14 @@ class ImageProcessor
   def calculate_orientation
     orientation = @image.get_exif_by_entry('Orientation')
     case orientation.first.last
-    when '1'
-      0
     when '6'
       1
     when '3'
       2
     when '8'
       3
+    else
+      0
     end
   end
 
