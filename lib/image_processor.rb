@@ -62,14 +62,6 @@ class ImageProcessor
     background&.destroy!
   end
 
-  # def image_width
-  #   @image.page.width
-  # end
-  #
-  # def image_height
-  #   @image.page.height
-  # end
-
   def deskew
     process_image { |image| image.deskew(0.4) }
   end
