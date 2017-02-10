@@ -116,6 +116,9 @@ class BillRecognizer
   def preprocess(image_path)
     image = ImageProcessor.new(image_path)
 
+    @clockwise_rotations_required = image.calculate_clockwise_rotations_required
+
+    image = image.correct_orientation
     @width = image.image_width
     @height = image.image_height
 
@@ -201,6 +204,7 @@ class BillRecognizer
       currencyCode: calculate_currency,
       dueDate: calculate_due_date,
       iban: calculate_iban,
+      clockwiseRotationsRequired: @clockwise_rotations_required,
       recognizerVersion: version
     }
   end
