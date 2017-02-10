@@ -34,6 +34,8 @@ class PriceTerm < Sequel::Model
     dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
     # Replace commas with periods
     dec_text.sub!(',', '.')
+    # If the string cotains two periods then replace the first one
+    dec_text.sub!('.', '') if dec_text.count('.') == 2
     # Replace space
     dec_text.sub!(' ', '')
     # Remove currency symbols
