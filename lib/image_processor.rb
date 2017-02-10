@@ -4,8 +4,7 @@ require 'rmagick'
 class ImageProcessor
   class InvalidImage < StandardError; end
   include Magick
-  attr_reader :image_width
-  attr_reader :image_height
+  attr_reader :image_width, :image_height
   def initialize(image_path)
     begin
       # Only read first page of bill
@@ -28,17 +27,13 @@ class ImageProcessor
     220_000.0 / min_dimension
   end
 
-  def calculate_orientation
+  def calculate_clockwise_rotations_required
     orientation = @image.get_exif_by_entry('Orientation')
     case orientation.first.last
-    when '6'
-      1
-    when '3'
-      2
-    when '8'
-      3
-    else
-      0
+    when '6' then 1
+    when '3' then 2
+    when '8' then 3
+    else 0
     end
   end
 
