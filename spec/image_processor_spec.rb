@@ -2,7 +2,7 @@
 require 'rmagick'
 require_relative '../lib/image_processor'
 
-describe ImageProcessor, :focus do
+describe ImageProcessor do
   include Magick
 
   let(:image) { ImageProcessor.new('./spec/support/orientation-test.jpg') }
