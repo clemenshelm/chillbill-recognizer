@@ -6,9 +6,10 @@ class ImageProcessor
   include Magick
   attr_reader :image_width, :image_height
   def initialize(image_path)
+    read_path = "#{image_path}[0]"
     begin
       # Only read first page of bill
-      original_image = Image.read("#{image_path}[0]")[0]
+      original_image = Image.read(read_path)[0]
       unless original_image
         raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
       end
@@ -18,7 +19,7 @@ class ImageProcessor
     ensure
       original_image&.destroy!
     end
-    @image = Image.read(image_path) { self.density = density }[0]
+    @image = Image.read(read_path) { self.density = density }[0]
   end
 
   def calculate_density(page)
