@@ -576,6 +576,30 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'does not recognize prices as short period dates' do
+    # from bill pHD2HWtSA4sEFuvHS.pdf
+    create(
+      :word,
+      text: '31.30',
+      left: 0.7081151832460733,
+      right: 0.8164267015706806,
+      top: 0.4988910793494332,
+      bottom: 0.5117052735337605
+    )
+
+    create(
+      :word,
+      text: '2.15',
+      left: 0.20647905759162305,
+      right: 0.2905759162303665,
+      top: 0.5547067520946279,
+      bottom: 0.5682602267126663
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
