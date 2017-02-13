@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+2# frozen_string_literal: true
 require_relative '../../lib/calculations/currency_calculation'
 
 describe CurrencyCalculation do
@@ -82,5 +82,27 @@ describe CurrencyCalculation do
   it 'returns nil if there is no currency code' do
     currency = CurrencyCalculation.new
     expect(currency.iso).to be_nil
+  end
+
+  it "returns the most accurate currency term without a price present" do
+    # From 3NcAALw3DfrfuLRJ4.png
+    CurrencyTerm.create(
+      text: 'EUR',
+      left: 0.37009063444108764,
+      right: 0.4123867069486405,
+      top: 0.20186915887850468,
+      bottom: 0.2205607476635514
+    )
+
+    CurrencyTerm.create(
+      text: 'EUR',
+      left: 0.6132930513595166,
+      right: 0.6465256797583081,
+      top: 0.6186915887850467,
+      bottom: 0.6336448598130842,
+    )
+
+    currency = CurrencyCalculation.new.iso
+    expect(currency).to eq 'EUR'
   end
 end
