@@ -34,14 +34,13 @@ class DateDetector
 
   def self.find_short_period_dates_and_reduce_words
     words = find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    long_year_dates = find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
-
-    Word.all - (words + long_year_dates)
+    words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
+    Word.all - words
   end
 
   def self.find_long_dates_with_periods(words)
     end_number_with_period = lambda do |term|
-      term.text += '.' if term.text =~ /\d$/ && !(term.text =~ /\d\.\d/)
+      term.text += '.' if term.text =~ /\d$/
     end
 
     find_dates(

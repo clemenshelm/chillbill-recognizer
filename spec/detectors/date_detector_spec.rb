@@ -576,7 +576,7 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'does not recognize prices as short period dates' do
+  it 'returns nil if the date is not correct' do
     # from bill pHD2HWtSA4sEFuvHS.pdf
     create(
       :word,
@@ -597,11 +597,11 @@ describe DateDetector do
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to be_empty
+    expect(date_strings(dates)).to eq [nil]
   end
 
   def date_strings(date_terms)
-    date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
+    date_terms.map { |date_term| date_term.to_datetime&.strftime('%Y-%m-%d') }
   end
 
   # TODO: Move to general helpers

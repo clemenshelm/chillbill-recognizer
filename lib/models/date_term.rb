@@ -44,7 +44,7 @@ class DateTerm < Sequel::Model
   def to_datetime
     case text
     when /\d+\.\d+\.\d{4}/
-      DateTime.parse(text)
+      DateTime.parse(text) rescue nil
     when DateDetector::FULL_GERMAN_DATE_REGEX
       date_text = text.gsub(/März|Oktober|Dezember/,
                             'März' => 'March',
@@ -58,7 +58,7 @@ class DateTerm < Sequel::Model
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
     when DateDetector::SHORT_PERIOD_DATE_REGEX
-      DateTime.strptime(text, '%d.%m.%y')
+      DateTime.strptime(text, '%d.%m.%y') rescue nil
     when DateDetector::LONG_YEAR_SLASH_REGEX
       DateTime.strptime(text, '%Y/%m/%d')
     when DateDetector::SHORT_SLASH_DATE_REGEX
