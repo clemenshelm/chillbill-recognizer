@@ -243,7 +243,7 @@ class BillRecognizer
 
     calculated_billing_period&.update(
         calculated_billing_period
-      ) { |_key, value| value&.strftime('%Y-%m-%d') }
+      ) { |_key, value| value.strftime('%Y-%m-%d') }
   end
 
   def calculate_currency

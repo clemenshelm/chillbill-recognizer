@@ -597,11 +597,11 @@ describe DateDetector do
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq [nil]
+    expect(date_strings(dates)).to be_empty
   end
 
   def date_strings(date_terms)
-    date_terms.map { |date_term| date_term.to_datetime&.strftime('%Y-%m-%d') }
+    date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
 
   # TODO: Move to general helpers
