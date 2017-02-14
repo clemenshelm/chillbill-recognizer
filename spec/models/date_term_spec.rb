@@ -39,4 +39,10 @@ describe DateTerm do
     term = DateTerm.new(text: '2016/12/14')
     expect(term.to_datetime).to eq DateTime.iso8601('2016-12-14')
   end
+
+  it 'returns false if the format is not valid' do
+    # From pHD2HWtSA4sEFuvHS.pdf
+    term = DateTerm.new(text: '30.2.15')
+    expect(term.valid?).to eq false
+  end
 end

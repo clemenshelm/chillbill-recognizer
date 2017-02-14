@@ -38,7 +38,10 @@ class DateTerm < Sequel::Model
   end
 
   def valid?
+    to_datetime
     @term_builder.valid?
+  rescue ArgumentError
+    false
   end
 
   def to_datetime
