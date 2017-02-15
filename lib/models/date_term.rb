@@ -58,8 +58,14 @@ class DateTerm < Sequel::Model
       date_text = text.gsub(/Oct/,
                             'Oct' => 'October')
       DateTime.strptime(date_text, '%d-%B-%Y')
+    when DateDetector::SHORT_ENGLISH_DATE_WITH_SPACE_REGEX
+      date_text = text.gsub(/Jul/,
+                            'Jul' => 'July')
+      DateTime.strptime(date_text, '%d %B %Y')
     when DateDetector::FULL_ENGLISH_DATE_REGEX
       DateTime.strptime(text, '%d %B %Y')
+    when DateDetector::FULL_ENGLISH_COMMA_DATE_REGEX
+      DateTime.strptime(text, '%B %d, %Y')
     when DateDetector::SHORT_PERIOD_DATE_REGEX
       DateTime.strptime(text, '%d.%m.%y')
     when DateDetector::LONG_YEAR_SLASH_REGEX
@@ -68,6 +74,8 @@ class DateTerm < Sequel::Model
       DateTime.strptime(text, '%d/%m/%y')
     when DateDetector::LONG_SLASH_DATE_REGEX
       DateTime.strptime(text, '%d/%m/%Y')
+    when DateDetector::AMERICAN_LONG_SLASH_DATE_REGEX
+      DateTime.strptime(text, '%m/%d/%Y')
     when DateDetector::LONG_HUNGARIAN_DATE_REGEX
       DateTime.strptime(text, '%Y.%m.%d')
     when DateDetector::LONG_HYPHEN_DATE_REGEX

@@ -12,11 +12,14 @@ class DateDetector
   LONG_YEAR_SLASH_REGEX = %r{\d{4}/(?:#{months})/(?:#{days})$}
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-20\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
+  SHORT_ENGLISH_DATE_WITH_SPACE_REGEX = /(\d+ (?:Jul) \d{4})/
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
+  AMERICAN_LONG_SLASH_DATE_REGEX = %r{((?:#{months})/(?:#{days})/\d{4}$)}
   FULL_GERMAN_DATE_REGEX =
     /(\d+\. (?:März|April|September|Oktober|Dezember) \d{4})/
   FULL_ENGLISH_DATE_REGEX = /(\d{2} (?:March|May|October) \d{4})/
   LONG_HUNGARIAN_DATE_REGEX = /20\d{2}\.(?:#{months})\.(?:#{days})/
+  FULL_ENGLISH_COMMA_DATE_REGEX = /((?:August) \d{2}\, \d{4})/
 
   def self.filter
     reduced_words = find_short_period_dates_and_reduce_words
@@ -25,6 +28,7 @@ class DateDetector
     find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_SLASH_DATE_REGEX, max_words: 1)
+    find_dates(reduced_words, AMERICAN_LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
     find_multi_word_dates(reduced_words)
@@ -60,6 +64,16 @@ class DateDetector
 
     find_dates(
       words, FULL_ENGLISH_DATE_REGEX,
+      after_each_word: end_word_with_space, max_words: 3
+    )
+
+    find_dates(
+      words, FULL_ENGLISH_COMMA_DATE_REGEX,
+      after_each_word: end_word_with_space, max_words: 3
+    )
+
+    find_dates(
+      words, SHORT_ENGLISH_DATE_WITH_SPACE_REGEX,
       after_each_word: end_word_with_space, max_words: 3
     )
   end
