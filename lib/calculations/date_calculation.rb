@@ -31,9 +31,7 @@ class DateCalculation
 
     due_date || begin
       date_relative_to = invoice_date
-      RelativeDateCalculation.new(
-        RelativeDateTerm.dataset
-      ).relative_date(date_relative_to)
+      RelativeDateCalculation.new.relative_date(date_relative_to)
     end
   end
 end
