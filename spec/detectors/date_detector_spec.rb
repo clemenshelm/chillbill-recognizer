@@ -600,6 +600,38 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'detects August' do
+    # from bill JBopEY4wukRCb7Sjh.pdf
+    create(
+      :word,
+      text: '29.',
+      left: 0.4204842931937173,
+      right: 0.4375,
+      top: 0.17625058438522676,
+      bottom: 0.182328190743338
+    )
+
+    create(
+      :word,
+      text: 'August',
+      left: 0.44142670157068065,
+      right: 0.48232984293193715,
+      top: 0.17601683029453016,
+      bottom: 0.1841982234689107
+    )
+
+    create(
+      :word,
+      text: '2016',
+      left: 0.48592931937172773,
+      right: 0.5137434554973822,
+      top: 0.17625058438522676,
+      bottom: 0.182328190743338
+    )
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-08-29']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
