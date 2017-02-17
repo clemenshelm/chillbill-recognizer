@@ -3,7 +3,7 @@ require_relative '../models/due_date_label_term'
 
 class DueDateLabelDetector
   DUE_DATE_LABELS =
-    /(Zahlungstermin|Due Date:|Zahlungsziel:|Fällig)/
+    /(Zahlungstermin|Due Date:|Zahlungsziel:|Fällig|zahlbar am)/
 
   def self.filter
     end_word_with_space = ->(term) { term.text += ' ' }

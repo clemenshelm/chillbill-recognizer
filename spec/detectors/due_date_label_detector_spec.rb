@@ -135,4 +135,54 @@ describe DueDateLabelDetector do
     due_date_labels = DueDateLabelDetector.filter
     expect(due_date_labels.map(&:to_s)).to eq ['Fällig']
   end
+
+  it 'detects the due date label zahlbar am' do
+    # From JBopEY4wukRCb7Sjh.pdf
+    create(
+      :word,
+      text: 'zahlbar',
+      left: 0.28075916230366493,
+      right: 0.32362565445026176,
+      top: 0.17554932211313698,
+      bottom: 0.1820944366526414
+    )
+
+    create(
+      :word,
+      text: 'am',
+      left: 0.32787958115183247,
+      right: 0.343586387434555,
+      top: 0.17765310892940628,
+      bottom: 0.1820944366526414
+    )
+
+    create(
+      :word,
+      text: '29.',
+      left: 0.4204842931937173,
+      right: 0.4375,
+      top: 0.17625058438522676,
+      bottom: 0.182328190743338
+    )
+
+    create(
+      :word,
+      text: 'August',
+      left: 0.44142670157068065,
+      right: 0.48232984293193715,
+      top: 0.17601683029453016,
+      bottom: 0.1841982234689107
+    )
+
+    create(
+      :word,
+      text: '2016',
+      left: 0.48592931937172773,
+      right: 0.5137434554973822,
+      top: 0.17625058438522676,
+      bottom: 0.182328190743338
+    )
+    due_date_labels = DueDateLabelDetector.filter
+    expect(due_date_labels.map(&:to_s)).to eq ['zahlbar am']
+  end
 end
