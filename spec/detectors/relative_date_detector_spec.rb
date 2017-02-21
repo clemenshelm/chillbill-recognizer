@@ -37,7 +37,7 @@ describe RelativeDateDetector do
     expect(relative_words.map(&:to_s)).to eq ['prompt']
   end
 
-  it 'detects the relative word Fällig bei Erhalt', :focus do
+  it 'detects the relative word Fällig bei Erhalt' do
     # From bill 5wsQ7YppaZLN5FSGC.pdf
 
     create(
@@ -71,7 +71,7 @@ describe RelativeDateDetector do
     expect(relative_words.map(&:to_s)).to eq ['Fällig bei Erhalt']
   end
 
-  it 'detects the relative word Fällig nach Erhalt', :focus do
+  it 'detects the relative word Fällig nach Erhalt' do
     # From ZqMX24iDMxxst5cnP.pdf
     create(
       :word,

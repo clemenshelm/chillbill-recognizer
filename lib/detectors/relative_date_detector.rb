@@ -7,8 +7,7 @@ class RelativeDateDetector
   def self.filter
     end_word_with_space = ->(term) { term.text += ' ' }
     find_relative_words(RELATIVE_WORDS,
-    after_each_word: end_word_with_space
-    )
+                        after_each_word: end_word_with_space)
 
     RelativeDateTerm.dataset
   end

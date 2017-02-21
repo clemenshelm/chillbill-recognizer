@@ -4,7 +4,7 @@ class RelativeDateCalculation
     return nil if RelativeDateTerm.empty?
 
     date_relative_to if RelativeDateTerm.first.text == 'prompt' ||
-    date_relative_to if RelativeDateTerm.first.text == 'Fällig bei Erhalt' ||
-    date_relative_to if RelativeDateTerm.first.text == 'Fällig nach Erhalt'
+                        RelativeDateTerm.first.text == 'Fällig bei Erhalt' ||
+                        RelativeDateTerm.first.text == 'Fällig nach Erhalt'
   end
 end

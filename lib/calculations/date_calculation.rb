@@ -32,8 +32,6 @@ class DateCalculation
     due_date || begin
       date_relative_to = invoice_date
       RelativeDateCalculation.new.relative_date(date_relative_to)
-
-      binding.pry
     end
   end
 end
