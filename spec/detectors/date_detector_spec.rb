@@ -599,6 +599,86 @@ describe DateDetector do
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
+  it 'detects a date in August, in the format "Month Day, Year"' do
+    # From D9KKkDdhbd2JzaS2C.pdf
+    create(
+      :word,
+      text: 'August',
+      left: 0.5304319371727748,
+      right: 0.580824607329843,
+      top: 0.12372802960222017,
+      bottom: 0.1332099907493062
+    )
+
+    create(
+      :word,
+      text: '27,',
+      left: 0.5857329842931938,
+      right: 0.6043848167539267,
+      top: 0.12372802960222017,
+      bottom: 0.13274745605920443
+    )
+
+    create(
+      :word,
+      text: '2016',
+      left: 0.6102748691099477,
+      right: 0.6416884816753927,
+      top: 0.12372802960222017,
+      bottom: 0.1311285846438483
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-08-27']
+  end
+
+  it 'detects short english dates in July' do
+    # From EmLuXAosrf54a9vnE.pdf
+    create(
+      :word,
+      text: '1',
+      left: 0.07787958115183247,
+      right: 0.08475130890052356,
+      top: 0.5227617602427921,
+      bottom: 0.5313606474456247
+    )
+
+    create(
+      :word,
+      text: 'Jul',
+      left: 0.08933246073298429,
+      right: 0.10798429319371727,
+      top: 0.5220030349013657,
+      bottom: 0.5313606474456247
+    )
+
+    create(
+      :word,
+      text: '2016',
+      left: 0.11387434554973822,
+      right: 0.1482329842931937,
+      top: 0.52250885179565,
+      bottom: 0.5313606474456247
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2016-07-01']
+  end
+
+  it 'detects a slash term in the format mm/dd/yyyy' do
+    # From KCsWbyeAvH7RMi2hL.pdf
+    create(
+      :word,
+      text: '09/16/2013',
+      left: 0.08047105004906771,
+      right: 0.16323192672554793,
+      top: 0.16631968540365488,
+      bottom: 0.17510987739995373
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2013-09-16']
+  end
 
   it 'detects August' do
     # from bill JBopEY4wukRCb7Sjh.pdf
