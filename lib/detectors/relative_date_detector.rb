@@ -2,11 +2,13 @@
 require_relative '../models/relative_date_term'
 
 class RelativeDateDetector
-  RELATIVE_WORDS = /(prompt|Fällig bei Erhalt|Fällig nach Erhalt)/
+  SAME_DAY_TERMS = ['prompt', 'Fällig bei Erhalt', 'Fällig nach Erhalt'].freeze
+  ALL_REL_WORDS = SAME_DAY_TERMS
 
   def self.filter
+    relative_regex = /#{ALL_REL_WORDS.map { |s| Regexp.quote(s) }.join('|')}/
     end_word_with_space = ->(term) { term.text += ' ' }
-    find_relative_words(RELATIVE_WORDS,
+    find_relative_words(relative_regex,
                         after_each_word: end_word_with_space)
 
     RelativeDateTerm.dataset

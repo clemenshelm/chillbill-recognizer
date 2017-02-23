@@ -387,5 +387,34 @@ describe DateCalculation do
       due_date = DateCalculation.new.due_date
       expect(due_date).to eq DateTime.iso8601('2016-08-02')
     end
+
+    it 'calculates the due date when it is written as Fällig bei Erhalt' do
+      DateTerm.create(
+        text: '15. Oktober 2016',
+        left: 0.6969895287958116,
+        right: 0.7087696335078534,
+        top: 0.22920985947938263,
+        bottom: 0.23842432619212164
+      )
+
+      DueDateLabelTerm.create(
+        text: 'Fällig',
+        left: 0.11866666666666667,
+        right: 0.16933333333333334,
+        top: 0.5769140164899882,
+        bottom: 0.5872791519434629
+      )
+
+      RelativeDateTerm.create(
+        text: 'Fällig bei Erhalt',
+        left: 0.11866666666666667,
+        right: 0.16933333333333334,
+        top: 0.5769140164899882,
+        bottom: 0.5872791519434629
+      )
+
+      due_date = DateCalculation.new.due_date
+      expect(due_date).to eq DateTime.iso8601('2016-10-15')
+    end
   end
 end
