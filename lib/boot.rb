@@ -117,6 +117,8 @@ DB.create_table :invoice_number_terms do
   Float :right
   Float :top
   Float :bottom
+  Integer :first_word_id
+  TrueClass :needs_label
 end
 
 DB.create_table :invoice_number_label_terms do

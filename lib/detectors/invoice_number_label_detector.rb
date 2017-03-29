@@ -2,14 +2,19 @@
 require_relative '../models/invoice_number_label_term'
 
 class InvoiceNumberLabelDetector
-  INVOICE_NUMBER_LABELS = /(Re-Nr:)/
-
+  INVOICE_NUMBER_LABELS =
+    /(Re-Nr:|Bon-ID|Rech.Nr:|Rechnungsnummer:|Rechnung:|Rechnungsnummer|Beleg-nr.:)/
+  MULTI_WORD_INVOICE_NUMBER_LABELS =
+    /(Invoice number:|Billing ID|Rechnung Nr.:)/
   def self.filter
     end_word_with_space = ->(term) { term.text += ' ' }
+
     find_invoice_number_labels(
-      INVOICE_NUMBER_LABELS,
+      MULTI_WORD_INVOICE_NUMBER_LABELS,
       after_each_word: end_word_with_space
     )
+    find_invoice_number_labels(INVOICE_NUMBER_LABELS)
+
     InvoiceNumberLabelTerm.dataset
   end
 

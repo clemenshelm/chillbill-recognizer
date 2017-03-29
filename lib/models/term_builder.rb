@@ -47,5 +47,6 @@ class TermBuilder
         return builder.text if builder.valid?
       end
     end
+    ''
   end
 end
