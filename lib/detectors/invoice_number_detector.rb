@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 require_relative '../boot'
 require_relative '../models/invoice_number_term'
-require_relative '../models/dimensionable'
 
 class InvoiceNumberDetector
-  include Dimensionable
 
   COMMON_SHOP_RECEIPT_NUMBER_REGEX = /\d{4}-\d{8}-\d{2}-\d{4}/
   SPAR_RECEIPT_NUMBER_REGEX = /\d{4} \d{2} \d{4} \d{6} \d{4}/
