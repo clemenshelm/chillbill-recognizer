@@ -7,7 +7,7 @@ describe InvoiceNumberTerm do
     expect(term.to_s).to eq '0547-20151202-02-5059'
   end
 
-  it "handles unlabeled invoice number" do
+  it 'handles unlabeled invoice number' do
     # From 6bWSXJ7fdLRbtbzaE.pdf
     term = InvoiceNumberTerm.new(
       text: '3521 634/092/001/20',
@@ -17,9 +17,8 @@ describe InvoiceNumberTerm do
       bottom: 0.2986802500578838,
       needs_label: true
     )
-    
+
     expect(term.to_s).to eq '3521 634/092/001/20'
     expect(term.needs_label).to eq true
-
   end
 end

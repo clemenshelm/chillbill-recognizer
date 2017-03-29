@@ -7,14 +7,12 @@ class InvoiceNumberCalculation
   def invoice_number
     return nil if InvoiceNumberTerm.empty?
     if InvoiceNumberLabelTerm.any?
-      invoice_number = InvoiceNumberTerm.right_after(InvoiceNumberLabelTerm.first) || InvoiceNumberTerm.right_below(InvoiceNumberLabelTerm.first)
+      invoice_number =
+        InvoiceNumberTerm.right_after(InvoiceNumberLabelTerm.first) ||
+        InvoiceNumberTerm.right_below(InvoiceNumberLabelTerm.first)
     else
       invoice_number = InvoiceNumberTerm.where(needs_label: true).first
     end
-    if invoice_number
-      invoice_number.to_s
-    else
-      nil
-    end
+    invoice_number.to_s if invoice_number
   end
 end

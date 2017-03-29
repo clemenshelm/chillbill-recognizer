@@ -60,8 +60,8 @@ describe InvoiceNumberLabelDetector do
       bottom: 0.45279962980101807
     )
 
-  invoice_number_labels = InvoiceNumberLabelDetector.filter
-  expect(invoice_number_labels.map(&:to_s)).to eq ['Rechnungsnummer:']
+    invoice_number_labels = InvoiceNumberLabelDetector.filter
+    expect(invoice_number_labels.map(&:to_s)).to eq ['Rechnungsnummer:']
   end
 
   it "detects the invoice number label 'Rechnung:'" do

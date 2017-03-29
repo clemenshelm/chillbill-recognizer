@@ -101,7 +101,7 @@ describe Dimensionable do
     end
   end
 
-    describe '#right_after' do
+  describe '#right_after' do
     it 'can detect the term after another term' do
       DateTerm.create(
         text: '10.04.2015',
@@ -293,7 +293,7 @@ describe Dimensionable do
   end
 
   describe '#right_below' do
-    it "detects a word directly below another" do
+    it 'detects a word directly below another' do
       # From Z6vrodr97FEZXXotA.pdf
       first_word = create(
         :word,

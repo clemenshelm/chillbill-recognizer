@@ -74,7 +74,7 @@ describe InvoiceNumberDetector do
     ]
   end
 
-  it "detects a DriveNow invoice number" do
+  it 'detects a DriveNow invoice number' do
     # From Thoii6YdqScSdPFZu.pdf
     create(
       :word,
@@ -90,7 +90,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['9344001433/00/M/00/N']
   end
 
-  it "detects an A1 invoice number" do
+  it 'detects an A1 invoice number' do
     # From fHuyd8GiytvSxJhSH.pdf
     create(
       :word,
@@ -106,8 +106,8 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['295133643413']
   end
 
-  it "detects an easyname invoice number" do
-    #From PTaeSF8Baw7F44FGT.pdf
+  it 'detects an easyname invoice number' do
+    # From PTaeSF8Baw7F44FGT.pdf
     create(
       :word,
       text: 'RE0335510',
@@ -121,7 +121,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['RE0335510']
   end
 
-  it "detects a Google invoice number" do
+  it 'detects a Google invoice number' do
     # From JzcFZfs2jm8C5eh7b.pdf
     create(
       :word,
@@ -136,7 +136,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['8640773779761846-5']
   end
 
-  it "detects an Google billing ID" do
+  it 'detects an Google billing ID' do
     # From GuhNJ5oRyWN5z92Rk.pdf
     create(
       :word,
@@ -151,7 +151,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['3199-8987-5671']
   end
 
-  it "detects a Google invoice number with a different number of digits" do
+  it 'detects a Google invoice number with a different number of digits' do
     # From 25owtvtff6GnuZHRo.pdf
     create(
       :word,
@@ -166,7 +166,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['360661687549-10']
   end
 
-  it "detects a Hofer invoice number" do
+  it 'detects a Hofer invoice number' do
     # From 6bWSXJ7fdLRbtbzaE.pdf
     create(
       :word,
@@ -190,7 +190,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['3521 634/092/001/20']
   end
 
-  it "detects a Drei invoice number" do
+  it 'detects a Drei invoice number' do
     # From Z6vrodr97FEZXXotA.pdf
     create(
       :word,
@@ -205,7 +205,7 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['6117223355']
   end
 
-  it "detects a Drei receipt invoice number" do
+  it 'detects a Drei receipt invoice number' do
     # From 4CodL4nWuXkwcsGQq.pdf
     create(
       :word,
@@ -214,9 +214,9 @@ describe InvoiceNumberDetector do
       right: 0.506217277486911,
       top: 0.24491211840888066,
       bottom: 0.25161887141535616
-      )
+    )
 
-      invoice_numbers = InvoiceNumberDetector.filter
-      expect(invoice_numbers.map(&:to_s)).to eq ['5873']
+    invoice_numbers = InvoiceNumberDetector.filter
+    expect(invoice_numbers.map(&:to_s)).to eq ['5873']
   end
 end

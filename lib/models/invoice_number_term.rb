@@ -10,7 +10,7 @@ class InvoiceNumberTerm < Sequel::Model
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
       after_each_word: attrs.delete(:after_each_word),
-      max_words: attrs.delete(:max_words),
+      max_words: attrs.delete(:max_words)
     )
     super
   end

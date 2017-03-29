@@ -21,7 +21,9 @@ describe InvoiceNumberCalculation do
 
     invoice_number_calculation = InvoiceNumberCalculation.new
 
-    expect(invoice_number_calculation.invoice_number).to eq '0547-20151202-02-5059'
+    expect(
+      invoice_number_calculation.invoice_number
+    ).to eq '0547-20151202-02-5059'
   end
 
   it 'returns nil if there is no invoice number' do
@@ -29,7 +31,7 @@ describe InvoiceNumberCalculation do
     expect(invoice_number.invoice_number).to be_nil
   end
 
-  it "returns an invoice number that is below its label" do
+  it 'returns an invoice number that is below its label' do
     # From Z6vrodr97FEZXXotA.pdf
     InvoiceNumberLabelTerm.create(
       text: 'Rechnungsnummer',
@@ -52,7 +54,7 @@ describe InvoiceNumberCalculation do
     expect(invoice_number_calculation.invoice_number).to eq '6117223355'
   end
 
-  it "returns nil if there are unlabelled invoice numbers that need a label" do
+  it 'returns nil if there are unlabelled invoice numbers that need a label' do
     InvoiceNumberTerm.create(
       text: '6117223355',
       left: 0.19136408243375858,
