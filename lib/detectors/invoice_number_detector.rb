@@ -3,7 +3,6 @@ require_relative '../boot'
 require_relative '../models/invoice_number_term'
 
 class InvoiceNumberDetector
-
   COMMON_SHOP_RECEIPT_NUMBER_REGEX = /\d{4}-\d{8}-\d{2}-\d{4}/
   SPAR_RECEIPT_NUMBER_REGEX = /\d{4} \d{2} \d{4} \d{6} \d{4}/
   DRIVE_NOW_INVOICE_NUMBER_REGEX = %r(\d{10}\/00\/M\/00\/N)
