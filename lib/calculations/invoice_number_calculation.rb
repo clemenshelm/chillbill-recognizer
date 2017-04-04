@@ -6,12 +6,13 @@ require_relative '../models/dimensionable'
 class InvoiceNumberCalculation
   def invoice_number
     return nil if InvoiceNumberTerm.empty?
-    if InvoiceNumberLabelTerm.any?
+    label = InvoiceNumberLabelTerm.first
+    if label
       invoice_number =
-        InvoiceNumberTerm.right_after(InvoiceNumberLabelTerm.first) ||
-        InvoiceNumberTerm.right_below(InvoiceNumberLabelTerm.first)
+        InvoiceNumberTerm.right_after(label) ||
+        InvoiceNumberTerm.right_below(label)
     else
-      invoice_number = InvoiceNumberTerm.where(needs_label: true).first
+      invoice_number = InvoiceNumberTerm.where(needs_label: nil).first
     end
     invoice_number.to_s if invoice_number
   end
