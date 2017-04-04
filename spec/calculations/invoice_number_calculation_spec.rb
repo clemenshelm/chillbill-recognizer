@@ -60,10 +60,11 @@ describe InvoiceNumberCalculation do
       left: 0.19136408243375858,
       right: 0.2832842656198888,
       top: 0.014341892204487625,
-      bottom: 0.022900763358778626
+      bottom: 0.022900763358778626,
+      needs_label: true
     )
 
-    invoice_number = InvoiceNumberCalculation.new
-    expect(invoice_number.invoice_number).to be_nil
+    invoice_number_calculation = InvoiceNumberCalculation.new
+    expect(invoice_number_calculation.invoice_number).to be_nil
   end
 end
