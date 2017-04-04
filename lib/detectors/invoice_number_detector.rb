@@ -48,7 +48,7 @@ class InvoiceNumberDetector
       HOFER_INVOICE_NUMBER_REGEX,
       after_each_word: end_word_with_space,
       max_words: 2,
-      needs_label: true
+      needs_label: nil
     )
     words += find_invoice_numbers(
       Word.all,
@@ -63,7 +63,7 @@ class InvoiceNumberDetector
     private
 
       def find_invoice_numbers(
-        words, regex, after_each_word: nil, max_words: nil, needs_label: nil
+        words, regex, after_each_word: nil, max_words: nil, needs_label: true
       )
         affected_words = []
         term = initialize_new_term(
