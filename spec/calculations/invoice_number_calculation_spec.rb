@@ -27,8 +27,8 @@ describe InvoiceNumberCalculation do
   end
 
   it 'returns nil if there is no invoice number' do
-    invoice_number = InvoiceNumberCalculation.new
-    expect(invoice_number.invoice_number).to be_nil
+    invoice_number_calculation = InvoiceNumberCalculation.new
+    expect(invoice_number_calculation.invoice_number).to be_nil
   end
 
   it 'returns an invoice number that is below its label' do
