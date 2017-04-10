@@ -580,4 +580,82 @@ describe VatNumberDetector do
     vat_numbers = VatNumberDetector.filter
     expect(vat_numbers.map(&:to_s)).to eq ['DE147645058']
   end
+
+  # Many samples to show that the test fails
+  it 'detects nothing if median high is low' do
+    create(
+      :word,
+      text: 'Wasser,',
+      left: 0.5893324607329843,
+      right: 0.6256544502617801,
+      top: 0.8529139685476411,
+      bottom: 0.8596207215541165
+    )
+
+    create(
+      :word,
+      text: 'im',
+      left: 0.7074607329842932,
+      right: 0.7169502617801047,
+      top: 0.853145235892692,
+      bottom: 0.8586956521739131
+    )
+
+    create(
+      :word,
+      text: 'rät',
+      left: 0.7342931937172775,
+      right: 0.7454188481675392,
+      top: 0.8533765032377428,
+      bottom: 0.8589269195189639
+    )
+
+    create(
+      :word,
+      text: 'befinden.',
+      left: 0.7486910994764397,
+      right: 0.7886125654450262,
+      top: 0.853145235892692,
+      bottom: 0.8589269195189639
+    )
+
+    create(
+      :word,
+      text: 'Alle',
+      left: 0.7925392670157068,
+      right: 0.8092277486910995,
+      top: 0.8533765032377428,
+      bottom: 0.8591581868640148
+    )
+
+    create(
+      :word,
+      text: 'Lieferungen',
+      left: 0.0281413612565445,
+      right: 0.08049738219895287,
+      top: 0.8596207215541165,
+      bottom: 0.8670212765957447
+    )
+
+    create(
+      :word,
+      text: 'die',
+      left: 0.1580497382198953,
+      right: 0.17113874345549737,
+      top: 0.8598519888991675,
+      bottom: 0.8656336725254394
+    )
+
+    create(
+      :word,
+      text: 'ATU65315367',
+      left: 0.0824607329842932,
+      right: 0.20026178010471204,
+      top: 0.16281221091581868,
+      bottom: 0.17321924144310824
+    )
+
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to be_empty
+  end
 end
