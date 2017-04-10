@@ -18,7 +18,6 @@ require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
-require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
@@ -137,15 +136,15 @@ class BillRecognizer
     hocr_doc = Nokogiri::HTML(hocr)
     create_words_from_hocr(hocr_doc)
 
-    #  puts Word.map { |word|
-    #    "
-    #    text: \'#{word.text}\',
-    #    left: #{word.left},
-    #    right: #{word.right},
-    #    top: #{word.top},
-    #    bottom: #{word.bottom}
-    #    "
-    #  }
+    #    puts Word.map { |word|
+    #      "
+    #      text: \'#{word.text}\',
+    #      left: #{word.left},
+    #      right: #{word.right},
+    #      top: #{word.top},
+    #      bottom: #{word.bottom}
+    #      "
+    #    }
   end
 
   def perform_ocr(png_file)
