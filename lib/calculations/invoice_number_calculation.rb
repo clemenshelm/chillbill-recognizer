@@ -12,7 +12,7 @@ class InvoiceNumberCalculation
         InvoiceNumberTerm.right_after(label) ||
         InvoiceNumberTerm.right_below(label)
     else
-      invoice_number = InvoiceNumberTerm.where(needs_label: nil).first
+      invoice_number = InvoiceNumberTerm.where(needs_label: false).first
     end
     invoice_number.to_s if invoice_number
   end

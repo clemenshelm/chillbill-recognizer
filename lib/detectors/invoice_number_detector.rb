@@ -48,7 +48,7 @@ class InvoiceNumberDetector
       HOFER_INVOICE_NUMBER_REGEX,
       after_each_word: end_word_with_space,
       max_words: 2,
-      needs_label: nil
+      needs_label: false
     )
     words += find_invoice_numbers(
       Word.all,
