@@ -2,7 +2,7 @@
 require_relative '../models/invoice_number_label_term'
 
 class InvoiceNumberLabelDetector
-  INVOICE_NUMBER_LABELS= %w(
+  INVOICE_NUMBER_LABELS = %w(
     Re-Nr: Bon-ID Rech.Nr: Beleg-nr.: Rechnungsnummer: Rechnung: Rechnungsnummer
   ).freeze
   MULTI_WORD_INVOICE_NUMBER_LABELS_REGEX =
