@@ -1,0 +1,16 @@
+amount_tuples:
+  -
+    vat_rate: 25
+    common_width: 0.050065445026178046
+    common_height: 0.08302497687326549
+    valid_amount: false
+  -
+    vat_rate: 25
+    common_width: 0.05399214659685869
+    common_height: 0.027058279370952842
+    valid_amount: false
+  -
+    vat_rate: 20
+    common_width: 0.06446335078534038
+    common_height: 0.039084181313598476
+    valid_amount: true

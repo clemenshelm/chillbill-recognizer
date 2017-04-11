@@ -39,6 +39,9 @@ gem 'valvat', '~> 0.6.10'
 # Ruby linter
 gem 'rubocop', require: false
 
+# Machine learning
+gem 'rb-libsvm'
+
 group :development do
   gem 'colorize' # Colorizes shell output
   gem 'rake'
