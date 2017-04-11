@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require_relative '../../lib/boot'
-require_relative '../../lib/models/date_term'
 
 describe DateTerm do
   it 'recognizes dates with a two-digit year correctly' do
