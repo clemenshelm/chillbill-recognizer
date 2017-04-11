@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+require_relative 'spec/spec_cache_retriever'
+require_relative 'lib/bill_recognizer'
+
 namespace :tmp do
   desc 'Clears all cached artifacts'
   task :clear do
@@ -55,18 +58,24 @@ task machine_learning: :setup_processing do
   amount_tuples = Dir['machine_learning/training/*.yml'].flat_map do |file|
     YAML.load_file(file)['amount_tuples']
   end
+  puts 'amount tuples'
+  puts amount_tuples.inspect
   training_values = amount_tuples.map do |tuple|
     [tuple['vat_rate'], tuple['common_width'], tuple['common_height']]
   end
+  puts 'training values'
+  puts training_values.inspect
   max_values = training_values.reduce([0, 0, 0]) do |max, current|
     max.zip(current).map(&:max).map(&:to_f)
   end
+  puts 'max values'
   puts max_values.inspect
   scaled_training_values = training_values.map do |training_set|
     training_set.zip(max_values).map { |t, m| t / m }
   end
+  puts 'scaled training values'
   puts scaled_training_values.inspect
-  labels = amount_tuples.map { |tuple| tuple['valid_amount'] ? 1 : 0 }
+  labels = amount_tuples.map { |tuple| tuple['valid_amount'] ? 1 : -1 }
   puts labels.inspect
 
   examples = scaled_training_values.map {|ary| Libsvm::Node.features(ary) }
@@ -84,6 +93,14 @@ task machine_learning: :setup_processing do
     puts correct ? 'correct' : 'wrong'
     puts "Example #{test_set} - Predicted #{pred}"
   end
+end
+
+desc 'Generate machine learning test data for a bill'
+task :generate_test_data do
+  retriever = SpecCacheRetriever.new(file_basename: 'GgDYmLfoXxeQ7t8F7.pdf')
+  recognizer = BillRecognizer.new(retriever: retriever)
+
+  bill_attributes = recognizer.recognize
 end
 
 def process(bill_kind, queue, &bill_proc)

@@ -17,11 +17,4 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
     expect(bill_attributes[:clockwiseRotationsRequired]).to eq 0
   end
-
-  it 'recognizes the bill 5CCkGCCprokPBy2o6', :focus do
-    retriever = SpecCacheRetriever.new(file_basename: 'kk4FafcZqvCCC64BY.pdf')
-    recognizer = BillRecognizer.new(retriever: retriever)
-
-    bill_attributes = recognizer.recognize
-  end
 end
