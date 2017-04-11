@@ -4,6 +4,7 @@ require 'bigdecimal'
 require 'pry'
 require 'nokogiri'
 require 'yaml'
+require 'qrio'
 require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
@@ -117,17 +118,25 @@ class BillRecognizer
     image = ImageProcessor.new(image_path)
 
     @clockwise_rotations_required = image.calculate_clockwise_rotations_required
-
     image = image.correct_orientation
+
     @width = image.image_width
     @height = image.image_height
 
-    image.apply_background('#fff')
+    png_file = image.apply_background('#fff')
          .deskew
          .normalize
          .trim
          .improve_level
          .write_png!
+    begin
+      Qrio::Qr.load(png_file.path).qr.text
+      @qr_code_present = true
+    rescue NoMethodError
+      @qr_code_present = false
+    end
+
+    png_file
   end
 
   def recognize_words(png_file)
@@ -205,6 +214,7 @@ class BillRecognizer
       dueDate: calculate_due_date,
       iban: calculate_iban,
       clockwiseRotationsRequired: @clockwise_rotations_required,
+      qrCodePresent: @qr_code_present,
       recognizerVersion: version
     }
   end
