@@ -16,7 +16,7 @@ class DateDetector
   LONG_SLASH_DATE_REGEX = %r{((?:#{days})/(?:#{months})/\d{4}$)}
   AMERICAN_LONG_SLASH_DATE_REGEX = %r{((?:#{months})/(?:#{days})/\d{4}$)}
   FULL_GERMAN_DATE_REGEX =
-    /(\d+\. (?:März|April|August|September|Oktober|Dezember) \d{4})/
+    /(\d+\. (?:Februar|März|April|August|September|Oktober|Dezember) \d{4})/
   FULL_ENGLISH_DATE_REGEX = /(\d{2} (?:March|May|October) \d{4})/
   LONG_HUNGARIAN_DATE_REGEX = /20\d{2}\.(?:#{months})\.(?:#{days})/
   FULL_ENGLISH_COMMA_DATE_REGEX = /((?:August) \d{2}\, \d{4})/
@@ -25,12 +25,12 @@ class DateDetector
     reduced_words = filter_out_interefering_date_terms
     find_long_dates_with_periods(reduced_words)
 
+    find_multi_word_dates(reduced_words)
     find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, AMERICAN_LONG_SLASH_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
     find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
-    find_multi_word_dates(reduced_words)
 
     DateTerm.order(:first_word_id)
   end

@@ -324,6 +324,38 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-03-16', '2016-03-21']
   end
 
+  it 'detects Februar' do
+    # From vGmK76dSSMrLQ8axN.pdf
+    create(
+      :word,
+      text: '27.',
+      left: 0.0003333333333333333,
+      right: 0.014,
+      top: 0.5585394581861013,
+      bottom: 0.5656065959952886
+    )
+
+    create(
+      :word,
+      text: 'Februar',
+      left: 0.018666666666666668,
+      right: 0.06533333333333333,
+      top: 0.5587750294464076,
+      bottom: 0.5656065959952886
+    )
+
+    create(
+      :word,
+      text: '2017',
+      left: 0.06833333333333333,
+      right: 0.09666666666666666,
+      top: 0.5585394581861013,
+      bottom: 0.5656065959952886
+    )
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2017-02-27']
+  end
+
   it 'detects October' do
     # From m4F2bLmpKn7wPqM7q.pdf
 
