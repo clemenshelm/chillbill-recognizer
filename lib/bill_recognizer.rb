@@ -124,11 +124,11 @@ class BillRecognizer
     @height = image.image_height
 
     png_file = image.apply_background('#fff')
-         .deskew
-         .normalize
-         .trim
-         .improve_level
-         .write_png!
+                    .deskew
+                    .normalize
+                    .trim
+                    .improve_level
+                    .write_png!
     begin
       Qrio::Qr.load(png_file.path).qr.text
       @qr_code_present = true
