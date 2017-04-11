@@ -39,6 +39,9 @@ gem 'valvat', '~> 0.6.10'
 # Ruby linter
 gem 'rubocop', require: false
 
+# QR Code reader
+gem 'qrio', '~> 0.0.1'
+
 group :development do
   gem 'colorize' # Colorizes shell output
   gem 'rake'
