@@ -192,6 +192,36 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['€1,202.16']
   end
 
+  it 'does not detect numbers with only one decimal digit' do
+    # from bill kk4FafcZqvCCC64BY.pdf
+    create(
+      :word,
+      text: '3.0',
+      left: 0.48528449967298887,
+      right: 0.5032701111837803,
+      top: 0.42298797409805733,
+      bottom: 0.4296947271045328
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect vat-rate as price' do
+    # from bill BYnCDzw7nNMFergRW.pdf
+    create(
+      :word,
+      text: '20,00%',
+      left: 0.5981033355134074,
+      right: 0.6530412034009156,
+      top: 0.4898242368177613,
+      bottom: 0.5
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
