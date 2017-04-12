@@ -38,7 +38,10 @@ The installation will also include docker-compose, which you will need, so for n
 1. Install [Docker](https://docs.docker.com/engine/installation/linux/ubuntu/). _Remember to get the Community Edition (CE)!_
 3. Install Docker Compose, [here’s a very good guide](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04).
 
+
 # Docker Set-Up
+> REMEMBER: If using Ubuntu, all docker commands AND docker compose commands need to be run with sudo!
+
 _Make sure Docker is running with docker info:_
 ```shell
 docker info
