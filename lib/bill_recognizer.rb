@@ -101,6 +101,7 @@ class BillRecognizer
       }
     end
 
+    detect_qr_code(png_file)
     recognize_words(png_file)
     filter_words
 
@@ -132,20 +133,19 @@ class BillRecognizer
     @width = image.image_width
     @height = image.image_height
 
-    png_file = image.apply_background('#fff')
-                    .deskew
-                    .normalize
-                    .trim
-                    .improve_level
-                    .write_png!
-    begin
-      Qrio::Qr.load(png_file.path).qr.text
-      @qr_code_present = true
-    rescue NoMethodError
-      @qr_code_present = false
-    end
+    image.apply_background('#fff')
+         .deskew
+         .normalize
+         .trim
+         .improve_level
+         .write_png!
+  end
 
-    png_file
+  def detect_qr_code(png_file)
+    Qrio::Qr.load(png_file.path).qr.text
+    @qr_code_present = true
+  rescue NoMethodError
+    @qr_code_present = false
   end
 
   def recognize_words(png_file)
