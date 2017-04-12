@@ -581,8 +581,193 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['DE147645058']
   end
 
-  # Many samples to show that the test fails
-  it 'detects nothing if median high is low' do
+  # Large sample size due to median height factor
+  it 'detects a VAT ID number using a larger median height' do
+    # from bill KsWubxamfEAwc7CfT.pdf
+    create(
+      :word,
+      text: '*',
+      left: 0.12238219895287958,
+      right: 0.12467277486910995,
+      top: 0.1343663274745606,
+      bottom: 0.13598519888991675
+    )
+
+    create(
+      :word,
+      text: 'E-Mail',
+      left: 0.649869109947644,
+      right: 0.6858638743455497,
+      top: 0.13020351526364476,
+      bottom: 0.13852913968547642
+    )
+
+    create(
+      :word,
+      text: 'hallo@espresso-',
+      left: 0.6904450261780105,
+      right: 0.7895942408376964,
+      top: 0.12974098057354302,
+      bottom: 0.14061054579093432
+    )
+
+    create(
+      :word,
+      text: 'rego.de',
+      left: 0.7977748691099477,
+      right: 0.8416230366492147,
+      top: 0.12974098057354302,
+      bottom: 0.14037927844588344
+    )
+
+    create(
+      :word,
+      text: 'VINOVUM',
+      left: 0.006544502617801047,
+      right: 0.08736910994764398,
+      top: 0.13459759481961148,
+      bottom: 0.1440795559666975
+    )
+
+    create(
+      :word,
+      text: 'Wemhandd',
+      left: 0.09554973821989529,
+      right: 0.19142670157068062,
+      top: 0.13367252543940797,
+      bottom: 0.15032377428307123
+    )
+
+    create(
+      :word,
+
+      text: 'OG',
+      left: 0.19960732984293195,
+      right: 0.22349476439790575,
+      top: 0.13367252543940797,
+      bottom: 0.143154486586494
+    )
+
+    create(
+      :word,
+      text: 'Steuernummer:',
+      left: 0.6665575916230366,
+      right: 0.756544502617801,
+      top: 0.14061054579093432,
+      bottom: 0.14939870490286772
+    )
+
+    create(
+      :word,
+      text: '43/2',
+      left: 0.7611256544502618,
+      right: 0.7866492146596858,
+      top: 0.14061054579093432,
+      bottom: 0.14893617021276595
+    )
+
+    create(
+      :word,
+      text: '5/01876',
+      left: 0.7945026178010471,
+      right: 0.8419502617801047,
+      top: 0.14037927844588344,
+      bottom: 0.14893617021276595
+    )
+
+    create(
+      :word,
+      text: 'Inhaber:',
+      left: 0.007526178010471204,
+      right: 0.07787958115183247,
+      top: 0.14870490286771507,
+      bottom: 0.158418131359852
+    )
+
+    create(
+      :word,
+
+      text: 'Nina',
+      left: 0.08769633507853403,
+      right: 0.12303664921465969,
+      top: 0.14893617021276595,
+      bottom: 0.15818686401480112
+    )
+
+    create(
+      :word,
+      text: 'Trefner',
+      left: 0.12958115183246074,
+      right: 0.18848167539267016,
+      top: 0.14801110083256244,
+      bottom: 0.15795559666975023
+    )
+
+    create(
+      :word,
+
+      text: 'Usrlpg',
+      left: 0.7143324607329843,
+      right: 0.7526178010471204,
+      top: 0.15148011100832562,
+      bottom: 0.16443108233117484
+    )
+
+    create(
+      :word,
+
+      text: '05227921502',
+      left: 0.7578534031413613,
+      right: 0.8419502617801047,
+      top: 0.15148011100832562,
+      bottom: 0.16026827012025902
+    )
+
+    create(
+      :word,
+      text: 'UST-ID:',
+      left: 0.007853403141361256,
+      right: 0.07362565445026178,
+      top: 0.16350601295097134,
+      bottom: 0.17345050878815912
+    )
+
+    create(
+      :word,
+      text: 'ATU65315367',
+      left: 0.0824607329842932,
+      right: 0.20026178010471204,
+      top: 0.16281221091581868,
+      bottom: 0.17321924144310824
+    )
+
+    create(
+      :word,
+      text: 'können',
+      left: 0.49705497382198954,
+      right: 0.5291230366492147,
+      top: 0.8529139685476411,
+      bottom: 0.8586956521739131
+    )
+
+    create(
+      :word,
+      text: 'sich',
+      left: 0.5330497382198953,
+      right: 0.550065445026178,
+      top: 0.8529139685476411,
+      bottom: 0.8586956521739131
+    )
+
+    create(
+      :word,
+      text: 'geringe',
+      left: 0.5536649214659686,
+      right: 0.5863874345549738,
+      top: 0.853145235892692,
+      bottom: 0.8600832562442183
+    )
+
     create(
       :word,
       text: 'Wasser,',
@@ -590,6 +775,24 @@ describe VatNumberDetector do
       right: 0.6256544502617801,
       top: 0.8529139685476411,
       bottom: 0.8596207215541165
+    )
+
+    create(
+      :word,
+      text: 'bzw.',
+      left: 0.6295811518324608,
+      right: 0.6492146596858639,
+      top: 0.8529139685476411,
+      bottom: 0.8586956521739131
+    )
+
+    create(
+      :word,
+      text: 'Kaffeereste',
+      left: 0.6534685863874345,
+      right: 0.7041884816753927,
+      top: 0.8529139685476411,
+      bottom: 0.8589269195189639
     )
 
     create(
@@ -610,52 +813,7 @@ describe VatNumberDetector do
       bottom: 0.8589269195189639
     )
 
-    create(
-      :word,
-      text: 'befinden.',
-      left: 0.7486910994764397,
-      right: 0.7886125654450262,
-      top: 0.853145235892692,
-      bottom: 0.8589269195189639
-    )
-
-    create(
-      :word,
-      text: 'Alle',
-      left: 0.7925392670157068,
-      right: 0.8092277486910995,
-      top: 0.8533765032377428,
-      bottom: 0.8591581868640148
-    )
-
-    create(
-      :word,
-      text: 'Lieferungen',
-      left: 0.0281413612565445,
-      right: 0.08049738219895287,
-      top: 0.8596207215541165,
-      bottom: 0.8670212765957447
-    )
-
-    create(
-      :word,
-      text: 'die',
-      left: 0.1580497382198953,
-      right: 0.17113874345549737,
-      top: 0.8598519888991675,
-      bottom: 0.8656336725254394
-    )
-
-    create(
-      :word,
-      text: 'ATU65315367',
-      left: 0.0824607329842932,
-      right: 0.20026178010471204,
-      top: 0.16281221091581868,
-      bottom: 0.17321924144310824
-    )
-
     vat_numbers = VatNumberDetector.filter
-    expect(vat_numbers.map(&:to_s)).to be_empty
+    expect(vat_numbers.map(&:to_s)).to eq ['ATU65315367']
   end
 end
