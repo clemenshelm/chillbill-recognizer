@@ -18,6 +18,7 @@ GEM
     aws-sdk-resources (2.6.43)
       aws-sdk-core (= 2.6.43)
     aws-sigv4 (1.0.0)
+    bson (4.2.1)
     builder (3.2.2)
     coderay (1.1.1)
     colorize (0.8.1)
@@ -68,6 +69,8 @@ GEM
       faye-websocket (~> 0.10)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
+    mongo (2.4.1)
+      bson (>= 4.2.1, < 5.0.0)
     nenv (0.3.0)
     nokogiri (1.7.0)
       mini_portile2 (~> 2.1.0)
@@ -158,6 +161,7 @@ DEPENDENCIES
   factory_girl (~> 4.0)
   guard-rspec
   metybur (= 0.4.3)
+  mongo
   nokogiri
   null-logger
   pry

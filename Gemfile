@@ -45,6 +45,7 @@ gem 'rb-libsvm'
 group :development do
   gem 'colorize' # Colorizes shell output
   gem 'rake'
+  gem 'mongo'
 end
 
 group :development, :test do

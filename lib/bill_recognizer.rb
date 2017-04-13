@@ -97,8 +97,6 @@ class BillRecognizer
     calculate_attributes(version)
   end
 
-  private
-
   def empty_database
     TABLES.each { |table| table.dataset.delete }
   end
