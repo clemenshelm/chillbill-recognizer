@@ -118,6 +118,13 @@ class BillRecognizer
     version_data['Version']
   end
 
+  def create_bill_config
+    attributes = YAML.load_file "lib/bill_config.yml"
+    attributes['bill_width'] = @width
+    attributes['bill_height'] = @height
+    File.open("lib/bill_config.yml", "w") { |f| YAML.dump(attributes, f) }
+  end
+
   def download_and_convert_image
     image_file = @retriever.save
     preprocess(image_file.path)
@@ -131,6 +138,7 @@ class BillRecognizer
 
     @width = image.image_width
     @height = image.image_height
+    create_bill_config
 
     image.apply_background('#fff')
          .deskew
