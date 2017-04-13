@@ -581,7 +581,7 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['DE147645058']
   end
 
-  it 'detects Austrian vat in lower case' do
+  it 'detects Austrian VAT ID number in lower case' do
     create(
       :word,
       text: 'atu',
@@ -601,6 +601,6 @@ describe VatNumberDetector do
     )
 
     vat_numbers = VatNumberDetector.filter
-    expect(vat_numbers.map(&:to_s)).to eq ['atu67318155']
+    expect(vat_numbers.map(&:to_s)).to eq ['ATU67318155']
   end
 end
