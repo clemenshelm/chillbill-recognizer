@@ -12,13 +12,13 @@ require_relative './calculations/vat_number_calculation'
 require_relative './calculations/iban_calculation'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
+require_relative './calculations/invoice_number_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
-require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
@@ -26,6 +26,8 @@ require_relative './detectors/relative_date_detector'
 require_relative './detectors/invoice_date_label_detector'
 require_relative './detectors/billing_start_label_detector'
 require_relative './detectors/billing_end_label_detector'
+require_relative './detectors/invoice_number_detector'
+require_relative './detectors/invoice_number_label_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -36,6 +38,8 @@ require_relative './models/currency_term'
 require_relative './models/due_date_label_term'
 require_relative './models/billing_start_label_term'
 require_relative './models/billing_end_label_term'
+require_relative './models/invoice_number_label_term'
+require_relative './models/invoice_number_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -55,7 +59,9 @@ class BillRecognizer
     InvoiceDateLabelTerm,
     BillingStartLabelTerm,
     BillingEndLabelTerm,
-    RelativeDateTerm
+    RelativeDateTerm,
+    InvoiceDateLabelTerm,
+    InvoiceNumberTerm
   ].freeze
 
   DETECTORS = [
@@ -69,7 +75,9 @@ class BillRecognizer
     RelativeDateDetector,
     InvoiceDateLabelDetector,
     BillingStartLabelDetector,
-    BillingEndLabelDetector
+    BillingEndLabelDetector,
+    InvoiceNumberLabelDetector,
+    InvoiceNumberDetector
   ].freeze
 
   def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
@@ -204,6 +212,7 @@ class BillRecognizer
       currencyCode: calculate_currency,
       dueDate: calculate_due_date,
       iban: calculate_iban,
+      invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @clockwise_rotations_required,
       recognizerVersion: version
     }
@@ -257,5 +266,9 @@ class BillRecognizer
 
   def calculate_iban
     IbanCalculation.new.iban
+  end
+
+  def calculate_invoice_number
+    InvoiceNumberCalculation.new.invoice_number
   end
 end

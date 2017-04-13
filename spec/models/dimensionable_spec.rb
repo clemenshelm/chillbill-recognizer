@@ -101,143 +101,145 @@ describe Dimensionable do
     end
   end
 
-  it 'can detect the term after another term' do
-    DateTerm.create(
-      text: '10.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 213,
-      bottom: 248
-    )
+  describe '#right_after' do
+    it 'can detect the term after another term' do
+      DateTerm.create(
+        text: '10.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 213,
+        bottom: 248
+      )
 
-    DateTerm.create(
-      text: '15.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 274,
-      bottom: 309
-    )
+      DateTerm.create(
+        text: '15.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 274,
+        bottom: 309
+      )
 
-    DateTerm.create(
-      text: '01.03.2015',
-      left: 591,
-      right: 798,
-      top: 773,
-      bottom: 809
-    )
+      DateTerm.create(
+        text: '01.03.2015',
+        left: 591,
+        right: 798,
+        top: 773,
+        bottom: 809
+      )
 
-    following_term = DateTerm.create(
-      text: '31.03.2015',
-      left: 832,
-      right: 1038,
-      top: 773,
-      bottom: 809
-    )
+      following_term = DateTerm.create(
+        text: '31.03.2015',
+        left: 832,
+        right: 1038,
+        top: 773,
+        bottom: 809
+      )
 
-    term = create(
-      :word,
-      text: '-',
-      left: 809,
-      right: 819,
-      top: 794,
-      bottom: 797
-    )
+      term = create(
+        :word,
+        text: '-',
+        left: 809,
+        right: 819,
+        top: 794,
+        bottom: 797
+      )
 
-    result = DateTerm.right_after(term)
-    expect(result).to eq following_term
-  end
+      result = DateTerm.right_after(term)
+      expect(result).to eq following_term
+    end
 
-  it 'detects a term further away' do
-    label = DueDateLabelTerm.create(
-      text: 'Zahlungstermin',
-      left: 0.5700261780104712,
-      right: 0.6659031413612565,
-      top: 0.2837650323774283,
-      bottom: 0.2937095282146161
-    )
+    it 'detects a term further away' do
+      label = DueDateLabelTerm.create(
+        text: 'Zahlungstermin',
+        left: 0.5700261780104712,
+        right: 0.6659031413612565,
+        top: 0.2837650323774283,
+        bottom: 0.2937095282146161
+      )
 
-    date = DateTerm.create(
-      text: '22.11.2016',
-      left: 0.8125,
-      right: 0.8524214659685864,
-      top: 0.2835337650323774,
-      bottom: 0.29162812210915817
-    )
+      date = DateTerm.create(
+        text: '22.11.2016',
+        left: 0.8125,
+        right: 0.8524214659685864,
+        top: 0.2835337650323774,
+        bottom: 0.29162812210915817
+      )
 
-    following_term = DateTerm.right_after(label)
-    expect(following_term).to eq date
-  end
+      following_term = DateTerm.right_after(label)
+      expect(following_term).to eq date
+    end
 
-  it 'does not detect a term very far to the right of the current term' do
-    DateTerm.create(
-      text: '15.04.2015',
-      left: 2194,
-      right: 2397,
-      top: 274,
-      bottom: 309
-    )
+    it 'does not detect a term very far to the right of the current term' do
+      DateTerm.create(
+        text: '15.04.2015',
+        left: 2194,
+        right: 2397,
+        top: 274,
+        bottom: 309
+      )
 
-    term = create(
-      :word,
-      text: '-',
-      left: 809,
-      right: 819,
-      top: 794,
-      bottom: 797
-    )
+      term = create(
+        :word,
+        text: '-',
+        left: 809,
+        right: 819,
+        top: 794,
+        bottom: 797
+      )
 
-    result = DateTerm.right_after(term)
-    expect(result).to eq nil
-  end
+      result = DateTerm.right_after(term)
+      expect(result).to eq nil
+    end
 
-  it 'can detect a word right after another on the same line' do
-    # From BYnCDzw7nNMFergRW.pdf
+    it 'can detect a word right after another on the same line' do
+      # From BYnCDzw7nNMFergRW.pdf
 
-    first_word = create(
-      :word,
-      text: 'Herzlichen',
-      left: 2,
-      right: 197,
-      top: 2223,
-      bottom: 2256
-    )
+      first_word = create(
+        :word,
+        text: 'Herzlichen',
+        left: 2,
+        right: 197,
+        top: 2223,
+        bottom: 2256
+      )
 
-    following_word = create(
-      :word,
-      text: 'Dank',
-      left: 215,
-      right: 310,
-      top: 2223,
-      bottom: 2256
-    )
+      following_word = create(
+        :word,
+        text: 'Dank',
+        left: 215,
+        right: 310,
+        top: 2223,
+        bottom: 2256
+      )
 
-    result = Word.right_after(first_word)
-    expect(result).to eq following_word
-  end
+      result = Word.right_after(first_word)
+      expect(result).to eq following_word
+    end
 
-  it 'can detect a word right after another, slightly below' do
-    # From BYnCDzw7nNMFergRW.pdf
+    it 'can detect a word right after another, slightly below' do
+      # From BYnCDzw7nNMFergRW.pdf
 
-    first_word = create(
-      :word,
-      text: 'Michael',
-      left: 170,
-      right: 310,
-      top: 2397,
-      bottom: 2430
-    )
+      first_word = create(
+        :word,
+        text: 'Michael',
+        left: 170,
+        right: 310,
+        top: 2397,
+        bottom: 2430
+      )
 
-    following_word = create(
-      :word,
-      text: 'Augsten',
-      left: 326,
-      right: 479,
-      top: 2397,
-      bottom: 2439
-    )
+      following_word = create(
+        :word,
+        text: 'Augsten',
+        left: 326,
+        right: 479,
+        top: 2397,
+        bottom: 2439
+      )
 
-    result = Word.right_after(first_word)
-    expect(result).to eq following_word
+      result = Word.right_after(first_word)
+      expect(result).to eq following_word
+    end
   end
 
   describe '#below' do
@@ -287,6 +289,32 @@ describe Dimensionable do
 
       result = Word.below(first_word)
       expect(result).to be_nil
+    end
+  end
+
+  describe '#right_below' do
+    it 'detects a word directly below another' do
+      # From Z6vrodr97FEZXXotA.pdf
+      first_word = create(
+        :word,
+        text: 'Rechnungsnummer',
+        left: 0.1920183186130193,
+        right: 0.34838076545632973,
+        top: 0.0,
+        bottom: 0.011103400416377515
+      )
+
+      word_below = create(
+        :word,
+        text: '6117223355',
+        left: 0.19136408243375858,
+        right: 0.2832842656198888,
+        top: 0.014341892204487625,
+        bottom: 0.022900763358778626
+      )
+
+      result = Word.right_below(first_word)
+      expect(result).to eq word_below
     end
   end
 end
