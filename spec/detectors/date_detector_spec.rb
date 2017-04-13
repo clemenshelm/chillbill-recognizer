@@ -352,6 +352,7 @@ describe DateDetector do
       top: 0.5585394581861013,
       bottom: 0.5656065959952886
     )
+
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2017-02-27']
   end
@@ -385,6 +386,7 @@ describe DateDetector do
       top: 0.5585394581861013,
       bottom: 0.5656065959952886
     )
+
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-10-27']
   end
@@ -742,6 +744,48 @@ describe DateDetector do
     )
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-08-29']
+  end
+
+  it 'detects multi word dates first' do
+    # From vGmK76dSSMrLQ8axN.pdf
+    create(
+      :word,
+      text: '27.',
+      left: 0.0003333333333333333,
+      right: 0.014,
+      top: 0.5585394581861013,
+      bottom: 0.5656065959952886
+    )
+
+    create(
+      :word,
+      text: 'Februar',
+      left: 0.018666666666666668,
+      right: 0.06533333333333333,
+      top: 0.5587750294464076,
+      bottom: 0.5656065959952886
+    )
+
+    create(
+      :word,
+      text: '2017',
+      left: 0.06833333333333333,
+      right: 0.09666666666666666,
+      top: 0.5585394581861013,
+      bottom: 0.5656065959952886
+    )
+
+    create(
+      :word,
+      text: '51/5/38',
+      left: 0.5363219895287958,
+      right: 0.5765706806282722,
+      top: 0.005319148936170213,
+      bottom: 0.01156336725254394
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2017-02-27', '2038-05-01']
   end
 
   def date_strings(date_terms)
