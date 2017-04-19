@@ -145,6 +145,9 @@ class BillRecognizer
     @qr_code_present = true
   rescue NoMethodError
     @qr_code_present = false
+  rescue RuntimeError
+    # This means that a QR code was found but it is the wrong kind
+    @qr_code_present = false
   end
 
   def recognize_words(png_file)
