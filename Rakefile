@@ -102,14 +102,39 @@ task :import_bill_data do
   client = Mongo::Client.new([ '127.0.0.1:3001' ], database: 'meteor')
   bills = client[:bills]
   bills.find(
-    {status: 'pushed', 'recognitionStatistics.allAttributesAreRecognized': true},
+    {
+      status: 'pushed',
+      'recognitionStatistics.allAttributesAreRecognized': true,
+      'accountingRecord.amounts.0.vatRate': {'$ne': 0}
+    },
     {limit: 10}
   ).each do |bill|
-    store = YAML::Store.new("machine_learning/training/#{bill[:_id]}.yml")
+    store = YAML::Store.new("machine_learning/invoices/#{bill[:_id]}.yml")
     store.transaction do
       store['_id'] = bill[:_id]
       store['image_url'] = bill[:imageUrl]
       store['amounts'] = bill[:accountingRecord][:amounts].map(&:to_h)
+    end
+  end
+end
+
+task :add_amount_candidates do
+  require 'yaml/store'
+  Dir['machine_learning/invoices/*.yml'].each do |file|
+    store = YAML::Store.new(file)
+    store.transaction do
+      puts "======="
+      puts "Bill #{store['_id']}:"
+
+      recognizer = BillRecognizer.new(image_url: store['image_url'])
+      recognizer.empty_database
+      png_file = recognizer.download_and_convert_image
+      recognizer.recognize_words(png_file)
+      recognizer.filter_words
+
+      store['amounts'].each do |amount|
+        puts PriceTerm.where(price: amount['total'].to_d * 100)
+      end
     end
   end
 end
@@ -119,6 +144,8 @@ task :add_price_terms do
   Dir['machine_learning/training/*.yml'].each do |file|
     store = YAML::Store.new(file)
     store.transaction do
+      puts "======="
+      puts "Bill #{store['_id']}:"
       recognizer = BillRecognizer.new(image_url: store['image_url'])
       recognizer.empty_database
       png_file = recognizer.download_and_convert_image
@@ -133,7 +160,6 @@ task :add_price_terms do
 
       valid_tuples = amount_tuples.find_all { |t| t[:valid_amount] }
       unless (valid_tuples.size == store['amounts'].size)
-        puts "Bill #{store['_id']}:"
         puts "Valid tuples #{valid_tuples.inspect}"
         puts "amounts: #{store['amounts'].inspect}"
       end
