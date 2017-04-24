@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
-
 describe 'Recognizing bills correctly' do
   it 'recognizes the bill BYnCDzw7nNMFergRW' do
     retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
@@ -16,5 +15,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
     expect(bill_attributes[:clockwiseRotationsRequired]).to eq 0
+    expect(bill_attributes[:qrCodePresent]).to be false
+    expect(bill_attributes[:invoiceNumber]).to be_nil
   end
 end
