@@ -99,13 +99,15 @@ desc 'Import bill data from local mongodb'
 task :import_bill_data do
   require 'mongo'
   require 'yaml/store'
+  existing_ids = Dir['machine_learning/invoices/*.yml'].map { |f| f.match(/([^\/]+)\.yml/)[1] }
   client = Mongo::Client.new([ '127.0.0.1:3001' ], database: 'meteor')
   bills = client[:bills]
   bills.find(
     {
+      _id: { '$nin': existing_ids },
       status: 'pushed',
       'recognitionStatistics.allAttributesAreRecognized': true,
-      'accountingRecord.amounts.0.vatRate': {'$ne': 0}
+      'accountingRecord.amounts.0.vatRate': { '$ne': 0 }
     },
     {limit: 10}
   ).each do |bill|
@@ -120,7 +122,14 @@ end
 
 task :add_amount_candidates do
   require 'yaml/store'
-  Dir['machine_learning/invoices/*.yml'].each do |file|
+  invoice_files = Dir['machine_learning/invoices/*.yml']
+  files_without_amounts = invoice_files.select do |file|
+    invoice = YAML.load_file(file)
+    puts invoice['amounts']
+    invoice['amounts'].nil?
+  end
+
+  files_without_amounts.each do |file|
     store = YAML::Store.new(file)
     store.transaction do
       puts "======="
