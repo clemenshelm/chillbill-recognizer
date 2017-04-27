@@ -99,7 +99,7 @@ desc 'Import bill data from local mongodb'
 task :import_bill_data do
   require 'mongo'
   require 'yaml/store'
-  existing_ids = Dir['machine_learning/invoices/*.yml'].map { |f| f.match(/([^\/]+)\.yml/)[1] }
+  existing_ids = Dir['machine_learning/bills/*.yml'].map { |f| f.match(/([^\/]+)\.yml/)[1] }
   client = Mongo::Client.new([ '127.0.0.1:3001' ], database: 'meteor')
   bills = client[:bills]
   bills.find(
@@ -111,8 +111,9 @@ task :import_bill_data do
     },
     {limit: 10}
   ).each do |bill|
-    store = YAML::Store.new("machine_learning/invoices/#{bill[:_id]}.yml")
+    store = YAML::Store.new("machine_learning/bills/#{bill[:_id]}.yml")
     store.transaction do
+      puts bill[:_id]
       store['_id'] = bill[:_id]
       store['image_url'] = bill[:imageUrl]
       store['amounts'] = bill[:accountingRecord][:amounts].map(&:to_h)
@@ -120,20 +121,20 @@ task :import_bill_data do
   end
 end
 
-task :add_amount_candidates do
+task :add_prices do
   require 'yaml/store'
-  invoice_files = Dir['machine_learning/invoices/*.yml']
-  files_without_amounts = invoice_files.select do |file|
-    invoice = YAML.load_file(file)
-    puts invoice['amounts']
-    invoice['amounts'].nil?
+  bill_files = Dir['machine_learning/bills/*.yml']
+  files_without_prices = bill_files.select do |file|
+    bill = YAML.load_file(file)
+    bill['amount_prices'].nil?
   end
 
-  files_without_amounts.each do |file|
+  files_without_prices.each do |file|
     store = YAML::Store.new(file)
     store.transaction do
       puts "======="
       puts "Bill #{store['_id']}:"
+      puts store['image_url']
 
       recognizer = BillRecognizer.new(image_url: store['image_url'])
       recognizer.empty_database
@@ -141,9 +142,110 @@ task :add_amount_candidates do
       recognizer.recognize_words(png_file)
       recognizer.filter_words
 
+      store['amount_prices_candidates'] = {}
+      store['amount_prices'] = {}
+      store['vat_prices_candidates'] = {}
+      store['vat_prices'] = {}
+      available_price_terms = PriceTerm.all
       store['amounts'].each do |amount|
-        puts PriceTerm.where(price: amount['total'].to_d * 100)
+        vat_rate = amount['vatRate']
+
+        total_price_key = "total_#{vat_rate}"
+        total_price_terms = PriceTerm.where(price: BigDecimal.new(amount['total']) / 100).all
+        available_price_terms -= total_price_terms
+        store['amount_prices_candidates'][total_price_key] = total_price_terms.map do |term|
+          {
+            'text' => term.text,
+            'price' => (term.price * 100).round.to_i,
+            'left' => term.left,
+            'right' => term.right,
+            'top' => term.top,
+            'bottom' => term.bottom
+          }
+        end
+        store['amount_prices'][total_price_key] = nil
+
+        vat_price_key = "vat_#{vat_rate}"
+        vat_price = (BigDecimal.new(amount['total']) / (100 + vat_rate) * vat_rate / 100).round(2)
+        vat_price_terms = PriceTerm.where(price: vat_price).all
+        available_price_terms -= vat_price_terms
+        store['vat_prices_candidates'][vat_price_key] = vat_price_terms.map do |term|
+          {
+            'text' => term.text,
+            'price' => (term.price * 100).round.to_i,
+            'left' => term.left,
+            'right' => term.right,
+            'top' => term.top,
+            'bottom' => term.bottom
+          }
+        end
+        store['vat_prices'][vat_price_key] = nil
+
+        store['remaining_prices'] = available_price_terms.map do |term|
+          {
+            'text' => term.text,
+            'price' => (term.price * 100).round.to_i,
+            'left' => term.left,
+            'right' => term.right,
+            'top' => term.top,
+            'bottom' => term.bottom
+          }
+        end
       end
+    end
+  end
+end
+
+task :generate_csv do
+  require 'csv'
+
+  CSV.open('machine_learning/price_tuples.csv', 'wb') do |csv|
+    csv << ['id', 'total_price', 'vat_price', 'valid_amount']
+    bills = Dir['machine_learning/bills/*.yml'].map { |f| YAML.load_file(f) }
+    bills.each do |bill|
+      existing_amount_prices = bill['amount_prices']
+        .select { |key, amount_price| amount_price }
+      # valid tuples
+      existing_amount_prices.each do |key, amount_price|
+          vat_rate = key.split('_').last
+          vat_price = bill['vat_prices']["vat_#{vat_rate}"]
+          csv << [bill['_id'], amount_price['price'], vat_price['price'], 1]
+        end
+
+      # invalid tuples
+      # TODO: Add vat prices, but make sure the correct tuple isn't listed
+      amount_prices = existing_amount_prices.map { |key, value| value }
+      (bill['remaining_prices'] + amount_prices).each do |total_price|
+        vat_candidates = (bill['remaining_prices'] - [total_price])
+          .select { |price| price['price'] < total_price['price'] * 0.3 }
+        vat_candidates.each do |vat_price|
+          csv << [bill['_id'], total_price['price'], vat_price['price'], 0]
+        end
+      end
+    end
+  end
+end
+
+task :list_bills do
+  require 'colorize'
+  Dir['machine_learning/bills/*.yml'].each do |file|
+    bill = YAML.load_file(file)
+    problems = []
+    bill['amount_prices'].each do |key, value|
+      vat_rate = key.split('_').last
+      problems << "No total price with #{vat_rate}% vat" unless value
+    end
+    bill['vat_prices'].each do |key, value|
+      vat_rate = key.split('_').last
+      problems << "No vat price with #{vat_rate}% vat" unless value
+    end
+
+    bill_label = "Bill #{bill['_id']}"
+    if problems.empty?
+      puts "👍🏼  #{bill_label}".green
+    else
+      puts "🙀  #{bill_label} has got the following problems:".red
+      problems.each { |p| puts "- #{p}".red }
     end
   end
 end
