@@ -4,3 +4,4 @@ dump.rdb
 .env*
 codeship.aes
 .DS_Store
+**/*.csv
