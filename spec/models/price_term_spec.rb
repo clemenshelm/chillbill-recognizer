@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require_relative '../../lib/boot'
-require_relative '../../lib/models/price_term'
 
 describe PriceTerm do
   it 'recognizes price with comma separator and euro sign behind' do

@@ -22,8 +22,6 @@ describe VatNumberCalculation do
     vat_number_calculation = VatNumberCalculation.new(
       customer_vat_number: 'ATU67760915'
     )
-    vat_number_calculation.vat_number
-
     expect(vat_number_calculation.vat_number).to eq 'EU372001951'
   end
 

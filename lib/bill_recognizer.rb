@@ -4,6 +4,7 @@ require 'bigdecimal'
 require 'pry'
 require 'nokogiri'
 require 'yaml'
+require 'qrio'
 require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
@@ -12,13 +13,13 @@ require_relative './calculations/vat_number_calculation'
 require_relative './calculations/iban_calculation'
 require_relative './calculations/billing_period_calculation'
 require_relative './calculations/currency_calculation'
+require_relative './calculations/invoice_number_calculation'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
 require_relative './detectors/vat_number_detector'
 require_relative './detectors/iban_detector'
 require_relative './detectors/price_detector'
 require_relative './detectors/date_detector'
-require_relative './detectors/vat_number_detector'
 require_relative './detectors/billing_period_detector'
 require_relative './detectors/currency_detector'
 require_relative './detectors/due_date_label_detector'
@@ -26,6 +27,8 @@ require_relative './detectors/relative_date_detector'
 require_relative './detectors/invoice_date_label_detector'
 require_relative './detectors/billing_start_label_detector'
 require_relative './detectors/billing_end_label_detector'
+require_relative './detectors/invoice_number_detector'
+require_relative './detectors/invoice_number_label_detector'
 require_relative './models/word'
 require_relative './models/price_term'
 require_relative './models/date_term'
@@ -36,6 +39,8 @@ require_relative './models/currency_term'
 require_relative './models/due_date_label_term'
 require_relative './models/billing_start_label_term'
 require_relative './models/billing_end_label_term'
+require_relative './models/invoice_number_label_term'
+require_relative './models/invoice_number_term'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
@@ -55,7 +60,9 @@ class BillRecognizer
     InvoiceDateLabelTerm,
     BillingStartLabelTerm,
     BillingEndLabelTerm,
-    RelativeDateTerm
+    RelativeDateTerm,
+    InvoiceDateLabelTerm,
+    InvoiceNumberTerm
   ].freeze
 
   DETECTORS = [
@@ -69,7 +76,9 @@ class BillRecognizer
     RelativeDateDetector,
     InvoiceDateLabelDetector,
     BillingStartLabelDetector,
-    BillingEndLabelDetector
+    BillingEndLabelDetector,
+    InvoiceNumberLabelDetector,
+    InvoiceNumberDetector
   ].freeze
 
   def initialize(image_url: nil, retriever: nil, customer_vat_number: nil)
@@ -91,6 +100,7 @@ class BillRecognizer
       }
     end
 
+    detect_qr_code(png_file)
     recognize_words(png_file)
     filter_words
 
@@ -117,8 +127,8 @@ class BillRecognizer
     image = ImageProcessor.new(image_path)
 
     @clockwise_rotations_required = image.calculate_clockwise_rotations_required
-
     image = image.correct_orientation
+
     @width = image.image_width
     @height = image.image_height
 
@@ -128,6 +138,16 @@ class BillRecognizer
          .trim
          .improve_level
          .write_png!
+  end
+
+  def detect_qr_code(png_file)
+    Qrio::Qr.load(png_file.path).qr.text
+    @qr_code_present = true
+  rescue NoMethodError
+    @qr_code_present = false
+  rescue RuntimeError
+    # This means that a QR code was found but it is the wrong kind
+    @qr_code_present = false
   end
 
   def recognize_words(png_file)
@@ -204,7 +224,9 @@ class BillRecognizer
       currencyCode: calculate_currency,
       dueDate: calculate_due_date,
       iban: calculate_iban,
+      invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @clockwise_rotations_required,
+      qrCodePresent: @qr_code_present,
       recognizerVersion: version
     }
   end
@@ -257,5 +279,9 @@ class BillRecognizer
 
   def calculate_iban
     IbanCalculation.new.iban
+  end
+
+  def calculate_invoice_number
+    InvoiceNumberCalculation.new.invoice_number
   end
 end
