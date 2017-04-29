@@ -1,0 +1,41 @@
+---
+_id: 2WD644LZkqqBTAW5W
+image_url: https://chillbill-prod.s3.eu-central-1.amazonaws.com/2WD644LZkqqBTAW5W.pdf
+amounts:
+- total: 134579
+  vatRate: 20
+amount_prices:
+  total_20:
+    text: "€1.345,79"
+    price: 134579
+    left: 0.7588350785340314
+    right: 0.838023560209424
+    top: 0.48450508788159113
+    bottom: 0.4958371877890842
+vat_prices:
+  vat_20:
+    text: "€224.30"
+    price: 22430
+    left: 0.7833769633507853
+    right: 0.8383507853403142
+    top: 0.45675300647548567
+    bottom: 0.4664662349676226
+remaining_prices:
+- text: "€900,60"
+  price: 90060
+  left: 0.787303664921466
+  right: 0.837369109947644
+  top: 0.2548566142460685
+  bottom: 0.26364477335800185
+- text: "€220,89"
+  price: 22089
+  left: 0.787303664921466
+  right: 0.837369109947644
+  top: 0.28769657724329323
+  bottom: 0.29648473635522665
+- text: "€1.121,49"
+  price: 112149
+  left: 0.7706151832460733
+  right: 0.8383507853403142
+  top: 0.43940795559666973
+  bottom: 0.44912118408880664
