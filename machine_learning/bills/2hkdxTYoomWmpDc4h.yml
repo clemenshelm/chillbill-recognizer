@@ -1,0 +1,66 @@
+---
+_id: 2hkdxTYoomWmpDc4h
+image_url: https://chillbill-prod.s3.eu-central-1.amazonaws.com/2hkdxTYoomWmpDc4h.pdf
+amounts:
+- total: 105667
+  vatRate: 20
+amount_prices:
+  total_20:
+    text: 1.056,67
+    price: 105667
+    left: 0.7373241740268237
+    right: 0.8011122015047432
+    top: 0.5362017117742308
+    bottom: 0.5468424705065926
+vat_prices:
+  vat_20:
+    text: '176,11'
+    price: 17611
+    left: 0.751390251880929
+    right: 0.7978410206084396
+    top: 0.5149201943095073
+    bottom: 0.5248669905158455
+remaining_prices:
+- text: '3,90'
+  price: 390
+  left: 0.639515865227347
+  right: 0.6709192018318613
+  top: 0.3421235253296322
+  bottom: 0.3520703215359704
+- text: '351,00'
+  price: 35100
+  left: 0.750408897612038
+  right: 0.8004579653254825
+  top: 0.3421235253296322
+  bottom: 0.3520703215359704
+- text: '12,55'
+  price: 1255
+  left: 0.6313379129865881
+  right: 0.6709192018318613
+  top: 0.3638676844783715
+  bottom: 0.3738144806847097
+- text: '439,25'
+  price: 43925
+  left: 0.750408897612038
+  right: 0.8004579653254825
+  top: 0.3638676844783715
+  bottom: 0.3738144806847097
+- text: '0,16'
+  price: 16
+  left: 0.639515865227347
+  right: 0.6709192018318613
+  top: 0.38538052278510293
+  bottom: 0.39532731899144113
+- text: '3,36'
+  price: 336
+  left: 0.7690546287209683
+  right: 0.8004579653254825
+  top: 0.38538052278510293
+  bottom: 0.39532731899144113
+# TODO: For some reason, 4 line items are entirely missing here. Find them :)
+- text: '880,56'
+  price: 88056
+  left: 0.750408897612038
+  right: 0.8004579653254825
+  top: 0.49340735600277585
+  bottom: 0.5033541522091141

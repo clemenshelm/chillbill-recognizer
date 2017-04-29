@@ -1,0 +1,36 @@
+---
+_id: 2cHm8jyMDCyDdiMsY
+image_url: https://chillbill-prod.s3.eu-central-1.amazonaws.com/2cHm8jyMDCyDdiMsY.pdf
+amounts:
+- total: 635
+  vatRate: 20
+amount_prices:
+  total_20:
+    text: '6,35'
+    price: 635
+    left: 0.7454188481675392
+    right: 0.7797774869109948
+    top: 0.4269195189639223
+    bottom: 0.4375578168362627
+vat_prices:
+  vat_20:
+    text: '1,06'
+    price: 106
+    left: 0.4721858638743455
+    right: 0.5045811518324608
+    top: 0.5321461609620721
+    bottom: 0.5427844588344126
+remaining_prices:
+# TODO: There are the prices of the line item missing. Would be interesting to investigate.
+- text: '5,29'
+  price: 529
+  left: 0.32362565445026176
+  right: 0.3576570680628272
+  top: 0.5321461609620721
+  bottom: 0.5427844588344126
+- text: '1,06'
+  price: 106
+  left: 0.5530104712041884
+  right: 0.5857329842931938
+  top: 0.532377428307123
+  bottom: 0.5427844588344126
