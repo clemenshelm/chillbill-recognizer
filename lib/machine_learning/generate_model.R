@@ -9,18 +9,27 @@
 #install.packages("e1071")
 library(e1071)
 
+# Set Working Directory to Source file loaction (nur in RStudio notwendig)
+# RScript hat automatisch das richtige Directory
+
 data_orig = read.csv("price_tuples.csv", header = TRUE)
-data = data_orig[data_orig[,"vat_price"] <= 0.3 * data_orig[,"total_price"],  c("id", "total_price", "vat_price", "valid_amount")]
+
+data = data_orig[data_orig[,"vat_price"] <= 0.3 * data_orig[,"total_price"] & 
+                  data_orig[,"total_price"] > 0 ,  ]
 
 
 # Amount of right data vs. wrong ones
-tmp = table(data$valid_amount)
-cat("Prozent richtiger Einträge: ", tmp[2]/(sum(tmp)) * 100, "%\n")
+cat("Prozent richtiger Einträge: ", table(data$valid_amount)[2]/ nrow(data) * 100, "%\n")
 
 
 # ADDING_ATTRIBUTES
 source("adding_attributes.R")
 
+
+
+# Checking of NaN entries
+cat("After adding Attributes there are", tmp <- sum(is.na(data)), "NaN entries\n" )
+if(tmp != 0){data[is.na(data)] = 0 }  # Setze NaN auf 0
 
 
 ############################
@@ -53,13 +62,15 @@ source("adding_attributes.R")
 
 n = nrow(data)
 s <- sample(n, round(n * 0.7))
-data$valid_amount <- as.factor(data$valid_amount)  # Konvert to factor
+  # Konvert to factor
+
 
 # choose which arguments are for the SVM
-col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount")  # group darf nicht dabei sein!
-
-
-
+#col <- names(data) # all
+#col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount")  # group darf nicht dabei sein!
+#col <- names(data)[!names(data) %in% c("id","valid_amount")] # all but..
+col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount", "common_width", "common_height")
+ 
 data_train <- data[s,col]
 data_test <- data[-s,col]
 
@@ -79,34 +90,42 @@ tuned <- tune(svm, valid_amount ~ .,
         )
 
 #summary(tuned)
-
+cat("Best parameters:\n")
 print(tuned$best.parameters)
 
 
 
 
-svmfit <- svm(valid_amount ~., data=data_train, kernel ="radial", cost = tuned$best.parameters$cost, gamma= tuned$best.parameters$gamma, scale = FALSE, type = "C-classification")
+svmfit <- svm(valid_amount ~., data=data_train, 
+              kernel ="radial", 
+              cost = tuned$best.parameters$cost, 
+              gamma= tuned$best.parameters$gamma, 
+              scale = FALSE, 
+              type = "C-classification")
 #print(svmfit)
 #plot(svmfit, data_train[,"rel_p"])
 
 
 # Save Model 
-# save(svmfit, file='mymodel.rda')
+save(svmfit, file='svm_model.rda')
 
 
 
 p <- predict(svmfit, data_test, type = "C-classification")
-#plot(p)
+# plot(p)
 # table(data_train$valid_amount)
 # table(data_test$valid_amount)
 
+cat("------------------------------------------------------------\n")
 cat("Wie viel wird generell richtig erkannt:", mean(p == data_test[,"valid_amount"]), "\n")
+cat("False Positive", mean(data_test$valid_amount[p == 1] == 0), "\n\n")
 cat("Wie viele von echten Werten werden als solche erkannt:", mean(p[data_test$valid_amount == 1] == 1),"\n" )
 cat("Wie viele von den erkannten Werten sind tatsächliich welche:", mean(data_test$valid_amount[p == 1] == 1),"\n")
 cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
 cat("Wie viele von den als falsch erkannten Werten sind tatsächlich falsch:", mean(data_test$valid_amount[p == 0] == 0),"\n")
-
-
+cat("------------------------------------------------------------\n\n")
+#cat("Ausgabe der false-positive:\n")
+#print(data_test[data_test$valid_amount[p == 1] == 0,])
 
 
 
