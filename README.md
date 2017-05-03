@@ -80,7 +80,7 @@ docker-compose run processor
 When running tests will be running the `tests` service from our Docker Compose file. To run our whole test suite use:
 
 ```shell
-docker-compose run test rspec ./spec/
+docker-compose run tests rspec ./spec/
 ```
 
 _Modify the path in the command to choose specific spec files._
