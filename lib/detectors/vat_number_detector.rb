@@ -6,7 +6,7 @@ require_relative '../logging.rb'
 class VatNumberDetector
   include Logging
 
-  VAT_REGEX = /[A-Z]{2}[A-Z0-9]{7,12}/
+  VAT_REGEX = /[A-Za-z]{2}[A-Z0-9a-z]{7,12}/
   EU_VAT_REGEX = /EU[0-9]{9}/
 
   def self.filter

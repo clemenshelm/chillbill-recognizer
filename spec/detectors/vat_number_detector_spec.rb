@@ -581,6 +581,30 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['DE147645058']
   end
 
+  it 'detects Austrian VAT ID number in lower case' do
+    # from bill PkAZBBAXapKyNNuqt.pdf
+    create(
+      :word,
+      text: 'atu',
+      left: 0.8384036637226039,
+      right: 0.8514883873078182,
+      top: 0.05089058524173028,
+      bottom: 0.05597964376590331
+    )
+
+    create(
+      :word,
+      text: '67318155',
+      left: 0.8554138043833824,
+      right: 0.8995747464834806,
+      top: 0.05089058524173028,
+      bottom: 0.05574832292389544
+    )
+
+    vat_numbers = VatNumberDetector.filter
+    expect(vat_numbers.map(&:to_s)).to eq ['ATU67318155']
+  end
+
   # Large sample size due to median height factor
   it 'detects a VAT ID number using a larger median height' do
     # from bill KsWubxamfEAwc7CfT.pdf
