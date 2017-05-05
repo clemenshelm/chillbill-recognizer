@@ -80,9 +80,7 @@ task :add_prices do
   files_without_prices.each do |file|
     store = YAML::Store.new(file)
     store.transaction do
-      puts "======="
-      puts "Bill #{store['_id']}:"
-      puts store['image_url']
+      puts "Processing bill #{store['_id']} ..."
 
       recognizer = BillRecognizer.new(image_url: store['image_url'])
       recognizer.empty_database
@@ -90,10 +88,9 @@ task :add_prices do
       recognizer.recognize_words(png_file)
       recognizer.filter_words
 
-      store['amount_prices_candidates'] = {}
-      store['amount_prices'] = {}
-      store['vat_prices_candidates'] = {}
-      store['vat_prices'] = {}
+      %w(amount_prices_candidates amount_prices vat_prices_candidates vat_prices)
+        .each { |attr| store[attr] = {} }
+
       available_price_terms = PriceTerm.all
       store['amounts'].each do |amount|
         vat_rate = amount['vatRate']
@@ -101,44 +98,17 @@ task :add_prices do
         total_price_key = "total_#{vat_rate}"
         total_price_terms = PriceTerm.where(price: BigDecimal.new(amount['total']) / 100).all
         available_price_terms -= total_price_terms
-        store['amount_prices_candidates'][total_price_key] = total_price_terms.map do |term|
-          {
-            'text' => term.text,
-            'price' => (term.price * 100).round.to_i,
-            'left' => term.left,
-            'right' => term.right,
-            'top' => term.top,
-            'bottom' => term.bottom
-          }
-        end
+        store['amount_prices_candidates'][total_price_key] = total_price_terms.map(&:to_h)
         store['amount_prices'][total_price_key] = nil
 
         vat_price_key = "vat_#{vat_rate}"
         vat_price = (BigDecimal.new(amount['total']) / (100 + vat_rate) * vat_rate / 100).round(2)
         vat_price_terms = PriceTerm.where(price: vat_price).all
         available_price_terms -= vat_price_terms
-        store['vat_prices_candidates'][vat_price_key] = vat_price_terms.map do |term|
-          {
-            'text' => term.text,
-            'price' => (term.price * 100).round.to_i,
-            'left' => term.left,
-            'right' => term.right,
-            'top' => term.top,
-            'bottom' => term.bottom
-          }
-        end
+        store['vat_prices_candidates'][vat_price_key] = vat_price_terms.map(&:to_h)
         store['vat_prices'][vat_price_key] = nil
 
-        store['remaining_prices'] = available_price_terms.map do |term|
-          {
-            'text' => term.text,
-            'price' => (term.price * 100).round.to_i,
-            'left' => term.left,
-            'right' => term.right,
-            'top' => term.top,
-            'bottom' => term.bottom
-          }
-        end
+        store['remaining_prices'] = available_price_terms.map(&:to_h)
       end
     end
   end
