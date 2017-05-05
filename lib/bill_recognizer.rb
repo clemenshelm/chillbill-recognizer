@@ -107,8 +107,6 @@ class BillRecognizer
     calculate_attributes(version)
   end
 
-  private
-
   def empty_database
     TABLES.each { |table| table.dataset.delete }
   end
@@ -144,6 +142,9 @@ class BillRecognizer
     Qrio::Qr.load(png_file.path).qr.text
     @qr_code_present = true
   rescue NoMethodError
+    @qr_code_present = false
+  rescue RuntimeError
+    # This means that a QR code was found but it is the wrong kind
     @qr_code_present = false
   end
 
@@ -231,6 +232,7 @@ class BillRecognizer
   def calculate_amounts
     amounts = []
     prices = PriceCalculation.new
+    puts prices.amount_tuples
     return amounts if prices.net_amount.nil?
     amounts << {
       total: (prices.net_amount + prices.vat_amount).to_i,

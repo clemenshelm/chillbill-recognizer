@@ -16,6 +16,7 @@ end
 DB.create_table :price_terms do
   primary_key :id
   String :text
+  BigDecimal :price, size: [10, 2]
   Float :left
   Float :right
   Float :top
