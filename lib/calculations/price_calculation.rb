@@ -14,27 +14,6 @@ class PriceCalculation
     @vat_amount * 100
   end
 
-  def amount_tuples
-    tuples = PriceTerm.flat_map do |total_term|
-      # only consider vat prices < total_term * 0.3 because we've never seen a vat rate that high
-      vat_terms = PriceTerm.where{price < total_term.to_d * 0.3}
-      vat_terms.map do |vat_term|
-        total = (total_term.to_d * 100).to_i
-        vat = (vat_term.to_d * 100).to_i
-        vat_rate = ((total_term.to_d / (total_term.to_d - vat_term.to_d) - 1) * 100).round
-        common_width = [total_term.right - vat_term.left, vat_term.right - total_term.left].max
-        common_height = [total_term.bottom - vat_term.top, vat_term.bottom - total_term.top].max
-        {
-          total: total,
-          vat: vat,
-          vat_rate: vat_rate,
-          common_width: common_width,
-          common_height: common_height
-        }
-      end
-    end
-  end
-
   private
 
   def calculate
