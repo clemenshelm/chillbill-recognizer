@@ -53,7 +53,7 @@ describe PriceTerm do
   end
 
   describe 'to_h' do
-    it 'creates a hash representing the price term', :focus do
+    it 'creates a hash representing the price term' do
       term = PriceTerm.new(
         text: '1234,56', top: 1, bottom: 2, left: 3, right: 4
       )

@@ -232,7 +232,6 @@ class BillRecognizer
   def calculate_amounts
     amounts = []
     prices = PriceCalculation.new
-    puts prices.amount_tuples
     return amounts if prices.net_amount.nil?
     amounts << {
       total: (prices.net_amount + prices.vat_amount).to_i,
