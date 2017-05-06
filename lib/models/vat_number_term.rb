@@ -27,6 +27,6 @@ class VatNumberTerm < Sequel::Model
   end
 
   def to_s
-    text
+    text.upcase
   end
 end
