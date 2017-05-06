@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 namespace :machine_learning do
   desc 'Add recognized prices to imported bill data'
   task :add_prices do
-
     require 'yaml/store'
     bill_files = Dir['data/bills/*.yml']
     files_without_prices = bill_files.select do |file|
@@ -48,7 +48,12 @@ namespace :machine_learning do
   class PriceExtractor
     attr_reader :remaining_prices
 
-    class Extractor < Struct.new(:amount, :remaining_prices)
+    class Extractor
+      def initialize(amount, remaining_prices)
+        self.amount = amount
+        self.remaining_prices = remaining_prices
+      end
+
       def total
         total_price = BigDecimal.new(amount['total']) / 100
         extract(price: total_price)
@@ -56,7 +61,8 @@ namespace :machine_learning do
 
       def vat
         vat_rate = amount['vatRate']
-        vat_price = (BigDecimal.new(amount['total']) / (100 + vat_rate) * vat_rate / 100).round(2)
+        amount_dec = BigDecimal.new(amount['total'])
+        vat_price = (amount_dec / (100 + vat_rate) * vat_rate / 100).round(2)
         extract(price: vat_price)
       end
 

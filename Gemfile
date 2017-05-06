@@ -47,8 +47,8 @@ gem 'qrio', '~> 0.0.1'
 
 group :development do
   gem 'colorize' # Colorizes shell output
-  gem 'rake'
   gem 'mongo'
+  gem 'rake'
 end
 
 group :development, :test do

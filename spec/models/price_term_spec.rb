@@ -54,15 +54,17 @@ describe PriceTerm do
 
   describe 'to_h' do
     it 'creates a hash representing the price term', :focus do
-      term = PriceTerm.new(text: '1234,56', top: 1, bottom: 2, left: 3, right: 4)
-      expect(term.to_h).to eq({
+      term = PriceTerm.new(
+        text: '1234,56', top: 1, bottom: 2, left: 3, right: 4
+      )
+      expect(term.to_h).to eq(
         'text' => '1234,56',
-        'price' => 123456,
+        'price' => 123_456,
         'top' => 1,
         'bottom' => 2,
         'left' => 3,
         'right' => 4
-      })
+      )
     end
   end
 end
