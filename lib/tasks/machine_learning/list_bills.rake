@@ -1,4 +1,5 @@
 namespace :machine_learning do
+  desc 'List all imported bills with their status and potential problems'
   task :list_bills do
     require 'colorize'
     Dir['data/bills/*.yml'].each do |file|
