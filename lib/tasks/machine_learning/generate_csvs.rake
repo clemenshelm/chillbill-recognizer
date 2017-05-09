@@ -5,6 +5,11 @@ namespace :machine_learning do
     require 'csv'
     require 'securerandom'
 
+    def add_id(price)
+      require 'securerandom'
+      price['_id'] = SecureRandom.uuid
+    end
+
     bills = Dir['data/bills/*.yml'].map { |f| YAML.load_file(f) }
     add_id = ->(price) { price['_id'] = SecureRandom.uuid }
 
