@@ -16,10 +16,6 @@ class PriceTerm < Sequel::Model
     super
   end
 
-  def before_save
-    self.price = to_d
-  end
-
   def add_word(word)
     @term_builder.add_word(word)
     self.text = @term_builder.extract_text

@@ -6,7 +6,6 @@ namespace :machine_learning do
     require 'securerandom'
 
     def add_id(price)
-      require 'securerandom'
       price['_id'] = SecureRandom.uuid
     end
 
@@ -28,7 +27,7 @@ namespace :machine_learning do
           vat_prices = bill['vat_prices']
                        .map { |_, price| price }
                        .each(&add_id)
-          remaining_prices = bill['remaining_prices'].each(&method(:add_id))
+          remaining_prices = bill['remaining_prices'].each(&add_id)
           all_prices = total_prices + vat_prices + remaining_prices
 
           # add price rows
