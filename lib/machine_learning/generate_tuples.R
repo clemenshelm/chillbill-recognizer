@@ -1,6 +1,22 @@
-# Diese Funktion erhält eine Preisliste und generiert daraus mögliche Tupel
-# Außerdem werden die zusätzlichen Attribute generiert und hinzugefügt
-# Zum Schluss werden eventuelle NaN Einträge zu 0 gemacht
+# The function "generate_tuples" gets prices and returns possible combinations of tuples.
+# It also adds attributes and erases NaN entries
+
+###############################################
+######    Description of the data set    ######
+# rel_p         proportion of vat_price to total_price
+# price_order   position of price entry compared to all prices in the bill
+# price_uq      1 if price is in the upper quartil (25%), 0 if not
+# total_price_s Scaled total_price
+# vat_price_s   Scaled vat_price
+# common_width  The common width of the possible total_price and the possible vat_price
+# common_height The common height of the possible total_price and the possible vat_price
+# group         colors for plots
+###############################################
+
+# Load example bill for debugging / creating new attributes:
+#price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
+
+
 
 generate_tuples <- function(price_list){
   
@@ -55,55 +71,20 @@ generate_tuples <- function(price_list){
   
   
   # Checking of NaN entries
-  
   tmp = sum(is.na(data))
   # cat("After adding Attributes there are", tmp , "NaN entries\n" )
-  if(tmp != 0){data[is.na(data)] = 0 }  # Setze NaN auf 0
+  if(tmp != 0){data[is.na(data)] = 0 }  # sets NaN values to 0
+  
+  
+  
+  # height of total_price > median of all heights?
+  
+  
     
   return(data)
+  
 }
 
 
 
-
-
-# Höhe des Preises > als median aller Höhen 
-# Hat derzeit noch keinen Sinn, erst weitermachen wenn ich die Liste aller Preise übergeben bekomme
-
-# 
-# for(i in 1:length(tab)){
-#   height_real_prices = (data$total_bottom - data$total_top)[data$id ==  names(tab)[i] & data$valid_amount == 1]
-#   height_false_prices = (data$total_bottom - data$total_top)[data$id ==  names(tab)[i] & data$valid_amount == 0]
-#   
-#   a = c(numeric(length(height_false_prices)), numeric(length(height_real_prices)) + 1)
-#   b = c(height_false_prices, height_real_prices)
-#   plot(cbind(a,b))
-#   
-# }
-
-# Plotte alle Preise  (keine Unterscheidung zwischen den einzelnen Rechnungen)
-# hist(height_real_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(1,1,0,0.7),main="",xlab="number")
-# par(new=TRUE)
-# hist(height_false_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(0,1,1,0.4),main="",xlab="",ylab="")
-
-
-
-
-
-
-
-
-
-
-
-
-
-# reconstruct Price list from Tupel
-# a = data_orig
-# tmp1 = data.frame("bill_id" = a$id, "id" = 123, "text" = "text", "amount" = a$total_price, "left" = a$total_left, "right" = a$total_right, "top" = a$total_top, "bottom" = a$total_bottom)
-# tmp2 = data.frame("bill_id" = a$id, "id" = 123, "text" = "text", "amount" = a$vat_price, "left" = a$vat_left, "right" = a$vat_right, "top" = a$vat_top, "bottom" = a$vat_bottom)
-# tmp3 = rbind(tmp1, tmp2)
-# tmp4 = unique(tmp3)
-# 
-# write.csv(tmp4, "price_list_1.csv")
 

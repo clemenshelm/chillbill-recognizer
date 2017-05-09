@@ -1,16 +1,7 @@
-###############################################
-######    Description of the data set    ######
-# rel_p       Verhältnis von Preis zu vat_price über alle daten wird hinzugefügt
-# price_order position of price entry compared to all prices in the bill
-# price_uq    1 if price is in the upper quartil (25%), 0 if not
-# group       colors for the plots
-###############################################
-
-# Set Working Directory to Source file loaction (nur in RStudio notwendig)
-# RScript hat automatisch das richtige Directory
+# Set Working Directory to Source file loaction (only necessary in RStudio)
+# RScript uses automatically the right directionary
 
 
-#install.packages("e1071")
 library(e1071)
 source('generate_tuples.R') # loads function "generate_tuples(price_list)"
 
@@ -24,35 +15,23 @@ correct_price_tuples = read.csv("correct_price_tuples.csv", header = TRUE)
 tab = table(prices_several_bills$bill_id)
 calibration_data = generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
 for(i in 2:length(tab)){
-  cat("Bill #", i, "; ")
+  # cat("Bill #", i, "; \n")
   calibration_data = rbind( calibration_data, 
                             generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
 }
 
-# for(i in 2:length(tab)){
-#   # adding correct answer in "valid_amount"
-#   calibration_data[ calibration_data$bill_id ==  names(tab)[i], "valid_amount"] = as.factor(0)
-#   
-#   #correct_total_id = correct_price_tuples[correct_price_tuples$bill_id == names(tab)[i], "total_id"]
-#   #correct_vat_id = correct_price_tuples[correct_price_tuples$bill_id == names(tab)[i], "vat_id"]
-#   
-#   
-#   calibration_data[ calibration_data$bill_id == names(tab)[i] &
-#                       calibration_data$total_id %in% correct_total_id &
-#                       calibration_data$vat_id %in% correct_vat_id, "valid_amount"] = as.factor(1)
-# }
 
 
 # adding correct answer in "valid_amount"
 calibration_data[ , "valid_amount"] = 0
 calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
                     calibration_data$vat_id %in% correct_price_tuples$vat_id ,  "valid_amount"] =  1
-#calibration_data$valid_amount <- as.factor(calibration_data$valid_amount) #convert to factor
+#calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 
 
 # Print some informations
-cat("Amount of right and false combinations:", table(calibration_data$valid_amount), 
+cat("Amount of false and right combinations:", table(calibration_data$valid_amount), 
  "<=>", table(calibration_data$valid_amount)[2]/ nrow(calibration_data) * 100, "% right combinations%\n")
 
 
@@ -62,19 +41,18 @@ cat("Amount of right and false combinations:", table(calibration_data$valid_amou
 #######################
 
 n = nrow(calibration_data)
-s <- sample(n, round(n * 0.7))
+s = sample(n, round(n * 0.7))
 
 
 # choose which arguments are for the SVM
-#col <- names(calibration_data) # all
-#col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount")  # group darf nicht dabei sein!
-#col <- names(calibration_data)[!names(calibration_data) %in% c("id","valid_amount")] # all but..
-col <- c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height")
+col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height")
+#col = names(calibration_data) # all
+#col = names(calibration_data)[!names(calibration_data) %in% c("id","valid_amount")] # all but..
 
-data_train <- calibration_data[s,col]
-data_test <- calibration_data[-s,col]
 
-# extract answers and convert to factor
+# build training values and answers (converted to factor)
+data_train = calibration_data[s,col]
+data_test = calibration_data[-s,col]
 answer_train = as.factor(calibration_data[s,"valid_amount"])
 answer_test = as.factor(calibration_data[-s,"valid_amount"])
 
@@ -84,7 +62,7 @@ answer_test = as.factor(calibration_data[-s,"valid_amount"])
 
 
 # Grid-search for the best paramters, kernel="radial" ... RBF
-tuned <- tune(svm, 
+tuned = tune(svm, 
               train.x = data_train, 
               train.y = answer_train,
               kernel = "radial",
@@ -96,19 +74,11 @@ tuned <- tune(svm,
                             )
         )
 
-
-
-
-
-#summary(tuned)
 cat("Best parameters:\n")
 print(tuned$best.parameters)
 
 
-
-
-
-svmfit <- svm(x = data_train, 
+svmfit = svm(x = data_train, 
               y = answer_train, 
               kernel ="radial", 
               cost = tuned$best.parameters$cost, 
@@ -117,22 +87,14 @@ svmfit <- svm(x = data_train,
               type = "C-classification")
 
 
-#print(svmfit)
-#plot(svmfit, data_train[,"rel_p"])
 
-
-# Save Model 
-# save(svmfit, file='svm_model.svm')
+# save Model 
 saveRDS(svmfit, 'modelfile.rds')
 cat("Saved model to svm_model.svm\n")
 
+# prediction
+p = predict(svmfit, data_test, type = "C-classification")
 
-p <- predict(svmfit, data_test, type = "C-classification")
-# plot(p)
-# table(answer_train)
-# table(answer_test)
- 
-# answer_test
 
 
 cat("------------------------------------------------------------\n")
@@ -141,7 +103,7 @@ cat("False Positive", mean(answer_test[p == 1] == 0), "\n\n")
 
 
 
-# muss noch angepasst werden
+# needs adaptaion, the name is incorrect
 # cat("Wie viele von echten Werten werden als solche erkannt:", mean(p[data_test$valid_amount == 1] == 1),"\n" )
 # cat("Wie viele von den erkannten Werten sind tatsächliich welche:", mean(data_test$valid_amount[p == 1] == 1),"\n")
 # cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
