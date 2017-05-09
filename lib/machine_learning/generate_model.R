@@ -6,53 +6,54 @@
 # group       colors for the plots
 ###############################################
 
-#install.packages("e1071")
-library(e1071)
-
 # Set Working Directory to Source file loaction (nur in RStudio notwendig)
 # RScript hat automatisch das richtige Directory
 
-data_orig = read.csv("price_tuples.csv", header = TRUE)
 
-data = data_orig[data_orig[,"vat_price"] <= 0.3 * data_orig[,"total_price"] & 
-                  data_orig[,"total_price"] > 0 ,  ]
-
-
-# Amount of right data vs. wrong ones
-cat("Prozent richtiger Einträge: ", table(data$valid_amount)[2]/ nrow(data) * 100, "%\n")
+#install.packages("e1071")
+library(e1071)
+source('generate_tuples.R') # loads function "generate_tuples(price_list)"
 
 
-# ADDING_ATTRIBUTES
-source("adding_attributes.R")
+# load data from several bills
+prices_several_bills = read.csv("prices.csv", header = TRUE)
+correct_price_tuples = read.csv("correct_price_tuples.csv", header = TRUE)
+
+
+# generate tuples and add attributes
+tab = table(prices_several_bills$bill_id)
+calibration_data = generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
+for(i in 2:length(tab)){
+  cat("Bill #", i, "; ")
+  calibration_data = rbind( calibration_data, 
+                            generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
+}
+
+# for(i in 2:length(tab)){
+#   # adding correct answer in "valid_amount"
+#   calibration_data[ calibration_data$bill_id ==  names(tab)[i], "valid_amount"] = as.factor(0)
+#   
+#   #correct_total_id = correct_price_tuples[correct_price_tuples$bill_id == names(tab)[i], "total_id"]
+#   #correct_vat_id = correct_price_tuples[correct_price_tuples$bill_id == names(tab)[i], "vat_id"]
+#   
+#   
+#   calibration_data[ calibration_data$bill_id == names(tab)[i] &
+#                       calibration_data$total_id %in% correct_total_id &
+#                       calibration_data$vat_id %in% correct_vat_id, "valid_amount"] = as.factor(1)
+# }
+
+
+# adding correct answer in "valid_amount"
+calibration_data[ , "valid_amount"] = 0
+calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
+                    calibration_data$vat_id %in% correct_price_tuples$vat_id ,  "valid_amount"] =  1
+#calibration_data$valid_amount <- as.factor(calibration_data$valid_amount) #convert to factor
 
 
 
-# Checking of NaN entries
-cat("After adding Attributes there are", tmp <- sum(is.na(data)), "NaN entries\n" )
-if(tmp != 0){data[is.na(data)] = 0 }  # Setze NaN auf 0
-
-
-############################
-######    PLOTTING    ######
-############################
-
-# R plots for colorselection (1,0) the awsome colors black and WHITE?!
-# adding "group" = valid_amount but with strings (for nice colors in R)
-#data[data$"valid_amount" == 1, "group"] <- "red"
-#data[data$"valid_amount" == 0, "group"] <- "green"
-
-# 
-# # Select the data we want to plot
-# data_selection1 = data[ ,c("total_price", "vat_price", "rel_p")]
-# data_selection2 = data[, !names(data) %in% c("id","valid_amount", "group")]
-# 
-# # Plot
-# plot(data_selection1, col=data$group)
-# #plot(data_selection2, col=data$group)
-# 
-
-
-
+# Print some informations
+cat("Amount of right and false combinations:", table(calibration_data$valid_amount), 
+ "<=>", table(calibration_data$valid_amount)[2]/ nrow(calibration_data) * 100, "% right combinations%\n")
 
 
 
@@ -60,34 +61,44 @@ if(tmp != 0){data[is.na(data)] = 0 }  # Setze NaN auf 0
 ######    SVM    ######
 #######################
 
-n = nrow(data)
+n = nrow(calibration_data)
 s <- sample(n, round(n * 0.7))
-  # Konvert to factor
 
 
 # choose which arguments are for the SVM
-#col <- names(data) # all
+#col <- names(calibration_data) # all
 #col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount")  # group darf nicht dabei sein!
-#col <- names(data)[!names(data) %in% c("id","valid_amount")] # all but..
-col <- c("total_price", "vat_price", "rel_p", "price_order", "price_uq", "valid_amount", "common_width", "common_height")
- 
-data_train <- data[s,col]
-data_test <- data[-s,col]
+#col <- names(calibration_data)[!names(calibration_data) %in% c("id","valid_amount")] # all but..
+col <- c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height")
+
+data_train <- calibration_data[s,col]
+data_test <- calibration_data[-s,col]
+
+# extract answers and convert to factor
+answer_train = as.factor(calibration_data[s,"valid_amount"])
+answer_test = as.factor(calibration_data[-s,"valid_amount"])
+
+#data_train$valid_amount = as.factor(data_train$valid_amount)
+#data_test$valid_amount = as.factor(data_test$valid_amount)
 
 
-  
-# Grid-search nach den besten Parametern 
-# kernel="radial" ... RBF
-tuned <- tune(svm, valid_amount ~ ., 
-              data   = data_train, 
-              kernel = "radial", 
-              type   = "C-classification", 
-              scale  = FALSE, 
+
+# Grid-search for the best paramters, kernel="radial" ... RBF
+tuned <- tune(svm, 
+              train.x = data_train, 
+              train.y = answer_train,
+              kernel = "radial",
+              type   = "C-classification",
+              scale  = FALSE,
               ranges = list(
-                              cost = 10^(-1:6), 
+                              cost = 10^(-1:6),
                               gamma = 10^(-1:1)
-                            ) 
+                            )
         )
+
+
+
+
 
 #summary(tuned)
 cat("Best parameters:\n")
@@ -96,34 +107,48 @@ print(tuned$best.parameters)
 
 
 
-svmfit <- svm(valid_amount ~., data=data_train, 
+
+svmfit <- svm(x = data_train, 
+              y = answer_train, 
               kernel ="radial", 
               cost = tuned$best.parameters$cost, 
               gamma= tuned$best.parameters$gamma, 
               scale = FALSE, 
               type = "C-classification")
+
+
 #print(svmfit)
 #plot(svmfit, data_train[,"rel_p"])
 
 
 # Save Model 
-save(svmfit, file='svm_model.rda')
-
+# save(svmfit, file='svm_model.svm')
+saveRDS(svmfit, 'modelfile.rds')
+cat("Saved model to svm_model.svm\n")
 
 
 p <- predict(svmfit, data_test, type = "C-classification")
 # plot(p)
-# table(data_train$valid_amount)
-# table(data_test$valid_amount)
+# table(answer_train)
+# table(answer_test)
+ 
+# answer_test
+
 
 cat("------------------------------------------------------------\n")
-cat("Wie viel wird generell richtig erkannt:", mean(p == data_test[,"valid_amount"]), "\n")
-cat("False Positive", mean(data_test$valid_amount[p == 1] == 0), "\n\n")
-cat("Wie viele von echten Werten werden als solche erkannt:", mean(p[data_test$valid_amount == 1] == 1),"\n" )
-cat("Wie viele von den erkannten Werten sind tatsächliich welche:", mean(data_test$valid_amount[p == 1] == 1),"\n")
-cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
-cat("Wie viele von den als falsch erkannten Werten sind tatsächlich falsch:", mean(data_test$valid_amount[p == 0] == 0),"\n")
-cat("------------------------------------------------------------\n\n")
+cat("Wie viel wird generell richtig erkannt:", mean(p == answer_test), "\n")
+cat("False Positive", mean(answer_test[p == 1] == 0), "\n\n")
+
+
+
+# muss noch angepasst werden
+# cat("Wie viele von echten Werten werden als solche erkannt:", mean(p[data_test$valid_amount == 1] == 1),"\n" )
+# cat("Wie viele von den erkannten Werten sind tatsächliich welche:", mean(data_test$valid_amount[p == 1] == 1),"\n")
+# cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
+# cat("Wie viele von den als falsch erkannten Werten sind tatsächlich falsch:", mean(data_test$valid_amount[p == 0] == 0),"\n")
+# cat("------------------------------------------------------------\n\n")
+
+
 #cat("Ausgabe der false-positive:\n")
 #print(data_test[data_test$valid_amount[p == 1] == 0,])
 

@@ -5,3 +5,5 @@ dump.rdb
 codeship.aes
 .DS_Store
 **/*.csv
+**/*.rda
+**/.Rhistory

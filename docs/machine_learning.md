@@ -1,10 +1,13 @@
-# preselection of data
-I think we should again include the preselection so that we use only data where vat-price <= 0.3*price or at least vat-price <= price
-
 
 # Save and load model (R)
 save(mymodel, file='mymodel.rda')
-load('mymodel.rda')
+load('mymodel.rda') # nicht some_name = load(..), es wird der ursprünglich gewählte name verwendet
+
+# Save and load model (R) second way:
+saveRDS(model, 'modelfile.rds')
+M <- readRDS('modelfile.rds')
+
+
 
 
 # Set Working Directory
@@ -29,3 +32,7 @@ numbers = as.numeric(args)  # Convertierung in numerische Zahlen
 
 Aufruf: 
 Rscript --vanilla Name_des_R_Scripts.R Inputparameter1 Inputparameter2
+
+Rscript --vanilla use_model.R 24PC5D5oeL6fb8a5n.csv
+Rscript --vanilla use_model.R 24PC5D5oeL6fb8a5n.csv
+
