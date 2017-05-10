@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'open-uri'
-require_relative '../lib/models/bill_dimension'
 
 describe BillDimension do
   it 'saves the width of the page' do
