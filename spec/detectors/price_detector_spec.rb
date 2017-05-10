@@ -222,6 +222,39 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it "does not detect a list of numbers as prices", :focus do
+    # from 2AAizxTARPRp8PN4D.pdf
+    create(
+      :word,
+      text: '01,',
+      left: 0.41216879293424924,
+      right: 0.43277723258096173,
+      top: 0.5047420772611613,
+      bottom: 0.5146888734674995
+    )
+
+    create(
+      :word,
+      text: '02,',
+      left: 0.4383382401046778,
+      right: 0.45894667975139025,
+      top: 0.5047420772611613,
+      bottom: 0.5146888734674995
+    )
+
+    create(
+      :word,
+      text: 'O3',
+      left: 0.46450768727510633,
+      right: 0.48086359175662413,
+      top: 0.5047420772611613,
+      bottom: 0.5130696275734443
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
