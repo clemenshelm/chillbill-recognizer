@@ -130,4 +130,10 @@ DB.create_table :invoice_number_label_terms do
   Float :bottom
 end
 
+DB.create_table :bill_dimensions do
+  primary_key :id
+  String :name
+  Float :dimension
+end
+
 Sequel::Model.db = DB

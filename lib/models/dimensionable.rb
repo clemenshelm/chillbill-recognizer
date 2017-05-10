@@ -21,8 +21,9 @@ module Dimensionable
 
     def right_after(current)
       all.find do |following|
+        space_width = following.height * BillDimension.bill_ratio
         (following.left > current.right) &&
-          (following.left - current.right) < (following.height * 32) &&
+          (following.left - current.right) < (space_width * 32) &&
           on_same_line(current, following)
       end
     end

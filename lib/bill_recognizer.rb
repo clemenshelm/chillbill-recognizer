@@ -100,6 +100,7 @@ class BillRecognizer
       }
     end
 
+    BillDimension.create_all(width: @width, height: @height)
     detect_qr_code(png_file)
     recognize_words(png_file)
     filter_words

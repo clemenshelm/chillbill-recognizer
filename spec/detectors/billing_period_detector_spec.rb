@@ -5,8 +5,10 @@ require_relative '../support/factory_girl'
 require_relative '../factories'
 
 describe BillingPeriodDetector do
-  # From ZkPkwYF8p6PPLbf7f.pdf
   it 'Recognises the billing period from a bill' do
+    # From ZkPkwYF8p6PPLbf7f.pdf
+    BillDimension.create_all(width: 3057, height: 4323)
+
     create(
       :word,
       text: 'T-Mobile',
@@ -77,6 +79,9 @@ describe BillingPeriodDetector do
   end
 
   it "Recognizes a billing period seperated by the word 'bis' " do
+    # No idea what bill this comes from. Guessing dimensions ...
+    BillDimension.create_all(width: 3057, height: 4323)
+
     create(
       :word,
       text: '07.02.2016',
@@ -129,6 +134,9 @@ describe BillingPeriodDetector do
   end
 
   it "it doesn't consider other dates as part of the billing period" do
+    # No idea what bill this comes from. Guessing dimensions ...
+    BillDimension.create_all(width: 3057, height: 4323)
+
     create(
       :word,
       text: 'Ausstellungsdatum:',
@@ -206,6 +214,8 @@ describe BillingPeriodDetector do
 
   it 'prefers from dates closer to the separator' do
     # From 3EagyvJYF2RJhNTQC.pdf
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '01.06.2016',
@@ -252,6 +262,8 @@ describe BillingPeriodDetector do
 
   it 'detects the billing period using billing period labels' do
     # From m4F2bLmpKn7wPqM7q.pdf
+    BillDimension.create_all(width: 3057, height: 4323)
+
     BillingStartLabelTerm.create(
       text: 'Billing Start:',
       left: 0.4525523560209424,

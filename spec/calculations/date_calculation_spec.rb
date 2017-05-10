@@ -150,6 +150,8 @@ describe DateCalculation do
 
     it 'calculates the due date from a bill' do
       # From 7FDFZnmZmfMyxWZtG.pdf
+      BillDimension.create_all(width: 3056, height: 4324)
+
       create(
         :word,
         text: 'INVOICE',
@@ -209,7 +211,9 @@ describe DateCalculation do
     end
 
     it 'calculates the due date when the Zahlungstermin label is used' do
-      # From ZkPkwYF8p6PPLbf7f.png
+      # From ZkPkwYF8p6PPLbf7f.pdf
+      BillDimension.create_all(width: 3057, height: 4323)
+
       DueDateLabelTerm.create(
         text: 'Zahlungstermin',
         left: 1558,
@@ -274,6 +278,8 @@ describe DateCalculation do
 
     it 'calculates the due date when the Zahlungsziel label is used' do
       # From fGHCBxN6cbksNrHpo.pdf
+      BillDimension.create_all(width: 3057, height: 4323)
+
       DueDateLabelTerm.create(
         text: 'Zahlungsziel:',
         left: 1839,
@@ -297,6 +303,8 @@ describe DateCalculation do
 
     it 'identifies a due date when "Zahlungstermin" is written above' do
       # From xAkCJuSGM8A4ZGoSy.pdf
+      BillDimension.create_all(width: 3057, height: 4323)
+
       DueDateLabelTerm.create(
         text: 'Zahlungstermin',
         left: 0.7877003598298986,
@@ -328,6 +336,7 @@ describe DateCalculation do
 
     it 'calculates the due date when it is written as prompt' do
       # From ZqMX24iDMxxst5cnP.pdf
+      BillDimension.create_all(width: 3057, height: 4323)
 
       DateTerm.create(
         text: '21.09.2016',
@@ -360,6 +369,8 @@ describe DateCalculation do
 
     it 'calculates the due date when it is written as Fällig nach Erhalt' do
       # From bill 9ynzhWf9nSxTrNmPu.pdf
+      BillDimension.create_all(width: 3056, height: 4341)
+
       DateTerm.create(
         text: '2. August 2016',
         left: 0.6969895287958116,
@@ -389,6 +400,9 @@ describe DateCalculation do
     end
 
     it 'calculates the due date when it is written as Fällig bei Erhalt' do
+      # Faked example based on 9ynzhWf9nSxTrNmPu.pdf
+      BillDimension.create_all(width: 3056, height: 4341)
+
       DateTerm.create(
         text: '15. Oktober 2016',
         left: 0.6969895287958116,
