@@ -5,7 +5,7 @@ require_relative '../models/price_term'
 
 class PriceDetector
   DECIMAL_PRICE_REGEX =
-    /(?:^|[^\.,\d])(€?\d{1,4}(?:[\.,]\d{3})?+[,\.](?:\d{2,3}|-))(?:[^\.\d%]|$)/
+    /(?:^|[^\.,\d, A, 0])(€?([1-9]{1}\d{0,3}|[0]{1})(?:[\.,]\d{3})?+[,\.](?:\d{2,3}|-))(?:[^\.\d%]|$)/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
   SHORT_PRICE_REGEX = /(\d+€)/
   HUNGARIAN_PRICE_REGEX = /^[0-9]{2} [0-9]{3}/
