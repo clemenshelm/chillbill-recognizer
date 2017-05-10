@@ -7,3 +7,4 @@ codeship.aes
 **/*.csv
 **/*.rda
 **/.Rhistory
+data/*

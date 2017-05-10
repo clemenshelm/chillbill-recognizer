@@ -73,7 +73,7 @@ class ImageProcessor
   end
 
   def trim
-    @image.fuzz = '80%'
+    @image.fuzz = '70%'
     @image.trim!
     self
   end

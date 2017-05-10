@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'yaml'
+require 'erb'
 
 class Config
   @config_hash =
