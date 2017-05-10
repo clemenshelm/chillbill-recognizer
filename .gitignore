@@ -4,4 +4,7 @@ dump.rdb
 .env*
 codeship.aes
 .DS_Store
+**/*.csv
+**/*.rda
+**/.Rhistory
 data/*
