@@ -222,7 +222,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
-  it "does not detect a list of numbers as prices", :focus do
+  it 'does not detect a list of numbers as prices' do
     # from 2AAizxTARPRp8PN4D.pdf
     create(
       :word,
@@ -249,6 +249,30 @@ describe PriceDetector do
       right: 0.48086359175662413,
       top: 0.5047420772611613,
       bottom: 0.5130696275734443
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect paper size followed by quantity as a price' do
+    # From 2HtXGWoynP3sFMvFH.pdf
+    create(
+      :word,
+      text: 'A5,',
+      left: 0.16328534031413613,
+      right: 0.18291884816753926,
+      top: 0.31059204440333027,
+      bottom: 0.3191489361702128
+    )
+
+    create(
+      :word,
+      text: '32',
+      left: 0.1888089005235602,
+      right: 0.2032068062827225,
+      top: 0.31059204440333027,
+      bottom: 0.3179925994449584
     )
 
     prices = PriceDetector.filter
