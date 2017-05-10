@@ -102,7 +102,11 @@ class BillRecognizer
     end
 
     BillDimension.create_all(width: @width, height: @height)
-    detect_qr_code(png_file)
+
+    # QR code detection is temporarily disabled because of timeouts
+    @qr_code_present = false
+    # detect_qr_code(png_file)
+
     recognize_words(png_file)
     filter_words
 
