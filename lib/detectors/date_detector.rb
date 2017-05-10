@@ -8,7 +8,7 @@ class DateDetector
 
   SHORT_PERIOD_DATE_REGEX =
     /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.((?:20)?1\d))/
-  SHORT_SLASH_DATE_REGEX = %r{((#{days})/(#{months})/\d{2}$)}
+  SHORT_SLASH_DATE_REGEX = %r{(^(#{days})/(#{months})/\d{2}$)}
   LONG_YEAR_SLASH_REGEX = %r{\d{4}/(?:#{months})/(?:#{days})$}
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-20\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/

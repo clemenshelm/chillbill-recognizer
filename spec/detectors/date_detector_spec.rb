@@ -746,7 +746,7 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2016-08-29']
   end
 
-  it 'detects multi word dates first' do
+  it 'detects multi word dates first, and does not detect non dates' do
     # From vGmK76dSSMrLQ8axN.pdf
     create(
       :word,
@@ -785,7 +785,7 @@ describe DateDetector do
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2017-02-27', '2038-05-01']
+    expect(date_strings(dates)).to eq ['2017-02-27']
   end
 
   def date_strings(date_terms)
