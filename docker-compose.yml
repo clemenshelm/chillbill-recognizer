@@ -45,6 +45,7 @@ tests:
   build: .
   volumes:
     - .:/myapp
+    - ./tmp/tmpdir:/tmp
   volumes_from:
     - bundle
   env_file: .env-rspec

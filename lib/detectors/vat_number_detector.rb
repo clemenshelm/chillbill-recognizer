@@ -6,7 +6,7 @@ require_relative '../logging.rb'
 class VatNumberDetector
   include Logging
 
-  VAT_REGEX = /[A-Z]{2}[A-Z0-9]{7,12}/
+  VAT_REGEX = /[A-Za-z]{2}[A-Z0-9a-z]{7,12}/
   EU_VAT_REGEX = /EU[0-9]{9}/
 
   def self.filter
@@ -31,8 +31,10 @@ class VatNumberDetector
         last_word = nil
 
         median_height = Word.map(&:height).sort[Word.count / 2]
+        scale_factor = median_height > 0.01 ? 1.15 : 1.5
+
         terms = Word.where(
-          'bottom - top <= ?', median_height * 1.15
+          'bottom - top <= ?', median_height * scale_factor
         ).map do |word|
           if term.valid? || (last_word && !word.follows(last_word))
             term = VatNumberTerm.new(
@@ -44,7 +46,6 @@ class VatNumberDetector
 
           term.add_word(word)
           last_word = word
-
           term if term.valid?
         end
 

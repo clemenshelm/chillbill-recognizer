@@ -15,7 +15,7 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:vatNumber]).to eq 'ATU54441803'
     expect(bill_attributes[:iban]).to eq 'AT431200010626827900'
     expect(bill_attributes[:clockwiseRotationsRequired]).to eq 0
-    expect(bill_attributes[:qrCode]).to be_nil
+    expect(bill_attributes[:qrCodePresent]).to be false
     expect(bill_attributes[:invoiceNumber]).to be_nil
   end
 end
