@@ -42,4 +42,15 @@ class PriceTerm < Sequel::Model
     dec_text.sub!('€', '')
     BigDecimal.new(dec_text)
   end
+
+  def to_h
+    {
+      'text' => text,
+      'price' => (to_d * 100).round.to_i,
+      'left' => left,
+      'right' => right,
+      'top' => top,
+      'bottom' => bottom
+    }
+  end
 end

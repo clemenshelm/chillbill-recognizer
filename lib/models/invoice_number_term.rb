@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 require 'sequel'
 require_relative './term_builder'
+require_relative '../boot'
+require_relative './dimensionable'
 
-class VatNumberTerm < Sequel::Model
+class InvoiceNumberTerm < Sequel::Model
+  include Dimensionable
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
@@ -20,6 +23,11 @@ class VatNumberTerm < Sequel::Model
     self.top = word.top
     self.right = word.right
     self.bottom = word.bottom
+    self.first_word_id = @term_builder.words.first.id
+  end
+
+  def words
+    @term_builder.words.dup
   end
 
   def valid?
@@ -27,6 +35,6 @@ class VatNumberTerm < Sequel::Model
   end
 
   def to_s
-    text.upcase
+    text
   end
 end

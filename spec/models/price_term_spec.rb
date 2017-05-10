@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require_relative '../../lib/boot'
-require_relative '../../lib/models/price_term'
 
 describe PriceTerm do
   it 'recognizes price with comma separator and euro sign behind' do
@@ -51,5 +50,21 @@ describe PriceTerm do
   it 'expext price to have space in betweeen' do
     term = PriceTerm.new(text: '11 038')
     expect(term.to_d).to eq 11_038
+  end
+
+  describe 'to_h' do
+    it 'creates a hash representing the price term' do
+      term = PriceTerm.new(
+        text: '1234,56', top: 1, bottom: 2, left: 3, right: 4
+      )
+      expect(term.to_h).to eq(
+        'text' => '1234,56',
+        'price' => 123_456,
+        'top' => 1,
+        'bottom' => 2,
+        'left' => 3,
+        'right' => 4
+      )
+    end
   end
 end

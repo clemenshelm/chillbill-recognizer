@@ -2,7 +2,7 @@
 require 'sequel'
 require_relative './term_builder'
 
-class VatNumberTerm < Sequel::Model
+class InvoiceNumberLabelTerm < Sequel::Model
   def initialize(attrs)
     @term_builder = TermBuilder.new(
       regex: attrs.delete(:regex),
@@ -27,6 +27,6 @@ class VatNumberTerm < Sequel::Model
   end
 
   def to_s
-    text.upcase
+    text
   end
 end
