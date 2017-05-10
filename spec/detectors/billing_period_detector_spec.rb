@@ -79,7 +79,7 @@ describe BillingPeriodDetector do
   end
 
   it "Recognizes a billing period seperated by the word 'bis' " do
-    # No idea what bill this comes from. Guessing dimensions …
+    # No idea what bill this comes from. Guessing dimensions ...
     BillDimension.create_all(width: 3057, height: 4323)
 
     create(
@@ -134,7 +134,7 @@ describe BillingPeriodDetector do
   end
 
   it "it doesn't consider other dates as part of the billing period" do
-    # No idea what bill this comes from. Guessing dimensions …
+    # No idea what bill this comes from. Guessing dimensions ...
     BillDimension.create_all(width: 3057, height: 4323)
 
     create(
