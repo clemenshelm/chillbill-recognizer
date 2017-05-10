@@ -21,16 +21,16 @@
 generate_tuples <- function(price_list){
   
   combinations = expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
-  part1 = price_list[ combinations$Var1, c("bill_id", "price_id",  "text", "price_cents", "left","right","top", "bottom")]
-  part2 = price_list[ combinations$Var2, c("price_id",  "text", "price_cents", "left","right","top", "bottom")]
+  part1 = price_list[ combinations$Var1, c("bill_id", "price_id", "text", "price_cents", "left", "right", "top", "bottom")]
+  part2 = price_list[ combinations$Var2, c("price_id", "text", "price_cents", "left", "right", "top", "bottom")]
   
   # rename columns
-  colnames(part1)<- c("bill_id","total_id", "total_text", "total_price","total_left", "total_right", "total_top","total_bottom")
-  colnames(part2)<- c("vat_id", "vat_text", "vat_price","vat_left", "vat_right", "vat_top","vat_bottom")
+  colnames(part1)<- c("bill_id", "total_id", "total_text", "total_price", "total_left", "total_right", "total_top", "total_bottom")
+  colnames(part2)<- c("vat_id", "vat_text", "vat_price", "vat_left", "vat_right", "vat_top", "vat_bottom")
   tuples = data.frame(part1,part2)
   
   # only use specific combinations
-  data = tuples[tuples[,"vat_price"] <= 0.3 * tuples[,"total_price"] &  tuples[,"total_price"] > 0 ,  ]
+  data = tuples[tuples[ , "vat_price"] <= 0.3 * tuples[ , "total_price"] & tuples[ , "total_price"] > 0,  ]
   
   # delete unused variables
   rm(combinations, part1, part2, tuples)

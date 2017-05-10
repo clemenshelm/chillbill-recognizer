@@ -1,5 +1,5 @@
-# Set Working Directory to Source file loaction (only necessary in RStudio)
-# RScript uses automatically the right directionary
+# Set Working Directory to Source file location (only necessary in RStudio)
+# RScript uses automatically the right directory
 
 
 library(e1071)
@@ -40,8 +40,9 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 ######    SVM    ######
 #######################
 
-n = nrow(calibration_data)
-s = sample(n, round(n * 0.7))
+number_of_tuples = nrow(calibration_data)
+selection = sample(number_of_tuples, round(number_of_tuples * 0.7)) 
+# pulls approx. 70% random tuples for training, the remaining 30% are for testing the model
 
 
 # choose which arguments are for the SVM
@@ -51,10 +52,10 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
 
 
 # build training values and answers (converted to factor)
-data_train = calibration_data[s,col]
-data_test = calibration_data[-s,col]
-answer_train = as.factor(calibration_data[s,"valid_amount"])
-answer_test = as.factor(calibration_data[-s,"valid_amount"])
+data_train = calibration_data[selection,col]
+data_test = calibration_data[-selection,col]
+answer_train = as.factor(calibration_data[selection,"valid_amount"])
+answer_test = as.factor(calibration_data[-selection,"valid_amount"])
 
 #data_train$valid_amount = as.factor(data_train$valid_amount)
 #data_test$valid_amount = as.factor(data_test$valid_amount)
@@ -98,7 +99,7 @@ p = predict(svmfit, data_test, type = "C-classification")
 
 
 cat("------------------------------------------------------------\n")
-cat("Wie viel wird generell richtig erkannt:", mean(p == answer_test), "\n")
+cat("Overall recognition:", mean(p == answer_test), "\n")
 cat("False Positive", mean(answer_test[p == 1] == 0), "\n\n")
 
 
@@ -109,7 +110,6 @@ cat("False Positive", mean(answer_test[p == 1] == 0), "\n\n")
 # cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
 # cat("Wie viele von den als falsch erkannten Werten sind tatsächlich falsch:", mean(data_test$valid_amount[p == 0] == 0),"\n")
 # cat("------------------------------------------------------------\n\n")
-
 
 #cat("Ausgabe der false-positive:\n")
 #print(data_test[data_test$valid_amount[p == 1] == 0,])
