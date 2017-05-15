@@ -44,6 +44,7 @@ require_relative './models/bill_dimension'
 require_relative './config'
 require_relative './logging'
 require_relative './image_processor'
+require_relative './qr_decoder'
 
 class BillRecognizer
   include Logging
