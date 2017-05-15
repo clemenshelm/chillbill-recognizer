@@ -2,13 +2,40 @@
 FROM ruby:2.3.1
 
 # This installs our libraries and some Tesseract dependencies
-RUN apt-get update &&  apt-get install -y ghostscript g++ autoconf automake libtool autoconf-archive pkg-config libpng12-dev libjpeg62-turbo-dev libtiff5-dev zlib1g-dev libleptonica-dev
+RUN apt-get update &&  apt-get install -y \
+  ghostscript \
+  g++ \
+  autoconf \
+  automake \
+  libtool \
+  autoconf-archive \
+  pkg-config \
+  libpng12-dev \
+  libjpeg62-turbo-dev \
+  libtiff5-dev \
+  zlib1g-dev \
+  libleptonica-dev \
+  zbar-tools
 
 # This downloads and compiles Leptonica 1.74, a Tesseract 4.00 dependency
-RUN git clone https://github.com/DanBloomberg/leptonica.git && cd leptonica && mkdir m4 && autoreconf -vi && ./autobuild && ./configure && make && make install
+# TODO: checkout tag 1.74 once it is tagged.
+RUN git clone https://github.com/DanBloomberg/leptonica.git && \
+  cd leptonica && \
+  mkdir m4 && \
+  autoreconf -vi && \
+  ./autobuild && \
+  ./configure && \
+  make && \
+  make install
 
 # This downloads and compiles Tesseract 4.00
-RUN git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git && cd tesseract && ./autogen.sh && ./configure --enable-debug && LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make && make install && ldconfig
+RUN git clone --depth 1 --branch 4.00.00alpha https://github.com/tesseract-ocr/tesseract.git && \
+  cd tesseract && \
+  ./autogen.sh && \
+  ./configure --enable-debug && \
+  LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make && \
+  make install && \
+  ldconfig
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1

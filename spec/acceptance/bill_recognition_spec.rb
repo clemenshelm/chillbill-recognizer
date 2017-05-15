@@ -18,4 +18,13 @@ describe 'Recognizing bills correctly' do
     expect(bill_attributes[:qrCodePresent]).to be false
     expect(bill_attributes[:invoiceNumber]).to be_nil
   end
+
+  it 'recognizes a bill with QR code' do
+    retriever = SpecCacheRetriever.new(file_basename: '3T2PCjhm5ovF4Mdce.pdf')
+    recognizer = BillRecognizer.new(retriever: retriever)
+
+    bill_attributes = recognizer.recognize
+
+    expect(bill_attributes[:qrCodePresent]).to be true
+  end
 end

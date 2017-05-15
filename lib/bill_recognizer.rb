@@ -4,7 +4,6 @@ require 'bigdecimal'
 require 'pry'
 require 'nokogiri'
 require 'yaml'
-require 'qrio'
 require_relative './boot'
 require_relative './bill_image_retriever'
 require_relative './calculations/price_calculation'
@@ -92,7 +91,9 @@ class BillRecognizer
     version = fetch_recognizer_version
 
     begin
-      png_file = download_and_convert_image
+      image_file = @retriever.save
+      @image = ImageProcessor.new(image_file.path)
+      png_file = @image.preprocess.write_png
 
     rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
       return {
@@ -101,16 +102,14 @@ class BillRecognizer
       }
     end
 
-    BillDimension.create_all(width: @width, height: @height)
-
-    # QR code detection is temporarily disabled because of timeouts
-    @qr_code_present = false
-    # detect_qr_code(png_file)
+    BillDimension.create_all(width: @image.image_width, height: @image.image_height)
 
     recognize_words(png_file)
     filter_words
 
     calculate_attributes(version)
+  ensure
+    @image&.destroy!
   end
 
   def empty_database
@@ -120,38 +119,6 @@ class BillRecognizer
   def fetch_recognizer_version
     version_data = YAML.load_file 'lib/version.yml'
     version_data['Version']
-  end
-
-  def download_and_convert_image
-    image_file = @retriever.save
-    preprocess(image_file.path)
-  end
-
-  def preprocess(image_path)
-    image = ImageProcessor.new(image_path)
-
-    @clockwise_rotations_required = image.calculate_clockwise_rotations_required
-    image = image.correct_orientation
-
-    @width = image.image_width
-    @height = image.image_height
-
-    image.apply_background('#fff')
-         .deskew
-         .normalize
-         .trim
-         .improve_level
-         .write_png!
-  end
-
-  def detect_qr_code(png_file)
-    Qrio::Qr.load(png_file.path).qr.text
-    @qr_code_present = true
-  rescue NoMethodError
-    @qr_code_present = false
-  rescue RuntimeError
-    # This means that a QR code was found but it is the wrong kind
-    @qr_code_present = false
   end
 
   def recognize_words(png_file)
@@ -197,11 +164,14 @@ class BillRecognizer
   end
 
   def adjust_word_attributes(left, top, right, bottom)
+    width = @image.image_width
+    height = @image.image_height
+
     {
-      left: left / @width.to_f,
-      right: right / @width.to_f,
-      top: top / @height.to_f,
-      bottom: bottom / @height.to_f
+      left: left / width.to_f,
+      right: right / width.to_f,
+      top: top / height.to_f,
+      bottom: bottom / height.to_f
     }
   end
 
@@ -229,10 +199,15 @@ class BillRecognizer
       dueDate: calculate_due_date,
       iban: calculate_iban,
       invoiceNumber: calculate_invoice_number,
-      clockwiseRotationsRequired: @clockwise_rotations_required,
-      qrCodePresent: @qr_code_present,
+      clockwiseRotationsRequired: @image.calculate_clockwise_rotations_required,
+      qrCodePresent: qr_code?,
       recognizerVersion: version
     }
+  end
+
+  def qr_code?
+    decoder = QRDecoder.new(@image.image)
+    decoder.qr_code?
   end
 
   def calculate_amounts
