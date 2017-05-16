@@ -201,14 +201,9 @@ class BillRecognizer
       iban: calculate_iban,
       invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @image.calculate_clockwise_rotations_required,
-      qrCodePresent: qr_code?,
+      qrCodePresent: QRDecoder.new(@image.image).qr_code?,
       recognizerVersion: version
     }
-  end
-
-  def qr_code?
-    decoder = QRDecoder.new(@image.image)
-    decoder.qr_code?
   end
 
   def calculate_amounts
