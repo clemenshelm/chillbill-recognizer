@@ -28,22 +28,19 @@ correct_price_tuples = read.csv("correct_price_tuples.csv", header = TRUE)
 tab = table(prices_several_bills$bill_id)
 
 
-# not working ... needs a little bit of work
+heights_all = prices_several_bills$bottom - prices_several_bills$top
+# answer =  numeric(length(heights_all))
+answer = rnorm(n = length(heights_all),mean =0, sd = .1) # wrong 
+answer[prices_several_bills$price_id %in% correct_price_tuples$total_id] = 1 #correct 
+m = data.frame("bill_id" = prices_several_bills$bill_id, "heights" = heights_all, "answer" = answer)
+
 for(i in 1:length(tab)){
+  x = m[m$bill_id ==  names(tab)[i], "answer"]
+  y = m[m$bill_id ==  names(tab)[i], "heights"]
   
-  height_real_prices = (prices_several_bills$total_bottom - prices_several_bills$total_top)[prices_several_bills$id ==  names(tab)[i] & prices_several_bills$valid_amount == 1]
-  height_false_prices = (prices_several_bills$total_bottom - prices_several_bills$total_top)[prices_several_bills$id ==  names(tab)[i] & prices_several_bills$valid_amount == 0]
-
-  a = c(numeric(length(height_false_prices)), numeric(length(height_real_prices)) + 1)
-  b = c(height_false_prices, height_real_prices)
-  plot(cbind(a,b))
-
+  
+  plot(main = names(tab)[i], x,y)
 }
 
-
-# Plotte alle Preise  (keine Unterscheidung zwischen den einzelnen Rechnungen)
-# hist(height_real_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(1,1,0,0.7),main="",xlab="number")
-# par(new=TRUE)
-# hist(height_false_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(0,1,1,0.4),main="",xlab="",ylab="")
-
-
+# If the height is 
+################################

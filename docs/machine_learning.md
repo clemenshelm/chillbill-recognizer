@@ -6,7 +6,7 @@ In the long run there are several possibilities to optimize the result:
 - Choose optimal Parameters for C and gamma (via grid search)
 - Choose different weights for the tuples (correct tuples should get a higher weight, otherwise they are underrepresented), this can also be seen as an optimization problem, the variable(s) to minimize are the errors
 - With all the obove givven we generate the model - this is also an optimization problem but R takes care of this
-
+- For some attributes (`total_height_uq`, `price_uq` ) we use the top 25% as a marker, this number must not be perfekt, so we could also tune it looking at the error-distribution
 
 ## Save and load model (R)
 save(mymodel, file='mymodel.rda')

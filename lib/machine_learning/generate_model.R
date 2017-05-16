@@ -29,10 +29,17 @@ calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id
 #calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 
+# Change Row names
+rownames(calibration_data) <- NULL
+
 
 # Print some informations
 cat("Amount of false and right combinations:", table(calibration_data$valid_amount), 
  "<=>", table(calibration_data$valid_amount)[2]/ nrow(calibration_data) * 100, "% right combinations%\n")
+
+
+
+
 
 
 
@@ -54,12 +61,9 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
 # build training values and answers (converted to factor)
 data_train = calibration_data[selection,col]
 data_test = calibration_data[-selection,col]
+
 answer_train = as.factor(calibration_data[selection,"valid_amount"])
 answer_test = as.factor(calibration_data[-selection,"valid_amount"])
-
-#data_train$valid_amount = as.factor(data_train$valid_amount)
-#data_test$valid_amount = as.factor(data_test$valid_amount)
-
 
 
 # Grid-search for the best paramters, kernel="radial" ... RBF
@@ -79,7 +83,7 @@ cat("Best parameters:\n")
 print(tuned$best.parameters)
 
 
-svmfit = svm(x = data_train, 
+svmfit = svm( x = data_train, 
               y = answer_train, 
               kernel ="radial", 
               cost = tuned$best.parameters$cost, 
@@ -99,20 +103,29 @@ p = predict(svmfit, data_test, type = "C-classification")
 
 
 cat("------------------------------------------------------------\n")
-cat("Overall recognition:", mean(p == answer_test), "\n")
-cat("False Positive", mean(answer_test[p == 1] == 0), "\n\n")
+cat("1: Overall recognition:", mean(p == answer_test), "\n")
+cat("2: Recognition rate of right values:", mean(p[answer_test == 1] == 1), "\n")
+cat("3: Recognition rate of the wrong values:", mean(p[answer_test == 0] == 0), "\n")
+cat("4: False Positive:", mean(answer_test[p == 1] == 0), " <-- \n")
+cat("5: Right Positive:", mean(answer_test[p == 1] == 1), "\n")
+cat("6. False Negative:", mean(answer_test[p == 0] == 1), "\n")
+cat("7: Right Negative:", mean(answer_test[p == 0] == 0), "\n")
+cat("------------------------------------------------------------\n\n")
+
+# 1: How many of the overall predictions are right, higher is better
+# 2: How many of the positive values are recognized correct, higher is better
+# 3: How many of the negative values are recognized correct, higher is better
+# 4: How many of the positive predictions are wrong, lower is better
+# 5: How many of the positive predictions are real positive, higher is better
+# 6: How many of the negative predictoins are wrong negative, lower is better 
+# 7: How many of the negative predictoins are real negative, higher is better
 
 
 
-# needs adaptaion, the name is incorrect
-# cat("Wie viele von echten Werten werden als solche erkannt:", mean(p[data_test$valid_amount == 1] == 1),"\n" )
-# cat("Wie viele von den erkannten Werten sind tatsächliich welche:", mean(data_test$valid_amount[p == 1] == 1),"\n")
-# cat("Wie viele von den falschen Werten werden als soche erkannt:", mean(p[data_test$valid_amount == 0] == 0),"\n")
-# cat("Wie viele von den als falsch erkannten Werten sind tatsächlich falsch:", mean(data_test$valid_amount[p == 0] == 0),"\n")
-# cat("------------------------------------------------------------\n\n")
+cat("Output of the false-positive Combinations:\n")
+# data_test[ , "valid_amount"] = answer_test
+print(data_test[answer_test == 0 & p == 1, ])
 
-#cat("Ausgabe der false-positive:\n")
-#print(data_test[data_test$valid_amount[p == 1] == 0,])
 
 
 

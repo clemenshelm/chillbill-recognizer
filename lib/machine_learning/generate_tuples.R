@@ -3,19 +3,21 @@
 
 ###############################################
 ######    Description of the data set    ######
-# rel_p         proportion of vat_price to total_price
-# price_order   position of price entry compared to all prices in the bill
-# price_uq      1 if price is in the upper quartil (25%), 0 if not
-# total_price_s Scaled total_price
-# vat_price_s   Scaled vat_price
-# common_width  The common width of the possible total_price and the possible vat_price
-# common_height The common height of the possible total_price and the possible vat_price
-# group         colors for plots
+# rel_p           proportion of vat_price to total_price
+# price_order     position of price entry compared to all prices in the bill
+# price_uq        1 if price is in the upper quartil (25%), 0 if not
+# total_price_s   Scaled total_price
+# vat_price_s     Scaled vat_price
+# common_width    The common width of the possible total_price and the possible vat_price
+# common_height   The common height of the possible total_price and the possible vat_price
+# group           colors for plots
+# total_height_uq 1 if the height of the total_price is in the upper quartil (25%), 0 if not
 ###############################################
 
 # Load example bill for debugging / creating new attributes:
-#price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
-
+# price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
+# price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
+# price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
 
 
 generate_tuples <- function(price_list){
@@ -67,7 +69,7 @@ generate_tuples <- function(price_list){
   
   # creating "price_uq"
   quantil_limit = quantile(price_list$price_cents, 0.75)
-  data[ ,"price_uq"] <- as.numeric(data$total_price > quantil_limit)
+  data[ ,"price_uq"] = as.numeric(data$total_price > quantil_limit)
   
   
   # Checking of NaN entries
@@ -76,13 +78,13 @@ generate_tuples <- function(price_list){
   if(tmp != 0){data[is.na(data)] = 0 }  # sets NaN values to 0
   
   
+
+  # creating "total_height_uq"
+  total_height = price_list$bottom - price_list$top
+  height_uq = quantile(total_height, 0.75)
+  data[ ,"height_uq"] =  as.numeric((data$total_bottom - data$total_top)  >= height_uq)
   
-  # height of total_price > median of all heights?
-  
-  
-    
   return(data)
-  
 }
 
 
