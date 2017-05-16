@@ -43,7 +43,7 @@ gem 'rubocop', require: false
 gem 'rb-libsvm'
 
 # QR Code reader
-gem 'zbar'
+gem 'zbar', require: false
 
 group :development do
   gem 'colorize' # Colorizes shell output
