@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 require_relative 'spec/spec_cache_retriever'
-require_relative 'lib/bill_recognizer'
-Dir["lib/tasks/machine_learning/*.rake"].each { |file| import file }
+if !ENV['deployment']
+  Dir["lib/tasks/machine_learning/*.rake"].each { |file| import file }
+end
 
 namespace :tmp do
   desc 'Clears all cached artifacts'
