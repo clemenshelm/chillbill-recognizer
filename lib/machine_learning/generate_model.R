@@ -41,7 +41,7 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 #######################
 
 # For now we just consider the wrong-positive error
-number_of_runs = 5
+number_of_runs = 50
 error_matrix = data.frame()
 
 
