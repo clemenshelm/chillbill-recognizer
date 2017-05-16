@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require_relative '../../bill_recognizer'
+
 namespace :machine_learning do
   desc 'Add recognized prices to imported bill data'
   task :add_prices do
