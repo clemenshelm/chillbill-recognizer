@@ -96,7 +96,7 @@ task :deploy => [:push_image, :restart_task] do
   p "Newest recognizer version successfully deployed!"
 end
 
-desc 'Gains access to parent image and build recognizer image'
+desc 'Gains access to parent image and builds recognizer image'
 task :build do
   sh "(aws ecr get-login --region eu-central-1) | /bin/bash
 
