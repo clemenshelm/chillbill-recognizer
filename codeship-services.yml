@@ -1,8 +1,8 @@
-- service: app
-  command: /bin/true
-  encrypted_dockercfg_path: dockercfg.encrypted
-
 tests:
   build: .
   encrypted_env_file: env-rspec.encrypted
   cached: true
+
+- service: app
+  command: /bin/true
+  encrypted_dockercfg_path: dockercfg.encrypted
