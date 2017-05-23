@@ -101,5 +101,17 @@ time.taken
 ```
 
 
+**choose which arguments are for the SVM**
+```r
+col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height", "height_uq")
+#col = names(calibration_data) # all
+#col = names(calibration_data)[!names(calibration_data) %in% c("id","valid_amount")] # all but..
+```
+
+**Save all attributes into one string**
+```r
+name_of_model = paste(col, sep="", collapse="/")
+```
+
 
 

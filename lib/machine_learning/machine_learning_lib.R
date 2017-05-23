@@ -8,7 +8,6 @@
 
 
 generate_tuples <- function(price_list){
-  
   combinations = expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
   part1 = price_list[ combinations$Var1, c("bill_id", "price_id", "text", "price_cents", "left", "right", "top", "bottom")]
   part2 = price_list[ combinations$Var2, c("price_id", "text", "price_cents", "left", "right", "top", "bottom")]
@@ -63,6 +62,100 @@ generate_tuples <- function(price_list){
   
   return(data)
 }
+
+
+
+# Grid-search for the best paramters, kernel="radial" ... RBF, returns a data.frame which includes the parameters
+parameters_grid_search = function(data_train, answer_train){
+  tuned = tune( svm, 
+                train.x = data_train, 
+                train.y = answer_train,
+                kernel = "radial",
+                type   = "C-classification",
+                scale  = FALSE,
+                ranges = list(
+                  cost = 10^(-1:6),
+                  gamma = 10^(-1:1)
+                )
+  )
+  
+  return(tuned$best.parameters)
+}
+
+
+
+generate_parameters_distribution = function(number_of_runs = 20, col, calibration_data ){
+  output = data.frame()
+  
+  number_of_tuples = nrow(calibration_data)
+  
+  for(iteration in 1:number_of_runs){
+    # Bootstrapping the data (and answer)
+    selection = sample(number_of_tuples, number_of_tuples, replace = TRUE)
+    data_train = calibration_data[selection,col] # there is NO data_test
+    answer_train = as.factor(calibration_data[selection,"valid_amount"])
+    
+    best_parameters = parameters_grid_search(data_train, answer_train)
+    
+    output = rbind(output, best_parameters)
+    cat("Progress: ", iteration/number_of_runs, "\n")
+  }
+  
+  return(output)
+}
+
+
+#To get a distribution of the error we run each combination several times (number_of_runs times)
+generate_error_distribution = function(number_of_runs, col, calibration_data, cost = NULL, gamma = NULL){
+  
+  output_error4 = numeric(number_of_runs)
+  output_cost = numeric(number_of_runs)
+  output_gamma = numeric(number_of_runs)
+  
+  number_of_tuples = nrow(calibration_data)
+  
+  
+  for(iteration in 1:number_of_runs){
+    
+    selection = sample(number_of_tuples, round(number_of_tuples * 0.7)) 
+    # pulls approx. 70% random tuples for training, the remaining 30% are for testing the model
+    
+    # build training values and answers (converted to factor)
+    data_train = calibration_data[selection,col]
+    data_test = calibration_data[-selection,col]
+    answer_train = as.factor(calibration_data[selection,"valid_amount"])
+    answer_test = as.factor(calibration_data[-selection,"valid_amount"])
+    
+    # Gridsearch for the best parameters
+    best_parameters = parameters_grid_search(data_train, answer_train)
+    
+    # create the model with the best cost and gamma parameters
+    svmfit = svm( x = data_train, 
+                  y = answer_train, 
+                  kernel ="radial", 
+                  cost = best_parameters$cost, 
+                  gamma= best_parameters$gamma, 
+                  scale = FALSE, 
+                  type = "C-classification")
+    
+    # prediction
+    p = predict(svmfit, data_test, type = "C-classification")
+    
+    
+    # Save to output-vectors
+    output_error4[iteration] = mean(answer_test[p == 1] == 0)
+    output_cost[iteration] = best_parameters$cost
+    output_gamma[iteration] = best_parameters$gamma
+    
+    cat("Progress: ", iteration/number_of_runs, "\n")
+  }
+  
+  return(list(error4 = output_error4, 
+              cost = output_cost, 
+              gamma = output_gamma  )
+         )
+}
+
 
 
 
