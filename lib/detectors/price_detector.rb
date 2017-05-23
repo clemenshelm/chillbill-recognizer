@@ -5,10 +5,10 @@ require_relative '../models/price_term'
 
 class PriceDetector
   DECIMAL_PRICE_REGEX =
-    /(?:^|[^\.,\d, A, 0])(€?([1-9]{1}\d{0,3}|[0]{1})(?:[\.,]\d{3})?+[,\.](?:\d{2,3}|-))(?:[^\.\d%]|$)/
+    /(?:^|[^\d,A])(€?([1-9]{1}\d{0,3}|0)(.\d{3})?[,.](\d{2,3}|-))$/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
   SHORT_PRICE_REGEX = /(\d+€)/
-  HUNGARIAN_PRICE_REGEX = /^[0-9]{2} [0-9]{3}/
+  HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3})/
 
   def self.filter
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
