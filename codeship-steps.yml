@@ -2,7 +2,6 @@
   services:
   - aws_generator
   - tests
-  dockercfg_service: aws_generator
   steps:
   - name: rubocop
     command: bundle exec rubocop

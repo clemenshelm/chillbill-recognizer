@@ -1,8 +1,8 @@
 tests:
   build: .
   encrypted_env_file: env-rspec.encrypted
+  dockercfg_service: aws_generator
   cached: true
-
 aws_generator:
   image: codeship/aws-ecr-dockercfg-generator
   encrypted_env_file: aws_creds.encrypted # contains Secret, AccessKey and Region
