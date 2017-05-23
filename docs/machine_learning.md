@@ -71,6 +71,7 @@ apt-get install libcurl4-openssl-dev libmagick++-dev
 ```
 
 **Use an RScript over the Command-line**
+
 *Command:*
 ```bash
 Rscript --vanilla Name_of_the_RScript.R Inputparameter1 Inputparameter2
@@ -83,8 +84,10 @@ Rscript --vanilla use_model.R 24PC5D5oeL6fb8a5n.csv
 ```
 
 **Use Inputparameters in R:**
+```r
 args = commandArgs(trailingOnly=TRUE)
 numbers = as.numeric(args)  # Convert to numerical
+```
 
 **Measure time in R**
 ```r
