@@ -1,4 +1,11 @@
+aws_generator:
+  image: codeship/aws-ecr-dockercfg-generator
+  encrypted_env_file: aws_creds.encrypted # contains Secret, AccessKey and Region
+  add_docker: true
+
 tests:
   build: .
+    image: 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-envd
+    dockerfile: Dockerfile
   encrypted_env_file: env-rspec.encrypted
   cached: true

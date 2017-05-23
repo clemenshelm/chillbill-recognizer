@@ -1,3 +1,9 @@
+- type: pull
+  service: app
+  registry: 175255700812.dkr.ecr.eu-central-1.amazonaws.com
+  image_name: 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-envd
+  dockercfg_service: aws_generator
+
 - type: parallel
   services:
   - tests
