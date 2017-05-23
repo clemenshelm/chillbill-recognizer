@@ -6,6 +6,11 @@
 # price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
 # price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
 
+# calibration_data = read.csv("calibration_data.csv", header = TRUE)
+# data_train = read.csv("data_train.csv", header = TRUE)
+# answer_train = read.csv("answer_train.csv", header = TRUE)
+
+
 
 generate_tuples <- function(price_list){
   combinations = expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
@@ -65,8 +70,32 @@ generate_tuples <- function(price_list){
 
 
 
+
+# Error function for the tune function, we want to minimize the wrong positive error
+# Consider that this function can return NaN entries. See the documentation for further information.
+error_function = function(true_values, predictions){
+  
+  # err =  mean(true_values[predictions == 1] == 0)
+  # print(err)
+  # 
+  # if(is.nan(err)){
+  #   # cat("T", paste(head(true_values)), length(true_values), "\n")
+  #   # cat("P", paste(head(predictions)), length(predictions), "\n")
+  #   cat("T", paste(table(true_values)), length(true_values), "\n")
+  #   cat("P", paste(table(predictions)), length(predictions), "\n")
+  #   
+  # }
+
+  return(mean(true_values[predictions == 1] == 0))
+}
+
+
+
 # Grid-search for the best paramters, kernel="radial" ... RBF, returns a data.frame which includes the parameters
 parameters_grid_search = function(data_train, answer_train){
+  
+  tune_control = tune.control(error.fun = error_function)
+  
   tuned = tune( svm, 
                 train.x = data_train, 
                 train.y = answer_train,
@@ -76,7 +105,9 @@ parameters_grid_search = function(data_train, answer_train){
                 ranges = list(
                   cost = 10^(-1:6),
                   gamma = 10^(-1:1)
-                )
+                ),
+                tunecontrol = tune_control
+              
   )
   
   return(tuned$best.parameters)
@@ -103,6 +134,9 @@ generate_parameters_distribution = function(number_of_runs = 20, col, calibratio
   
   return(output)
 }
+
+
+
 
 
 #To get a distribution of the error we run each combination several times (number_of_runs times)

@@ -5,7 +5,6 @@ library(e1071)
 source('machine_learning_lib.R') # loads function "generate_tuples(price_list)"
 
 
-
 ######################################
 ######    GENERATION OF DATA    ######
 ######################################
@@ -38,9 +37,10 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 
 
 
-#######################
-######    SVM    ######
-#######################
+
+######################################
+######           SVM            ######
+######################################
 
 # For now we just consider the wrong-positive error
 # number_of_runs = 20
@@ -64,56 +64,29 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 # 
 
 
-
-
-
-
-
 # choose which arguments are for the SVM
 col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height", "height_uq")
 
 
+# We must rethink the search for the optimal hyperparameters (cost, gamma) because the tune function already calculates the distribution.
+# So now we calculate the distribution of the optimal parameter searched through the distribution of the error?? 
+# The standard tund function calculates the wrong error, but I fixed that already
+
 
 # Distribution of the parameters (cost and gamma)
-parameter_run1 =  generate_parameters_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data)
-
-
-# error_run1 = generate_error_distribution(number_of_runs = 20, col = col, calibration_data = calibration_data, cost = NULL, gamma = NULL)
-
-
-# print error distributions
-# hist(run1$error4)
-# hist(run1$cost)
-# hist(run1$gamma)
+# parameter_run1 =  generate_parameters_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data)
 
 
 
-# cat("Best parameters:\n")
-# print(best_parameters)
-# 
-# cat("------------------------------------------------------------\n")
-# cat("1: Overall recognition:", mean(p == answer_test), "\n")
-# cat("2: Recognition rate of right values:", mean(p[answer_test == 1] == 1), "\n")
-# cat("3: Recognition rate of the wrong values:", mean(p[answer_test == 0] == 0), "\n")
-# cat("4: False Positive:", mean(answer_test[p == 1] == 0), " <-- \n")
-# cat("5: Right Positive:", mean(answer_test[p == 1] == 1), "\n")
-# cat("6. False Negative:", mean(answer_test[p == 0] == 1), "\n")
-# cat("7: Right Negative:", mean(answer_test[p == 0] == 0), "\n")
-# cat("------------------------------------------------------------\n\n")
-
-# Description
-# 1: How many of the overall predictions are right, higher is better
-# 2: How many of the positive values are recognized correct, higher is better
-# 3: How many of the negative values are recognized correct, higher is better
-# 4: How many of the positive predictions are wrong, lower is better
-# 5: How many of the positive predictions are real positive, higher is better
-# 6: How many of the negative predictoins are wrong negative, lower is better 
-# 7: How many of the negative predictoins are real negative, higher is better
+error_run1 = generate_error_distribution(number_of_runs = 20, col = col, calibration_data = calibration_data, cost = NULL, gamma = NULL)
 
 
-# cat("Output of the false-positive Combinations:\n")
-# # data_test[ , "valid_amount"] = answer_test
-# print(data_test[answer_test == 0 & p == 1, ])
+#print error distributions
+hist(run1$error4)
+hist(run1$cost)
+hist(run1$gamma)
+
+
 
 
 

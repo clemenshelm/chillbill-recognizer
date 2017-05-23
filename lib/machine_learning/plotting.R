@@ -3,6 +3,7 @@
 ######    PLOTTING    ######
 ############################
 
+
 # R plots for colorselection (1,0) the awsome colors black and WHITE?!
 # adding "group" = valid_amount but with strings (for nice colors in R)
 #data[data$"valid_amount" == 1, "group"] <- "red"
@@ -19,8 +20,11 @@
 # 
 
 
-##############################
+
+
+
 ## Distribution of heights ##
+##############################
 
 # load data from several bills
 prices_several_bills = read.csv("prices.csv", header = TRUE)
@@ -41,6 +45,39 @@ for(i in 1:length(tab)){
   
   plot(main = names(tab)[i], x,y)
 }
+# -->  If the height is greater than the height of 0.75 quartil, we will give the attribute a 1
 
-# If the height is 
-################################
+
+
+
+### Printing all errors ###
+###########################
+# We  need this only if we want to consider / output different types of error
+
+# 
+# cat("------------------------------------------------------------\n")
+# cat("1: Overall recognition:", mean(p == answer_test), "\n")
+# cat("2: Recognition rate of right values:", mean(p[answer_test == 1] == 1), "\n")
+# cat("3: Recognition rate of the wrong values:", mean(p[answer_test == 0] == 0), "\n")
+# cat("4: False Positive:", mean(answer_test[p == 1] == 0), " <-- \n")
+# cat("5: Right Positive:", mean(answer_test[p == 1] == 1), "\n")
+# cat("6. False Negative:", mean(answer_test[p == 0] == 1), "\n")
+# cat("7: Right Negative:", mean(answer_test[p == 0] == 0), "\n")
+# cat("------------------------------------------------------------\n\n")
+
+# Description
+# 1: How many of the overall predictions are right, higher is better
+# 2: How many of the positive values are recognized correct, higher is better
+# 3: How many of the negative values are recognized correct, higher is better
+# 4: How many of the positive predictions are wrong, lower is better
+# 5: How many of the positive predictions are real positive, higher is better
+# 6: How many of the negative predictoins are wrong negative, lower is better 
+# 7: How many of the negative predictoins are real negative, higher is better
+
+# cat("Output of the false-positive Combinations:\n")
+# # data_test[ , "valid_amount"] = answer_test
+# print(data_test[answer_test == 0 & p == 1, ])
+
+##################################
+
+

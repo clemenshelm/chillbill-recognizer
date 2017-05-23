@@ -34,39 +34,60 @@ We generate the attributes via the function `generate_tuples`.
 - `total_height_uq` 1 if the height of the total_price is in the upper quartil (25%), 0 if not
 
 
+## Measuring the error
+There are several possibilities to measure errors.
+
+
+1. Overall recognition - How many of the overall predictions are right, higher is better
+2. Recognition rate of right values - How many of the positive values are recognized correct, higher is better
+3. Recognition rate of the wrong values - How many of the negative values are recognized correct, higher is better
+4. False Positive - How many of the positive predictions are wrong, lower is better
+5. Right Positive - How many of the positive predictions are real positive, higher is better
+6. False Negative - How many of the negative predictions are wrong negative, lower is better 
+7. Right Negative - How many of the negative predictions are real negative, higher is better
+
+Of course some of them are unnecessary because we could calculate them from an other error but to give a better understanding we wrote them down anyway.
+
+Most important --> wrong positives
+It is possible to get NaN entries here!
+When there is no positive prediction (all of the predictions are 0) then our measurements fails. The best solution is not to take them into consideration
+ 
+
+
+
 ## Some important commands for the R-Code
 
 **Save and load model (R)**
 ```r
 save(mymodel, file='mymodel.rda')
 load('mymodel.rda') # do not use some_name = load(..), load(..) uses the original name of the model 
-``
+```
 
 **Save and load model (R) second (better) way:**
 ```r
 saveRDS(model, 'modelfile.rds')
-M <- readRDS('modelfile.rds')
+M = readRDS('modelfile.rds')
 ```
 
 **Set Working Directory**
 ```r
 setwd("~/Dokumente/ChillBill/r-chillbill")
-```
+``` 
 
 **Load different R file** 
 ```r
-source("adding_attriutes.R")
+source("adding_attributes.R")
 # Just runs this script. It has no extra workspace!!
 # It will run every time - not like require.
-```
-
+``` 
 **Magick in R**
 ```r
 library(magick)
-```
+``` 
+
 Needs two extra-installations apart from the installation in R:
 
-```bash
+```sh
 apt-get install libcurl4-openssl-dev libmagick++-dev
 ```
 
@@ -91,12 +112,12 @@ numbers = as.numeric(args)  # Convert to numerical
 
 **Measure time in R**
 ```r
-start.time <- Sys.time()
+start.time = Sys.time()
 
 # Some code
 
-end.time <- Sys.time()
-time.taken <- end.time - start.time
+end.time = Sys.time()
+time.taken = end.time - start.time
 time.taken
 ```
 
@@ -112,6 +133,17 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
 ```r
 name_of_model = paste(col, sep="", collapse="/")
 ```
+
+
+**tune**
+The `tune` function already calculates the distribution (sort of) of the error and decides because of this.
+
+For 8 x 3 = 24 possible combinations it calculated 240 times the error, so 10 times per combination. With the object `tune.control` we are able to specify the error to decide on (we want the wrong-positives to be minimized).
+
+For the cross-validation the `tune` function takes 10% of the data to validate the error by default.
+
+
+
 
 
 
