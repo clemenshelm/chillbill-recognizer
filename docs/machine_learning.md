@@ -36,40 +36,51 @@ We generate the attributes via the function `generate_tuples`.
 
 ## Some important commands for the R-Code
 
-### Save and load model (R)
+**Save and load model (R)**
+```r
 save(mymodel, file='mymodel.rda')
 load('mymodel.rda') # do not use some_name = load(..), load(..) uses the original name of the model 
+``
 
-
-### Save and load model (R) second (better) way:
+**Save and load model (R) second (better) way:**
+```r
 saveRDS(model, 'modelfile.rds')
 M <- readRDS('modelfile.rds')
-
+```
 
 **Set Working Directory**
+```r
 setwd("~/Dokumente/ChillBill/r-chillbill")
-
+```
 
 **Load different R file** 
+```r
 source("adding_attriutes.R")
-Just runs this script. It has no extra workspace!!
-It will run every time - not like require.
-
+# Just runs this script. It has no extra workspace!!
+# It will run every time - not like require.
+```
 
 **Magick in R**
+```r
 library(magick)
+```
 Needs two extra-installations apart from the installation in R:
-apt-get install libcurl4-openssl-dev libmagick++-dev
 
+```bash
+apt-get install libcurl4-openssl-dev libmagick++-dev
+```
 
 **Use an RScript over the Command-line**
-Command: 
+*Command:*
+```bash
 Rscript --vanilla Name_of_the_RScript.R Inputparameter1 Inputparameter2
+```
 
-Example:
+*Example:*
+```bash
 Rscript --vanilla use_model.R 24PC5D5oeL6fb8a5n.csv
 Rscript --vanilla use_model.R 24PC5D5oeL6fb8a5n.csv
-
+```
 
 **Use Inputparameters in R:**
 args = commandArgs(trailingOnly=TRUE)
