@@ -8,3 +8,4 @@ codeship.aes
 **/*.rda
 **/.Rhistory
 data/*
+aws_creds.env
