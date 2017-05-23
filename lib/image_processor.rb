@@ -21,7 +21,6 @@ class ImageProcessor
     @image = Image.read(read_path) { self.density = density }[0]
     @image_width = @image.page.width
     @image_height = @image.page.height
-    binding.pry
     @image
   end
 
@@ -80,7 +79,6 @@ class ImageProcessor
     @image.trim!
     @image_width = @image.page.width
     @image_height = @image.page.height
-    binding.pry
     self
   end
 
