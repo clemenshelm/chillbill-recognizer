@@ -5,5 +5,5 @@ tests:
   cached: true
 aws_generator:
   image: codeship/aws-ecr-dockercfg-generator
-  encrypted_env_file: aws_creds.encrypted # contains Secret, AccessKey and Region
+  encrypted_env_file: aws_creds.encrypted
   add_docker: true
