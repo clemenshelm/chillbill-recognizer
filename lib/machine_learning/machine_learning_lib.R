@@ -1,18 +1,5 @@
-# The function "generate_tuples" gets prices and returns possible combinations of tuples.
-# It also adds attributes and erases NaN entries
+# The function "generate_tuples" gets prices and returns possible combinations of tuples. It also adds attributes and erases NaN entries
 
-###############################################
-######    Description of the data set    ######
-# rel_p           proportion of vat_price to total_price
-# price_order     position of price entry compared to all prices in the bill
-# price_uq        1 if price is in the upper quartil (25%), 0 if not
-# total_price_s   Scaled total_price
-# vat_price_s     Scaled vat_price
-# common_width    The common width of the possible total_price and the possible vat_price
-# common_height   The common height of the possible total_price and the possible vat_price
-# group           colors for plots
-# total_height_uq 1 if the height of the total_price is in the upper quartil (25%), 0 if not
-###############################################
 
 # Load example bill for debugging / creating new attributes:
 # price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
@@ -42,47 +29,37 @@ generate_tuples <- function(price_list){
   data[ , "total_price_s"] <- data[ , "total_price"] / max_price
   data[ , "vat_price_s"] <- data[ , "vat_price"] / max_price
   
-  
-  
   # creates "rel_p"
   data[ , "rel_p"] <- data$vat_price / data$total_price 
-  
-  
   
   # adding common width
   data[ ,"common_width"] <- 
     apply(data[ ,c("total_left", "total_right", "vat_left", "vat_right")], 1, max) -
     apply(data[ ,c("total_left", "total_right", "vat_left", "vat_right")], 1, min)
   
-  
   # adding common height
   data[ ,"common_height"] <- 
     apply(data[ ,c("total_top", "total_bottom", "vat_top", "vat_bottom")], 1, max) -
     apply(data[ ,c("total_top", "total_bottom", "vat_top", "vat_bottom")], 1, min)
   
-    
   # creating "price_order"
   # It is very likely that "price_order" do not contain low values because we do not use all possible tuples
   prices_red = unique(sort(price_list$price_cents))  # sorted prices reduced (deleted all repeated elements)
   data[ ,"price_order"] <- match(data[ , "total_price"], sort(prices_red)) / length(prices_red)
   
-  
   # creating "price_uq"
   quantil_limit = quantile(price_list$price_cents, 0.75)
   data[ ,"price_uq"] = as.numeric(data$total_price > quantil_limit)
   
+  # creating "total_height_uq"
+  total_height = price_list$bottom - price_list$top
+  height_uq = quantile(total_height, 0.75)
+  data[ ,"height_uq"] =  as.numeric((data$total_bottom - data$total_top)  >= height_uq)
   
   # Checking of NaN entries
   tmp = sum(is.na(data))
   # cat("After adding Attributes there are", tmp , "NaN entries\n" )
   if(tmp != 0){data[is.na(data)] = 0 }  # sets NaN values to 0
-  
-  
-
-  # creating "total_height_uq"
-  total_height = price_list$bottom - price_list$top
-  height_uq = quantile(total_height, 0.75)
-  data[ ,"height_uq"] =  as.numeric((data$total_bottom - data$total_top)  >= height_uq)
   
   return(data)
 }
