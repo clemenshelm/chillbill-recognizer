@@ -8,6 +8,7 @@ source('machine_learning_lib.R') # loads function "generate_tuples(price_list)"
 ######################################
 ######    GENERATION OF DATA    ######
 ######################################
+# This section will go to machine_learning_lib.R
 
 # load data from several bills
 prices_several_bills = read.csv("prices.csv", header = TRUE)
@@ -34,7 +35,6 @@ rownames(calibration_data) <- NULL
 # Print some informations
 cat("Amount of false and right combinations:", table(calibration_data$valid_amount), 
  "<=>", table(calibration_data$valid_amount)[2]/ nrow(calibration_data) * 100, "% right combinations%\n")
-
 
 
 
@@ -68,32 +68,21 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height", "height_uq")
 
 
-# We must rethink the search for the optimal hyperparameters (cost, gamma) because the tune function already calculates the distribution.
-# So now we calculate the distribution of the optimal parameter searched through the distribution of the error?? 
-# The standard tund function calculates the wrong error, but I fixed that already
-
 
 # Distribution of the parameters (cost and gamma)
 # parameter_run1 =  generate_parameters_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data)
 
 
-
-error_run1 = generate_error_distribution(number_of_runs = 20, col = col, calibration_data = calibration_data, cost = NULL, gamma = NULL)
+error_run1 = generate_error_distribution(number_of_runs = 10, col = col, calibration_data = calibration_data, cost = NULL, gamma = NULL)
 
 
 #print error distributions
-hist(run1$error4)
-hist(run1$cost)
-hist(run1$gamma)
-
-
-
-
+hist(error_run1$error4)
+hist(error_run1$cost)
+hist(error_run1$gamma)
 
 
 # save Model 
+# This will go to a new file "create_model.R"
 # saveRDS(svmfit, 'modelfile.rds')
 # cat("Saved model to svm_model.svm\n")
-
-
-
