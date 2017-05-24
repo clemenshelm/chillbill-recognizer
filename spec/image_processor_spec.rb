@@ -49,9 +49,9 @@ describe ImageProcessor do
 
   it "gets the width of a bill's first page after trimming", :focus do
     original_width = trimming_image.image_width
-    trimmed_width = trimming_image.trim.image_width
+    trimmed_width = trimming_image.trim
 
     expect(original_width).to eq 3056
-    expect(trimmed_width).to eq 3273
+    expect(trimmed_width.image_width).to eq 3273
   end
 end
