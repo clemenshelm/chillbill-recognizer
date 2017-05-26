@@ -1,5 +1,6 @@
 - type: parallel
   services:
+  - aws_generator
   - tests
   steps:
   - name: rubocop
