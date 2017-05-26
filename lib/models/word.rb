@@ -12,6 +12,10 @@ class Word < Sequel::Model
     Word[id + 1]
   end
 
+  def previous
+    Word[id - 1]
+  end
+
   def follows(previous_word)
     max_space_width = previous_word.height * 1.76
     # logger.debug "#{text}:: first: #{previous_word.right} =>

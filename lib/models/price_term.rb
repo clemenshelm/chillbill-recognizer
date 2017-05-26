@@ -29,6 +29,10 @@ class PriceTerm < Sequel::Model
     @term_builder.valid?
   end
 
+  def words
+    @term_builder.words.dup
+  end
+
   def to_d
     # remove thousand separator, but keep comma
     dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
