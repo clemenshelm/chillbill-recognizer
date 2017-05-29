@@ -1,6 +1,6 @@
 library(e1071, quietly = TRUE)
 library(jsonlite, quietly = TRUE)
-source('generate_tuples.R') # loads function "generate_tuples(price_list)"
+source('machine_learning_lib.R') # loads function "generate_tuples(price_list)"
 
 # load the bill (needs argument via command line like 296mm2mqrPTJMsB4J.csv)
 args = commandArgs(trailingOnly=TRUE)

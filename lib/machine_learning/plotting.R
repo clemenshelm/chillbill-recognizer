@@ -3,6 +3,7 @@
 ######    PLOTTING    ######
 ############################
 
+
 # R plots for colorselection (1,0) the awsome colors black and WHITE?!
 # adding "group" = valid_amount but with strings (for nice colors in R)
 #data[data$"valid_amount" == 1, "group"] <- "red"
@@ -19,8 +20,11 @@
 # 
 
 
-##############################
+
+
+
 ## Distribution of heights ##
+##############################
 
 # load data from several bills
 prices_several_bills = read.csv("prices.csv", header = TRUE)
@@ -28,22 +32,52 @@ correct_price_tuples = read.csv("correct_price_tuples.csv", header = TRUE)
 tab = table(prices_several_bills$bill_id)
 
 
-# not working ... needs a little bit of work
+heights_all = prices_several_bills$bottom - prices_several_bills$top
+# answer =  numeric(length(heights_all))
+answer = rnorm(n = length(heights_all),mean =0, sd = .1) # wrong 
+answer[prices_several_bills$price_id %in% correct_price_tuples$total_id] = 1 #correct 
+m = data.frame("bill_id" = prices_several_bills$bill_id, "heights" = heights_all, "answer" = answer)
+
 for(i in 1:length(tab)){
+  x = m[m$bill_id ==  names(tab)[i], "answer"]
+  y = m[m$bill_id ==  names(tab)[i], "heights"]
   
-  height_real_prices = (prices_several_bills$total_bottom - prices_several_bills$total_top)[prices_several_bills$id ==  names(tab)[i] & prices_several_bills$valid_amount == 1]
-  height_false_prices = (prices_several_bills$total_bottom - prices_several_bills$total_top)[prices_several_bills$id ==  names(tab)[i] & prices_several_bills$valid_amount == 0]
-
-  a = c(numeric(length(height_false_prices)), numeric(length(height_real_prices)) + 1)
-  b = c(height_false_prices, height_real_prices)
-  plot(cbind(a,b))
-
+  
+  plot(main = names(tab)[i], x,y)
 }
+# -->  If the height is greater than the height of 0.75 quartil, we will give the attribute a 1
 
 
-# Plotte alle Preise  (keine Unterscheidung zwischen den einzelnen Rechnungen)
-# hist(height_real_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(1,1,0,0.7),main="",xlab="number")
-# par(new=TRUE)
-# hist(height_false_prices,xlim=c(0, 0.03), ylim=c(0,30),breaks=10,col=rgb(0,1,1,0.4),main="",xlab="",ylab="")
+
+
+### Printing all errors ###
+###########################
+# We  need this only if we want to consider / output different types of error
+
+# 
+# cat("------------------------------------------------------------\n")
+# cat("1: Overall recognition:", mean(p == answer_test), "\n")
+# cat("2: Recognition rate of right values:", mean(p[answer_test == 1] == 1), "\n")
+# cat("3: Recognition rate of the wrong values:", mean(p[answer_test == 0] == 0), "\n")
+# cat("4: False Positive:", mean(answer_test[p == 1] == 0), " <-- \n")
+# cat("5: Right Positive:", mean(answer_test[p == 1] == 1), "\n")
+# cat("6. False Negative:", mean(answer_test[p == 0] == 1), "\n")
+# cat("7: Right Negative:", mean(answer_test[p == 0] == 0), "\n")
+# cat("------------------------------------------------------------\n\n")
+
+# Description
+# 1: How many of the overall predictions are right, higher is better
+# 2: How many of the positive values are recognized correct, higher is better
+# 3: How many of the negative values are recognized correct, higher is better
+# 4: How many of the positive predictions are wrong, lower is better
+# 5: How many of the positive predictions are real positive, higher is better
+# 6: How many of the negative predictoins are wrong negative, lower is better 
+# 7: How many of the negative predictoins are real negative, higher is better
+
+# cat("Output of the false-positive Combinations:\n")
+# # data_test[ , "valid_amount"] = answer_test
+# print(data_test[answer_test == 0 & p == 1, ])
+
+##################################
 
 

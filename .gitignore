@@ -6,6 +6,7 @@ codeship.aes
 .DS_Store
 **/*.csv
 **/*.rda
+**/*.rds
 **/.Rhistory
 data/*
 aws_creds.env
