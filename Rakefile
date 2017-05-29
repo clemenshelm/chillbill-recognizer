@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 require_relative 'spec/spec_cache_retriever'
-require_relative 'lib/bill_recognizer'
-Dir["lib/tasks/machine_learning/*.rake"].each { |file| import file }
+if !ENV['deployment']
+  Dir["lib/tasks/machine_learning/*.rake"].each { |file| import file }
+end
 
 namespace :tmp do
   desc 'Clears all cached artifacts'
@@ -93,4 +94,15 @@ end
 desc 'Increments recognizer version number and deploys newest version'
 task :deploy => [:push_image, :restart_task] do
   p "Newest recognizer version successfully deployed!"
+end
+
+desc 'Gains access to parent image and builds recognizer image'
+task :build do
+  sh "(aws ecr get-login --region eu-central-1) | /bin/bash
+
+      docker pull 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-envd:latest
+
+      docker build -t recognizer-repo ."
+
+  p "The recognizer image was successfully built!✨"
 end

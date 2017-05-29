@@ -4,7 +4,8 @@ require 'rmagick'
 class ImageProcessor
   class InvalidImage < StandardError; end
   include Magick
-  attr_reader :image_width, :image_height
+  attr_reader :image_width, :image_height, :image
+
   def initialize(image_path)
     read_path = "#{image_path}[0]"
     begin
@@ -78,11 +79,22 @@ class ImageProcessor
     self
   end
 
-  def write_png!
+  def preprocess
+    correct_orientation
+    apply_background('#fff')
+    deskew
+    normalize
+    trim
+    improve_level
+  end
+
+  def write_png
     png_file = Tempfile.new ['bill', '.png']
     @image.write png_file.path
-    return png_file
-  ensure
+    png_file
+  end
+
+  def destroy!
     @image.destroy!
   end
 

@@ -1,10 +1,7 @@
 # frozen_string_literal: true
-require 'rmagick'
 require_relative '../lib/image_processor'
 
 describe ImageProcessor do
-  include Magick
-
   let(:image) { ImageProcessor.new('./spec/support/orientation-test.jpg') }
 
   it 'auto corrects the orientation of a bill image' do
