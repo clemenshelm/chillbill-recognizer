@@ -279,6 +279,165 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'does not detect numbers before kg' do
+    # From 25KA7rWWmhStXDEsb.pdf
+    create(
+    :word,
+    text: '36,80',
+    left: 0.7706151832460733,
+    right: 0.8072643979057592,
+    top: 0.8700277520814061,
+    bottom: 0.8792784458834413
+    )
+
+    create(
+    :word,
+    text: 'kg',
+    left: 0.8118455497382199,
+    right: 0.8255890052356021,
+    top: 0.8697964847363552,
+    bottom: 0.8799722479185939
+    )
+
+    create(
+    :word,
+    text: '4,24',
+    left: 0.7797774869109948,
+    right: 0.8049738219895288,
+    top: 0.45351526364477335,
+    bottom: 0.4616096207215541
+    )
+
+    create(
+    :word,
+    text: 'kg',
+    left: 0.8095549738219895,
+    right: 0.8232984293193717,
+    top: 0.45351526364477335,
+    bottom: 0.46207215541165586
+    )
+
+    create(
+    :word,
+    text: '3,76',
+    left: 0.7797774869109948,
+    right: 0.805628272251309,
+    top: 0.4081868640148011,
+    bottom: 0.4162812210915819
+    )
+
+    create(
+    :word,
+    text: 'kg',
+    left: 0.8095549738219895,
+    right: 0.8232984293193717,
+    top: 0.4081868640148011,
+    bottom: 0.4167437557816836
+    )
+
+    create(
+    :word,
+    text: '€',
+    left: 0.05791884816753927,
+    right: 0.06675392670157068,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '260,00',
+    left: 0.07264397905759162,
+    right: 0.12238219895287958,
+    top: 0.8499074930619797,
+    bottom: 0.8598519888991675
+    )
+
+    create(
+    :word,
+    text: '€',
+    left: 0.2005890052356021,
+    right: 0.2094240837696335,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '45,00',
+    left: 0.21498691099476439,
+    right: 0.25589005235602097,
+    top: 0.8499074930619797,
+    bottom: 0.8598519888991675
+    )
+
+    create(
+    :word,
+    text: '€',
+    left: 0.3530759162303665,
+    right: 0.3619109947643979,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '305,00',
+    left: 0.36780104712041883,
+    right: 0.4178664921465969,
+    top: 0.8499074930619797,
+    bottom: 0.8598519888991675
+    )
+
+    create(
+    :word,
+    text: '20',
+    left: 0.4869109947643979,
+    right: 0.5042539267015707,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '€',
+    left: 0.5768979057591623,
+    right: 0.5857329842931938,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '61,00',
+    left: 0.5916230366492147,
+    right: 0.6321989528795812,
+    top: 0.8499074930619797,
+    bottom: 0.8598519888991675
+    )
+
+    create(
+    :word,
+    text: '€',
+    left: 0.7257853403141361,
+    right: 0.7346204188481675,
+    top: 0.8499074930619797,
+    bottom: 0.8584643848288621
+    )
+
+    create(
+    :word,
+    text: '366,00',
+    left: 0.7405104712041884,
+    right: 0.7905759162303665,
+    top: 0.8499074930619797,
+    bottom: 0.8598519888991675
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ["260,00", "45,00", "305,00", "61,00", "366,00"]
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|

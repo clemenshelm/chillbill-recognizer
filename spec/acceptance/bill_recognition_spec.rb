@@ -2,8 +2,8 @@
 require_relative '../spec_cache_retriever'
 require_relative '../../lib/bill_recognizer'
 describe 'Recognizing bills correctly' do
-  it 'recognizes the bill BYnCDzw7nNMFergRW', :focus do
-    retriever = SpecCacheRetriever.new(file_basename: '25KA7rWWmhStXDEsb.pdf')
+  it 'recognizes the bill BYnCDzw7nNMFergRW' do
+    retriever = SpecCacheRetriever.new(file_basename: 'BYnCDzw7nNMFergRW.pdf')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
