@@ -20,38 +20,34 @@ class PriceDetector
   def self.filter
     filter_out_unnecessary_numbers
 
-    find_prices(Word.all,
-                DECIMAL_PRICE_REGEX,
-                max_words: 3)
+    find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
 
     end_word_with_space = ->(term) { term.text += ' ' }
 
     find_prices(
-      Word.all,
       HUNGARIAN_PRICE_REGEX,
       after_each_word: end_word_with_space,
       max_words: 2
     )
 
     find_prices(
-      Word.all,
       WRITTEN_PRICE_REGEX,
       after_each_word: end_word_with_space,
       max_words: 2
     )
 
-    find_prices(Word.all,SHORT_PRICE_REGEX, max_words: 1)
+    find_prices(SHORT_PRICE_REGEX, max_words: 1)
     PriceTerm.dataset
   end
 
   class << self
     private
 
-      def find_prices(words, regex, after_each_word: nil, max_words: nil)
+      def find_prices(regex, after_each_word: nil, max_words: nil)
         term = initialize_new_term(regex, after_each_word, max_words)
         last_word = nil
 
-        words.each do |word|
+        Word.each do |word|
           if term.exists? || (last_word && !word.follows(last_word))
             term = initialize_new_term(regex, after_each_word, max_words)
           end
