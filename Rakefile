@@ -95,3 +95,14 @@ desc 'Increments recognizer version number and deploys newest version'
 task :deploy => [:push_image, :restart_task] do
   p "Newest recognizer version successfully deployed!"
 end
+
+desc 'Gains access to parent image and builds recognizer image'
+task :build do
+  sh "(aws ecr get-login --region eu-central-1) | /bin/bash
+
+      docker pull 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-envd:latest
+
+      docker build -t recognizer-repo ."
+
+  p "The recognizer image was successfully built!✨"
+end
