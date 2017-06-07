@@ -77,9 +77,8 @@ class ImageProcessor
   def trim
     @image.fuzz = '70%'
     @image.trim!
-    @image_width = @image.width
-    @image_height = @image.height
-    @image.write('../tmp/testimg.png')
+    @image_width = @image.columns
+    @image_height = @image.rows
     self
   end
 
