@@ -3,7 +3,7 @@ require_relative '../lib/image_processor'
 
 describe ImageProcessor do
   let(:image) { ImageProcessor.new('./spec/support/orientation-test.jpg') }
-  let(:trimming_image) { ImageProcessor.new('./spec/support/image-dimension-test.jpeg') }
+  let(:image_to_be_trimmed) { ImageProcessor.new('./spec/support/image-dimension-test.jpeg') }
 
   it 'auto corrects the orientation of a bill image' do
     original_height = image.image_height
@@ -48,16 +48,16 @@ describe ImageProcessor do
   end
 
   it "gets the width of a bill's first page after trimming" do
-    original_width = trimming_image.image_width
-    trimmed_width = trimming_image.trim.image_width
+    original_width = image_to_be_trimmed.image_width
+    trimmed_width = image_to_be_trimmed.trim.image_width
 
     expect(original_width).to eq 2268
     expect(trimmed_width).to eq 1658
   end
 
   it "gets the height of a bill's first page after trimming" do
-    original_height = trimming_image.image_height
-    trimmed_height = trimming_image.trim.image_height
+    original_height = image_to_be_trimmed.image_height
+    trimmed_height = image_to_be_trimmed.trim.image_height
 
     expect(original_height).to eq 4032
     expect(trimmed_height).to eq 3818
