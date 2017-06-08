@@ -5,7 +5,7 @@
 # price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
 # price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
 # price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
-
+# 
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
 # data_train = read.csv("data_train.csv", header = TRUE)[ , -1]
 # answer_train = read.csv("answer_train.csv", header = TRUE)[ , -1]
@@ -70,20 +70,39 @@ generate_tuples <- function(price_list){
 }
 
 
+getting_all_values <- function(){
 
+
+
+
+
+}
 
 # Error function for the tune function, we want to minimize the wrong positive error
 # Consider that this function can return NaN entries. See the documentation for further information.
 error_function = function(true_values, predictions){
-  return(mean(true_values[predictions == 1] == 0))
+  tmp = mean(true_values[predictions == 1] == 0)
+  # tmp_error_list[counter] <<- tmp
+  # counter <<- counter + 1
+  return(tmp)
 }
 
-
+na_omit_mean <- function(x){mean(na.omit(x))}
+na_omit_sd <- function(x){sd(na.omit(x))}
 
 # Grid-search for the best paramters, kernel="radial" ... RBF, returns a data.frame which includes the parameters
 parameters_grid_search = function(data_train, answer_train){
   
-  tune_control = tune.control(error.fun = error_function)
+  # global values to get 
+  counter <<- 1
+  tmp_error_list <<- numeric(240)
+  tmp <<- NULL
+  
+  
+  tune_control = tune.control(error.fun = error_function, 
+                              performances = TRUE, 
+                              sampling.aggregate = na_omit_mean,
+                              sampling.dispersion = na_omit_sd)
   
   tuned = tune( svm, 
                 train.x = data_train, 
@@ -98,6 +117,20 @@ parameters_grid_search = function(data_train, answer_train){
                 tunecontrol = tune_control
   )
   
+  
+  
+
+  # for boxplotting the error values
+  # error_matrix <- matrix(tmp_error_list, nrow = 24, byrow = TRUE)
+  # names_c_g <- apply(tuned$performances[,1:2], 1, function(x){paste("c = ",x[1],",g = ",x[2])})
+  # rownames(error_matrix) <- names_c_g
+  # boxplot(t(error_matrix), las=2, names = names_c_g)
+  
+ 
+  
+  
+  # The function `tune` 
+  
   # #246
   # We must rethink the search for the optimal hyperparameters (cost, gamma) because the tune function already calculates the distribution.
   # Now we calculate the distribution of the optimal parameter searched through the distribution of the error?? 
@@ -111,31 +144,104 @@ parameters_grid_search = function(data_train, answer_train){
 
 
 
-generate_parameters_distribution = function(number_of_runs = 20, col, calibration_data ){
-  output = data.frame()
+# generate_parameters_distribution = function(number_of_runs = 20, col, calibration_data ){
+#   output = data.frame()
+#   
+#   number_of_tuples = nrow(calibration_data)
+#   
+#   for(iteration in 1:number_of_runs){
+#     # Bootstrapping the data (and answer)
+#     selection = sample(number_of_tuples, number_of_tuples, replace = TRUE)
+#     data_train = calibration_data[selection,col] # there is NO data_test
+#     answer_train = as.factor(calibration_data[selection,"valid_amount"])
+#     
+#     best_parameters = parameters_grid_search(data_train, answer_train)
+#     
+#     output = rbind(output, best_parameters)
+#     cat("Progress: ", iteration/number_of_runs, "\n")
+#   }
+#   
+#   return(output)
+# }
+# 
+# 
+
+# for testing
+nruns = 10
+p = 0.7
+gamma_range = 10^(-1:1)
+cost_range = 10^(-1:6)
+cost = 0.1
+gamma = 0.1
+
+
+custom_grid_search_svm <- function(data_train, answer_train, nruns = 10, p = 0.7, cost_range = 10^(-1:6), gamma_range = 10^(-1:1)){
+  # nruns   number of runs per combination
+  # p       percentage of the data used for the error validation
+  # cost    range for C
+  # gamma   range for gamma
   
-  number_of_tuples = nrow(calibration_data)
+  amount_of_data = length(answer_train)
+  amount_of_selection = round(amount_of_data * 0.7)
   
-  for(iteration in 1:number_of_runs){
-    # Bootstrapping the data (and answer)
-    selection = sample(number_of_tuples, number_of_tuples, replace = TRUE)
-    data_train = calibration_data[selection,col] # there is NO data_test
-    answer_train = as.factor(calibration_data[selection,"valid_amount"])
-    
-    best_parameters = parameters_grid_search(data_train, answer_train)
-    
-    output = rbind(output, best_parameters)
-    cat("Progress: ", iteration/number_of_runs, "\n")
+  performances = NULL
+  
+  for(gamma in gamma_range){
+    for(cost in cost_range){
+      
+      iterations_all = 0
+      iterations_count = 0
+      error_list = numeric(nruns)
+      while(iterations_count < nruns & iterations_all < 100){
+        # random selection
+        selection = sample(amount_of_data, amount_of_selection) 
+        
+        
+        # create the model 
+        svmfit = svm( x = data_train[selection, ], 
+                      y = answer_train[selection], 
+                      kernel ="radial", 
+                      cost = cost, 
+                      gamma = gamma, 
+                      scale = FALSE, 
+                      type = "C-classification")
+        
+        p = predict(svmfit, data_train[-selection, ], type = "C-classification")
+        error = error_function(answer_train[-selection], p)
+        
+        
+        if(!is.na(error)){
+          error_list[iterations_count] <- error
+          iterations_count <- iterations_count + 1
+          }
+        iterations_all <- iterations_all + 1
+        
+      }
+
+      performances = rbind(performances, c(cost, gamma, error_list))
+      
+      
+    }
   }
   
-  return(output)
+
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
 }
 
 
 
-
-
-#To get a distribution of the error we run each combination several times (number_of_runs times)
+#To get a distribution of the error for a specific combination of attributes we run each combination several times (number_of_runs times)
 generate_error_distribution = function(number_of_runs, col, calibration_data, cost = NULL, gamma = NULL){
   
   output_error4 = numeric(number_of_runs)

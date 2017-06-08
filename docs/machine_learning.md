@@ -21,9 +21,8 @@ In the Future it is easy to merge all optimization into one big problem that run
 
 
 ## Grid search
-The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) is probably not the best option for us. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it fits our needs, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). The main problem is, that only one "NaN" entry destroys the whole combination of C and gamma. It is not possible to find out how `tune` decides which of the combinations is the best and it is also not possible to adapt it to our needs. 
+The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) needs some adaptations to suits our needs. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it returns the "wrong-positive"-error, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). So for each cost-gamma combination `tune` produces 10 (standard) evaluations of errors. From each of these sets, we need only two numbers, the average standard deviation. The problem is, that only one "NaN" entry destroys the whole set for the combination of C and gamma, because `mean` and `sd` can not handle `NaN`. So we have to adapt these function. Therefore we use `na_omit_mean` and `na_omit_sd` in `tune.control`.
 
-The perfect solution is to not take any "NaN" entries into consideration. For each time, the error is equal to "NaN", we could run it again. 
 
 ## Description of the attributes 
 We generate the attributes via the function `generate_tuples`.
