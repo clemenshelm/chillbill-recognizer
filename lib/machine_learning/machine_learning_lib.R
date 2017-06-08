@@ -6,9 +6,10 @@
 # price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
 # price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
 
-# calibration_data = read.csv("calibration_data.csv", header = TRUE)
-# data_train = read.csv("data_train.csv", header = TRUE)
-# answer_train = read.csv("answer_train.csv", header = TRUE)
+# calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
+# data_train = read.csv("data_train.csv", header = TRUE)[ , -1]
+# answer_train = read.csv("answer_train.csv", header = TRUE)[ , -1]
+
 
 
 

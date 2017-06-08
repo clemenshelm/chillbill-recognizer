@@ -20,6 +20,11 @@ In the Future it is easy to merge all optimization into one big problem that run
 
 
 
+## Grid search
+The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) is probably not the best option for us. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it fits our needs, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). The main problem is, that only one "NaN" entry destroys the whole combination of C and gamma. It is not possible to find out how `tune` decides which of the combinations is the best and it is also not possible to adapt it to our needs. 
+
+The perfect solution is to not take any "NaN" entries into consideration. For each time, the error is equal to "NaN", we could run it again. 
+
 ## Description of the attributes 
 We generate the attributes via the function `generate_tuples`.
 
@@ -48,9 +53,10 @@ There are several possibilities to measure errors.
 
 Of course some of them are unnecessary because we could calculate them from an other error but to give a better understanding we wrote them down anyway.
 
-Most important --> wrong positives
+**Most important error: wrong positives** 
+
 It is possible to get NaN entries here!
-When there is no positive prediction (all of the predictions are 0) then our measurements fails. The best solution is not to take them into consideration
+When there is no positive prediction (all of the predictions are 0) then our measurements fails and we get a "NaN". The best solution is not to take them into consideration.
  
 
 
