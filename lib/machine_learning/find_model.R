@@ -115,6 +115,7 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
   contour(log10(cost_range), log10(gamma_range), z)
   
   # compute key figures out of "hyperparameters_detailed"
+  # Maybe this will be the 2nd important number to minimize
   matrix(as.numeric(sapply(hyperparameters_detailed[[2]], na_omit_mean)), nrow = length(cost_range))
 }
 

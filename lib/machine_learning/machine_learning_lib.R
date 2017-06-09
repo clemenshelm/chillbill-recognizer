@@ -129,10 +129,6 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
   }   else {
     return(tuned$best.parameters)
   }
-  
-  # best.parameters = tuned$best.parameters,
-  # grid_names = tuned$performances[,1:2], 
-  # performances = tuned$performances)
 }
 
 
