@@ -74,33 +74,37 @@ generate_tuples <- function(price_list){
 
 
 
-# Error function for the tune function, we want to minimize the wrong positive error
 # Consider that this function can return NaN entries. See the documentation for further information.
-error_function = function(true_values, predictions){
+error_wrong_positive = function(true_values, predictions){
   return(mean(true_values[predictions == 1] == 0))
 }
 
-na_omit_mean <- function(x){
-  tmp_error_list[[counter]] <<- x
-  counter <<- counter + 1
-  mean(na.omit(x))}
-
+na_omit_mean <- function(x){mean(na.omit(x))}
 na_omit_sd <- function(x){sd(na.omit(x))}
 
-# Grid-search for the best paramters, kernel="radial" ... RBF, returns a data.frame which includes the parameters
-parameters_grid_search = function(data_train, answer_train, cost_range = 10^(-1:6), gamma_range = 10^(-1:1)){
+
+# Grid-search for the best hyperparamters, kernel="radial" ... RBF, returns a data.frame which includes the parameters or a list including every error evaluation
+hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10^(-1:6), gamma_range = 10^(-1:1), detailed.output = FALSE, nruns = 10){
   
-  # global variables to get the errors from each iteration and not just the mean
+  if(detailed.output){
+    # global variables to get the errors from each iteration and not just the mean
+    counter <<- 1
+    tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range)) 
+    
+    na_omit_mean <- function(x){
+      tmp_error_list[[counter]] <<- x
+      counter <<- counter + 1
+      mean(na.omit(x))}
+    
+  }
   
-  counter <<- 1
-  tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range))
   
-  
-  # changing the tune attributes
-  tune_control = tune.control(error.fun = error_function, 
+  # special settings for tune 
+  tune_control = tune.control(error.fun = error_wrong_positive, 
                               performances = TRUE, 
                               sampling.aggregate = na_omit_mean,
-                              sampling.dispersion = na_omit_sd)
+                              sampling.dispersion = na_omit_sd,
+                              cross = nruns)
   
   tuned = tune( svm, 
                 train.x = data_train, 
@@ -116,13 +120,19 @@ parameters_grid_search = function(data_train, answer_train, cost_range = 10^(-1:
   )
   
   
-  # for boxplotting the error values
-  names_c_g <- apply(tuned$performances[,1:2], 1, function(x){paste("c = ",x[1],",g = ",x[2])})
-  names(tmp_error_list) <- names_c_g
-  boxplot(tmp_error_list, las=2)
+  if(detailed.output){
+    names_c_g <- apply(tuned$performances[,1:2], 1, function(x){paste("c = ",x[1],",g = ",x[2])})
+    names(tmp_error_list) <- names_c_g
+    return(list(tuned = tuned,
+                detailed_results = tmp_error_list))
+           
+  }   else {
+    return(tuned$best.parameters)
+  }
   
-  
-  return(tuned$best.parameters)
+  # best.parameters = tuned$best.parameters,
+  # grid_names = tuned$performances[,1:2], 
+  # performances = tuned$performances)
 }
 
 
@@ -149,15 +159,19 @@ generate_error_distribution = function(number_of_runs, col, calibration_data, co
     answer_train = as.factor(calibration_data[selection,"valid_amount"])
     answer_test = as.factor(calibration_data[-selection,"valid_amount"])
     
-    # Gridsearch for the best parameters
-    best_parameters = parameters_grid_search(data_train, answer_train)
+    # Gridsearch for the best parameters if not specified
+    if (is.null(cost) | is.null(gamma)){
+      best_parameters <- hyperparameters_grid_search(data_train, answer_train)
+      cost <- best_parameters$cost
+      gamma <- best_parameters$gamma
+    }
     
     # create the model with the best cost and gamma parameters
     svmfit = svm( x = data_train, 
                   y = answer_train, 
                   kernel ="radial", 
-                  cost = best_parameters$cost, 
-                  gamma= best_parameters$gamma, 
+                  cost = cost, 
+                  gamma= gamma, 
                   scale = FALSE, 
                   type = "C-classification")
     
@@ -167,8 +181,8 @@ generate_error_distribution = function(number_of_runs, col, calibration_data, co
     
     # Save to output-vectors
     output_error4[iteration] = mean(answer_test[p == 1] == 0)
-    output_cost[iteration] = best_parameters$cost
-    output_gamma[iteration] = best_parameters$gamma
+    output_cost[iteration] = cost
+    output_gamma[iteration] = gamma
     
     cat("Progress: ", iteration/number_of_runs, "\n")
   }
