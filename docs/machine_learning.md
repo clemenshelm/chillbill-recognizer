@@ -71,6 +71,15 @@ When there is no positive prediction (all of the predictions are 0) then our mea
 
 ## Some important commands for the R-Code
 
+**Linter in R**
+
+IMPORTANT: before installing the package within R via `install.packages("lintr")` in *Ubuntu* you need to install the following packages:
+```shell
+sudo apt-get install libcurl4-openssl-dev libssl-dev
+```
+To use the linter, you have to load the package within the R-console via `library(lintr)` and then use `lint("Name_of_R_file_to_lint.R")`. 
+
+
 **Save and load model (R)**
 ```r
 save(mymodel, file='mymodel.rda')
