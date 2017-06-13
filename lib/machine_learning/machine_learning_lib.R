@@ -79,9 +79,16 @@ error_wrong_positive = function(true_values, predictions){
   return(mean(true_values[predictions == 1] == 0))
 }
 
+error_wrong_negative = function(true_values, predictions){
+  return(mean(prediction[true_values == 1] == 0))
+}
+
 na_omit_mean <- function(x){mean(na.omit(x))}
 na_omit_sd <- function(x){sd(na.omit(x))}
 
+custom_error_function = function(true_values, predictions){
+  return(error_wrong_positive(true_values, predictions))
+}
 
 # Grid-search for the best hyperparamters, kernel="radial" ... RBF, returns a data.frame which includes the parameters or a list including every error evaluation
 hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10^(-1:6), gamma_range = 10^(-1:1), detailed.output = FALSE, nruns = 10){
@@ -89,7 +96,13 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
   if(detailed.output){
     # global variables to get the errors from each iteration and not just the mean
     counter <<- 1
-    tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range)) 
+    
+    #tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range)) 
+    error_wrong_positive_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
+    error_wrong_negative_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
+    
+    
+    
     
     na_omit_mean <- function(x){
       tmp_error_list[[counter]] <<- x
@@ -100,7 +113,7 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
   
   
   # special settings for tune 
-  tune_control = tune.control(error.fun = error_wrong_positive, 
+  tune_control = tune.control(error.fun = custom_error_function, 
                               performances = TRUE, 
                               sampling.aggregate = na_omit_mean,
                               sampling.dispersion = na_omit_sd,
