@@ -123,15 +123,15 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
     #   mean(na.omit(x))}
   }
 
-  # special settings for tune 
-  tune_control <- tune.control(error.fun = custom_error_function, 
-                              performances = TRUE, 
+  # special settings for tune
+  tune_control <- tune.control(error.fun = custom_error_function,
+                              performances = TRUE,
                               sampling.aggregate = na_omit_mean,
                               sampling.dispersion = na_omit_sd,
                               cross = nruns)
 
-  tuned <- tune( svm, 
-                train.x = data_train, 
+  tuned <- tune( svm,
+                train.x = data_train,
                 train.y = answer_train,
                 kernel = "radial",
                 type   = "C-classification",
@@ -143,8 +143,8 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
                 tunecontrol = tune_control
   )
 
-  if(detailed.output){
-    names_c_g <- apply(tuned$performances[,1:2], 1, function(x){paste("c = ",x[1],",g = ",x[2])})
+  if (detailed.output){
+    names_c_g <- apply(tuned$performances[, 1:2], 1, function(x) paste("c = ", x[1], ", g = ", x[2]))
     matrix_wrong_positive <- matrix(data = error_wrong_positive_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
     matrix_wrong_negative <- matrix(data = error_wrong_negative_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
     row.names(matrix_wrong_positive) <- names_c_g
@@ -170,15 +170,15 @@ generate_error_distribution <- function(number_of_runs, col, calibration_data, c
   output_gamma <- numeric(number_of_runs)
   number_of_tuples <- nrow(calibration_data)
 
-  for(iteration in 1:number_of_runs){
-    selection <- sample(number_of_tuples, round(number_of_tuples * 0.7)) 
+  for (iteration in 1:number_of_runs){
+    selection <- sample(number_of_tuples, round(number_of_tuples * 0.7))
     # pulls approx. 70% random tuples for training, the remaining 30% are for testing the model
 
     # build training values and answers (converted to factor)
-    data_train <- calibration_data[selection,col]
-    data_test <- calibration_data[-selection,col]
-    answer_train <- as.factor(calibration_data[selection,"valid_amount"])
-    answer_test <- as.factor(calibration_data[-selection,"valid_amount"])
+    data_train <- calibration_data[selection, col]
+    data_test <- calibration_data[-selection, col]
+    answer_train <- as.factor(calibration_data[selection, "valid_amount"])
+    answer_test <- as.factor(calibration_data[-selection, "valid_amount"])
 
     # Gridsearch for the best parameters if not specified
     if (is.null(cost) | is.null(gamma)){
@@ -188,12 +188,12 @@ generate_error_distribution <- function(number_of_runs, col, calibration_data, c
     }
 
     # create the model with the best cost and gamma parameters
-    svmfit = svm( x = data_train, 
-                  y = answer_train, 
-                  kernel ="radial", 
-                  cost = cost, 
-                  gamma= gamma, 
-                  scale = FALSE, 
+    svmfit <- svm( x = data_train,
+                  y = answer_train,
+                  kernel = "radial",
+                  cost = cost,
+                  gamma = gamma,
+                  scale = FALSE,
                   type = "C-classification")
 
     # prediction
@@ -206,13 +206,8 @@ generate_error_distribution <- function(number_of_runs, col, calibration_data, c
     #cat("Progress: ", iteration/number_of_runs, "\n")
   }
 
-  return(list(error4 = output_error4, 
-              cost = output_cost, 
+  return(list(error4 = output_error4,
+              cost = output_cost,
               gamma = output_gamma  )
          )
 }
-
-
-
-
-
