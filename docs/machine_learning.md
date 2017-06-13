@@ -25,6 +25,7 @@ The build in function `tune` for finding the best "hyper-parameters" (in our cas
 
 
 ## Interpretation of the hyperparameters "cost" and "gamma"
+https://chrisalbon.com/machine-learning/svc_parameters_using_rbf_kernel.html
 
 
 
