@@ -107,7 +107,6 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
     custom_error_function <- function(true_values, predictions){
       # error_wrong_positive_collection[counter] <<- counter
       # error_wrong_negative_collection[counter] <<- counter
-      
       error_wrong_positive_collection[counter] <<- error_wrong_positive(true_values, predictions)
       error_wrong_negative_collection[counter] <<- error_wrong_negative(true_values, predictions)
       counter <<- counter + 1
