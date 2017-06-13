@@ -6,12 +6,13 @@
 # price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
 # price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
 # 
+# testdata for grid search
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
 # data_train = read.csv("data_train.csv", header = TRUE)[ , -1]
 # answer_train = read.csv("answer_train.csv", header = TRUE)[ , -1]
+# cost_range = 10^(-1:6); gamma_range = 10^(-1:1); detailed.output = TRUE; nruns = 10
 
-
-
+options(scipen = -10)
 
 generate_tuples <- function(price_list){
   combinations = expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
@@ -75,13 +76,20 @@ generate_tuples <- function(price_list){
 
 
 # Consider that this function can return NaN entries. See the documentation for further information.
-error_wrong_positive = function(true_values, predictions){
+error_wrong_positive <- function(true_values, predictions){
   return(mean(true_values[predictions == 1] == 0))
+}
+
+error_wrong_negative <- function(true_values, predictions){
+  return(mean(predictions[true_values == 1] == 0))
 }
 
 na_omit_mean <- function(x){mean(na.omit(x))}
 na_omit_sd <- function(x){sd(na.omit(x))}
 
+custom_error_function <- function(true_values, predictions){
+  return(error_wrong_positive(true_values, predictions))
+}
 
 # Grid-search for the best hyperparamters, kernel="radial" ... RBF, returns a data.frame which includes the parameters or a list including every error evaluation
 hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10^(-1:6), gamma_range = 10^(-1:1), detailed.output = FALSE, nruns = 10){
@@ -89,18 +97,32 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
   if(detailed.output){
     # global variables to get the errors from each iteration and not just the mean
     counter <<- 1
-    tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range)) 
     
-    na_omit_mean <- function(x){
-      tmp_error_list[[counter]] <<- x
+    #tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range)) 
+    error_wrong_positive_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
+    error_wrong_negative_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
+    
+    
+    
+    custom_error_function <- function(true_values, predictions){
+      # error_wrong_positive_collection[counter] <<- counter
+      # error_wrong_negative_collection[counter] <<- counter
+      error_wrong_positive_collection[counter] <<- error_wrong_positive(true_values, predictions)
+      error_wrong_negative_collection[counter] <<- error_wrong_negative(true_values, predictions)
       counter <<- counter + 1
-      mean(na.omit(x))}
+      
+      return(error_wrong_positive(true_values, predictions))
+    }
     
+    # na_omit_mean <- function(x){
+    #   tmp_error_list[[counter]] <<- x
+    #   counter <<- counter + 1
+    #   mean(na.omit(x))}
   }
   
   
   # special settings for tune 
-  tune_control = tune.control(error.fun = error_wrong_positive, 
+  tune_control = tune.control(error.fun = custom_error_function, 
                               performances = TRUE, 
                               sampling.aggregate = na_omit_mean,
                               sampling.dispersion = na_omit_sd,
@@ -122,13 +144,20 @@ hyperparameters_grid_search = function(data_train, answer_train, cost_range = 10
   
   if(detailed.output){
     names_c_g <- apply(tuned$performances[,1:2], 1, function(x){paste("c = ",x[1],",g = ",x[2])})
-    names(tmp_error_list) <- names_c_g
+    matrix_wrong_positive <- matrix(data = error_wrong_positive_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
+    matrix_wrong_negative <- matrix(data = error_wrong_negative_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
+    row.names(matrix_wrong_positive) <- names_c_g
+    row.names(matrix_wrong_negative) <- names_c_g
+    
+    # names(tmp_error_list) <- names_c_g
     return(list(tuned = tuned,
-                detailed_results = tmp_error_list))
-           
-  }   else {
+                wrong_positive = matrix_wrong_positive,
+                wrong_negative = matrix_wrong_negative))
+                # detailed_results = tmp_error_list))
+    }   else {
     return(tuned$best.parameters)
   }
+ 
 }
 
 
@@ -180,7 +209,7 @@ generate_error_distribution = function(number_of_runs, col, calibration_data, co
     output_cost[iteration] = cost
     output_gamma[iteration] = gamma
     
-    cat("Progress: ", iteration/number_of_runs, "\n")
+    #cat("Progress: ", iteration/number_of_runs, "\n")
   }
   
   return(list(error4 = output_error4, 
