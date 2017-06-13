@@ -3,8 +3,9 @@
 {
 library(e1071)
 source('machine_learning_lib.R') # loads function "generate_tuples(price_list)"
-
-
+# require(geoR)
+library(fields)
+  
 ######################################
 ######    GENERATION OF DATA    ######
 ######################################
@@ -76,7 +77,7 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
 
 
 ######       GRID-SEARCH FOR COL       ######
-{
+
   cost_range = 10^(-3:7)
   gamma_range = 10^(-3:3)
   
@@ -92,32 +93,49 @@ col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "com
   # Detaild output
   hyperparameters_detailed <- hyperparameters_grid_search(data_train = data_train, answer_train = answer_train, cost_range = cost_range, gamma_range = gamma_range, detailed.output = TRUE, nruns = 10)
   
-  
-  # plotting 
-  x11()
-  boxplot(hyperparameters_detailed[[2]], las=2, 
-          main = paste("Best Hyperp.: Cost = ", hyperparameters_detailed$tuned$best.parameters$cost, ", gamma = ", hyperparameters_detailed$tuned$best.parameters$gamma ), 
-          ylab = "Wrong Positive", par(mar = c(12, 5, 4, 2)+ 0.1))
-  
-  
-  lapply(hyperparameters_detailed[[2]], function(x) x[!is.na(x)])
-  
+{ 
+  # plotting wrong positive
+  #x11()
   dev.new()
-  require(geoR)
-  z <- matrix(hyperparameters_detailed$tuned$performances$error, ncol = length(gamma_range))
   dev.new()
-  image.plot(log10(cost_range), log10(gamma_range), z,
+  par(mar = c(12, 5, 4, 2)+ 0.1)
+  boxplot(t(hyperparameters_detailed$wrong_positive), las=2, 
+          main = paste("Wrong-Positive - Best Hyperp.: Cost = ", hyperparameters_detailed$tuned$best.parameters$cost, ", gamma = ", hyperparameters_detailed$tuned$best.parameters$gamma ), 
+          ylab = "Wrong Positive")
+  
+  
+  # mean of wrong-positives as matrix for 2d plot
+  z1 <- matrix(apply(hyperparameters_detailed$wrong_positive, 1, na_omit_mean), byrow = FALSE, ncol = length(gamma_range))
+  # z <- matrix(hyperparameters_detailed$tuned$performances$error, ncol = length(gamma_range))
+  dev.new()
+  image.plot(log10(cost_range), log10(gamma_range), z1,
         xlab = "log(cost)", ylab = "log(gamma)",
         main = "Mean wrong-positive error")
   box()
+  contour(log10(cost_range), log10(gamma_range), z1, main = "Mean wrong-positive error", add = TRUE)
   
+  
+
+
+  # plotting wrong negative
   dev.new()
-  contour(log10(cost_range), log10(gamma_range), z)
+  par(mar = c(12, 5, 4, 2)+ 0.1)
+  boxplot(t(hyperparameters_detailed$wrong_negative), las=2, 
+          main = paste("Wrong-Negative"), 
+          ylab = "Wrong Negative")
   
-  # compute key figures out of "hyperparameters_detailed"
-  # Maybe this will be the 2nd important number to minimize
-  matrix(as.numeric(sapply(hyperparameters_detailed[[2]], na_omit_mean)), nrow = length(cost_range))
-}
+  
+  # mean of wrong-negatives as matrix for 2d plot
+  z2 <- matrix(apply(hyperparameters_detailed$wrong_negative, 1, na_omit_mean), byrow = FALSE, ncol = length(gamma_range))
+  dev.new()
+  image.plot(log10(cost_range), log10(gamma_range), z2,
+             xlab = "log(cost)", ylab = "log(gamma)",
+             main = "Mean wrong-negative error")
+  box()
+  contour(log10(cost_range), log10(gamma_range), z2, main = "Mean wrong-negative error", add = TRUE)
+}  
+  
+
 
 
 graphics.off()
@@ -131,7 +149,7 @@ graphics.off()
 cost = 1000
 gamma =  0.01
 
-error_run1 = generate_error_distribution(number_of_runs = 1000, col = col, calibration_data = calibration_data, cost = cost, gamma = gamma)
+error_run1 = generate_error_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data, cost = cost, gamma = gamma)
 
 
 #print error distributions
