@@ -20,6 +20,19 @@ In the Future it is easy to merge all optimization into one big problem that run
 
 
 
+## Grid search
+The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) needs some adaptations to suits our needs. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it returns the "wrong-positive"-error, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). So for each cost-gamma combination `tune` produces 10 (standard) evaluations of errors. From each of these sets, we need only two numbers, the average standard deviation. The problem is, that only one "NaN" entry destroys the whole set for the combination of C and gamma, because `mean` and `sd` can not handle `NaN`. So we have to adapt these function. Therefore we use `na_omit_mean` and `na_omit_sd` in `tune.control`.
+
+
+## Interpretation of the hyperparameters "cost" and "gamma"
+https://chrisalbon.com/machine-learning/svc_parameters_using_rbf_kernel.html
+
+
+
+## Error of first kind vs. error of second kind
+The error we try to minimize in the first place is the "wrong-positive" error. The problem is that we often get zero positive prediction. So from all possible combinations (hyperparameters and attributes) with a low "wrong-positive" error, we should choose the one with a high rate of positive predictions. 
+
+
 ## Description of the attributes 
 We generate the attributes via the function `generate_tuples`.
 
@@ -48,9 +61,10 @@ There are several possibilities to measure errors.
 
 Of course some of them are unnecessary because we could calculate them from an other error but to give a better understanding we wrote them down anyway.
 
-Most important --> wrong positives
+**Most important error: wrong positives** 
+
 It is possible to get NaN entries here!
-When there is no positive prediction (all of the predictions are 0) then our measurements fails. The best solution is not to take them into consideration
+When there is no positive prediction (all of the predictions are 0) then our measurements fails and we get a "NaN". The best solution is not to take them into consideration.
  
 
 
@@ -136,6 +150,7 @@ name_of_model = paste(col, sep="", collapse="/")
 
 
 **tune**
+
 The `tune` function already calculates the distribution (sort of) of the error and decides because of this.
 
 For 8 x 3 = 24 possible combinations it calculated 240 times the error, so 10 times per combination. With the object `tune.control` we are able to specify the error to decide on (we want the wrong-positives to be minimized).
