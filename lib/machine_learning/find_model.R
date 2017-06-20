@@ -65,14 +65,18 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 
 
 # choose which arguments are for the SVM
-col = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height", "height_uq")
+col = c("total_price_s", "vat_price_s", "rel_p", "price_order",
+        "price_uq", "common_width", "common_height", "height_uq")
 
 
 
 
 ######       GRID-SEARCH FOR A COL       ######
-cost_range = 10^(-3:7)
-gamma_range = 10^(-3:3)
+cost_range = 10 ^ (-2:2)
+gamma_range = 10 ^ (-1:1)
+
+# cost_range = 10 ^ (-3:7)
+# gamma_range = 10 ^ (-3:3)
 
 
 # Grid search for the hyperparameters using ALL data

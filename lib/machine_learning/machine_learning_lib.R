@@ -97,7 +97,8 @@ na_omit_sd <- function(x)
 custom_error_function <- function(true_values, predictions)
   error_wrong_positive(true_values, predictions)
 
-# Grid-search for the best hyperparamters, kernel="radial" ... RBF, returns a data.frame which includes the parameters or a list including every error evaluation
+# Grid-search for the best hyperparamters, kernel="radial" ... RBF, 
+# returns a data.frame which includes the parameters or a list including every error evaluation
 hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 10 ^ (-1:6),
                             gamma_range = 10 ^ (-1:1), detailed.output = FALSE, nruns = 10) {
   if (detailed.output) {
