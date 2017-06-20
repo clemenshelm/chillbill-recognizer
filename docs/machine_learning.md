@@ -61,15 +61,32 @@ There are several possibilities to measure errors.
 
 Of course some of them are unnecessary because we could calculate them from an other error but to give a better understanding we wrote them down anyway.
 
-**Most important error: wrong positives** 
+**Most important error: wrong positives**
 
 It is possible to get NaN entries here!
 When there is no positive prediction (all of the predictions are 0) then our measurements fails and we get a "NaN". The best solution is not to take them into consideration.
- 
+
 
 
 
 ## Some important commands for the R-Code
+**Show all manually installed packages in R**
+ip <- as.data.frame(installed.packages()[,c(1,3:4)])
+rownames(ip) <- NULL
+ip <- ip[is.na(ip$Priority),1:2,drop=FALSE]
+print(ip, row.names=FALSE)
+
+
+**Install R in Debian 8 (Jessie)**
+https://cran.r-project.org/bin/linux/debian/
+http://www.jason-french.com/blog/2013/03/11/installing-r-in-linux/
+
+I was not able to use the GPG key. Therefore I just used:
+```shell
+sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
+apt-get update
+apt-get install r-base r-base-dev
+```
 
 **Linter in R**
 
