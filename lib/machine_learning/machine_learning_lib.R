@@ -103,25 +103,18 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
                             gamma_range = 10 ^ (-1:1), detailed.output = FALSE, nruns = 10) {
   if (detailed.output) {
     # global variables to get the errors from each iteration and not just the mean
-    counter <<- 1
-
-    #tmp_error_list <<- vector("list", length(cost_range) * length(gamma_range))
-    error_wrong_positive_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
-    error_wrong_negative_collection <<- numeric(length(cost_range) * length(gamma_range) * nruns)
+    assign("glob_counter", 1, envir = .GlobalEnv)
+    assign("glob_wrong_positive",
+           numeric(length(cost_range) * length(gamma_range) * nruns), envir = .GlobalEnv)
+    assign("glob_wrong_negative",
+           numeric(length(cost_range) * length(gamma_range) * nruns), envir = .GlobalEnv)
 
     custom_error_function <- function(true_values, predictions){
-      # error_wrong_positive_collection[counter] <<- counter
-      # error_wrong_negative_collection[counter] <<- counter
-      error_wrong_positive_collection[counter] <<- error_wrong_positive(true_values, predictions)
-      error_wrong_negative_collection[counter] <<- error_wrong_negative(true_values, predictions)
-      counter <<- counter + 1
+      glob_wrong_positive[glob_counter] <<- error_wrong_positive(true_values, predictions)
+      glob_wrong_negative[glob_counter] <<- error_wrong_negative(true_values, predictions)
+      glob_counter <<- glob_counter + 1
       return(error_wrong_positive(true_values, predictions))
     }
-
-    # na_omit_mean <- function(x){
-    #   tmp_error_list[[counter]] <<- x
-    #   counter <<- counter + 1
-    #   mean(na.omit(x))}
   }
 
   # special settings for tune
@@ -145,17 +138,18 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
   )
 
   if (detailed.output){
-    names_c_g <- apply(tuned$performances[, 1:2], 1, function(x) paste("c = ", x[1], ", g = ", x[2]))
-    matrix_wrong_positive <- matrix(data = error_wrong_positive_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
-    matrix_wrong_negative <- matrix(data = error_wrong_negative_collection, nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
+    names_c_g <- apply(tuned$performances[, 1:2], 1,
+        function(x) paste("c = ", x[1], ", g = ", x[2]))
+    matrix_wrong_positive <- matrix(data = glob_wrong_positive,
+        nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
+    matrix_wrong_negative <- matrix(data = glob_wrong_negative,
+        nrow = length(cost_range) * length(gamma_range), byrow = TRUE)
     row.names(matrix_wrong_positive) <- names_c_g
     row.names(matrix_wrong_negative) <- names_c_g
 
-    # names(tmp_error_list) <- names_c_g
     return(list(tuned = tuned,
                 wrong_positive = matrix_wrong_positive,
                 wrong_negative = matrix_wrong_negative))
-                # detailed_results = tmp_error_list))
     }   else {
     return(tuned$best.parameters)
   }
