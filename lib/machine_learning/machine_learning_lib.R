@@ -17,9 +17,9 @@ options(scipen = -10)
 generate_tuples <- function(price_list){
   combinations <- expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
   part1 <- price_list[ combinations$Var1,
-            c("bill_id", "price_id", "text", "price_cents", "left", "right", "top", "bottom")]
+      c("bill_id", "price_id", "text", "price_cents", "left", "right", "top", "bottom")]
   part2 <- price_list[ combinations$Var2,
-            c("price_id", "text", "price_cents", "left", "right", "top", "bottom")]
+      c("price_id", "text", "price_cents", "left", "right", "top", "bottom")]
 
   # rename columns
   colnames(part1) <- c("bill_id", "total_id", "total_text", "total_price",
@@ -75,9 +75,6 @@ generate_tuples <- function(price_list){
 
   return(data)
 }
-
-
-
 
 
 

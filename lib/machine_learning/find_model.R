@@ -2,25 +2,25 @@
 # RScript uses automatically the right directory
 {
 library(e1071)
-source('machine_learning_lib.R') # loads function "generate_tuples(price_list)"
+source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
 # require(geoR)
 library(fields)
-  
+
 ######################################
 ######    GENERATION OF DATA    ######
 ######################################
 # This section will go to machine_learning_lib.R
 
 # load data from several bills
-prices_several_bills = read.csv("prices.csv", header = TRUE)
-correct_price_tuples = read.csv("correct_price_tuples.csv", header = TRUE)
+prices_several_bills <- read.csv("prices.csv", header = TRUE)
+correct_price_tuples <- read.csv("correct_price_tuples.csv", header = TRUE)
 
 # generate tuples and add attributes
-tab = table(prices_several_bills$bill_id)
-calibration_data = generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
+tab <- table(prices_several_bills$bill_id)
+calibration_data <- generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
 for(i in 2:length(tab)){
   # cat("Bill #", i, "; \n")
-  calibration_data = rbind( calibration_data, 
+  calibration_data <- rbind( calibration_data, 
                             generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
 }
 
@@ -65,23 +65,23 @@ cat("Amount of false and right combinations:", table(calibration_data$valid_amou
 
 
 # choose which arguments are for the SVM
-col = c("total_price_s", "vat_price_s", "rel_p", "price_order",
+col <- c("total_price_s", "vat_price_s", "rel_p", "price_order",
         "price_uq", "common_width", "common_height", "height_uq")
 
 
 
 
 ######       GRID-SEARCH FOR A COL       ######
-cost_range = 10 ^ (-2:2)
-gamma_range = 10 ^ (-1:1)
+cost_range <- 10 ^ (-2:2)
+gamma_range <- 10 ^ (-1:1)
 
-# cost_range = 10 ^ (-3:7)
-# gamma_range = 10 ^ (-3:3)
+# cost_range <- 10 ^ (-3:7)
+# gamma_range <- 10 ^ (-3:3)
 
 
 # Grid search for the hyperparameters using ALL data
-data_train = calibration_data[ ,col]
-answer_train = as.factor(calibration_data[ ,"valid_amount"])
+data_train <- calibration_data[ ,col]
+answer_train <- as.factor(calibration_data[ ,"valid_amount"])
 
 # normal output
 # best_hyperparameters <- hyperparameters_grid_search(data_train = data_train, answer_train = answer_train, cost_range = cost_range, gamma_range = gamma_range, detailed.output = FALSE)
@@ -139,10 +139,10 @@ hyperparameters_detailed <- hyperparameters_grid_search(data_train = data_train,
 
 ######       ERROR DISTRIBUTION FOR COL        ######
 # Define the hyperparameters
-cost = 1000
-gamma =  0.01
+cost <- 1000
+gamma <-  0.01
 
-error_run1 = generate_error_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data, cost = cost, gamma = gamma)
+error_run1 <- generate_error_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data, cost = cost, gamma = gamma)
 
 
 #print error distributions
