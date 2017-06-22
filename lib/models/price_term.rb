@@ -26,7 +26,16 @@ class PriceTerm < Sequel::Model
   end
 
   def valid?
-    @term_builder.valid?
+    if @term_builder.valid?
+      # Find the word which is right after this PriceTerm
+      word_right_after = Word.right_after(self)
+
+      # Get the text only if the word right after exists
+      text = word_right_after.text if word_right_after != nil
+
+      # Check if the text is kg
+      text != 'kg'
+    end
   end
 
   def to_d

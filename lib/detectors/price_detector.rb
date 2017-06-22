@@ -10,18 +10,8 @@ class PriceDetector
   SHORT_PRICE_REGEX = /(\d+€)/
   HUNGARIAN_PRICE_REGEX = /^[0-9]{2} [0-9]{3}/
 
-  def self.filter_out_unnecessary_numbers
-    Word.where(:text => 'kg').all.each do |term|
-      Word.where(id: term.previous.id)
-      .delete if term != nil && term.id > 0
-    end
-  end
-
   def self.filter
-    filter_out_unnecessary_numbers
-
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
-
     end_word_with_space = ->(term) { term.text += ' ' }
 
     find_prices(

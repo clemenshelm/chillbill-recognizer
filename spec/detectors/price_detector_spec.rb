@@ -5,6 +5,9 @@ require_relative '../factories' # should be loaded automatically
 
 describe PriceDetector do
   it 'finds prices separated with a comma' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(C 14,49 4006972047414 2,69).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -12,6 +15,9 @@ describe PriceDetector do
   end
 
   it "doesn't find words that contain no numbers" do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(/,v„ Sie).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -19,6 +25,9 @@ describe PriceDetector do
   end
 
   it "doesn't find words with 4 decimal places" do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(:word, text: '5,1920')
 
     prices = PriceDetector.filter
@@ -26,6 +35,9 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 2 words' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create_following_words(['54,', '00'])
 
     prices = PriceDetector.filter
@@ -33,6 +45,9 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 3 words' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create_following_words(%w(45 , 00))
 
     prices = PriceDetector.filter
@@ -40,6 +55,9 @@ describe PriceDetector do
   end
 
   it 'only find prices with typical characters' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(02/2015 N24 1.185,00).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -47,6 +65,9 @@ describe PriceDetector do
   end
 
   it "doesn't find prices that contain letters" do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(12 x 0,95).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -54,6 +75,9 @@ describe PriceDetector do
   end
 
   it "includes a word's bounding box" do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '1.185,00',
@@ -72,6 +96,9 @@ describe PriceDetector do
   end
 
   it 'finds prices with a colon as decimal separator' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
     price_texts.each { |text| create(:word, text: text) }
 
@@ -80,6 +107,9 @@ describe PriceDetector do
   end
 
   it "doesn't find dates as prices" do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(28.02.15 31.03.15).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -87,6 +117,9 @@ describe PriceDetector do
   end
 
   it 'recognizes correct prices with a period as thousand separator' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     %w(3.551,37 4.261,64).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
@@ -95,6 +128,9 @@ describe PriceDetector do
   end
 
   it 'recognizes correct prices with a period as decimal separator' do
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
     price_texts.each { |text| create(:word, text: text) }
 
@@ -104,7 +140,10 @@ describe PriceDetector do
   end
 
   it 'recognizes prices with leading euro symbol' do
-    create(:word, text: '€86.97')
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
+    create(:word, text:'€86.97')
 
     prices = PriceDetector.filter
     price_string = format('%.2f', prices.first.to_d)
@@ -112,7 +151,18 @@ describe PriceDetector do
   end
 
   it 'recognizes a price with a dash as decimal places' do
-    create(:word, text: '1000,-')
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
+    create(
+      :word,
+       text: '1000,-',
+       left: 0.95,
+       right: 0.95,
+       top: 0.95,
+       bottom: 0.95
+    )
 
     prices = PriceDetector.filter
     price_string = format('%.2f', prices.first.to_d)
@@ -121,6 +171,10 @@ describe PriceDetector do
 
   it 'finds a price without decimal places with the currency name behind' do
     # from bill gANywe3fjvx98iPp2
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '360',
@@ -146,6 +200,10 @@ describe PriceDetector do
 
   it 'finds a price without decimal places with the currency symbol behind' do
     # from bill gANywe3fjvx98iPp2
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '300€',
@@ -162,6 +220,10 @@ describe PriceDetector do
 
   it 'finds hungarian price that consist of 2 words' do
     # from bill Thzi7n3qdSk4awip2
+
+    # Dummy values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create_following_words(%w(11 038))
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['11 038']
@@ -169,6 +231,9 @@ describe PriceDetector do
 
   it 'detects price with comma and period separator' do
     # from bill fP5Y5WXQGoF45YePr
+
+    # Dummy values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
 
     create(
       :word,
@@ -194,6 +259,10 @@ describe PriceDetector do
 
   it 'does not detect numbers with only one decimal digit' do
     # from bill kk4FafcZqvCCC64BY.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '3.0',
@@ -209,6 +278,10 @@ describe PriceDetector do
 
   it 'does not detect vat-rate as price' do
     # from bill BYnCDzw7nNMFergRW.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '20,00%',
@@ -224,6 +297,10 @@ describe PriceDetector do
 
   it 'does not detect a list of numbers as prices' do
     # from 2AAizxTARPRp8PN4D.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: '01,',
@@ -257,6 +334,10 @@ describe PriceDetector do
 
   it 'does not detect paper size followed by quantity as a price' do
     # From 2HtXGWoynP3sFMvFH.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
       :word,
       text: 'A5,',
@@ -281,32 +362,36 @@ describe PriceDetector do
 
   it 'does not detect numbers before kg' do
     # From 25KA7rWWmhStXDEsb.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
     create(
-    :word,
-    text: '36,80',
-    left: 0.7706151832460733,
-    right: 0.8072643979057592,
-    top: 0.8700277520814061,
-    bottom: 0.8792784458834413
+      :word,
+      text: '28,80',
+      left: 0.7719240837696335,
+      right: 0.8053010471204188,
+      top: 0.3172987974098057,
+      bottom: 0.3251618871415356
     )
 
     create(
-    :word,
-    text: 'kg',
-    left: 0.8118455497382199,
-    right: 0.8255890052356021,
-    top: 0.8697964847363552,
-    bottom: 0.8799722479185939
-    )
+      :word,
+       text: 'kg',
+       left: 0.8095549738219895,
+       right: 0.8232984293193717,
+       top: 0.31706753006475485,
+       bottom: 0.32562442183163737
+  )
 
     create(
-    :word,
-    text: '4,24',
-    left: 0.7797774869109948,
-    right: 0.8049738219895288,
-    top: 0.45351526364477335,
-    bottom: 0.4616096207215541
-    )
+      :word,
+      text: '4,24',
+      left: 0.7797774869109948,
+      right: 0.8049738219895288,
+      top: 0.45351526364477335,
+      bottom: 0.4616096207215541
+      )
 
     create(
     :word,
@@ -432,6 +517,24 @@ describe PriceDetector do
     right: 0.7905759162303665,
     top: 0.8499074930619797,
     bottom: 0.8598519888991675
+    )
+
+    create(
+    :word,
+    text: '36,80',
+    left: 0.7706151832460733,
+    right: 0.8072643979057592,
+    top: 0.8700277520814061,
+    bottom: 0.8792784458834413
+    )
+
+    create(
+    :word,
+    text: 'kg',
+    left: 0.8118455497382199,
+    right: 0.8255890052356021,
+    top: 0.8697964847363552,
+    bottom: 0.8799722479185939
     )
 
     prices = PriceDetector.filter
