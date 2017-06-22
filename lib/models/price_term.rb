@@ -31,7 +31,7 @@ class PriceTerm < Sequel::Model
       word_right_after = Word.right_after(self)
 
       # Get the text only if the word right after exists
-      text = word_right_after.text if word_right_after != nil
+      text = word_right_after.text unless word_right_after.nil?
 
       # Check if the text is kg
       text != 'kg'
