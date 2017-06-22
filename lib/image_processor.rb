@@ -15,12 +15,13 @@ class ImageProcessor
         raise InvalidImage, 'Cannot read image. Maybe the PDF has errors?'
       end
       density = calculate_density(original_image.page)
-      @image_width = original_image.page.width
-      @image_height = original_image.page.height
     ensure
       original_image&.destroy!
     end
     @image = Image.read(read_path) { self.density = density }[0]
+    @image_width = @image.columns
+    @image_height = @image.rows
+    @image
   end
 
   def calculate_density(page)
@@ -41,8 +42,8 @@ class ImageProcessor
 
   def correct_orientation
     @image.auto_orient!
-    @image_width = @image.page.width
-    @image_height = @image.page.height
+    @image_width = @image.columns
+    @image_height = @image.rows
     self
   end
 
@@ -76,6 +77,8 @@ class ImageProcessor
   def trim
     @image.fuzz = '70%'
     @image.trim!
+    @image_width = @image.columns
+    @image_height = @image.rows
     self
   end
 
