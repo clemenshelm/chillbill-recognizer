@@ -788,6 +788,39 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2017-02-27']
   end
 
+  it 'fadds', :focus do
+
+    create(
+      :word,
+      text: '902308630217',
+      left: 0.8712151796528058,
+      right: 0.9874848607186112,
+      top: 0.04630454140694568,
+      bottom: 0.05699020480854853
+    )
+
+    create(
+      :word,
+      text: '07.02.2017',
+      left: 0.9023011707710941,
+      right: 0.9874848607186112,
+      top: 0.06470762837637281,
+      bottom: 0.07539329177797566
+    )
+
+    create(
+      :word,
+      text: '15.02.2017',
+      left: 0.9039160274525636,
+      right: 0.9874848607186112,
+      top: 0.08281389136242208,
+      bottom: 0.09349955476402494
+    )
+    
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2017-02-07']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end

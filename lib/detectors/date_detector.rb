@@ -23,14 +23,14 @@ class DateDetector
 
   def self.filter
     reduced_words = filter_out_interefering_date_terms
-    find_long_dates_with_periods(reduced_words)
+#    find_long_dates_with_periods(reduced_words)
 
-    find_multi_word_dates(reduced_words)
-    find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
-    find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
-    find_dates(reduced_words, AMERICAN_LONG_SLASH_DATE_REGEX, max_words: 1)
-    find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
-    find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
+#    find_multi_word_dates(reduced_words)
+#    find_dates(reduced_words, SHORT_SLASH_DATE_REGEX, max_words: 1)
+#    find_dates(reduced_words, SHORT_ENGLISH_DATE_REGEX, max_words: 1)
+#    find_dates(reduced_words, AMERICAN_LONG_SLASH_DATE_REGEX, max_words: 1)
+#    find_dates(reduced_words, LONG_HYPHEN_DATE_REGEX, max_words: 1)
+#    find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
 
     DateTerm.order(:first_word_id)
   end
@@ -38,7 +38,8 @@ class DateDetector
   def self.filter_out_interefering_date_terms
     words = find_dates(Word.all, LONG_SLASH_DATE_REGEX, max_words: 1)
     words += find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
+
+    #words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
     Word.all - words
   end
 
@@ -94,10 +95,15 @@ class DateDetector
 
           last_word = word
 
-          if term.valid?
-            term.save
-            affected_words += term.words
+          if term.text == '07.02.2017'
+            binding.pry
+            if term.valid?
+              term.save
+              binding.pry
+              affected_words += term.words
+            end
           end
+
         end
         affected_words
       end

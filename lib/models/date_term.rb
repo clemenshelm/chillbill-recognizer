@@ -40,6 +40,7 @@ class DateTerm < Sequel::Model
   def valid?
     to_datetime
     @term_builder.valid?
+    #binding.pry
   rescue ArgumentError
     false
   end
