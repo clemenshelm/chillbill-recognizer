@@ -11,14 +11,8 @@ class PriceDetector
   HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3} )$/
 
   def self.filter_out_quantity_column
-    # Get word Menge
-    quantity = Word.where(text: 'Menge')
-    return nil if quantity.empty?
-
-    PriceTerm.all.map do |term|
-      piece_term = term if term.right <= quantity.first.right
-      PriceTerm.where(id: piece_term.id).delete unless piece_term.nil?
-    end
+    quantity = Word.first(text: 'Menge')
+    PriceTerm.where { right <= quantity.right }.destroy if quantity
   end
 
   def self.filter
