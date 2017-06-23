@@ -164,7 +164,7 @@ describe PriceDetector do
     # from bill Thzi7n3qdSk4awip2
     create_following_words(%w(11 038))
     prices = PriceDetector.filter
-    expect(prices.map(&:text)).to eq ['11 038']
+    expect(prices.map(&:text)).to eq ['11 038 ']
   end
 
   it 'detects price with comma and period separator' do
@@ -277,6 +277,97 @@ describe PriceDetector do
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect pieces as prices' do
+    # from bill 29pwjsKx88nhnQKm9.pdf
+
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: 'Menge',
+      left: 0.6013185287994448,
+      right: 0.6544066620402498,
+      top: 0.42119769481332997,
+      bottom: 0.43297419193184666
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.6210964607911172,
+      right: 0.6492019430950728,
+      top: 0.4560260586319218,
+      bottom: 0.46579804560260585
+    )
+
+    create(
+      :word,
+      text: '2,00',
+      left: 0.6197085357390701,
+      right: 0.6492019430950728,
+      top: 0.4845903282385367,
+      bottom: 0.49436231520922075
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.6210964607911172,
+      right: 0.6492019430950728,
+      top: 0.5276872964169381,
+      bottom: 0.5374592833876222
+    )
+
+    create(
+      :word,
+      text: '8,50',
+      left: 0.9389312977099237,
+      right: 0.9687716863289383,
+      top: 0.4560260586319218,
+      bottom: 0.46579804560260585
+    )
+
+    create(
+      :word,
+      text: '12,00',
+      left: 0.9309507286606523,
+      right: 0.9684247050659265,
+      top: 0.4845903282385367,
+      bottom: 0.49436231520922075
+    )
+
+    create(
+      :word,
+      text: '4,00',
+      left: 0.9385843164469119,
+      right: 0.9687716863289383,
+      top: 0.5276872964169381,
+      bottom: 0.5374592833876222
+    )
+
+    create(
+      :word,
+      text: '17',
+      left: 0.7394170714781402,
+      right: 0.7678695350451076,
+      top: 0.08694562766224004,
+      bottom: 0.09771986970684039
+    )
+
+    create(
+      :word,
+      text: '2152',
+      left: 0.7744621790423317,
+      right: 0.8223455933379598,
+      top: 0.08669506389376096,
+      bottom: 0.09596592332748685
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['8,50', '12,00', '4,00']
   end
 
   # TODO: Move to general helpers
