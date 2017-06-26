@@ -103,11 +103,9 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
                             gamma_range = 10 ^ (-1:1), detailed.output = FALSE, nruns = 10) {
   if (detailed.output) {
     # global variables to get the errors from each iteration and not just the mean
-    assign("glob_counter", 1, envir = .GlobalEnv)
-    assign("glob_wrong_positive",
-           numeric(length(cost_range) * length(gamma_range) * nruns), envir = .GlobalEnv)
-    assign("glob_wrong_negative",
-           numeric(length(cost_range) * length(gamma_range) * nruns), envir = .GlobalEnv)
+    glob_counter <- 1
+    glob_wrong_positive <- numeric(length(cost_range) * length(gamma_range) * nruns)
+    glob_wrong_negative <- numeric(length(cost_range) * length(gamma_range) * nruns)
 
     custom_error_function <- function(true_values, predictions){
       glob_wrong_positive[glob_counter] <<- error_wrong_positive(true_values, predictions)
