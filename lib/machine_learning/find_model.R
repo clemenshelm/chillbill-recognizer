@@ -17,25 +17,29 @@ correct_price_tuples <- read.csv("correct_price_tuples.csv", header = TRUE)
 
 # generate tuples and add attributes
 tab <- table(prices_several_bills$bill_id)
-calibration_data <- generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
-for(i in 2:length(tab)){
+calibration_data <-
+  generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
+for (i in 2:length(tab)){
   # cat("Bill #", i, "; \n")
-  calibration_data <- rbind( calibration_data, 
-                            generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
+  calibration_data <-
+    rbind(calibration_data,
+          generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
 }
 
 # adding correct answer in "valid_amount"
-calibration_data[ , "valid_amount"] = 0
+calibration_data[, "valid_amount"] <- 0
 calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
-                    calibration_data$vat_id %in% correct_price_tuples$vat_id ,  "valid_amount"] =  1
+                    calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
 #calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 # Change Row namesto 1, 2, 3, ...
 rownames(calibration_data) <- NULL
 
 # Print percentage of right combinations
-cat("Amount of false and right combinations:", table(calibration_data$valid_amount), 
- "<=>", table(calibration_data$valid_amount)[2]/ nrow(calibration_data) * 100, "% right combinations%\n")
+cat("Amount of false and right combinations:",
+    table(calibration_data$valid_amount),
+    "<=>", table(calibration_data$valid_amount)[2] / nrow(calibration_data) * 100,
+    "% right combinations%\n")
 
 }
 
@@ -80,29 +84,39 @@ gamma_range <- 10 ^ (-1:1)
 
 
 # Grid search for the hyperparameters using ALL data
-data_train <- calibration_data[ ,col]
-answer_train <- as.factor(calibration_data[ ,"valid_amount"])
-
-# normal output
-# best_hyperparameters <- hyperparameters_grid_search(data_train = data_train, answer_train = answer_train, cost_range = cost_range, gamma_range = gamma_range, detailed.output = FALSE)
+data_train <- calibration_data[, col]
+answer_train <- as.factor(calibration_data[, "valid_amount"])
 
 
 # Detaild output
-hyperparameters_detailed <- hyperparameters_grid_search(data_train = data_train, answer_train = answer_train, cost_range = cost_range, gamma_range = gamma_range, detailed.output = TRUE, nruns = 10)
+hyperparameters_detailed <-
+  hyperparameters_grid_search(data_train = data_train,
+                              answer_train = answer_train,
+                              cost_range = cost_range,
+                              gamma_range = gamma_range,
+                              detailed.output = TRUE,
+                              nruns = 10)
 
-{ 
+{
   # plotting wrong positive
   #x11()
   dev.new()
   dev.new()
-  par(mar = c(12, 5, 4, 2)+ 0.1)
-  boxplot(t(hyperparameters_detailed$wrong_positive), las=2, 
-          main = paste("Wrong-Positive - Best Hyperp.: Cost = ", hyperparameters_detailed$tuned$best.parameters$cost, ", gamma = ", hyperparameters_detailed$tuned$best.parameters$gamma ), 
+  par(mar = c(12, 5, 4, 2) + 0.1)
+  boxplot(t(hyperparameters_detailed$wrong_positive), las = 2,
+          main = paste("Wrong-Positive - Best Hyperp.: Cost = ",
+                       hyperparameters_detailed$tuned$best.parameters$cost,
+                       ", gamma = ",
+                       hyperparameters_detailed$tuned$best.parameters$gamma ),
           ylab = "Wrong Positive")
-  
-  
+
+
   # mean of wrong-positives as matrix for 2d plot
-  z1 <- matrix(apply(hyperparameters_detailed$wrong_positive, 1, na_omit_mean), byrow = FALSE, ncol = length(gamma_range))
+  z1 <- matrix(apply(hyperparameters_detailed$wrong_positive,
+                     1,
+                     na_omit_mean),
+               byrow = FALSE,
+               ncol = length(gamma_range))
   # z <- matrix(hyperparameters_detailed$tuned$performances$error, ncol = length(gamma_range))
   dev.new()
   image.plot(log10(cost_range), log10(gamma_range), z1,
@@ -110,31 +124,32 @@ hyperparameters_detailed <- hyperparameters_grid_search(data_train = data_train,
         main = "Mean wrong-positive error")
   box()
   contour(log10(cost_range), log10(gamma_range), z1, main = "Mean wrong-positive error", add = TRUE)
-  
-  
+
+
   # plotting wrong negative
   dev.new()
-  par(mar = c(12, 5, 4, 2)+ 0.1)
-  boxplot(t(hyperparameters_detailed$wrong_negative), las=2, 
-          main = paste("Wrong-Negative"), 
+  par(mar = c(12, 5, 4, 2) + 0.1)
+  boxplot(t(hyperparameters_detailed$wrong_negative), las = 2,
+          main = paste("Wrong-Negative"),
           ylab = "Wrong Negative")
-  
-  
+
+
   # mean of wrong-negatives as matrix for 2d plot
-  z2 <- matrix(apply(hyperparameters_detailed$wrong_negative, 1, na_omit_mean), byrow = FALSE, ncol = length(gamma_range))
+  z2 <- matrix(apply(hyperparameters_detailed$wrong_negative,
+                     1,
+                     na_omit_mean),
+               byrow = FALSE,
+               ncol = length(gamma_range))
   dev.new()
   image.plot(log10(cost_range), log10(gamma_range), z2,
              xlab = "log(cost)", ylab = "log(gamma)",
              main = "Mean wrong-negative error")
   box()
   contour(log10(cost_range), log10(gamma_range), z2, main = "Mean wrong-negative error", add = TRUE)
-}  
+}
   
 #graphics.off()
 
-
-# Distribution of the parameters (cost and gamma)
-# parameter_run1 =  generate_parameters_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data)
 
 
 ######       ERROR DISTRIBUTION FOR COL        ######
@@ -142,11 +157,17 @@ hyperparameters_detailed <- hyperparameters_grid_search(data_train = data_train,
 cost <- 1000
 gamma <-  0.01
 
-error_run1 <- generate_error_distribution(number_of_runs = 100, col = col, calibration_data = calibration_data, cost = cost, gamma = gamma)
+error_run1 <-
+  generate_error_distribution(number_of_runs = 100,
+                              col = col,
+                              calibration_data = calibration_data,
+                              cost = cost,
+                              gamma = gamma)
 
 
 #print error distributions
-cat("Percentage of NaN results: ", sum(is.na(error_run1$error4))/ length(error_run1$error4) * 100, "%")
+cat("Percentage of NaN results: ",
+    sum(is.na(error_run1$error4)) / length(error_run1$error4) * 100, "%")
 hist(error_run1$error4)
 hist(error_run1$cost)
 hist(error_run1$gamma)

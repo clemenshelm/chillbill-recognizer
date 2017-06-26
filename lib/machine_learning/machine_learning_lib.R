@@ -158,7 +158,7 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
 
 # To get a distribution of the error for a specific combination of attributes
 # we run each combination several times (number_of_runs times)
-generate_error_distribution <- 
+generate_error_distribution <-
   function(number_of_runs, col, calibration_data, cost = NULL, gamma = NULL){
   output_error4 <- numeric(number_of_runs)
   output_cost <- numeric(number_of_runs)
