@@ -90,12 +90,21 @@ https://cran.r-project.org/bin/linux/debian/
 http://www.jason-french.com/blog/2013/03/11/installing-r-in-linux/
 ```
 
-I was not able to use the GPG key. Therefore I just used:
+add the cran link to sources.list to get R 3.4
 ```shell
-sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
-apt-get update
-apt-get install r-base r-base-dev
+RUN sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
 ```
+
+add key, this is important to verify the new R version
+```shell
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+
+RUN apt-get update && apt-get install -y \
+  r-base \
+  r-recommended
+```
+
+
 
 **Linter in R**
 
