@@ -3,8 +3,9 @@
 {
 library(e1071)
 source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
-# require(geoR)
-library(fields)
+library(fields) # for scatterplot
+library(dplyr)
+library(data.table)
 library(ggplot2)
 
 ######################################
