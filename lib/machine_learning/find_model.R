@@ -32,7 +32,7 @@ for (i in 2:length(tab)){
 calibration_data[, "valid_amount"] <- 0
 calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
                     calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
-#calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
+# calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 # Change Row namesto 1, 2, 3, ...
 rownames(calibration_data) <- NULL
@@ -68,7 +68,7 @@ cat("Amount of false and right combinations:",
 # 
 
 
-# choose which arguments are for the SVM
+# choose which arguments to use in the SVM
 col <- c("total_price_s", "vat_price_s", "rel_p", "price_order",
         "price_uq", "common_width", "common_height", "height_uq")
 

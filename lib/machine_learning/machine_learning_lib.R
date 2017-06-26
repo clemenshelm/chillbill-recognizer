@@ -13,28 +13,38 @@
 # answer_train = read.csv("answer_train.csv", header = TRUE)[ , -1]
 # cost_range = 10^(-1:6); gamma_range = 10^(-1:1); detailed.output = TRUE; nruns = 10
 
-options(scipen = -10)
+# options(scipen = -10)
 
 generate_tuples <- function(price_list){
-  combinations <- expand.grid(c(1:nrow(price_list)), c(1:nrow(price_list)))
-  part1 <- price_list[ combinations$Var1,
-      c("bill_id", "price_id", "text", "price_cents", "left", "right", "top", "bottom")]
-  part2 <- price_list[ combinations$Var2,
-      c("price_id", "text", "price_cents", "left", "right", "top", "bottom")]
+  combinations <- expand.grid(total = c(1:nrow(price_list)),
+                              vat = c(1:nrow(price_list)))
 
-  # rename columns
-  colnames(part1) <- c("bill_id", "total_id", "total_text", "total_price",
-                       "total_left", "total_right", "total_top", "total_bottom")
-  colnames(part2) <- c("vat_id", "vat_text", "vat_price", "vat_left",
-                       "vat_right", "vat_top", "vat_bottom")
-  tuples <- data.frame(part1, part2)
-
+  tuples <- cbind(
+    price_list %>% slice(combinations$total) %>% select("bill_id" = bill_id,
+                                                        "total_id" = price_id,
+                                                        "total_text" = text,
+                                                        "total_price" = price_cents,
+                                                        "total_left" = left,
+                                                        "total_right" = right,
+                                                        "total_top" = top,
+                                                        "total_bottom" = bottom),
+    
+    price_list %>% slice(combinations$vat) %>% select("vat_id" = price_id,
+                                                      "vat_text" = text,
+                                                      "vat_price" = price_cents,
+                                                      "vat_left" = left,
+                                                      "vat_right" = right,
+                                                      "vat_top" = top,
+                                                      "vat_bottom" = bottom)
+  )
+  
+  
   # only use specific combinations
   data <-
     tuples[tuples[, "vat_price"] <= 0.3 * tuples[, "total_price"] & tuples[, "total_price"] > 0,  ]
 
   # delete unused variables
-  rm(combinations, part1, part2, tuples)
+  rm(combinations, tuples)
 
   # scaling prices
   max_price <- max(price_list$price_cents)
