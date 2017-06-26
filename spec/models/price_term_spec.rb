@@ -48,7 +48,7 @@ describe PriceTerm do
   end
 
   it 'expext price to have space in betweeen' do
-    term = PriceTerm.new(text: '11 038')
+    term = PriceTerm.new(text: '11 038 ')
     expect(term.to_d).to eq 11_038
   end
 

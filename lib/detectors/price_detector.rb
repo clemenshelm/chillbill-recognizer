@@ -11,10 +11,17 @@ class PriceDetector
     /#{ALLOWED_PREFIX_REGEX}(#{PREFIX_CURRENCY_REGEX}?#{PRICE_REGEX})$/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
   SHORT_PRICE_REGEX = /(\d+€)/
-  HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3})/
+  HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3} )$/
+
+  def self.filter_out_quantity_column
+    quantity = Word.first(text: 'Menge')
+    PriceTerm.where { right <= quantity.right }.destroy if quantity
+  end
 
   def self.filter
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
+    filter_out_quantity_column
+
     end_word_with_space = ->(term) { term.text += ' ' }
 
     find_prices(
@@ -30,7 +37,6 @@ class PriceDetector
     )
 
     find_prices(SHORT_PRICE_REGEX, max_words: 1)
-
     PriceTerm.dataset
   end
 
