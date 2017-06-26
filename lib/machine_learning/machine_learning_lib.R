@@ -1,4 +1,5 @@
-# The function "generate_tuples" gets prices and returns possible combinations of tuples. It also adds attributes and erases NaN entries
+# The function "generate_tuples" gets prices and returns possible combinations of tuples. 
+# It also adds attributes and erases NaN entries
 
 
 # Load example bill for debugging / creating new attributes:
@@ -29,7 +30,8 @@ generate_tuples <- function(price_list){
   tuples <- data.frame(part1, part2)
 
   # only use specific combinations
-  data <- tuples[tuples[, "vat_price"] <= 0.3 * tuples[, "total_price"] & tuples[, "total_price"] > 0,  ]
+  data <-
+    tuples[tuples[, "vat_price"] <= 0.3 * tuples[, "total_price"] & tuples[, "total_price"] > 0,  ]
 
   # delete unused variables
   rm(combinations, part1, part2, tuples)
@@ -53,8 +55,9 @@ generate_tuples <- function(price_list){
     apply(data[, c("total_top", "total_bottom", "vat_top", "vat_bottom")], 1, min)
 
   # creating "price_order"
-  # It is very likely that "price_order" do not contain low values because we do not use all possible tuples
-  prices_red <- unique(sort(price_list$price_cents))  # sorted prices reduced (deleted all repeated elements)
+  # It is very likely that "price_order" do not contain low values, because we
+  # do not use all possible tuples
+  prices_red <- unique(sort(price_list$price_cents))  # deleted all repeated elements
   data[, "price_order"] <- match(data[, "total_price"], sort(prices_red)) / length(prices_red)
 
   # creating "price_uq"
@@ -78,7 +81,7 @@ generate_tuples <- function(price_list){
 
 
 
-# Consider that this function can return NaN entries. See the documentation for further information.
+# Consider that this function can return NaN entries (see  documentation)
 error_wrong_positive <- function(true_values, predictions)
   mean(true_values[predictions == 1] == 0)
 
@@ -155,8 +158,10 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
 
 
 
-#To get a distribution of the error for a specific combination of attributes we run each combination several times (number_of_runs times)
-generate_error_distribution <- function(number_of_runs, col, calibration_data, cost = NULL, gamma = NULL){
+# To get a distribution of the error for a specific combination of attributes
+# we run each combination several times (number_of_runs times)
+generate_error_distribution <- 
+  function(number_of_runs, col, calibration_data, cost = NULL, gamma = NULL){
   output_error4 <- numeric(number_of_runs)
   output_cost <- numeric(number_of_runs)
   output_gamma <- numeric(number_of_runs)
