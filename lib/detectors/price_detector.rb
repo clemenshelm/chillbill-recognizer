@@ -4,8 +4,11 @@ require 'bigdecimal'
 require_relative '../models/price_term'
 
 class PriceDetector
+  PRICE_REGEX = /([1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-)/
+  PREFIX_CURRENCY_REGEX = /(€|EUR)/
+  ALLOWED_PREFIX_REGEX = /(?:^|[^\d,A-Z])/
   DECIMAL_PRICE_REGEX =
-    /(?:^|[^\d,A-Z])(€?([1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-))$/
+    /#{ALLOWED_PREFIX_REGEX}(#{PREFIX_CURRENCY_REGEX}?#{PRICE_REGEX})$/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
   SHORT_PRICE_REGEX = /(\d+€)/
   HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3})/
@@ -35,15 +38,12 @@ class PriceDetector
     private
 
       def find_prices(regex, after_each_word: nil, max_words: nil)
-        term = PriceTerm.new(
-          regex: regex,
-          after_each_word: after_each_word,
-          max_words: max_words
-        )
+        term = nil
         last_word = nil
+        term_stale = true
 
         Word.each do |word|
-          if term.exists? || (last_word && !word.follows(last_word))
+          if term_stale || (last_word && !word.follows(last_word))
             term = PriceTerm.new(
               regex: regex,
               after_each_word: after_each_word,
@@ -54,7 +54,7 @@ class PriceDetector
 
           last_word = word
 
-          term.save if term.valid?
+          term_stale = term.valid_subterm&.save
         end
       end
   end

@@ -66,36 +66,27 @@ class InvoiceNumberDetector
         words, regex, after_each_word: nil, max_words: nil, needs_label: true
       )
         affected_words = []
-        term = initialize_new_term(
-          regex, after_each_word, max_words, needs_label
-        )
+        term = nil
         last_word = nil
+        term_stale = true
 
         words.each do |word|
-          if term.exists? || (last_word && !word.follows(last_word))
-            term = initialize_new_term(
-              regex, after_each_word, max_words, needs_label
+          if term_stale || (last_word && !word.follows(last_word))
+            term = InvoiceNumberTerm.new(
+              regex: regex,
+              after_each_word: after_each_word,
+              max_words: max_words,
+              needs_label: needs_label
             )
           end
           term.add_word(word)
 
           last_word = word
 
-          if term.valid?
-            term.save
-            affected_words += term.words
-          end
+          term_stale = term.valid_subterm&.save
+          affected_words += term.words if term_stale
         end
         affected_words
-      end
-
-      def initialize_new_term(regex, after_each_word, max_words, needs_label)
-        InvoiceNumberTerm.new(
-          regex: regex,
-          after_each_word: after_each_word,
-          max_words: max_words,
-          needs_label: needs_label
-        )
       end
   end
 end
