@@ -5,6 +5,7 @@ library(e1071)
 source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
 # require(geoR)
 library(fields)
+library(ggplot2)
 
 ######################################
 ######    GENERATION OF DATA    ######
@@ -42,8 +43,6 @@ cat("Amount of false and right combinations:",
     "% right combinations%\n")
 
 }
-
-
 
 
 ######################################
@@ -110,6 +109,14 @@ hyperparameters_detailed <-
                        hyperparameters_detailed$tuned$best.parameters$gamma ),
           ylab = "Wrong Positive")
 
+
+
+  # ggplot2
+  # We need the standard format for data
+  # as.data.frame(t(hyperparameters_detailed$wrong_positive))
+  # ggplot(as.data.frame(t(hyperparameters_detailed$wrong_positive)),
+  #        aes(factor(Year), Value))
+  # str(hyperparameters_detailed$wrong_positive)
 
   # mean of wrong-positives as matrix for 2d plot
   z1 <- matrix(apply(hyperparameters_detailed$wrong_positive,
