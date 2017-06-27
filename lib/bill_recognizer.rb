@@ -94,10 +94,7 @@ class BillRecognizer
     begin
       png_file = download_and_convert_image
     rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
-      return {
-        error: e.to_s,
-        recognizerVersion: version
-      }
+      return { error: e.to_s, recognizerVersion: version }
     end
 
     recognize_words(png_file)
@@ -230,8 +227,7 @@ class BillRecognizer
   end
 
   def calculate_invoice_date
-    dates = DateCalculation.new
-    dates.invoice_date&.strftime('%Y-%m-%d')
+    DateCalculation.new.invoice_date&.strftime('%Y-%m-%d')
   end
 
   def calculate_vat_number
@@ -253,8 +249,7 @@ class BillRecognizer
   end
 
   def calculate_due_date
-    due_datetime = DateCalculation.new.due_date
-    due_datetime&.strftime('%Y-%m-%d')
+    DateCalculation.new.due_date&.strftime('%Y-%m-%d')
   end
 
   def calculate_iban
