@@ -63,7 +63,8 @@ class BillRecognizer
     BillingEndLabelTerm,
     RelativeDateTerm,
     InvoiceDateLabelTerm,
-    InvoiceNumberTerm
+    InvoiceNumberTerm,
+    BillDimension
   ].freeze
 
   DETECTORS = [
