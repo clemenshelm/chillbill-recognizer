@@ -11,10 +11,10 @@ In the long run there are several possibilities to optimize the result:
 
 
 ## "ceteris paribus" vs. "all at once"
-We have different possibilities to optimize the result. I assume that the calculation will become very heavy if we try to optimize all at once. So my recommendation is to optimize "ceteris paribus" only one at the time. 
+We have different possibilities to optimize the result. I assume that the calculation will become very heavy if we try to optimize all at once. So my recommendation is to optimize "ceteris paribus" only one at the time.
 
 Because of my observations, I assume that the grid search will not have a huge impact on the error distribution if we run it for every random sample again, because the distribution of the cost and the gamma have a very strong tendency. So to generate the error distribution from several given environments I recommend to generate the distribution of the costs and gamma for the H0 hypothesis and use one cost-gamma-combination for all the following investigation. This will speed up the process immense.
- 
+
 
 In the Future it is easy to merge all optimization into one big problem that runs a long time and give us the best result.
 
@@ -27,13 +27,19 @@ The build in function `tune` for finding the best "hyper-parameters" (in our cas
 ## Interpretation of the hyperparameters "cost" and "gamma"
 https://chrisalbon.com/machine-learning/svc_parameters_using_rbf_kernel.html
 
+## Use overfitting to our advantage
+Because there are often similar bills we could use overfitting (specially a high gamma) to our advantage. A high gamma creates some sort of "islands" around the data points. If the data-tuples (of a bill) we want to classify have the same structure as some data-tuples we used  to create the model, the "island" around that specific point will likely contain the new data. This gives us the possibility to make a very likely classification.
+
+If these process do not return any true combination for a bill, we use another model (with hyperparameters that do not overfitt).
+
+Overall, we can create several steps (models) from "total overfit" to "none overfitt".
 
 
 ## Error of first kind vs. error of second kind
-The error we try to minimize in the first place is the "wrong-positive" error. The problem is that we often get zero positive prediction. So from all possible combinations (hyperparameters and attributes) with a low "wrong-positive" error, we should choose the one with a high rate of positive predictions. 
+The error we try to minimize in the first place is the "wrong-positive" error. The problem is that we often get zero positive prediction. So from all possible combinations (hyperparameters and attributes) with a low "wrong-positive" error, we should choose the one with a high rate of positive predictions.
 
 
-## Description of the attributes 
+## Description of the attributes
 We generate the attributes via the function `generate_tuples`.
 
 - `rel_p`           proportion of `vat_price` to `total_price`
@@ -56,20 +62,49 @@ There are several possibilities to measure errors.
 3. Recognition rate of the wrong values - How many of the negative values are recognized correct, higher is better
 4. False Positive - How many of the positive predictions are wrong, lower is better
 5. Right Positive - How many of the positive predictions are real positive, higher is better
-6. False Negative - How many of the negative predictions are wrong negative, lower is better 
+6. False Negative - How many of the negative predictions are wrong negative, lower is better
 7. Right Negative - How many of the negative predictions are real negative, higher is better
 
 Of course some of them are unnecessary because we could calculate them from an other error but to give a better understanding we wrote them down anyway.
 
-**Most important error: wrong positives** 
+**Most important error: wrong positives**
 
 It is possible to get NaN entries here!
 When there is no positive prediction (all of the predictions are 0) then our measurements fails and we get a "NaN". The best solution is not to take them into consideration.
- 
+
 
 
 
 ## Some important commands for the R-Code
+**Show all manually installed packages in R**
+```r
+ip <- as.data.frame(installed.packages()[,c(1,3:4)])
+rownames(ip) <- NULL
+ip <- ip[is.na(ip$Priority),1:2,drop=FALSE]
+print(ip, row.names=FALSE)
+```
+
+**Install R in Debian 8 (Jessie)**
+```link
+https://cran.r-project.org/bin/linux/debian/
+http://www.jason-french.com/blog/2013/03/11/installing-r-in-linux/
+```
+
+I was not able to use the GPG key. Therefore I just used:
+```shell
+sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
+apt-get update
+apt-get install r-base r-base-dev
+```
+
+**Linter in R**
+
+IMPORTANT: before installing the package within R via `install.packages("lintr")` in *Ubuntu* you need to install the following packages:
+```shell
+sudo apt-get install libcurl4-openssl-dev libssl-dev
+```
+To use the linter, you have to load the package within the R-console via `library(lintr)` and then use `lint("Name_of_R_file_to_lint.R")`.
+
 
 **Save and load model (R)**
 ```r
@@ -86,18 +121,18 @@ M = readRDS('modelfile.rds')
 **Set Working Directory**
 ```r
 setwd("~/Dokumente/ChillBill/r-chillbill")
-``` 
+```
 
-**Load different R file** 
+**Load different R file**
 ```r
 source("adding_attributes.R")
 # Just runs this script. It has no extra workspace!!
 # It will run every time - not like require.
-``` 
+```
 **Magick in R**
 ```r
 library(magick)
-``` 
+```
 
 Needs two extra-installations apart from the installation in R:
 
