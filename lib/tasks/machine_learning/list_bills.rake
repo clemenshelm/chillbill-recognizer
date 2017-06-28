@@ -9,10 +9,16 @@ namespace :machine_learning do
       bill['total_prices'].each do |key, value|
         vat_rate = key.split('_').last
         problems << "No total price with #{vat_rate}% vat" unless value
+        problems << 'Total price must not be an array.' if value.is_a?(Array)
       end
       bill['vat_prices'].each do |key, value|
         vat_rate = key.split('_').last
         problems << "No vat price with #{vat_rate}% vat" unless value
+        problems << 'Vat price must not be an array.' if value.is_a?(Array)
+      end
+
+      unless bill['remaining_prices'].is_a?(Array)
+        problems << 'Remaining prices must be an array.'
       end
 
       bill_label = "Bill #{bill['_id']}"
