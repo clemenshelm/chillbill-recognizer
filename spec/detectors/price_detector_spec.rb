@@ -279,6 +279,39 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'detects a price after EUR' do
+    # From 2D6A3fe8Ggpovv3EF.pdf
+    create(
+      :word,
+      text: 'EUR',
+      left: 0.6587068332108743,
+      right: 0.6958119030124909,
+      top: 0.41488539788823076,
+      bottom: 0.42467164563481846
+    )
+
+    create(
+      :word,
+      text: '14,90',
+      left: 0.7038941954445261,
+      right: 0.74834680382072,
+      top: 0.41514293072366726,
+      bottom: 0.42621684264743753
+    )
+
+    create(
+      :word,
+      text: 'EUR',
+      left: 0.8475385745775166,
+      right: 0.884643644379133,
+      top: 0.41488539788823076,
+      bottom: 0.42467164563481846
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq(%w(14,90))
+  end
+
   it 'does not detect pieces as prices' do
     # from bill 29pwjsKx88nhnQKm9.pdf
 

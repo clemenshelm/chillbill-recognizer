@@ -83,31 +83,26 @@ class DateDetector
 
       def find_dates(words, regex, after_each_word: nil, max_words: nil)
         affected_words = []
-        term = initialize_new_term(regex, after_each_word, max_words)
+        term = nil
         last_word = nil
+        term_stale = true
 
         words.each do |word|
-          if term.exists? || (last_word && !word.follows(last_word))
-            term = initialize_new_term(regex, after_each_word, max_words)
+          if term_stale || (last_word && !word.follows(last_word))
+            term = DateTerm.new(
+              regex: regex,
+              after_each_word: after_each_word,
+              max_words: max_words
+            )
           end
           term.add_word(word)
 
           last_word = word
 
-          if term.valid?
-            term.save
-            affected_words += term.words
-          end
+          term_stale = term.valid_subterm&.save
+          affected_words += term.words if term_stale
         end
         affected_words
-      end
-
-      def initialize_new_term(regex, after_each_word, max_words)
-        DateTerm.new(
-          regex: regex,
-          after_each_word: after_each_word,
-          max_words: max_words
-        )
       end
   end
 end
