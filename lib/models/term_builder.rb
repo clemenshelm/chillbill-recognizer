@@ -6,10 +6,11 @@ class TermBuilder
   attr_reader :words
   attr_accessor :text
 
-  def initialize(regex:, after_each_word:, max_words: nil)
+  def initialize(regex:, after_each_word:, term_class:, max_words: nil)
     @regex = regex
     @after_each_word = after_each_word
     @max_words = max_words || Float::INFINITY
+    @term_class = term_class
     @words = []
     @text = ''
   end
@@ -34,19 +35,19 @@ class TermBuilder
     @text =~ @regex
   end
 
-  def extract_text
+  def valid_subterm
     (1..@words.length).each do |numwords|
       available_words = @words[-numwords..-1]
-      builder = TermBuilder.new(
-        regex: @regex, after_each_word: @after_each_word
+      term = @term_class.new(
+        regex: @regex, after_each_word: @after_each_word, max_words: @max_words
       )
 
       available_words.each do |word|
-        builder.add_word(word)
+        term.add_word(word)
 
-        return builder.text if builder.valid?
+        return term if term.valid?
       end
     end
-    ''
+    nil
   end
 end
