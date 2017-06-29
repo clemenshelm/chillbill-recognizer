@@ -9,7 +9,7 @@ class DateDetector
   SHORT_PERIOD_DATE_REGEX =
     /(?:^|[^+\d])((?:#{days})\.(?:#{months})\.((?:20)?1\d))/
   SHORT_SLASH_DATE_REGEX = %r{(^(#{days})/(#{months})/\d{2}$)}
-  LONG_YEAR_SLASH_REGEX = %r{\d{4}/(?:#{months})/(?:#{days})$}
+  LONG_YEAR_SLASH_REGEX = %r{^\d{4}/(?:#{months})/(?:#{days})$}
   LONG_HYPHEN_DATE_REGEX = /((?:#{days})-(?:#{months})-20\d{2}$)/
   SHORT_ENGLISH_DATE_REGEX = /((?:#{days})-(?:Oct)-\d{4}$)/
   SHORT_ENGLISH_DATE_WITH_SPACE_REGEX = /((?:#{days}) (?:Jul) \d{4})/
@@ -38,7 +38,7 @@ class DateDetector
   def self.filter_out_interefering_date_terms
     words = find_dates(Word.all, LONG_SLASH_DATE_REGEX, max_words: 1)
     words += find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 2)
-    words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 2)
+    words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 1)
     Word.all - words
   end
 

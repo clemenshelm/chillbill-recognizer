@@ -110,7 +110,7 @@ describe PriceDetector do
     # Dummy dimension values for the bill
     BillDimension.create_all(width: 3056, height: 4324)
 
-    %w(28.02.15 31.03.15).each { |text| create(:word, text: text) }
+    %w(28.02.15 31.03.15 29.12.15).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to be_empty
@@ -666,6 +666,22 @@ describe PriceDetector do
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['8,50', '12,00', '4,00']
+  end
+
+  it 'detects negative prices' do
+    # from bill 2D7BuHc3f8wAmb4y8.pdf
+
+    create(
+      :word,
+      text: '-12,00',
+      left: 0.9422174070061394,
+      right: 0.9869989165763814,
+      top: 0.42149788504603136,
+      bottom: 0.4319482458322966
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['-12,00']
   end
 
   # TODO: Move to general helpers
