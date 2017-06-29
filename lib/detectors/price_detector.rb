@@ -4,7 +4,7 @@ require 'bigdecimal'
 require_relative '../models/price_term'
 
 class PriceDetector
-  PRICE_REGEX = /([1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-)/
+  PRICE_REGEX = /(-?[1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-)/
   PREFIX_CURRENCY_REGEX = /(€|EUR)/
   ALLOWED_PREFIX_REGEX = /(?:^|[^\d,A-Z\.])/
   DECIMAL_PRICE_REGEX =
