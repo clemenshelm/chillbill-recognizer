@@ -16,10 +16,10 @@ module Term
     @term_builder.add_word(word)
 
     self.text = @term_builder.text
-    self.left = [left, word.left].compact.min
-    self.top = [top, word.top].compact.min
-    self.right = [right, word.right].compact.max
-    self.bottom = [bottom, word.bottom].compact.max
+    self.left = @term_builder.words.map(&:left).min
+    self.top = @term_builder.words.map(&:top).min
+    self.right = @term_builder.words.map(&:right).max
+    self.bottom = @term_builder.words.map(&:bottom).max
   end
 
   def valid?

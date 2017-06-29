@@ -77,5 +77,17 @@ describe Term do
       expect(valid_subterm.top).to eq(0)
       expect(valid_subterm.bottom).to eq(3)
     end
+
+    it 'mainains the term dimensions for all present words' do
+      two_word_term = TermTest.new(regex: /abcdef/, max_words: 2)
+      two_word_term.add_word(Word.new(text: 'xxx', left: 0, right: 10, top: 0, bottom: 4))
+      two_word_term.add_word(Word.new(text: 'abc', left: 3, right: 5, top: 1, bottom: 2))
+      two_word_term.add_word(Word.new(text: 'def', left: 6, right: 8, top: 1, bottom: 3))
+
+      expect(two_word_term.left).to eq(3)
+      expect(two_word_term.right).to eq(8)
+      expect(two_word_term.top).to eq(1)
+      expect(two_word_term.bottom).to eq(3)
+    end
   end
 end
