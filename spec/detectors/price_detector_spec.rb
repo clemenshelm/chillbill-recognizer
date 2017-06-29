@@ -80,7 +80,7 @@ describe PriceDetector do
   end
 
   it "doesn't find dates as prices" do
-    %w(28.02.15 31.03.15).each { |text| create(:word, text: text) }
+    %w(28.02.15 31.03.15 29.12.15).each { |text| create(:word, text: text) }
 
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to be_empty
