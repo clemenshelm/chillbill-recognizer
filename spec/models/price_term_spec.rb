@@ -54,7 +54,7 @@ describe PriceTerm do
 
   it 'expect price to be negative' do
     term = PriceTerm.new(text: '-12,00')
-    expect(term.to_d).to == -12.00
+    expect(term.to_d).to eq(-12.00)
   end
 
   describe 'to_h' do
