@@ -7,6 +7,7 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
+
   #  expect(bill_attributes[:amounts]).to eq [{ total: 29_674, vatRate: 20 }]
   #  expect(bill_attributes[:currencyCode]).to eq 'EUR'
     expect(bill_attributes[:invoiceDate]).to eq '2017-02-07'

@@ -792,11 +792,11 @@ describe DateDetector do
 
     create(
       :word,
-      text: '902308630217',
-      left: 0.8712151796528058,
-      right: 0.9874848607186112,
-      top: 0.04630454140694568,
-      bottom: 0.05699020480854853
+      text: '35451545',
+      left: 0.902011707710941,
+      right: 0.98756848607186112,
+      top: 0.060762837637281,
+      bottom: 0.0539329177797566
     )
 
     create(
@@ -816,7 +816,7 @@ describe DateDetector do
       top: 0.08281389136242208,
       bottom: 0.09349955476402494
     )
-    
+
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2017-02-07']
   end
