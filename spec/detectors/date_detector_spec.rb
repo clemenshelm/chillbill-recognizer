@@ -788,6 +788,40 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2017-02-27']
   end
 
+  it 'does not recognize long numbers as dates' do
+    # from bill oAE4BBMHfDGfwhX3i.pdf
+
+    create(
+      :word,
+      text: '90230863021707',
+      left: 0.902011707710941,
+      right: 0.98756848607186112,
+      top: 0.060762837637281,
+      bottom: 0.0539329177797566
+    )
+
+    create(
+      :word,
+      text: '07.02.2017',
+      left: 0.9023011707710941,
+      right: 0.9874848607186112,
+      top: 0.06470762837637281,
+      bottom: 0.07539329177797566
+    )
+
+    create(
+      :word,
+      text: '15.02.2017',
+      left: 0.9039160274525636,
+      right: 0.9874848607186112,
+      top: 0.08281389136242208,
+      bottom: 0.09349955476402494
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to eq ['2017-02-07', '2017-02-15']
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
