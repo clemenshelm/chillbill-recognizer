@@ -2,7 +2,7 @@
 require_relative '../models/invoice_date_label_term'
 
 class InvoiceDateLabelDetector
-  INVOICE_DATE_LABELS = /Rechnungsdatum/
+  INVOICE_DATE_LABELS = /Rechnungsdatum:/
 
   def self.filter
     find_invoice_date_labels(INVOICE_DATE_LABELS)
@@ -13,13 +13,12 @@ class InvoiceDateLabelDetector
     private
 
       def find_invoice_date_labels(regex, after_each_word: nil)
-        term = InvoiceDateLabelTerm.new(
-          regex: regex, after_each_word: after_each_word, max_words: 1
-        )
+        term = nil
         last_word = nil
+        term_stale = true
 
         Word.each do |word|
-          if term.exists? || (last_word && !word.follows(last_word))
+          if term_stale || (last_word && !word.follows(last_word))
             term = InvoiceDateLabelTerm.new(
               regex: regex, after_each_word: after_each_word, max_words: 1
             )
@@ -29,7 +28,7 @@ class InvoiceDateLabelDetector
 
           last_word = word
 
-          term.save if term.valid?
+          term_stale = term.valid_subterm&.save
         end
       end
   end

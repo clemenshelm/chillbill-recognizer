@@ -15,7 +15,6 @@ class DateCalculation
   def find_standalone_dates
     DateTerm.all.select do |term|
       term.started_periods.empty? && term.ended_periods.empty?
-      #binding.pry
     end
   end
 

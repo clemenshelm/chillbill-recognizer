@@ -788,11 +788,12 @@ describe DateDetector do
     expect(date_strings(dates)).to eq ['2017-02-27']
   end
 
-  it 'fadds', :focus do
+  it 'does not recognize long numbers as dates' do
+    # from bill oAE4BBMHfDGfwhX3i.pdf
 
     create(
       :word,
-      text: '35451545',
+      text: '90230863021707',
       left: 0.902011707710941,
       right: 0.98756848607186112,
       top: 0.060762837637281,
@@ -818,7 +819,7 @@ describe DateDetector do
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2017-02-07']
+    expect(date_strings(dates)).to eq ['2017-02-07', '2017-02-15']
   end
 
   def date_strings(date_terms)

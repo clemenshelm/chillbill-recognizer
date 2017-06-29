@@ -1,46 +1,32 @@
 # frozen_string_literal: true
 require 'sequel'
-require_relative './term_builder'
+require_relative './term'
 require_relative '../detectors/date_detector'
 require_relative '../boot'
 require_relative './dimensionable'
 
 # TODO: unit test
 class DateTerm < Sequel::Model
+  include Term
   include Dimensionable
+
   # Loading it here resolves issues with the circular dependency
   require_relative './billing_period_term'
   one_to_many :started_periods, class: BillingPeriodTerm, key: :from_id
   one_to_many :ended_periods, class: BillingPeriodTerm, key: :to_id
 
-  def initialize(attrs)
-    @term_builder = TermBuilder.new(
-      regex: attrs.delete(:regex),
-      after_each_word: attrs.delete(:after_each_word),
-      max_words: attrs.delete(:max_words)
-    )
-    super
-  end
-
-  def add_word(word)
-    @term_builder.add_word(word)
-
-    self.text = @term_builder.extract_text
-    self.first_word_id = @term_builder.words.first.id
-    self.left = word.left
-    self.top = word.top
-    self.right = word.right
-    self.bottom = word.bottom
-  end
-
   def words
     @term_builder.words.dup
   end
 
+  def add_word(word)
+    super
+    self.first_word_id = @term_builder.words.first.id
+  end
+
   def valid?
     to_datetime
-    @term_builder.valid?
-    #binding.pry
+    super
   rescue ArgumentError
     false
   end

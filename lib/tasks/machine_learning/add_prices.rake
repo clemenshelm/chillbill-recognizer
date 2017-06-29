@@ -52,18 +52,18 @@ namespace :machine_learning do
 
     class Extractor
       def initialize(amount, remaining_prices)
-        self.amount = amount
-        self.remaining_prices = remaining_prices
+        @amount = amount
+        @remaining_prices = remaining_prices
       end
 
       def total
-        total_price = BigDecimal.new(amount['total']) / 100
+        total_price = BigDecimal.new(@amount['total']) / 100
         extract(price: total_price)
       end
 
       def vat
-        vat_rate = amount['vatRate']
-        amount_dec = BigDecimal.new(amount['total'])
+        vat_rate = @amount['vatRate']
+        amount_dec = BigDecimal.new(@amount['total'])
         vat_price = (amount_dec / (100 + vat_rate) * vat_rate / 100).round(2)
         extract(price: vat_price)
       end
@@ -71,8 +71,8 @@ namespace :machine_learning do
       private
 
       def extract(price:)
-        PriceTerm.where(price: price).all.tap do |price_terms|
-          self.remaining_prices -= price_terms
+        PriceTerm.all.select { |p| p.to_d == price }.tap do |price_terms|
+          @remaining_prices.replace(@remaining_prices - price_terms)
         end
       end
     end
