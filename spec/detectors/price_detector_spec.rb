@@ -225,7 +225,7 @@ describe PriceDetector do
 
     create_following_words(%w(11 038))
     prices = PriceDetector.filter
-    expect(prices.map(&:text)).to eq ['11 038 ']
+    expect(prices.map(&:text)).to eq ['11 038']
   end
 
   it 'detects price with comma and period separator' do
@@ -670,6 +670,8 @@ describe PriceDetector do
 
   it 'detects negative prices' do
     # from bill 2D7BuHc3f8wAmb4y8.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_all(width: 3056, height: 4324)
 
     create(
       :word,
