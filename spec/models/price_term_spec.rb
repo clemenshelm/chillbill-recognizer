@@ -52,6 +52,11 @@ describe PriceTerm do
     expect(term.to_d).to eq 11_038
   end
 
+  it 'expect price to be negative' do
+    term = PriceTerm.new(text: '-12,00')
+    expect(term.to_d).to == -12.00
+  end
+
   describe 'to_h' do
     it 'creates a hash representing the price term' do
       term = PriceTerm.new(
