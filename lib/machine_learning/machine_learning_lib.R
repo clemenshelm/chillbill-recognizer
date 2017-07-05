@@ -14,6 +14,9 @@
 # cost_range = 10^(-1:6); gamma_range = 10^(-1:1); detailed.output = TRUE; nruns = 10
 
 # options(scipen = -10)
+library(e1071)
+library(dplyr)
+library(data.table)
 
 generate_tuples <- function(price_list){
   combinations <- expand.grid(total = c(1:nrow(price_list)),
