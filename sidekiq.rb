@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'lib/rollbar'
+require_relative 'lib/rollbar'
 require 'sidekiq'
 require 'hiredis'
 require_relative 'lib/bill_recognizer'

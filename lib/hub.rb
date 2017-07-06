@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require './rollbar'
+require_relative './rollbar'
 require 'eventmachine'
 require 'metybur'
 require 'em-hiredis'
