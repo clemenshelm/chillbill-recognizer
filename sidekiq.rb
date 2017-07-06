@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'lib/rollbar'
 require 'sidekiq'
 require 'hiredis'
 require_relative 'lib/bill_recognizer'
@@ -33,6 +34,9 @@ class RecognitionWorker
     bill_attributes[:id] = id
     logger.info bill_attributes
     REDIS.publish 'results', bill_attributes.to_json
+  rescue Exception => e # rubocop:disable Lint/RescueException
+    Rollbar.error(e)
+    raise e
   end
 
   def log(image_url, customer_vat_number)
