@@ -9,6 +9,13 @@ class QRDecoder
   end
 
   def qr_code?
+    return false unless symbol?
+    symbology == 'QR-Code'
+  end
+
+  private
+
+  def symbol?
     tmp_image = @image.dup
     image_blob = tmp_image.to_blob do
       self.depth = 8
@@ -16,8 +23,11 @@ class QRDecoder
     end
     tmp_image.destroy!
 
-    zbar_image = ZBar::Image.from_pgm(image_blob)
+    @zbar_image = ZBar::Image.from_pgm(image_blob).process
+    !@zbar_image.empty?
+  end
 
-    !zbar_image.process.empty?
+  def symbology
+    @zbar_image.last.instance_variable_get(:@symbology)
   end
 end
