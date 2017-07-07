@@ -16,8 +16,17 @@ class QRDecoder
     end
     tmp_image.destroy!
 
-    zbar_image = ZBar::Image.from_pgm(image_blob)
+    @zbar_image = ZBar::Image.from_pgm(image_blob).process
 
-    !zbar_image.process.empty?
+    !@zbar_image.empty?
+  end
+
+  def decode_qr_code
+    return unless qr_code?
+    all_data = @zbar_image.last.instance_variable_get(:@data).split('_')
+    processed_data = {
+      date: all_data[4],
+      
+    }
   end
 end

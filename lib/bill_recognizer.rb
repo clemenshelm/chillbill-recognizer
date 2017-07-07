@@ -108,6 +108,7 @@ class BillRecognizer
     recognize_words(png_file)
     filter_words
 
+    process_qr_code_data
     calculate_attributes(version)
   ensure
     @image&.destroy!
@@ -188,6 +189,10 @@ class BillRecognizer
 
   def filter_words
     DETECTORS.each(&:filter)
+  end
+
+  def process_qr_code_data
+    QRDecoder.new(@image.image).decode_qr_code
   end
 
   def calculate_attributes(version)
