@@ -16,7 +16,7 @@ class QRDecoder
     end
     tmp_image.destroy!
 
-    zbar_image = ZBar::Image.from_pgm(image_blob).process(symbology: :qrcode)
-    !zbar_image.empty?
+    qr_codes = ZBar::Image.from_pgm(image_blob).process(symbology: :qrcode)
+    !qr_codes.empty?
   end
 end
