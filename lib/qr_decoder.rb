@@ -25,8 +25,12 @@ class QRDecoder
     return unless qr_code?
     all_data = @zbar_image.last.instance_variable_get(:@data).split('_')
     processed_data = {
-      date: all_data[4],
-      
+      dueDate: all_data[4],
+      amounts: {
+        total: all_data[5] || all_data[6],
+        vatRate: all_data[5] ? 20 : 10
+      }
     }
+    processed_data
   end
 end
