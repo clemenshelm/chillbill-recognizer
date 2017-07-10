@@ -25,4 +25,11 @@ describe QRDecoder do
 
     expect(image).to eq original_image
   end
+
+  it 'does not process a non QR code symbol' do
+    image = Magick::Image.read('./spec/support/barcode-test.pdf') { self.density = 600 }.first
+
+    decoder = QRDecoder.new(image)
+    expect(decoder.qr_code?).to be false
+  end
 end
