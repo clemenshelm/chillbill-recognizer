@@ -31,7 +31,7 @@ generate_tuples <- function(price_list){
                                                         "total_right" = right,
                                                         "total_top" = top,
                                                         "total_bottom" = bottom),
-    
+
     price_list %>% slice(combinations$vat) %>% select("vat_id" = price_id,
                                                       "vat_text" = text,
                                                       "vat_price" = price_cents,
@@ -40,11 +40,9 @@ generate_tuples <- function(price_list){
                                                       "vat_top" = top,
                                                       "vat_bottom" = bottom)
   )
-  
-  
+
   # only use specific combinations
   data <- data %>% filter(vat_price <= 0.3 * total_price, total_price > 0)
-
 
   # scaling prices -> add "total_price_s" and "vat_price_s", creating "rel_p"
   max_price <- max(price_list$price_cents)
@@ -54,25 +52,27 @@ generate_tuples <- function(price_list){
 
   # adding common width and common height
   data <- data %>% rowwise() %>%
-    mutate(common_width = max(total_left, total_right, vat_left, vat_right) - 
+    mutate(common_width = max(total_left, total_right, vat_left, vat_right) -
                           min(total_left, total_right, vat_left, vat_right),
-           common_height = max(total_top, total_bottom, vat_top, vat_bottom) - 
+           common_height = max(total_top, total_bottom, vat_top, vat_bottom) -
                            min(total_top, total_bottom, vat_top, vat_bottom))
 
   # creating "price_order"
   # It is very likely that "price_order" do not contain low values, because we
   # do not use all possible tuples
-  prices_red <- unique(sort(price_list$price_cents))  # deleted all repeated elements
-  data[, "price_order"] <- match(data[, "total_price"], sort(prices_red)) / length(prices_red)
+  prices_red_sort <- unique(sort(price_list$price_cents))  # deleted all repeated elements
+  data <- data %>%
+    mutate(price_order = match(total_price, prices_red_sort) / length(prices_red_sort))
 
   # creating "price_uq"
   quantil_limit <- quantile(price_list$price_cents, 0.75)
-  data[, "price_uq"] <- as.numeric(data$total_price > quantil_limit)
+  data <- data %>%
+    mutate(price_uq = as.numeric(total_price > quantil_limit))
 
   # creating "total_height_uq"
-  total_height <- price_list$bottom - price_list$top
-  height_uq <- quantile(total_height, 0.75)
-  data[, "height_uq"] <-  as.numeric( (data$total_bottom - data$total_top)  >= height_uq)
+  height_uq <- quantile(price_list$bottom - price_list$top, 0.75)
+  data <- data %>%
+    mutate(height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
   # Checking of NaN entries
   tmp <- sum(is.na(data))
@@ -83,7 +83,6 @@ generate_tuples <- function(price_list){
 
   return(data)
 }
-
 
 
 # Consider that this function can return NaN entries (see  documentation)
@@ -210,4 +209,4 @@ generate_error_distribution <-
               cost = output_cost,
               gamma = output_gamma  )
          )
-}
+  }
