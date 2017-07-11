@@ -85,6 +85,12 @@ prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
 
+
+# not done yet
+# colour the true brutto values different to the other ones
+
+
+
 #### plot page ratio of bill
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 one_element_per_bill <- prices_several_bills %>%
@@ -97,5 +103,3 @@ ggplot(data = one_element_per_bill, aes(x = bill_ratio)) +
   geom_histogram() +
   geom_density(kernel = "gaussian") +
   geom_segment(aes(x = 297/210, y = 0, xend = 297/210, yend = 20))
-
-distinct(prices_several_bills_n)

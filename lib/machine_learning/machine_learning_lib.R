@@ -79,7 +79,8 @@ generate_tuples <- function(price_list){
   data <- data %>%
     mutate(height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
-  # creating "avg_width"
+  # creating "avg_width" (one per bill)
+  price_list %>% transmute(char_width = (right - left) / sapply(price_list$text, to_string_nchar))
   sapply(price_list$text, to_string_nchar)
 
 
