@@ -74,6 +74,8 @@ generate_tuples <- function(price_list){
   data <- data %>%
     mutate(height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
+  # creating "avg_height"
+
   # Checking of NaN entries
   tmp <- sum(is.na(data))
   # cat("After adding Attributes there are", tmp , "NaN entries\n" )
