@@ -3,9 +3,9 @@
 
 
 # Load example bill for debugging / creating new attributes:
-# price_list = read.csv("25KA7rWWmhStXDEsb.csv", header=TRUE)
-# price_list = read.csv("26joYiARG5L5SmfxM.csv", header=TRUE)
-# price_list = read.csv("24PC5D5oeL6fb8a5n.csv", header=TRUE)
+# price_list = read.csv("csv/25KA7rWWmhStXDEsb.csv", header=TRUE)
+# price_list = read.csv("csv/26joYiARG5L5SmfxM.csv", header=TRUE)
+# price_list = read.csv("csv/24PC5D5oeL6fb8a5n.csv", header=TRUE)
 # 
 # testdata for grid search
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
@@ -22,7 +22,7 @@ generate_tuples <- function(price_list){
   combinations <- expand.grid(total = c(1:nrow(price_list)),
                               vat = c(1:nrow(price_list)))
 
-  tuples <- cbind(
+  data <- cbind(
     price_list %>% slice(combinations$total) %>% select("bill_id" = bill_id,
                                                         "total_id" = price_id,
                                                         "total_text" = text,
@@ -43,29 +43,21 @@ generate_tuples <- function(price_list){
   
   
   # only use specific combinations
-  data <-
-    tuples[tuples[, "vat_price"] <= 0.3 * tuples[, "total_price"] & tuples[, "total_price"] > 0,  ]
+  data <- data %>% filter(vat_price <= 0.3 * total_price, total_price > 0)
 
-  # delete unused variables
-  rm(combinations, tuples)
 
-  # scaling prices
+  # scaling prices -> add "total_price_s" and "vat_price_s", creating "rel_p"
   max_price <- max(price_list$price_cents)
-  data[, "total_price_s"] <- data[, "total_price"] / max_price
-  data[, "vat_price_s"] <- data[, "vat_price"] / max_price
+  data <- data %>% mutate(total_price_s = total_price / max_price,
+                          vat_price_s = vat_price / max_price,
+                          rel_p = vat_price / total_price)
 
-  # creates "rel_p"
-  data[, "rel_p"] <- data$vat_price / data$total_price
-
-  # adding common width
-  data[, "common_width"] <-
-    apply(data[, c("total_left", "total_right", "vat_left", "vat_right")], 1, max) -
-    apply(data[, c("total_left", "total_right", "vat_left", "vat_right")], 1, min)
-
-  # adding common height
-  data[, "common_height"] <-
-    apply(data[, c("total_top", "total_bottom", "vat_top", "vat_bottom")], 1, max) -
-    apply(data[, c("total_top", "total_bottom", "vat_top", "vat_bottom")], 1, min)
+  # adding common width and common height
+  data <- data %>% rowwise() %>%
+    mutate(common_width = max(total_left, total_right, vat_left, vat_right) - 
+                          min(total_left, total_right, vat_left, vat_right),
+           common_height = max(total_top, total_bottom, vat_top, vat_bottom) - 
+                           min(total_top, total_bottom, vat_top, vat_bottom))
 
   # creating "price_order"
   # It is very likely that "price_order" do not contain low values, because we
