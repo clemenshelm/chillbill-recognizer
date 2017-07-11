@@ -12,8 +12,8 @@ library(ggplot2)
 # This section will go to machine_learning_lib.R
 
 # load data from several bills
-prices_several_bills <- read.csv("prices.csv", header = TRUE)
-correct_price_tuples <- read.csv("correct_price_tuples.csv", header = TRUE)
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
 # generate tuples and add attributes
 tab <- table(prices_several_bills$bill_id)
