@@ -3,9 +3,10 @@
 
 
 # Load example bill for debugging / creating new attributes:
-# price_list = read.csv("csv/25KA7rWWmhStXDEsb.csv", header=TRUE)
-# price_list = read.csv("csv/26joYiARG5L5SmfxM.csv", header=TRUE)
-# price_list = read.csv("csv/24PC5D5oeL6fb8a5n.csv", header=TRUE)
+# price_list = read.csv("csv/2D7BuHc3f8wAmb4y8.csv", header=TRUE)
+# price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
+# price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
+# price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
 # 
 # testdata for grid search
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
@@ -17,6 +18,10 @@
 library(e1071)
 library(dplyr)
 library(data.table)
+
+to_string_nchar <- function(x){
+  nchar(toString(x))
+}
 
 generate_tuples <- function(price_list){
   combinations <- expand.grid(total = c(1:nrow(price_list)),
@@ -74,7 +79,9 @@ generate_tuples <- function(price_list){
   data <- data %>%
     mutate(height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
-  # creating "avg_height"
+  # creating "avg_width"
+  sapply(price_list$text, to_string_nchar)
+
 
   # Checking of NaN entries
   tmp <- sum(is.na(data))

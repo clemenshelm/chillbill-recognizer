@@ -80,4 +80,22 @@ for(i in 1:length(tab)){
 
 ##################################
 
+#### plot the character width in percentage of the bill width ####
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
+
+#### plot page ratio of bill
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+one_element_per_bill <- prices_several_bills %>%
+  group_by(bill_id) %>%
+  slice(1) %>%
+  ungroup
+
+one_element_per_bill <- one_element_per_bill %>% mutate(bill_ratio = bill_height / bill_width) %>% filter(bill_ratio > 1) 
+ggplot(data = one_element_per_bill, aes(x = bill_ratio)) +
+  geom_histogram() +
+  geom_density(kernel = "gaussian") +
+  geom_segment(aes(x = 297/210, y = 0, xend = 297/210, yend = 20))
+
+distinct(prices_several_bills_n)
