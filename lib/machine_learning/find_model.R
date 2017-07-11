@@ -28,8 +28,8 @@ for (i in 2:length(tab)){
 
 # adding correct answer in "valid_amount"
 calibration_data[, "valid_amount"] <- 0
-calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
-                    calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
+calibration_data[calibration_data$total_id %in% correct_price_tuples$total_id &
+                 calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
 # calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 # Change Row namesto 1, 2, 3, ...
