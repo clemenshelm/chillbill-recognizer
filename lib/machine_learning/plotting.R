@@ -84,6 +84,22 @@ for(i in 1:length(tab)){
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
+to_string_nchar <- function(x){
+  nchar(toString(x))
+}
+
+price_list2 <- prices_several_bills %>%
+  mutate(char_width = (right - left) / sapply(price_list$text, to_string_nchar))
+
+# scale for plot (divide by max char_width per bill)
+price_list2 <- price_list2 %>% group_by(bill_id) %>%
+  mutate(char_width_s = char_width/ max(char_width), max_width = max(char_width))
+price_list2[, "valid_amount"] <- 0
+price_list2[price_list2$price_id %in% correct_price_tuples$total_id,  "valid_amount"] <-  1
+
+ggplot(price_list2, aes(x = char_width_s)) + geom_dotplot(aes(color = factor(valid_amount))) + facet_wrap(~ bill_id)
+
+
 
 
 # not done yet
