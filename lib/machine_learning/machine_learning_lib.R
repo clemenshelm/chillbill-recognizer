@@ -19,9 +19,6 @@ library(e1071)
 library(dplyr)
 library(data.table)
 
-to_string_nchar <- function(x){
-  nchar(toString(x))
-}
 
 generate_tuples <- function(price_list){
   combinations <- expand.grid(total = c(1:nrow(price_list)),
@@ -54,7 +51,7 @@ generate_tuples <- function(price_list){
   data <- data %>%
     filter(vat_price <= 0.3 * total_price, total_price > 0)
 
-  # scaling prices -> add "total_price_s" and "vat_price_s", creating "rel_p"
+  # add "total_price_s" and "vat_price_s", creating "rel_p"
   max_price <- max(price_list$price_cents)
   data <- data %>%
     mutate(total_price_s = total_price / max_price,
@@ -69,23 +66,24 @@ generate_tuples <- function(price_list){
            common_height = max(total_top, total_bottom, vat_top, vat_bottom) -
                            min(total_top, total_bottom, vat_top, vat_bottom))
 
-  # creating "price_order"
+  # creating "total_price_order"
   # It is very likely that "price_order" do not contain low values, because we
   # do not use all possible tuples
   prices_red_sort <- unique(sort(price_list$price_cents))  # deleted all repeated elements
   data <- data %>%
-    mutate(price_order = match(total_price, prices_red_sort) / length(prices_red_sort))
+    mutate(total_price_order = match(total_price, prices_red_sort) / length(prices_red_sort))
 
-  # creating "total_value_uq"
+  # creating "total_price_uq"
   quantil_limit <- quantile(price_list$price_cents, 0.75)
   data <- data %>%
-    mutate(total_value_uq = as.numeric(total_price >= quantil_limit))
+    mutate(total_price_uq = as.numeric(total_price >= quantil_limit))
 
-  # creating "total_height_uq"
+  # creating "total_height", "total_height_s", "total_height_uq"
   height_max <- max(price_list$bottom - price_list$top)
   height_uq <- quantile(price_list$bottom - price_list$top, 0.75)
   data <- data %>%
-    mutate(total_height_s = (total_bottom - totoal_top) / height_max,
+    mutate(total_height = total_bottom - total_top,
+           total_height_s = (total_bottom - total_top) / height_max,
            total_height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
   # creating "total_char_counter", "total_char_width", "total_char_width_s", "total_char_width_uq"
@@ -97,18 +95,12 @@ generate_tuples <- function(price_list){
   width_max <- max(prices_widths$char_width)
   width_uq <- quantile(prices_widths$char_width, 0.75)
   
-  data2 <- data %>%
+  data <- data %>%
     rowwise() %>%
     mutate(total_char_counter = nchar(toString(total_text)),
            total_char_width = (total_right - total_left) / total_char_counter,
            total_char_width_s = total_char_width / width_max,
            total_char_width_uq = as.numeric(total_char_width >= width_uq))
-  
-  
-  # creating "total_char_width"
-  
-
-  
 
   # Checking of NaN entries
   tmp <- sum(is.na(data))
