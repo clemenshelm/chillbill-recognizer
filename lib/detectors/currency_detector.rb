@@ -26,14 +26,15 @@ class CurrencyDetector
     private
 
       def find_currencies(regex)
-        term = CurrencyTerm.new(regex: regex, max_words: 1)
+        term = nil
+        term_stale = true
 
         Word.each do |word|
-          term = CurrencyTerm.new(regex: regex, max_words: 1) if term.exists?
+          term = CurrencyTerm.new(regex: regex, max_words: 1) if term_stale
 
           term.add_word(word)
 
-          term.save if term.valid?
+          term_stale = term.valid_subterm&.save
         end
       end
   end

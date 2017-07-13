@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 require 'bigdecimal'
 require 'pry'
@@ -63,7 +62,8 @@ class BillRecognizer
     BillingEndLabelTerm,
     RelativeDateTerm,
     InvoiceDateLabelTerm,
-    InvoiceNumberTerm
+    InvoiceNumberTerm,
+    BillDimension
   ].freeze
 
   DETECTORS = [
@@ -92,18 +92,10 @@ class BillRecognizer
     version = fetch_recognizer_version
 
     begin
-      image_file = @retriever.save
-      @image = ImageProcessor.new(image_file.path)
-      png_file = @image.preprocess.write_png
-
+      png_file = download_and_convert_image
     rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
-      return {
-        error: e.to_s,
-        recognizerVersion: version
-      }
+      return { error: e.to_s, recognizerVersion: version }
     end
-
-    BillDimension.create_all(width: @image.image_width, height: @image.image_height)
 
     recognize_words(png_file)
     filter_words
@@ -111,6 +103,16 @@ class BillRecognizer
     calculate_attributes(version)
   ensure
     @image&.destroy!
+  end
+
+  def download_and_convert_image
+    image_file = @retriever.save
+    @image = ImageProcessor.new(image_file.path)
+    png_file = @image.preprocess.write_png
+
+    BillDimension.create_all(width: @image.image_width, height: @image.image_height)
+
+    png_file
   end
 
   def empty_database
@@ -225,8 +227,7 @@ class BillRecognizer
   end
 
   def calculate_invoice_date
-    dates = DateCalculation.new
-    dates.invoice_date&.strftime('%Y-%m-%d')
+    DateCalculation.new.invoice_date&.strftime('%Y-%m-%d')
   end
 
   def calculate_vat_number
@@ -248,8 +249,7 @@ class BillRecognizer
   end
 
   def calculate_due_date
-    due_datetime = DateCalculation.new.due_date
-    due_datetime&.strftime('%Y-%m-%d')
+    DateCalculation.new.due_date&.strftime('%Y-%m-%d')
   end
 
   def calculate_iban

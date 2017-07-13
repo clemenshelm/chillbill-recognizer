@@ -18,13 +18,12 @@ class RelativeDateDetector
     private
 
       def find_relative_words(regex, after_each_word: nil)
-        term = RelativeDateTerm.new(
-          regex: regex, after_each_word: after_each_word, max_words: 3
-        )
+        term = nil
         last_word = nil
+        term_stale = true
 
         Word.each do |word|
-          if term.exists? || (last_word && !word.follows(last_word))
+          if term_stale || (last_word && !word.follows(last_word))
             term = RelativeDateTerm.new(
               regex: regex, after_each_word: after_each_word, max_words: 3
             )
@@ -34,7 +33,7 @@ class RelativeDateDetector
 
           last_word = word
 
-          term.save if term.valid?
+          term_stale = term.valid_subterm&.save
         end
       end
   end
