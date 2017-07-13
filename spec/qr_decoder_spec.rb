@@ -73,8 +73,7 @@ describe QRDecoder do
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
 
-      expect(decoded_qr_code[:amounts][:total]).to eq 6_90
-      expect(decoded_qr_code[:amounts][:vatRate]).to eq 0
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 6_90, vatRate: 0 }]
     end
   end
 
@@ -85,8 +84,7 @@ describe QRDecoder do
       ) { self.density = 600 }.first
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
-      expect(decoded_qr_code[:amounts][:total]).to eq 6_90
-      expect(decoded_qr_code[:amounts][:vatRate]).to eq 0
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 6_90, vatRate: 0 }]
     end
 
     it 'extracts a 10% vat rate price from QR code data' do
@@ -95,8 +93,7 @@ describe QRDecoder do
       ) { self.density = 600 }.first
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
-      expect(decoded_qr_code[:amounts][:total]).to eq 5_90
-      expect(decoded_qr_code[:amounts][:vatRate]).to eq 10
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 5_90, vatRate: 10 }]
     end
 
     it 'extracts a 20% vat rate price from QR code data' do
@@ -105,8 +102,7 @@ describe QRDecoder do
       ) { self.density = 600 }.first
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
-      expect(decoded_qr_code[:amounts][:total]).to eq 60_72
-      expect(decoded_qr_code[:amounts][:vatRate]).to eq 20
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 60_72, vatRate: 20 }]
     end
   end
 end
