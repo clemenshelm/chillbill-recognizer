@@ -7,6 +7,8 @@
 # price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
 # price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
 # price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
+# price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) # problem
+
 # 
 # testdata for grid search
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]

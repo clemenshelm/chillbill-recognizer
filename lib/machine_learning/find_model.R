@@ -20,7 +20,7 @@ tab <- table(prices_several_bills$bill_id)
 calibration_data <-
   generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
 for (i in 2:length(tab)){
-  # cat("Bill #", i, "; \n")
+  # cat("Bill #", i, "; Bill id:", names(tab)[i],"\n")
   calibration_data <-
     rbind(calibration_data,
           generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))

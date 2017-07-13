@@ -101,9 +101,7 @@ ggplot(price_list2, aes(x = char_width_s)) + geom_dotplot(aes(color = factor(val
 
 
 
-
-# not done yet
-# colour the true brutto values different to the other ones
+#### plot 
 
 
 
