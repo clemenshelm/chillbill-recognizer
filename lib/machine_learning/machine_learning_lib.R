@@ -28,35 +28,42 @@ generate_tuples <- function(price_list){
                               vat = c(1:nrow(price_list)))
 
   data <- cbind(
-    price_list %>% slice(combinations$total) %>% select("bill_id" = bill_id,
-                                                        "total_id" = price_id,
-                                                        "total_text" = text,
-                                                        "total_price" = price_cents,
-                                                        "total_left" = left,
-                                                        "total_right" = right,
-                                                        "total_top" = top,
-                                                        "total_bottom" = bottom),
+    price_list %>%
+      slice(combinations$total) %>%
+      select("bill_id" = bill_id,
+             "total_id" = price_id,
+             "total_text" = text,
+             "total_price" = price_cents,
+             "total_left" = left,
+             "total_right" = right,
+             "total_top" = top,
+             "total_bottom" = bottom),
 
-    price_list %>% slice(combinations$vat) %>% select("vat_id" = price_id,
-                                                      "vat_text" = text,
-                                                      "vat_price" = price_cents,
-                                                      "vat_left" = left,
-                                                      "vat_right" = right,
-                                                      "vat_top" = top,
-                                                      "vat_bottom" = bottom)
+    price_list %>%
+      slice(combinations$vat) %>%
+      select("vat_id" = price_id,
+             "vat_text" = text,
+             "vat_price" = price_cents,
+             "vat_left" = left,
+             "vat_right" = right,
+             "vat_top" = top,
+             "vat_bottom" = bottom)
   )
 
   # only use specific combinations
-  data <- data %>% filter(vat_price <= 0.3 * total_price, total_price > 0)
+  data <- data %>%
+    filter(vat_price <= 0.3 * total_price, total_price > 0)
 
   # scaling prices -> add "total_price_s" and "vat_price_s", creating "rel_p"
   max_price <- max(price_list$price_cents)
-  data <- data %>% mutate(total_price_s = total_price / max_price,
+  data <- data %>%
+    mutate(total_price_s = total_price / max_price,
                           vat_price_s = vat_price / max_price,
                           rel_p = vat_price / total_price)
 
   # adding common width and common height
-  data <- data %>% rowwise() %>%
+  data <- data %>%
+    rowwise() %>%
     mutate(common_width = max(total_left, total_right, vat_left, vat_right) -
                           min(total_left, total_right, vat_left, vat_right),
            common_height = max(total_top, total_bottom, vat_top, vat_bottom) -
@@ -69,20 +76,39 @@ generate_tuples <- function(price_list){
   data <- data %>%
     mutate(price_order = match(total_price, prices_red_sort) / length(prices_red_sort))
 
-  # creating "price_uq"
+  # creating "total_value_uq"
   quantil_limit <- quantile(price_list$price_cents, 0.75)
   data <- data %>%
-    mutate(price_uq = as.numeric(total_price > quantil_limit))
+    mutate(total_value_uq = as.numeric(total_price >= quantil_limit))
 
   # creating "total_height_uq"
+  height_max <- max(price_list$bottom - price_list$top)
   height_uq <- quantile(price_list$bottom - price_list$top, 0.75)
   data <- data %>%
-    mutate(height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
+    mutate(total_height_s = (total_bottom - totoal_top) / height_max,
+           total_height_uq = as.numeric( (total_bottom - total_top)  >= height_uq))
 
-  # creating "avg_width" (one per bill)
-  t <- price_list %>% transmute(char_width = (right - left) / sapply(price_list$text, to_string_nchar))
-  sapply(price_list$text, to_string_nchar)
+  # creating "total_char_counter", "total_char_width", "total_char_width_s", "total_char_width_uq"
+  prices_widths <- price_list %>%
+    rowwise() %>%
+    mutate(char_width = (right - left) / nchar(toString(text))) %>%
+    select(char_width)
+  
+  width_max <- max(prices_widths$char_width)
+  width_uq <- quantile(prices_widths$char_width, 0.75)
+  
+  data2 <- data %>%
+    rowwise() %>%
+    mutate(total_char_counter = nchar(toString(total_text)),
+           total_char_width = (total_right - total_left) / total_char_counter,
+           total_char_width_s = total_char_width / width_max,
+           total_char_width_uq = as.numeric(total_char_width >= width_uq))
+  
+  
+  # creating "total_char_width"
+  
 
+  
 
   # Checking of NaN entries
   tmp <- sum(is.na(data))
