@@ -7,11 +7,10 @@
 # price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
 # price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
 # price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
-# price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) 
+# price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) # problem
 # price_list = read.csv("csv/2CfCKenByph4Ht8EE.csv", header=TRUE) # problem with total_width_s
 
 
-# 
 # testdata for grid search
 # calibration_data = read.csv("calibration_data.csv", header = TRUE)[ , -1]
 # data_train = read.csv("data_train.csv", header = TRUE)[ , -1]
@@ -25,6 +24,12 @@ library(data.table)
 
 
 generate_tuples <- function(price_list){
+  # Checking of NaN entries in price_list
+  if (sum(is.na(price_list)) != 0){
+    cat("There are NaN entries in the price list of bill ", toString(price_list$bill_id[1]), "\n")
+    return(NULL)
+  }
+  
   combinations <- expand.grid(total = c(1:nrow(price_list)),
                               vat = c(1:nrow(price_list)))
 
@@ -32,6 +37,8 @@ generate_tuples <- function(price_list){
     price_list %>%
       slice(combinations$total) %>%
       select("bill_id" = bill_id,
+             "bill_width" = bill_width,
+             "bill_height" = bill_height,
              "total_id" = price_id,
              "total_text" = text,
              "total_price" = price_cents,
@@ -53,22 +60,29 @@ generate_tuples <- function(price_list){
 
   # only use specific combinations
   data <- data %>%
-    filter(vat_price <= 0.3 * total_price, total_price > 0)
+    filter(vat_price <= 0.3 * total_price, total_price > 0, vat_price >= 0)
 
-  # add "total_price_s" and "vat_price_s", creating "rel_p"
+  # creating "total_price_s" and "vat_price_s", creating "rel_p"
   max_price <- max(price_list$price_cents)
   data <- data %>%
     mutate(total_price_s = total_price / max_price,
                           vat_price_s = vat_price / max_price,
                           rel_p = vat_price / total_price)
 
-  # adding common width and common height
+  # creating "common_width", "common_height", "common_width_s", "common_height_s"
   data <- data %>%
     rowwise() %>%
     mutate(common_width = max(total_left, total_right, vat_left, vat_right) -
                           min(total_left, total_right, vat_left, vat_right),
            common_height = max(total_top, total_bottom, vat_top, vat_bottom) -
                            min(total_top, total_bottom, vat_top, vat_bottom))
+
+  common_width_max <- max(data$common_width)
+  common_height_max <- max(data$common_height)
+
+  data <- data %>%
+    mutate(common_width_s = common_width / common_width_max,
+           common_height_s = common_height / common_height_max)
 
   # creating "total_price_order"
   # It is very likely that "price_order" do not contain low values, because we
@@ -95,10 +109,10 @@ generate_tuples <- function(price_list){
     rowwise() %>%
     mutate(char_width = (right - left) / nchar(toString(text))) %>%
     select(char_width)
-  
+
   width_max <- max(prices_widths$char_width)
   width_uq <- quantile(prices_widths$char_width, 0.75)
-  
+
   data <- data %>%
     rowwise() %>%
     mutate(total_char_counter = nchar(toString(total_text)),
