@@ -194,17 +194,28 @@ class BillRecognizer
   end
 
   def process_qr_code_data
-    QRDecoder.new(@image.image).decode_qr_code
+    @qr_data = QRDecoder.new(@image.image).decode_qr_code
   end
 
   def calculate_attributes(version)
     {
-      amounts: calculate_amounts,
-      invoiceDate: calculate_invoice_date,
+      amounts:  if @qr_data
+                  @qr_data[:amounts]
+                else calculate_amounts
+                end,
+      invoiceDate:  if @qr_data
+                      @qr_data[:invoiceDate]&.strftime('%Y-%m-%d')
+                    else
+                      calculate_invoice_date
+                    end,
       vatNumber: calculate_vat_number,
       billingPeriod: calculate_billing_period,
       currencyCode: calculate_currency,
-      dueDate: calculate_due_date,
+      dueDate:  if @qr_data
+                  @qr_data[:dueDate]&.strftime('%Y-%m-%d')
+                else
+                  calculate_due_date
+                end,
       iban: calculate_iban,
       invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @image.calculate_clockwise_rotations_required,
