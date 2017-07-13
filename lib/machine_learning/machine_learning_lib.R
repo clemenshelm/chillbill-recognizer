@@ -7,7 +7,9 @@
 # price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
 # price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
 # price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
-# price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) # problem
+# price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) 
+# price_list = read.csv("csv/2CfCKenByph4Ht8EE.csv", header=TRUE) # problem with total_width_s
+
 
 # 
 # testdata for grid search
