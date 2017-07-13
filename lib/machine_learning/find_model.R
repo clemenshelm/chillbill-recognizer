@@ -67,8 +67,17 @@ cat("Amount of false and right combinations:",
 
 
 # choose which arguments to use in the SVM
-col <- c("total_price_s", "vat_price_s", "rel_p", "price_order",
-        "price_uq", "common_width", "common_height", "height_uq")
+col <- c("total_price_s",
+         "vat_price_s",
+         "rel_p",
+         "common_width_s",
+         "common_height_s",
+         "total_price_order",
+         "total_price_uq",
+         "total_height_s",
+         "total_height_uq",
+         "total_char_width_s",
+         "total_char_width_uq")
 
 
 
@@ -83,8 +92,7 @@ gamma_range <- 10 ^ (-1:1)
 
 # Grid search for the hyperparameters using ALL data
 data_train <- calibration_data[, col]
-answer_train <- as.factor(calibration_data[, "valid_amount"])
-
+answer_train <- calibration_data[, "valid_amount"]
 
 # Detaild output
 hyperparameters_detailed <-
