@@ -101,8 +101,16 @@ ggplot(price_list2, aes(x = char_width_s)) + geom_dotplot(aes(color = factor(val
 
 
 
-#### plot 
+#### plotting total_char_width_s vs. total_height_s
+# need to load "calibration_data"
+ggplot(calibration_data, aes(x = total_char_width_s, y = total_height_s)) +
+  geom_point(aes(color = factor(valid_amount), size = calibration_data$valid_amount/2 + 0.3)) +
+  facet_wrap(~ bill_id)
 
+
+
+
+calibration_data$valid_amount/2 + 0.3
 
 
 #### plot page ratio of bill
