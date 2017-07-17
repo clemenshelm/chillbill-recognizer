@@ -3,6 +3,13 @@ require 'zbar'
 
 class QRDecoder
   include Magick
+  VAT_RATES = [
+    20,
+    10,
+    13,
+    0,
+    nil
+  ].freeze
 
   def initialize(image)
     @image = image
@@ -23,28 +30,22 @@ class QRDecoder
   def decode_qr_code
     return unless qr_code?
     all_data = @qr_codes.last.instance_variable_get(:@data).split('_')
-    price = all_data.find { |prices| /^(?!.*0,00).*$*\d,\d{2}/ =~ prices }
+    prices = all_data.find_all { |price| /\d,\d{2}/ =~ price }
+    prices_and_vats = VAT_RATES.zip(prices).to_h
+    compacted_prices_and_vats = prices_and_vats.select do |_vat, price|
+      /^(?!.*0,00).*$*\d,\d{2}/ =~ price
+    end
     processed_data = {
       invoiceDate: DateTime.strptime(all_data[4], '%Y-%m-%d'),
       dueDate: DateTime.strptime(all_data[4], '%Y-%m-%d'),
       amounts: [{
-        total: (BigDecimal.new(price.sub!(',', '.')) * 100).to_i,
-        vatRate: vat_rate(all_data, price)
+        total: (BigDecimal.new(
+          compacted_prices_and_vats.values.first.sub!(',', '.')
+        ) * 100
+               ).to_i,
+        vatRate: compacted_prices_and_vats.keys.first
       }]
     }
-
     processed_data
-  end
-
-  def vat_rate(all_data, price)
-    index = all_data.index(price)
-    case index
-    when 8
-      0
-    when 6
-      10
-    when 5
-      20
-    end
   end
 end
