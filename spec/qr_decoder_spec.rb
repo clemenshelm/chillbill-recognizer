@@ -75,9 +75,7 @@ describe QRDecoder do
 
       expect(decoded_qr_code[:amounts]).to eq [{ total: 6_90, vatRate: 0 }]
     end
-  end
 
-  describe '#decode_qr_code' do
     it 'extracts a 0% vat rate price from QR code data' do
       image = Magick::Image.read(
         './spec/support/qr-test.pdf'
