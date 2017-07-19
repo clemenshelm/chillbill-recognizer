@@ -98,8 +98,9 @@ class BillRecognizer
     end
 
     recognize_words(png_file)
-    filter_words
+    calculate_text_box
 
+    filter_words
     calculate_attributes(version)
   ensure
     @image&.destroy!
@@ -185,6 +186,20 @@ class BillRecognizer
       right: adjusted_word[:right],
       top: adjusted_word[:top],
       bottom: adjusted_word[:bottom]
+    )
+  end
+
+  def calculate_text_box
+    top_boundary = Word.select_order_map(:top).first
+    bottom_boundary = Word.select_order_map(:bottom).last
+    left_boundary = Word.select_order_map(:left).first
+    right_boundary = Word.select_order_map(:right).last
+
+    BillDimension.define_text_box(
+      top_boundary: top_boundary,
+      bottom_boundary: bottom_boundary,
+      left_boundary: left_boundary,
+      right_boundary: right_boundary
     )
   end
 
