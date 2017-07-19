@@ -62,8 +62,8 @@ describe QRDecoder do
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
 
-      expect(decoded_qr_code[:dueDate]).to eq DateTime.iso8601('2017-06-08')
-      expect(decoded_qr_code[:invoiceDate]).to eq DateTime.iso8601('2017-06-08')
+      expect(decoded_qr_code[:dueDate]).to eq '2017-06-08'
+      expect(decoded_qr_code[:invoiceDate]).to eq '2017-06-08'
     end
 
     it 'extracts the total and vat rate from a QR code' do
