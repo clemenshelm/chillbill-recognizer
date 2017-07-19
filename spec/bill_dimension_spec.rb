@@ -32,53 +32,53 @@ describe BillDimension do
     end
   end
 
-  describe '#define_text_box' do
+  describe '#text_box_boundaries' do
     it 'saves the top boundary of the textbox' do
-      top_boundary = [10, 200, 3000].sample
-      BillDimension.define_text_box(
-        top_boundary: top_boundary,
-        bottom_boundary: 10,
-        left_boundary: 15,
-        right_boundary: 20
+      text_top = [10, 200, 3000].sample
+      BillDimension.text_box_boundaries(
+        text_top: text_top,
+        text_bottom: 10,
+        text_left: 15,
+        text_right: 20
       )
 
-      expect(BillDimension.top_boundary).to eq(top_boundary)
+      expect(BillDimension.text_top).to eq(text_top)
     end
 
     it 'saves the bottom boundary of the textbox' do
-      bottom_boundary = [10, 200, 3000].sample
-      BillDimension.define_text_box(
-        top_boundary: 10,
-        bottom_boundary: bottom_boundary,
-        left_boundary: 15,
-        right_boundary: 20
+      text_bottom = [10, 200, 3000].sample
+      BillDimension.text_box_boundaries(
+        text_top: 10,
+        text_bottom: text_bottom,
+        text_left: 15,
+        text_right: 20
       )
 
-      expect(BillDimension.bottom_boundary).to eq(bottom_boundary)
+      expect(BillDimension.text_bottom).to eq(text_bottom)
     end
 
     it 'saves the left boundary of the textbox' do
-      left_boundary = [10, 200, 3000].sample
-      BillDimension.define_text_box(
-        top_boundary: 10,
-        bottom_boundary: 15,
-        left_boundary: left_boundary,
-        right_boundary: 20
+      text_left = [10, 200, 3000].sample
+      BillDimension.text_box_boundaries(
+        text_top: 10,
+        text_bottom: 15,
+        text_left: text_left,
+        text_right: 20
       )
 
-      expect(BillDimension.left_boundary).to eq(left_boundary)
+      expect(BillDimension.text_left).to eq(text_left)
     end
 
-    it 'saves the right boundary of the textbox' do
-      right_boundary = [10, 200, 3000].sample
-      BillDimension.define_text_box(
-        top_boundary: 10,
-        bottom_boundary: 15,
-        left_boundary: 20,
-        right_boundary: right_boundary
+    it 'saves the top boundary of the textbox' do
+      text_right = [10, 200, 3000].sample
+      BillDimension.text_box_boundaries(
+        text_top: 10,
+        text_bottom: 15,
+        text_left: 20,
+        text_right: text_right
       )
 
-      expect(BillDimension.right_boundary).to eq(right_boundary)
+      expect(BillDimension.text_right).to eq(text_right)
     end
   end
 end
