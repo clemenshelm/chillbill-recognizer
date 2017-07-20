@@ -131,6 +131,35 @@ generate_tuples <- function(price_list){
 }
 
 
+genearte_calibration_data_tuples <- function(prices_several_bills, correct_price_tuples){
+  # generate tuples and add attributes for several bills
+  tab <- table(prices_several_bills$bill_id)
+  calibration_data <-
+    generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
+  for (i in 2:length(tab)){
+    # cat("Bill #", i, "; Bill id:", names(tab)[i],"\n")
+    calibration_data <-
+      rbind(calibration_data,
+            generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
+  }
+  
+  # adding correct answer in "valid_amount"
+  calibration_data[, "valid_amount"] <- 0
+  calibration_data[calibration_data$total_id %in% correct_price_tuples$total_id &
+                     calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <- 1
+  # calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
+  
+  # Change Row names to 1, 2, 3, ...
+  rownames(calibration_data) <- NULL
+  
+  return(calibration_data)
+}
+
+generate_calibration_data_bill_type <- function(prices_several_bills, correct_price_tuples){
+  
+}
+
+
 # Consider that this function can return NaN entries (see  documentation)
 error_wrong_positive <- function(true_values, predictions)
   mean(true_values[predictions == 1] == 0)

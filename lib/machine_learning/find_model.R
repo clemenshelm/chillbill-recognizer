@@ -1,7 +1,3 @@
-# Set Working Directory to Source file location (only necessary in RStudio)
-# RScript uses automatically the right directory
-{
-
 source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
 library(fields) # for scatterplot
 library(ggplot2)
@@ -9,31 +5,11 @@ library(ggplot2)
 ######################################
 ######    GENERATION OF DATA    ######
 ######################################
-# This section will go to machine_learning_lib.R
-
 # load data from several bills
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
-# generate tuples and add attributes
-tab <- table(prices_several_bills$bill_id)
-calibration_data <-
-  generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
-for (i in 2:length(tab)){
-  # cat("Bill #", i, "; Bill id:", names(tab)[i],"\n")
-  calibration_data <-
-    rbind(calibration_data,
-          generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
-}
-
-# adding correct answer in "valid_amount"
-calibration_data[, "valid_amount"] <- 0
-calibration_data[calibration_data$total_id %in% correct_price_tuples$total_id &
-                 calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
-# calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
-
-# Change Row namesto 1, 2, 3, ...
-rownames(calibration_data) <- NULL
+calibration_data <- genearte_calibration_data_tuples(prices_several_bills, correct_price_tuples)
 
 # Print percentage of right combinations
 cat("Amount of false and right combinations:",
@@ -41,7 +17,6 @@ cat("Amount of false and right combinations:",
     "<=>", table(calibration_data$valid_amount)[2] / nrow(calibration_data) * 100,
     "% right combinations%\n")
 
-}
 
 
 ######################################
