@@ -6,7 +6,7 @@
 # price_list = read.csv("csv/2D7BuHc3f8wAmb4y8.csv", header=TRUE)
 # price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
 # price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
-# price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
+# price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE) # added text_box_attributes
 # price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) # problem
 # price_list = read.csv("csv/2CfCKenByph4Ht8EE.csv", header=TRUE) # problem with total_width_s
 
@@ -131,7 +131,7 @@ generate_tuples <- function(price_list){
 }
 
 
-genearte_calibration_data_tuples <- function(prices_several_bills, correct_price_tuples){
+genearte_calibration_data_prices <- function(prices_several_bills, correct_price_tuples){
   # generate tuples and add attributes for several bills
   tab <- table(prices_several_bills$bill_id)
   calibration_data <-
@@ -155,8 +155,31 @@ genearte_calibration_data_tuples <- function(prices_several_bills, correct_price
   return(calibration_data)
 }
 
-generate_calibration_data_bill_type <- function(prices_several_bills, correct_price_tuples){
+
+generate_tuples_bill_type <- function(price_list){
+  # returns one line of attributes
+  char_width_med <- price_list %>%
+    group_by(price_id) %>%
+    mutate(tmp_r_l = right - left,
+           tmp_nchar = nchar(toString(text)),
+           char_width = (right - left) / nchar(toString(text))) %>%
+    ungroup() %>%
+    summarise(med = median(char_width))
   
+  text_box_width <- price_list %>%
+    slice(1) %>%
+    transmute(text_box_width = text_box_right - text_box_left)
+  return(
+    data.frame(char_width_med = char_width_med,
+               char_width_med_b = as.numeric(char_width_med > 0.02),
+               text_box_width = text_box_width,
+               text_box_width_b = as.numeric(text_box_width < 0.5))
+  )
+}
+
+
+generate_calibration_data_bill_type <- function(prices_several_bills, correct_price_tuples){
+  # not done yet
 }
 
 

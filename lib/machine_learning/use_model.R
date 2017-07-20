@@ -19,8 +19,7 @@ predicted_type <- predict(bill_typ_lassifier,
 
 # load correct model
 classification_model <- switch(predicted_type,
-                               "a4_letter" = readRDS("modelfile_a4_letter.rds"),
-                               "email" = readRDS("modelfile_email.rds"),
+                               "a4" = readRDS("modelfile_a4.rds"),
                                "sales_check" = readRDS("modelfile_sales_check.rds"))
 
 # predict 

@@ -9,13 +9,23 @@ library(ggplot2)
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
-calibration_data <- genearte_calibration_data_tuples(prices_several_bills, correct_price_tuples)
+calibration_data <- genearte_calibration_data_prices(prices_several_bills, correct_price_tuples)
 
 # Print percentage of right combinations
 cat("Amount of false and right combinations:",
     table(calibration_data$valid_amount),
     "<=>", table(calibration_data$valid_amount)[2] / nrow(calibration_data) * 100,
     "% right combinations%\n")
+
+
+######################################
+######    SVM - TYPE OF BILL    ######
+######################################
+
+
+
+
+
 
 
 
