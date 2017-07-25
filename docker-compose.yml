@@ -49,6 +49,16 @@ tests:
   volumes_from:
     - bundle
   env_file: .env-rspec
+  environment:
+    - MONGO_READ_URL
+
+ml:
+  build: .
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - bundle
+  env_file: .env-ml
 
 # Data container to contain bundled gems
 bundle:
