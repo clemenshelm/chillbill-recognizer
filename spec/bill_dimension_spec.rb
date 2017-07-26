@@ -34,51 +34,51 @@ describe BillDimension do
 
   describe '#text_box_boundaries' do
     it 'saves the top boundary of the textbox' do
-      text_top = [10, 200, 3000].sample
+      text_box_top = [10, 200, 3000].sample
       BillDimension.text_box_boundaries(
-        text_top: text_top,
-        text_bottom: 10,
-        text_left: 15,
-        text_right: 20
+        text_box_top: text_box_top,
+        text_box_bottom: 10,
+        text_box_left: 15,
+        text_box_right: 20
       )
 
-      expect(BillDimension.text_top).to eq(text_top)
+      expect(BillDimension.text_box_top).to eq(text_box_top)
     end
 
     it 'saves the bottom boundary of the textbox' do
-      text_bottom = [10, 200, 3000].sample
+      text_box_bottom = [10, 200, 3000].sample
       BillDimension.text_box_boundaries(
-        text_top: 10,
-        text_bottom: text_bottom,
-        text_left: 15,
-        text_right: 20
+        text_box_top: 10,
+        text_box_bottom: text_box_bottom,
+        text_box_left: 15,
+        text_box_right: 20
       )
 
-      expect(BillDimension.text_bottom).to eq(text_bottom)
+      expect(BillDimension.text_box_bottom).to eq(text_box_bottom)
     end
 
     it 'saves the left boundary of the textbox' do
-      text_left = [10, 200, 3000].sample
+      text_box_left = [10, 200, 3000].sample
       BillDimension.text_box_boundaries(
-        text_top: 10,
-        text_bottom: 15,
-        text_left: text_left,
-        text_right: 20
+        text_box_top: 10,
+        text_box_bottom: 15,
+        text_box_left: text_box_left,
+        text_box_right: 20
       )
 
-      expect(BillDimension.text_left).to eq(text_left)
+      expect(BillDimension.text_box_left).to eq(text_box_left)
     end
 
     it 'saves the top boundary of the textbox' do
-      text_right = [10, 200, 3000].sample
+      text_box_right = [10, 200, 3000].sample
       BillDimension.text_box_boundaries(
-        text_top: 10,
-        text_bottom: 15,
-        text_left: 20,
-        text_right: text_right
+        text_box_top: 10,
+        text_box_bottom: 15,
+        text_box_left: 20,
+        text_box_right: text_box_right
       )
 
-      expect(BillDimension.text_right).to eq(text_right)
+      expect(BillDimension.text_box_right).to eq(text_box_right)
     end
   end
 end

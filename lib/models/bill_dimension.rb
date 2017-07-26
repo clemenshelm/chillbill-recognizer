@@ -9,7 +9,7 @@ class BillDimension < Sequel::Model
     end
 
     %w(
-      bill_width bill_height text_top text_bottom text_left text_right
+      bill_width bill_height text_box_top text_box_bottom text_box_left text_box_right
     ).each do |dimension_name|
       define_method(dimension_name) do
         BillDimension.find(name: dimension_name).dimension
@@ -20,11 +20,13 @@ class BillDimension < Sequel::Model
       bill_width / bill_height
     end
 
-    def text_box_boundaries(text_top:, text_bottom:, text_left:, text_right:)
-      BillDimension.create(name: 'text_top', dimension: text_top)
-      BillDimension.create(name: 'text_bottom', dimension: text_bottom)
-      BillDimension.create(name: 'text_left', dimension: text_left)
-      BillDimension.create(name: 'text_right', dimension: text_right)
+    def text_box_boundaries(
+      text_box_top:, text_box_bottom:, text_box_left:, text_box_right:
+    )
+      BillDimension.create(name: 'text_box_top', dimension: text_box_top)
+      BillDimension.create(name: 'text_box_bottom', dimension: text_box_bottom)
+      BillDimension.create(name: 'text_box_left', dimension: text_box_left)
+      BillDimension.create(name: 'text_box_right', dimension: text_box_right)
     end
   end
 end
