@@ -348,18 +348,18 @@ describe DateCalculation do
 
       DueDateLabelTerm.create(
         text: 'Zahlungsziel:',
-        left: 0.0003333333333333333,
-        right: 0.09666666666666666,
-        top: 0.5762073027090695,
-        bottom: 0.5872791519434629
+        left: 0.09620418848167539,
+        right: 0.19208115183246074,
+        top: 0.6274283071230342,
+        bottom: 0.6382978723404256
       )
 
       RelativeDateTerm.create(
         text: 'prompt',
-        left: 0.11866666666666667,
-        right: 0.16933333333333334,
-        top: 0.5769140164899882,
-        bottom: 0.5872791519434629
+        left: 0.21465968586387435,
+        right: 0.26472513089005234,
+        top: 0.6281221091581869,
+        bottom: 0.6382978723404256
       )
 
       due_date = DateCalculation.new.due_date

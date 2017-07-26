@@ -3,12 +3,13 @@ require_relative '../../lib/boot'
 
 describe RelativeDateTerm do
   it 'detects a relative word correctly' do
+    # From ZqMX24iDMxxst5cnP.pdf
     term = RelativeDateTerm.new(
       text: 'prompt',
-      left: 0.11866666666666667,
-      right: 0.16933333333333334,
-      top: 0.5769140164899882,
-      bottom: 0.5872791519434629
+      left: 0.21465968586387435,
+      right: 0.26472513089005234,
+      top: 0.6281221091581869,
+      bottom: 0.6382978723404256
     )
 
     expect(term.to_s).to eq 'prompt'

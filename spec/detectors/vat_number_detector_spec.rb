@@ -540,7 +540,7 @@ describe VatNumberDetector do
   end
 
   it 'recognizes a German VAT ID number broken by several spaces' do
-    # from bill mqJFF5BbAgGSr4pqX
+    # From bill mqJFF5BbAgGSr4pqX
     create(
       :word,
       text: 'DE',
@@ -582,7 +582,7 @@ describe VatNumberDetector do
   end
 
   it 'detects Austrian VAT ID number in lower case' do
-    # from bill PkAZBBAXapKyNNuqt.pdf
+    # From bill PkAZBBAXapKyNNuqt.pdf
     create(
       :word,
       text: 'atu',
