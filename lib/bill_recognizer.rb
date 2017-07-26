@@ -218,8 +218,6 @@ class BillRecognizer
         dueDate: calculate_due_date
       )
     end
-
-    bill_attributes
   end
 
   def calculate_amounts
