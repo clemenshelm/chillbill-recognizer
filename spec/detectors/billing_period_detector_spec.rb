@@ -260,40 +260,41 @@ describe BillingPeriodDetector do
     )
   end
 
+  DONE:
   it 'detects the billing period using billing period labels' do
     # From m4F2bLmpKn7wPqM7q.pdf
     BillDimension.create_all(width: 3057, height: 4323)
 
     BillingStartLabelTerm.create(
       text: 'Billing Start:',
-      left: 0.4525523560209424,
-      right: 0.4849476439790576,
-      top: 0.1593432007400555,
-      bottom: 0.16651248843663274
+      left: 0.450261780104712,
+      right: 0.5258507853403142,
+      top: 0.2511563367252544,
+      bottom: 0.259713228492136
     )
 
     DateTerm.create(
       text: '22 October 2016',
-      left: 0.5788612565445026,
-      right: 0.6070026178010471,
-      top: 0.1593432007400555,
-      bottom: 0.16628122109158186
+      left: 0.5517015706806283,
+      right: 0.6479057591623036,
+      top: 0.2511563367252544,
+      bottom: 0.2578630897317299
     )
 
     BillingEndLabelTerm.create(
       text: 'Billing End:',
-      left: 0.45287958115183247,
-      right: 0.4800392670157068,
-      top: 0.17437557816836263,
-      bottom: 0.18131359851988899
+      left: 0.450261780104712,
+      right: 0.5209424083769634,
+      top: 0.26595744680851063,
+      bottom: 0.27451433857539315
     )
 
     DateTerm.create(
       text: '27 October 2016',
-      left: 0.5788612565445026,
-      right: 0.6070026178010471,
-      top: 0.17414431082331175,
-      bottom: 0.1810823311748381
+      left: 0.5517015706806283,
+      right: 0.6479057591623036,
+      top: 0.26595744680851063,
+      bottom: 0.27266419981498613
     )
 
     billing_periods = BillingPeriodDetector.filter
