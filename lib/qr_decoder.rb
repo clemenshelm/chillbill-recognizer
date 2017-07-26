@@ -24,24 +24,21 @@ class QRDecoder
     all_data = qr_codes.last.data.split('_')
     prices = all_data.grep(/\d,\d{2}/)
     prices_and_vats = VAT_RATES.zip(prices).to_h
-    compacted_prices_and_vats = prices_and_vats.select do |_vat, price|
+    prices_present = prices_and_vats.select do |_vat, price|
       /^(?!.*0,00).*$*\d,\d{2}/ =~ price
     end
 
-    # Processed QR code data:
+    date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
+    total = (
+      BigDecimal.new(prices_present.values.first.sub!(',', '.')) * 100
+    ).to_i
+
     {
-      invoiceDate: DateTime.strptime(
-        all_data[4], '%Y-%m-%d'
-      ).strftime('%Y-%m-%d'),
-      dueDate: DateTime.strptime(
-        all_data[4], '%Y-%m-%d'
-      ).strftime('%Y-%m-%d'),
+      invoiceDate: date_in_qr,
+      dueDate: date_in_qr,
       amounts: [{
-        total: (BigDecimal.new(
-          compacted_prices_and_vats.values.first.sub!(',', '.')
-        ) * 100
-               ).to_i,
-        vatRate: compacted_prices_and_vats.keys.first
+        total: total,
+        vatRate: prices_present.keys.first
       }]
     }
   end
