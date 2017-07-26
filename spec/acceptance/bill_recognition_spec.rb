@@ -7,6 +7,7 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
+
     expect(bill_attributes[:amounts]).to eq [{ total: 29_674, vatRate: 20 }]
     expect(bill_attributes[:currencyCode]).to eq 'EUR'
     expect(bill_attributes[:invoiceDate]).to eq '2016-03-16'
@@ -19,11 +20,16 @@ describe 'Recognizing bills correctly' do
   end
 
   it 'recognizes a bill with QR code' do
-    retriever = SpecCacheRetriever.new(file_basename: '3T2PCjhm5ovF4Mdce.pdf')
+    retriever = SpecCacheRetriever.new(file_basename: 'pYbaWiFCmR7rbhx9K.png')
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
 
     expect(bill_attributes[:qrCodePresent]).to be true
+    expect(bill_attributes[:amounts]).to eq [{ total: 5_90, vatRate: 10 }]
+    expect(bill_attributes[:dueDate]).to eq '2017-06-13'
+    expect(bill_attributes[:invoiceDate]).to eq '2017-06-13'
+    expect(bill_attributes[:vatNumber]).to eq 'ATU69210837'
+    expect(bill_attributes[:currencyCode]).to eq 'EUR'
   end
 end
