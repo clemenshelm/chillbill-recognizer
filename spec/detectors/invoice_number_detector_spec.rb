@@ -8,7 +8,7 @@ describe InvoiceNumberDetector do
     # From sMMSHJyCdCKvCZ7ra.jpg
     create(
       :word,
-      text: '0547-20151202-02-5059',
+      text: '1735-20151014-01-9235',
       left: 0.23821989528795812,
       right: 0.40575916230366493,
       top: 0.2130122713591109,
@@ -17,54 +17,54 @@ describe InvoiceNumberDetector do
 
     invoice_numbers = InvoiceNumberDetector.filter
 
-    expect(invoice_numbers.map(&:to_s)).to eq ['0547-20151202-02-5059']
+    expect(invoice_numbers.map(&:to_s)).to eq ['1735-20151014-01-9235']
   end
 
   it 'detects a Spar invoice number' do
-    # From kvAPgEMmAKgLHBLZf.jpg
+    # From kvAPgEMmAKgLHBLZf.pdf
     create(
       :word,
       text: '4144',
-      left: 0.1881544502617801,
-      right: 0.2683246073298429,
-      top: 0.7735061838772165,
-      bottom: 0.7885561019222173
+      left: 0.2964659685863874,
+      right: 0.37663612565445026,
+      top: 0.871554164804053,
+      bottom: 0.8866040828490538
     )
 
     create(
       :word,
       text: '01',
-      left: 0.29221204188481675,
-      right: 0.3298429319371728,
-      top: 0.7732081656981076,
-      bottom: 0.7885561019222173
+      left: 0.4005235602094241,
+      right: 0.4381544502617801,
+      top: 0.8712561466249441,
+      bottom: 0.8866040828490538
     )
 
     create(
       :word,
       text: '8597',
-      left: 0.3550392670157068,
-      right: 0.4352094240837696,
-      top: 0.7732081656981076,
-      bottom: 0.7881090746535538
+      left: 0.46335078534031415,
+      right: 0.543520942408377,
+      top: 0.8712561466249441,
+      bottom: 0.8861570555803904
     )
 
     create(
       :word,
       text: '160930',
-      left: 0.46138743455497383,
-      right: 0.5824607329842932,
-      top: 0.7735061838772165,
-      bottom: 0.7885561019222173
+      left: 0.5696989528795812,
+      right: 0.6907722513089005,
+      top: 0.871554164804053,
+      bottom: 0.8866040828490538
     )
 
     create(
       :word,
       text: '1043',
-      left: 0.6079842931937173,
-      right: 0.6855366492146597,
-      top: 0.7739532111458799,
-      bottom: 0.7893011473699896
+      left: 0.7162958115183246,
+      right: 0.793848167539267,
+      top: 0.8720011920727164,
+      bottom: 0.8873491282968261
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -79,10 +79,10 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '9344001433/00/M/00/N',
-      left: 0.6601243048740595,
-      right: 0.8161596336277396,
-      top: 0.22623178348369188,
-      bottom: 0.23432801295396716
+      left: 0.7363428197579326,
+      right: 0.8923781485116127,
+      top: 0.2509831135785334,
+      bottom: 0.2590793430488087
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -95,10 +95,10 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '295133643413',
-      left: 0.25253516519463526,
-      right: 0.34838076545632973,
-      top: 0.44400740397963906,
-      bottom: 0.45118000925497453
+      left: 0.25286228328426563,
+      right: 0.3487078835459601,
+      top: 0.44423877834335956,
+      bottom: 0.45141138361869504
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -110,15 +110,15 @@ describe InvoiceNumberDetector do
     # From PTaeSF8Baw7F44FGT.pdf
     create(
       :word,
-      text: 'RE0335510',
-      left: 0.08766764802093556,
-      right: 0.17402682368334968,
-      top: 0.31598427018274344,
-      bottom: 0.3247744621790423
+      text: 'RE0337923',
+      left: 0.155053974484789,
+      right: 0.24141315014720313,
+      top: 0.37867221836687487,
+      bottom: 0.38746241036317375
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
-    expect(invoice_numbers.map(&:to_s)).to eq ['RE0335510']
+    expect(invoice_numbers.map(&:to_s)).to eq ['RE0337923']
   end
 
   it 'detects a Google invoice number' do
@@ -126,10 +126,10 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '8640773779761846-5',
-      left: 0.6285994764397905,
-      right: 0.7915575916230366,
-      top: 0.1604995374653099,
-      bottom: 0.1690564292321924
+      left: 0.20451570680628273,
+      right: 0.36747382198952877,
+      top: 0.9067992599444958,
+      bottom: 0.9153561517113784
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -140,26 +140,41 @@ describe InvoiceNumberDetector do
     # From GuhNJ5oRyWN5z92Rk.pdf
     create(
       :word,
-      text: '3199-8987-5671',
-      left: 0.5521753352960419,
-      right: 0.6764802093555774,
-      top: 0.13324080499653018,
-      bottom: 0.14203099699282906
+      text: '8761-4080-2361',
+      left: 0.20451570680628273,
+      right: 0.3239528795811518,
+      top: 0.8734967622571693,
+      bottom: 0.8820536540240518
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
-    expect(invoice_numbers.map(&:to_s)).to eq ['3199-8987-5671']
+    expect(invoice_numbers.map(&:to_s)).to eq ['8761-4080-2361']
   end
 
-  it 'detects a Google invoice number with a different number of digits' do
+  it 'detects a Google invoice number with more digits' do
+    # From GuhNJ5oRyWN5z92Rk.pdf
+    create(
+      :word,
+      text: '9377396032481092-46',
+      left: 0.20451570680628273,
+      right: 0.3769633507853403,
+      top: 0.8901480111008325,
+      bottom: 0.8987049028677151
+    )
+
+    invoice_numbers = InvoiceNumberDetector.filter
+    expect(invoice_numbers.map(&:to_s)).to eq ['9377396032481092-46']
+  end
+
+  it 'detects a Google invoice number with fewer digits' do
     # From 25owtvtff6GnuZHRo.pdf
     create(
       :word,
       text: '360661687549-10',
-      left: 0.6282722513089005,
-      right: 0.7630890052356021,
-      top: 0.18154486586493987,
-      bottom: 0.19010175763182238
+      left: 0.6960078534031413,
+      right: 0.830824607329843,
+      top: 0.20143385753931545,
+      bottom: 0.20999074930619796
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -171,19 +186,19 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '3521',
-      left: 0.007198952879581152,
-      right: 0.03599476439790576,
-      top: 0.2910395924982635,
-      bottom: 0.2986802500578838
+      left: 0.6233638743455497,
+      right: 0.6521596858638743,
+      top: 0.32993748552905766,
+      bottom: 0.33757814308867795
     )
 
     create(
       :word,
       text: '634/092/001/20',
-      left: 0.04548429319371728,
-      right: 0.1531413612565445,
-      top: 0.2910395924982635,
-      bottom: 0.29914332021301226
+      left: 0.6616492146596858,
+      right: 0.7693062827225131,
+      top: 0.32993748552905766,
+      bottom: 0.3380412132438064
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -195,10 +210,10 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '6117223355',
-      left: 0.19136408243375858,
-      right: 0.2832842656198888,
-      top: 0.014341892204487625,
-      bottom: 0.022900763358778626
+      left: 0.28655544651619236,
+      right: 0.3784756297023225,
+      top: 0.08350682396483923,
+      bottom: 0.09206569511913024
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
@@ -210,10 +225,10 @@ describe InvoiceNumberDetector do
     create(
       :word,
       text: '5873',
-      left: 0.48592931937172773,
-      right: 0.506217277486911,
-      top: 0.24491211840888066,
-      bottom: 0.25161887141535616
+      left: 0.4862565445026178,
+      right: 0.506544502617801,
+      top: 0.24629972247918594,
+      bottom: 0.2530064754856614
     )
 
     invoice_numbers = InvoiceNumberDetector.filter

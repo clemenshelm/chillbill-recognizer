@@ -260,7 +260,6 @@ describe BillingPeriodDetector do
     )
   end
 
-  DONE:
   it 'detects the billing period using billing period labels' do
     # From m4F2bLmpKn7wPqM7q.pdf
     BillDimension.create_all(width: 3057, height: 4323)

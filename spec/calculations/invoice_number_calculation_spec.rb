@@ -8,18 +8,18 @@ describe InvoiceNumberCalculation do
 
     InvoiceNumberLabelTerm.create(
       text: 'Re-Nr:',
-      left: 0.18226439790575916,
-      right: 0.22709424083769633,
-      top: 0.2130122713591109,
-      bottom: 0.22273674461680945
+      left: 0.5009816753926701,
+      right: 0.5458115183246073,
+      top: 0.35540634406112526,
+      bottom: 0.3651308173188238
     )
 
     InvoiceNumberTerm.create(
       text: '0547-20151202-02-5059',
-      left: 0.23821989528795812,
-      right: 0.40575916230366493,
-      top: 0.2130122713591109,
-      bottom: 0.22273674461680945
+      left: 0.5569371727748691,
+      right: 0.724476439790576,
+      top: 0.35540634406112526,
+      bottom: 0.3651308173188238
     )
 
     invoice_number_calculation = InvoiceNumberCalculation.new
@@ -40,18 +40,18 @@ describe InvoiceNumberCalculation do
 
     InvoiceNumberLabelTerm.create(
       text: 'Rechnungsnummer',
-      left: 0.1920183186130193,
-      right: 0.34838076545632973,
-      top: 0.0,
-      bottom: 0.011103400416377515
+      left: 0.28720968269545305,
+      right: 0.4435721295387635,
+      top: 0.06916493176035161,
+      bottom: 0.08026833217672913
     )
 
     InvoiceNumberTerm.create(
       text: '6117223355',
-      left: 0.19136408243375858,
-      right: 0.2832842656198888,
-      top: 0.014341892204487625,
-      bottom: 0.022900763358778626
+      left: 0.28655544651619236,
+      right: 0.3784756297023225,
+      top: 0.08350682396483923,
+      bottom: 0.09206569511913024
     )
 
     invoice_number_calculation = InvoiceNumberCalculation.new
@@ -60,12 +60,13 @@ describe InvoiceNumberCalculation do
   end
 
   it 'returns nil if there are unlabelled invoice numbers that need a label' do
+    # From Z6vrodr97FEZXXotA.pdf
     InvoiceNumberTerm.create(
       text: '6117223355',
-      left: 0.19136408243375858,
-      right: 0.2832842656198888,
-      top: 0.014341892204487625,
-      bottom: 0.022900763358778626,
+      left: 0.28655544651619236,
+      right: 0.3784756297023225,
+      top: 0.08350682396483923,
+      bottom: 0.09206569511913024,
       needs_label: true
     )
 
