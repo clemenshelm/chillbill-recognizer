@@ -66,4 +66,25 @@ describe 'recognizing words' do
 
     expect(word2.follows(word1)).to eq false
   end
+
+  it 'two words follow one another despite being distant' do
+    # From pYbaWiFCmR7rbhx9K.png
+    word1 = Word.create(
+      text: 'ATU',
+      left: 0.4444444444444444,
+      right: 0.5050505050505051,
+      top: 0.7075,
+      bottom: 0.7216666666666667
+    )
+
+    word2 = Word.create(
+      text: '69210837',
+      left: 0.5303030303030303,
+      right: 0.697979797979798,
+      top: 0.7075,
+      bottom: 0.7216666666666667
+    )
+
+    expect(word2.follows(word1)).to eq true
+  end
 end
