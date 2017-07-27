@@ -19,6 +19,13 @@ Because of my observations, I assume that the grid search will not have a huge i
 In the Future it is easy to merge all optimization into one big problem that runs a long time and give us the best result.
 
 
+## Possible ways to speed up the process
+- At the moment, we also generate some "useless" attributes, this just gives us the possibillity to easily recalculate some other attribtutes. They are:
+`common_width`, `common_height`, `total_height`, `total_char_counter`, `total_char_width`
+ - group the code better
+ - we should generate `total_height_s` and `total_char_width_s` at the beginning, before making the possible combinations
+ - parallelize the calculations
+
 
 ## Grid search
 The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) needs some adaptations to suits our needs. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it returns the "wrong-positive"-error, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). So for each cost-gamma combination `tune` produces 10 (standard) evaluations of errors. From each of these sets, we need only two numbers, the average standard deviation. The problem is, that only one "NaN" entry destroys the whole set for the combination of C and gamma, because `mean` and `sd` can not handle `NaN`. So we have to adapt these function. Therefore we use `na_omit_mean` and `na_omit_sd` in `tune.control`.

@@ -98,9 +98,11 @@ class BillRecognizer
     end
 
     recognize_words(png_file)
+    filter_words
+
     calculate_text_box
 
-    filter_words
+    process_qr_code_data
     calculate_attributes(version)
   ensure
     @image&.destroy!
@@ -132,15 +134,15 @@ class BillRecognizer
     hocr_doc = Nokogiri::HTML(hocr)
     create_words_from_hocr(hocr_doc)
 
-    puts Word.map { |word|
-      "
-      text: \'#{word.text}\',
-      left: #{word.left},
-      right: #{word.right},
-      top: #{word.top},
-      bottom: #{word.bottom}
-      "
-    }
+    # puts Word.map { |word|
+    #   "
+    #   text: \'#{word.text}\',
+    #   left: #{word.left},
+    #   right: #{word.right},
+    #   top: #{word.top},
+    #   bottom: #{word.bottom}
+    #   "
+    # }
   end
 
   def perform_ocr(png_file)
@@ -207,20 +209,31 @@ class BillRecognizer
     DETECTORS.each(&:filter)
   end
 
+  def process_qr_code_data
+    @qr_data = QRDecoder.new(@image.image).decode_qr_code
+  end
+
   def calculate_attributes(version)
-    {
-      amounts: calculate_amounts,
-      invoiceDate: calculate_invoice_date,
+    bill_attributes = {
       vatNumber: calculate_vat_number,
       billingPeriod: calculate_billing_period,
       currencyCode: calculate_currency,
-      dueDate: calculate_due_date,
       iban: calculate_iban,
       invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @image.calculate_clockwise_rotations_required,
       qrCodePresent: QRDecoder.new(@image.image).qr_code?,
       recognizerVersion: version
     }
+
+    if @qr_data
+      bill_attributes.merge(@qr_data)
+    else
+      bill_attributes.merge(
+        amounts: calculate_amounts,
+        invoiceDate: calculate_invoice_date,
+        dueDate: calculate_due_date
+      )
+    end
   end
 
   def calculate_amounts
