@@ -22,6 +22,8 @@ class QRDecoder
   def decode_qr_code
     return unless qr_code?
     all_data = qr_codes.last.data.split('_')
+    return unless all_data.length == 14
+
     prices = all_data.grep(/\d,\d{2}/)
     prices_and_vats = VAT_RATES.zip(prices).to_h
     prices_present = prices_and_vats.select do |_vat, price|
