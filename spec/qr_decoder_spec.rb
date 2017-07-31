@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_relative '../lib/qr_decoder'
 
-describe QRDecoder, :focus do
+describe QRDecoder do
   describe '#qr_code?' do
     it 'detects that an image contains a QR code' do
       image = Magick::Image.read(
