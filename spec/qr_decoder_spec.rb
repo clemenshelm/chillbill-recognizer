@@ -96,11 +96,20 @@ describe QRDecoder do
 
     it 'extracts a 20% vat rate price from QR code data' do
       image = Magick::Image.read(
-        './spec/support/20-percent-vat-qr-code.pdf'
+        './spec/support/20-percent-vat-qr-code.png'
       ) { self.density = 600 }.first
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
       expect(decoded_qr_code[:amounts]).to eq [{ total: 60_72, vatRate: 20 }]
+    end
+
+    it 'does not decode a QR code in an unknown format' do
+      image = Magick::Image.read(
+        './spec/support/unknown-qr-code.png'
+      ).first
+
+      decoded_qr_code = QRDecoder.new(image).decode_qr_code
+      expect(decoded_qr_code).to be_nil
     end
   end
 end
