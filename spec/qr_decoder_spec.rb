@@ -43,7 +43,7 @@ describe QRDecoder do
     end
   end
 
-  describe '#decode_qr_code', :focus do
+  describe '#decode_qr_code' do
     it 'extracts the desired data from a QR code' do
       image = Magick::Image.read(
         './spec/support/qr-test.pdf'
