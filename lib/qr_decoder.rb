@@ -24,16 +24,12 @@ class QRDecoder
     all_data = qr_codes.last.data.split('_')
     return unless all_data.length == 14
 
-    prices = all_data.grep(/\d,\d{2}/)
+    prices = all_data[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) }
     prices_and_vats = VAT_RATES.zip(prices).to_h
-    prices_present = prices_and_vats.select do |_vat, price|
-      /^(?!.*0,00).*$*\d,\d{2}/ =~ price
-    end
+    prices_present = prices_and_vats.select { |_vat, price| price > 0 }
 
     date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
-    total = (
-      BigDecimal.new(prices_present.values.first.sub!(',', '.')) * 100
-    ).to_i
+    total = (prices_present.values.first * 100).to_i
 
     {
       invoiceDate: date_in_qr,

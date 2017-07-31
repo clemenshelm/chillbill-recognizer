@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_relative '../lib/qr_decoder'
 
-describe QRDecoder do
+describe QRDecoder, :focus do
   describe '#qr_code?' do
     it 'detects that an image contains a QR code' do
       image = Magick::Image.read(
@@ -101,6 +101,15 @@ describe QRDecoder do
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
       expect(decoded_qr_code[:amounts]).to eq [{ total: 60_72, vatRate: 20 }]
+    end
+
+    it 'extracts a high price from QR code data' do
+      image = Magick::Image.read(
+        './spec/support/high-qr-code.jpg'
+      ) { self.density = 600 }.first
+
+      decoded_qr_code = QRDecoder.new(image).decode_qr_code
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 400_00, vatRate: 20 }]
     end
 
     it 'does not decode a QR code in an unknown format' do
