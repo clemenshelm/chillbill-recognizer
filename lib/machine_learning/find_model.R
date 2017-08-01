@@ -9,6 +9,40 @@ library(ggplot2)
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
+######################################
+######    SVM - TYPE OF BILL    ######
+######################################
+
+calibration_data_format <-
+  generate_calibration_data_format(prices_several_bills, correct_price_tuples)
+
+# in this case we do not need to specify the tune function via tune.control
+tuned <- tune( svm,
+               train.x = calibration_data_format[ , c("char_width_med",
+                                                      "char_width_med_b",
+                                                      "text_box_width",
+                                                      "text_box_width_b",
+                                                      "text_box_ratio")],
+               train.y = as.factor(calibration_data_format[ , "format"]),
+               kernel = "radial",
+               type   = "C-classification",
+               scale  = FALSE,
+               ranges = list(
+                 cost = 10 ^ (-2:2),
+                 gamma = 10 ^ (-1:1)
+               ),
+               best.model = TRUE
+)
+
+
+# save model
+saveRDS(tuned$best.model, 'svm-format-search.rds')
+
+
+######################################
+######           SVM            ######
+######################################
+
 calibration_data <- genearte_calibration_data_prices(prices_several_bills, correct_price_tuples)
 
 # Print percentage of right combinations
@@ -17,24 +51,7 @@ cat("Amount of false and right combinations:",
     "<=>", table(calibration_data$valid_amount)[2] / nrow(calibration_data) * 100,
     "% right combinations%\n")
 
-
-######################################
-######    SVM - TYPE OF BILL    ######
-######################################
-
-
-
-
-
-
-
-
-######################################
-######           SVM            ######
-######################################
-
-
-##### ALL POSSIBLE COMBINATIONS OF ATTRIBUTES ##########
+##### ALL POSSIBLE COMBINATIONS OF ATTRIBUTES #######
 # 
 # col_all = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height")
 # 
@@ -51,7 +68,7 @@ cat("Amount of false and right combinations:",
 # 
 
 
-# choose which arguments to use in the SVM
+#### choose which arguments to use in the SVM ####
 col <- c("total_price_s",
          "vat_price_s",
          "rel_p",

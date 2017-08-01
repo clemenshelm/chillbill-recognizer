@@ -13,8 +13,8 @@
 # add fake text_box dimensions to all bills
 # prices_several_bills$text_box_left <- min(prices_several_bills$left)
 # prices_several_bills$text_box_right <- max(prices_several_bills$right)
-# prices_several_bills$text_box_top <- 0.2
-# prices_several_bills$text_box_bottom <- 0.9
+# prices_several_bills$text_box_top <- min(prices_several_bills$top)
+# prices_several_bills$text_box_bottom <- max(prices_several_bills$bottom)
 
 # add fake format to all bills
 # correct_price_tuples$format <- "a4"
