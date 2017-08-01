@@ -1,5 +1,46 @@
 # Machine Learning Documentation
 
+## Description of the attributes
+We generate the attributes (tuples) via the function `generate_tuples`.
+
+|attribute | description |
+| --- | --- |
+| `bill_width`| bill width in px|
+| `bill_height`| bill height in px|
+| `total_id`|unique id of the total price|
+| `total_text` |original text |
+| `total_price`| total price in cents|
+| `total_left` | location of the total price  in percentage|
+| `total_right` | location of the total price  in percentage| 
+| `total_top` | location of the total price  in percentage|
+| `total_bottom`| location of the total price  in percentage|
+| `vat_id` |unique id of the vat |
+| `vat_text` |original text |
+| `vat_price`| vat price in cents |
+| `vat_left` | location of the vat price  in percentage |
+| `vat_right` | location of the vat price  in percentage |
+| `vat_top` | location of the vat price  in percentage |
+| `vat_bottom` | location of the vat price  in percentage |
+| `total_price_s`| scaled total price = price divided by the highesst price on the bill |
+| `vat_price_s` | scaled vat price = price divided by the highesst price on the bill |
+| `rel_p` | proportion of `vat_price` to `total_price` |
+| `common_width` | The common width of the possible `total_price` and the possible `vat_price`|
+| `common_height`| The common height of the possible `total_price` and the possible `vat_price`|
+| `common_width_s` | scaled common width = `common_width` divided by the largest `common_width` in this bill |
+| `common_height_s` | scaled common height = `common_height` divided by the largest `common_height` in this bill |
+| `total_price_order`| position of price entry compared to all prices in the bill |
+| `total_price_uq`| 1 if price is in the upper quartil (25%) of all prices, 0 if not |
+| `total_height`| height of the total price in percentage |
+| `total_height_s`| scaled `total_height` |
+| `total_height_uq` | 1 if the height of the total_price is in the upper quartil (25%) of all heights of that bill, 0 if not|
+| `total_char_counter` | amount of characters in `total_text` |
+| `total_char_width`| average width per character  |
+| `total_char_width_s`| scaled `total_char_width` |
+| `total_char_width_uq` | 1 if `total_char_width`  is in the upper quartil (25%) of all widths of all numbers, 0 if not |
+|`valid_amount`| only needed for training the model. 1 if the combination is correct, 0 if not |
+
+
+
 ## Description of the procedure
 In the long run there are several possibilities to optimize the result:
 
@@ -46,18 +87,7 @@ Overall, we can create several steps (models) from "total overfit" to "none over
 The error we try to minimize in the first place is the "wrong-positive" error. The problem is that we often get zero positive prediction. So from all possible combinations (hyperparameters and attributes) with a low "wrong-positive" error, we should choose the one with a high rate of positive predictions.
 
 
-## Description of the attributes
-We generate the attributes via the function `generate_tuples`.
 
-- `rel_p`           proportion of `vat_price` to `total_price`
-- `price_order`     position of price entry compared to all prices in the bill
-- `price_uq`        1 if price is in the upper quartil (25%), 0 if not
-- `total_price_s`   Scaled total_price
-- `vat_price_s`     Scaled `vat_price`
-- `common_width`    The common width of the possible `total_price` and the possible `vat_price`
-- `common_height`   The common height of the possible `total_price` and the possible `vat_price`
-- `group`           colors for plots
-- `total_height_uq` 1 if the height of the total_price is in the upper quartil (25%), 0 if not
 
 
 ## Measuring the error
