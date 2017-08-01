@@ -27,10 +27,11 @@ namespace :machine_learning do
       store['dimensions'] = {
         'width' => BillDimension.bill_width,
         'height' => BillDimension.bill_height,
-        'text_top' => BillDimension.text_top,
-        'text_bottom' => BillDimension.text_bottom,
-        'text_left' => BillDimension.text_left,
-        'text_right' => BillDimension.text_right
+        'text_box_top' => BillDimension.text_box_top,
+        'text_box_bottom' => BillDimension.text_box_bottom,
+        'text_box_left' => BillDimension.text_box_left,
+        'text_box_right' => BillDimension.text_box_right,
+        'bill_type' => 'A4'
       }
     end
   end
