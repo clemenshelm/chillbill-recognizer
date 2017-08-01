@@ -305,11 +305,16 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
 
     return(list(tuned = tuned,
                 wrong_positive = matrix_wrong_positive,
-                wrong_negative = matrix_wrong_negative))
+                wrong_negative = matrix_wrong_negative,
+                standard_format = data.frame(cost = rep(tuned$performances$cost, each = nruns),
+                                             gamma = rep(tuned$performances$gamma, each = nruns),
+                                             wrong_positive = glob_wrong_positive,
+                                             wrong_negative = glob_wrong_negative)))
     }   else {
     return(tuned$best.parameters)
   }
 }
+
 
 
 
