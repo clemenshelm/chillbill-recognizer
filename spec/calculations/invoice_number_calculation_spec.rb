@@ -4,7 +4,7 @@ require_relative '../../lib/calculations/invoice_number_calculation'
 describe InvoiceNumberCalculation do
   it 'returns a labelled invoice number of the common shop receipt format' do
     # From 6GiWj7tehdimjcpeA.pdf
-    BillDimension.create_all(width: 3056, height: 4319)
+    BillDimension.create_image_dimensions(width: 3056, height: 4319)
 
     InvoiceNumberLabelTerm.create(
       text: 'Re-Nr:',
@@ -36,7 +36,7 @@ describe InvoiceNumberCalculation do
 
   it 'returns an invoice number that is below its label' do
     # From Z6vrodr97FEZXXotA.pdf
-    BillDimension.create_all(width: 3057, height: 4323)
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     InvoiceNumberLabelTerm.create(
       text: 'Rechnungsnummer',

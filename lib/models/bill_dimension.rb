@@ -3,7 +3,7 @@ require 'sequel'
 
 class BillDimension < Sequel::Model
   class << self
-    def create_all(width:, height:)
+    def create_image_dimensions(width:, height:)
       BillDimension.create(name: 'bill_width', dimension: width)
       BillDimension.create(name: 'bill_height', dimension: height)
     end
@@ -20,7 +20,7 @@ class BillDimension < Sequel::Model
       bill_width / bill_height
     end
 
-    def text_box_boundaries(top:, bottom:, left:, right:)
+    def create_text_boundaries(top:, bottom:, left:, right:)
       BillDimension.create(name: 'text_box_top', dimension: top)
       BillDimension.create(name: 'text_box_bottom', dimension: bottom)
       BillDimension.create(name: 'text_box_left', dimension: left)

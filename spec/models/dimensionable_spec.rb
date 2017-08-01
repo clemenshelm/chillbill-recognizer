@@ -5,7 +5,7 @@ require_relative '../factories'
 describe Dimensionable do
   before(:each) do
     # A4 format as default
-    BillDimension.create_all(width: 3057, height: 4323)
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
   end
 
   it 'can detect the width of a term' do
