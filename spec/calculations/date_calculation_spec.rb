@@ -150,7 +150,7 @@ describe DateCalculation do
 
     it 'calculates the due date from a bill' do
       # From 7FDFZnmZmfMyxWZtG.pdf
-      BillDimension.create_all(width: 3056, height: 4324)
+      BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
       create(
         :word,
@@ -212,7 +212,7 @@ describe DateCalculation do
 
     it 'calculates the due date when the Zahlungstermin label is used' do
       # From ZkPkwYF8p6PPLbf7f.pdf
-      BillDimension.create_all(width: 3057, height: 4323)
+      BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
       DueDateLabelTerm.create(
         text: 'Zahlungstermin',
@@ -278,7 +278,7 @@ describe DateCalculation do
 
     it 'calculates the due date when the Zahlungsziel label is used' do
       # From fGHCBxN6cbksNrHpo.pdf
-      BillDimension.create_all(width: 3057, height: 4323)
+      BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
       DueDateLabelTerm.create(
         text: 'Zahlungsziel:',
@@ -303,7 +303,7 @@ describe DateCalculation do
 
     it 'identifies a due date when "Zahlungstermin" is written above' do
       # From xAkCJuSGM8A4ZGoSy.pdf
-      BillDimension.create_all(width: 3057, height: 4323)
+      BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
       DueDateLabelTerm.create(
         text: 'Zahlungstermin',
@@ -336,7 +336,7 @@ describe DateCalculation do
 
     it 'calculates the due date when it is written as prompt' do
       # From ZqMX24iDMxxst5cnP.pdf
-      BillDimension.create_all(width: 3057, height: 4323)
+      BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
       DateTerm.create(
         text: '21.09.2016',
@@ -348,18 +348,18 @@ describe DateCalculation do
 
       DueDateLabelTerm.create(
         text: 'Zahlungsziel:',
-        left: 0.0003333333333333333,
-        right: 0.09666666666666666,
-        top: 0.5762073027090695,
-        bottom: 0.5872791519434629
+        left: 0.09620418848167539,
+        right: 0.19208115183246074,
+        top: 0.6274283071230342,
+        bottom: 0.6382978723404256
       )
 
       RelativeDateTerm.create(
         text: 'prompt',
-        left: 0.11866666666666667,
-        right: 0.16933333333333334,
-        top: 0.5769140164899882,
-        bottom: 0.5872791519434629
+        left: 0.21465968586387435,
+        right: 0.26472513089005234,
+        top: 0.6281221091581869,
+        bottom: 0.6382978723404256
       )
 
       due_date = DateCalculation.new.due_date
@@ -369,7 +369,7 @@ describe DateCalculation do
 
     it 'calculates the due date when it is written as Fällig nach Erhalt' do
       # From bill 9ynzhWf9nSxTrNmPu.pdf
-      BillDimension.create_all(width: 3056, height: 4341)
+      BillDimension.create_image_dimensions(width: 3056, height: 4341)
 
       DateTerm.create(
         text: '2. August 2016',
@@ -401,7 +401,7 @@ describe DateCalculation do
 
     it 'calculates the due date when it is written as Fällig bei Erhalt' do
       # Faked example based on 9ynzhWf9nSxTrNmPu.pdf
-      BillDimension.create_all(width: 3056, height: 4341)
+      BillDimension.create_image_dimensions(width: 3056, height: 4341)
 
       DateTerm.create(
         text: '15. Oktober 2016',

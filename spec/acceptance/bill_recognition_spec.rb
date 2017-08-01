@@ -24,7 +24,6 @@ describe 'Recognizing bills correctly' do
     recognizer = BillRecognizer.new(retriever: retriever)
 
     bill_attributes = recognizer.recognize
-
     expect(bill_attributes[:qrCodePresent]).to be true
     expect(bill_attributes[:amounts]).to eq [{ total: 5_90, vatRate: 10 }]
     expect(bill_attributes[:dueDate]).to eq '2017-06-13'

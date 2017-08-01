@@ -100,6 +100,8 @@ class BillRecognizer
     recognize_words(png_file)
     filter_words
 
+    calculate_text_box
+
     process_qr_code_data
     calculate_attributes(version)
   ensure
@@ -111,7 +113,10 @@ class BillRecognizer
     @image = ImageProcessor.new(image_file.path)
     png_file = @image.preprocess.write_png
 
-    BillDimension.create_all(width: @image.image_width, height: @image.image_height)
+    BillDimension.create_image_dimensions(
+      width: @image.image_width,
+      height: @image.image_height
+    )
 
     png_file
   end
@@ -168,14 +173,11 @@ class BillRecognizer
   end
 
   def adjust_word_attributes(left, top, right, bottom)
-    width = @image.image_width
-    height = @image.image_height
-
     {
-      left: left / width.to_f,
-      right: right / width.to_f,
-      top: top / height.to_f,
-      bottom: bottom / height.to_f
+      left: left / BillDimension.bill_width.to_f,
+      right: right / BillDimension.bill_width.to_f,
+      top: top / BillDimension.bill_height.to_f,
+      bottom: bottom / BillDimension.bill_height.to_f
     }
   end
 
@@ -186,6 +188,20 @@ class BillRecognizer
       right: adjusted_word[:right],
       top: adjusted_word[:top],
       bottom: adjusted_word[:bottom]
+    )
+  end
+
+  def calculate_text_box
+    top = Word.select_order_map(:top).first
+    bottom = Word.select_order_map(:bottom).last
+    left = Word.select_order_map(:left).first
+    right = Word.select_order_map(:right).last
+
+    BillDimension.create_text_boundaries(
+      top: top,
+      bottom: bottom,
+      left: left,
+      right: right
     )
   end
 

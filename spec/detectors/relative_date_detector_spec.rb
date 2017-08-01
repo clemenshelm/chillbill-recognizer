@@ -9,28 +9,28 @@ describe RelativeDateDetector do
     create(
       :word,
       text: 'Zahlungsziel:',
-      left: 0.0003333333333333333,
-      right: 0.09666666666666666,
-      top: 0.5762073027090695,
-      bottom: 0.5872791519434629
+      left: 0.09620418848167539,
+      right: 0.19208115183246074,
+      top: 0.6274283071230342,
+      bottom: 0.6382978723404256
     )
 
     create(
       :word,
       text: 'prompt',
-      left: 0.11866666666666667,
-      right: 0.16933333333333334,
-      top: 0.5769140164899882,
-      bottom: 0.5872791519434629
+      left: 0.21465968586387435,
+      right: 0.26472513089005234,
+      top: 0.6281221091581869,
+      bottom: 0.6382978723404256
     )
 
     create(
       :word,
       text: '-',
-      left: 0.17466666666666666,
-      right: 0.179,
-      top: 0.5809187279151944,
-      bottom: 0.5820965842167256
+      left: 0.27028795811518325,
+      right: 0.2742146596858639,
+      top: 0.6320536540240518,
+      bottom: 0.6329787234042553
     )
 
     relative_words = RelativeDateDetector.filter
@@ -43,28 +43,28 @@ describe RelativeDateDetector do
     create(
       :word,
       text: 'Fällig',
-      left: 0.0032722513089005235,
-      right: 0.04155759162303665,
-      top: 0.8180142824234048,
-      bottom: 0.8295323658143285
+      left: 0.44030094864245994,
+      right: 0.47759241086032056,
+      top: 0.301411057136248,
+      bottom: 0.31251445755262547
     )
 
     create(
       :word,
       text: 'bei',
-      left: 0.04744764397905759,
-      right: 0.08180628272251309,
-      top: 0.8177839207555863,
-      bottom: 0.8269983874683253
+      left: 0.4844618907425581,
+      right: 0.5047432122996401,
+      top: 0.301411057136248,
+      bottom: 0.3102012491325468
     )
 
     create(
       :word,
       text: 'Erhalt',
-      left: 0.08900523560209424,
-      right: 0.13448952879581152,
-      top: 0.8177839207555863,
-      bottom: 0.8306841741534209
+      left: 0.511939810271508,
+      right: 0.5538109257441937,
+      top: 0.301411057136248,
+      bottom: 0.3102012491325468
     )
 
     relative_words = RelativeDateDetector.filter
@@ -72,7 +72,7 @@ describe RelativeDateDetector do
   end
 
   it 'detects the relative word Fällig nach Erhalt' do
-    # From ZqMX24iDMxxst5cnP.pdf
+    # Missing label - needs Fällig nach Erhalt
     create(
       :word,
       text: 'Fällig',

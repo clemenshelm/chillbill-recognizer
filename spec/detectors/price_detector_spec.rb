@@ -316,7 +316,7 @@ describe PriceDetector do
     # from bill 29pwjsKx88nhnQKm9.pdf
 
     # Dummy dimension values for the bill
-    BillDimension.create_all(width: 3056, height: 4324)
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,

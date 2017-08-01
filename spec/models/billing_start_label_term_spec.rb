@@ -6,10 +6,10 @@ describe BillingStartLabelTerm do
     # From m4F2bLmpKn7wPqM7q.pdf
     term = BillingStartLabelTerm.new(
       text: 'Billing Start:',
-      left: 0.4525523560209424,
-      right: 0.4849476439790576,
-      top: 0.1593432007400555,
-      bottom: 0.16651248843663274
+      left: 0.450261780104712,
+      right: 0.5258507853403142,
+      top: 0.2511563367252544,
+      bottom: 0.259713228492136
     )
 
     expect(term.to_s).to eq 'Billing Start:'
