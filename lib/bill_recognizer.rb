@@ -145,7 +145,7 @@ class BillRecognizer
 
   def perform_ocr(png_file)
     tesseract_config = configure_tessarect
-    `tesseract "#{png_file.path}" stdout -l eng+deu #{tesseract_config}`
+    `tesseract "#{png_file.path}" stdout -l eng+deu+hun #{tesseract_config}`
       .force_encoding('UTF-8')
   end
 
