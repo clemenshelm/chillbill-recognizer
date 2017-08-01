@@ -11,14 +11,14 @@
 # price_list = read.csv("csv/2CfCKenByph4Ht8EE.csv", header=TRUE) # problem with total_width_s
 
 # add fake text_box dimensions to all bills
-# prices_several_bills$text_box_left <- 0.1
-# prices_several_bills$text_box_right <- 0.98
+# prices_several_bills$text_box_left <- min(prices_several_bills$left)
+# prices_several_bills$text_box_right <- max(prices_several_bills$right)
 # prices_several_bills$text_box_top <- 0.2
 # prices_several_bills$text_box_bottom <- 0.9
 
-# add fake bill_type to all bills
-# correct_price_tuples$bill_type <- "a4"
-# correct_price_tuples[c(1, 5, 6, 8, 30), "bill_type"] <- "sales_check"
+# add fake format to all bills
+# correct_price_tuples$format <- "a4"
+# correct_price_tuples[c(1, 5, 6, 8, 30), "format"] <- "sales_check"
 
 
 
@@ -33,8 +33,29 @@ library(e1071)
 library(dplyr)
 library(data.table)
 
+recalculate_positions <- function(price_list){
+  horizontal_scaling <- price_list %>%
+    slice(1) %>%
+    transmute( ( 1 - text_box_left ) / (text_box_right - text_box_left) ) %>%
+    as.numeric()
+
+  vertical_scaling <- price_list %>%
+    slice(1) %>%
+    transmute( ( 1 - text_box_top ) / (text_box_bottom - text_box_top) ) %>%
+    as.numeric()
+
+  return(
+    price_list %>% mutate(left = ( left - text_box_left ) * horizontal_scaling, 
+                          right = ( right - text_box_left ) * horizontal_scaling, 
+                          top = ( top - text_box_top ) * vertical_scaling, 
+                          bottom = ( bottom - text_box_top ) * vertical_scaling)
+  )
+}
+
 
 generate_tuples_prices <- function(price_list){
+  # price_list <- recalculate_positions(price_list)
+  
   # Checking of NaN entries in price_list
   if (sum(is.na(price_list)) != 0){
     cat("There are NaN entries in the price list of bill ", toString(price_list$bill_id[1]), "\n")
@@ -168,7 +189,7 @@ genearte_calibration_data_prices <- function(prices_several_bills, correct_price
 }
 
 
-generate_tuples_bill_type <- function(price_list){
+generate_tuples_format <- function(price_list){
   # returns one line of attributes
   char_width_med <- price_list %>%
     group_by(price_id) %>%
@@ -198,7 +219,7 @@ generate_tuples_bill_type <- function(price_list){
 }
 
 
-generate_calibration_data_bill_type <- function(prices_several_bills, correct_price_tuples){
+generate_calibration_data_format <- function(prices_several_bills, correct_price_tuples){
   bill_ids <- prices_several_bills %>% select(bill_id) %>% distinct() %>% lapply(as.character)
 
   calibration_data <- NULL
@@ -206,10 +227,10 @@ generate_calibration_data_bill_type <- function(prices_several_bills, correct_pr
     calibration_data <- rbind(calibration_data,
                               cbind(prices_several_bills %>%
                                       filter(bill_id == i) %>%
-                                      generate_tuples_bill_type(),
+                                      generate_tuples_format(),
                                     correct_tye = correct_price_tuples %>%
                                       filter(bill_id == i) %>%
-                                      select(bill_type)
+                                      select(format)
                                     )
                               )
   }
