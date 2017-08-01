@@ -16,7 +16,7 @@ namespace :machine_learning do
       CSV.open('data/correct_price_tuples.csv', 'wb') do |correct_tuples_csv|
         prices_csv << %w(bill_id price_id text price_cents left right top
                          bottom bill_width bill_height text_box_top text_bottom
-                         text_box_left text_box_right bill_type)
+                         text_box_left text_box_right format)
         correct_tuples_csv << %w(bill_id total_id vat_id vat_rate)
 
         bills.each do |bill|
@@ -41,7 +41,7 @@ namespace :machine_learning do
               bill_dimensions['text_box_top'],
               bill_dimensions['text_box_bottom'],
               bill_dimensions['text_box_left'],
-              bill_dimensions['text_box_right'], bill_dimensions['bill_type']
+              bill_dimensions['text_box_right'], bill_dimensions['format']
             ]
           end
 

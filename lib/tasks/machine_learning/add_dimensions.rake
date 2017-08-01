@@ -31,7 +31,7 @@ namespace :machine_learning do
         'text_box_bottom' => BillDimension.text_box_bottom,
         'text_box_left' => BillDimension.text_box_left,
         'text_box_right' => BillDimension.text_box_right,
-        'bill_type' => 'A4'
+        'format' => 'A4'
       }
     end
   end
