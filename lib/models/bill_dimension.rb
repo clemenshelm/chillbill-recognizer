@@ -20,13 +20,11 @@ class BillDimension < Sequel::Model
       bill_width / bill_height
     end
 
-    def text_box_boundaries(
-      text_box_top:, text_box_bottom:, text_box_left:, text_box_right:
-    )
-      BillDimension.create(name: 'text_box_top', dimension: text_box_top)
-      BillDimension.create(name: 'text_box_bottom', dimension: text_box_bottom)
-      BillDimension.create(name: 'text_box_left', dimension: text_box_left)
-      BillDimension.create(name: 'text_box_right', dimension: text_box_right)
+    def text_box_boundaries(top:, bottom:, left:, right:)
+      BillDimension.create(name: 'text_box_top', dimension: top)
+      BillDimension.create(name: 'text_box_bottom', dimension: bottom)
+      BillDimension.create(name: 'text_box_left', dimension: left)
+      BillDimension.create(name: 'text_box_right', dimension: right)
     end
   end
 end

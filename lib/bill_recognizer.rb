@@ -192,16 +192,16 @@ class BillRecognizer
   end
 
   def calculate_text_box
-    text_box_top = Word.select_order_map(:top).first
-    text_box_bottom = Word.select_order_map(:bottom).last
-    text_box_left = Word.select_order_map(:left).first
-    text_box_right = Word.select_order_map(:right).last
+    top = Word.select_order_map(:top).first
+    bottom = Word.select_order_map(:bottom).last
+    left = Word.select_order_map(:left).first
+    right = Word.select_order_map(:right).last
 
     BillDimension.text_box_boundaries(
-      text_box_top: text_box_top,
-      text_box_bottom: text_box_bottom,
-      text_box_left: text_box_left,
-      text_box_right: text_box_right
+      top: top,
+      bottom: bottom,
+      left: left,
+      right: right
     )
   end
 
