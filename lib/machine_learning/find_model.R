@@ -107,6 +107,8 @@ hyperparameters_detailed <-
 
 {
   # plotting wrong positive
+  hyperparameters_detailed$standard_format %>% ggplot(aes(x = wrong_positive)) # not finished
+
   #x11()
   dev.new()
   dev.new()
