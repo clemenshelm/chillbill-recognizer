@@ -53,7 +53,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq %w(0,95)
   end
 
-  it "includes a word's bounding box", :focus do
+  it "includes a word's bounding box" do
     # From fP5Y5WXQGoF45YePr.pdf
     create(
       :word,
