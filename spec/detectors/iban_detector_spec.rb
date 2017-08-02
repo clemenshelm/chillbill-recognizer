@@ -5,40 +5,41 @@ require_relative '../factories'
 
 describe IbanDetector do
   it 'recognizes IBAN seperated by a space' do
+    # From 7FDFZnmZmfMyxWZtG.pdf
     create(
       :word,
       text: 'IBAN:',
-      left: 1230,
-      right: 1348,
-      top: 3025,
-      bottom: 3060
+      left: 0.5317408376963351,
+      right: 0.5713350785340314,
+      top: 0.8061979648473635,
+      bottom: 0.8142923219241444
     )
 
     create(
       :word,
       text: 'AT28',
-      left: 1365,
-      right: 1477,
-      top: 3025,
-      bottom: 3061
+      left: 0.5768979057591623,
+      right: 0.6138743455497382,
+      top: 0.8061979648473635,
+      bottom: 0.8142923219241444
     )
 
     create(
       :word,
       text: '12000',
-      left: 1497,
-      right: 1631,
-      top: 3025,
-      bottom: 3061
+      left: 0.6210732984293194,
+      right: 0.6652486910994765,
+      top: 0.8061979648473635,
+      bottom: 0.8142923219241444
     )
 
     create(
       :word,
       text: '10011287801',
-      left: 1650,
-      right: 1952,
-      top: 3025,
-      bottom: 3061
+      left: 0.6721204188481675,
+      right: 0.7722513089005235,
+      top: 0.8061979648473635,
+      bottom: 0.8142923219241444
     )
 
     iban = IbanDetector.filter
@@ -46,40 +47,41 @@ describe IbanDetector do
   end
 
   it 'recognizes separated IBAN' do
+    # From 4WaHezqC7H7HgDzcy.pdf
     create(
       :word,
-      text: 'ibon',
-      left: 838,
-      right: 984,
-      top: 2550,
-      bottom: 2606
+      text: 'ibom',
+      left: 0.33496892378148513,
+      right: 0.3837095191364082,
+      top: 0.6888734674994217,
+      bottom: 0.7013647929678464
     )
 
     create(
       :word,
       text: 'AT85',
-      left: 1029,
-      right: 1217,
-      top: 2537,
-      bottom: 2605
+      left: 0.39842983316977426,
+      right: 0.460582270199542,
+      top: 0.6856349757113116,
+      bottom: 0.7013647929678464
     )
 
     create(
       :word,
       text: '11000',
-      left: 1258,
-      right: 1484,
-      top: 2537,
-      bottom: 2605
+      left: 0.47497546614327774,
+      right: 0.5498855086686294,
+      top: 0.6856349757113116,
+      bottom: 0.7013647929678464
     )
 
     create(
       :word,
       text: '10687568500',
-      left: 1523,
-      right: 2036,
-      top: 2537,
-      bottom: 2605
+      left: 0.563297350343474,
+      right: 0.7333987569512594,
+      top: 0.6856349757113116,
+      bottom: 0.7013647929678464
     )
 
     iban = IbanDetector.filter
@@ -87,90 +89,91 @@ describe IbanDetector do
   end
 
   it 'recognizes Austrian IBAN number without space' do
+    # From 9NwagojCEgB3Ex92B.pdf
     create(
       :word,
-      text: 'Umsatzsteuer-Identifikotionsnummer:',
-      left: 1487,
-      right: 2118,
-      top: 3849,
-      bottom: 3882
+      text: 'UID',
+      left: 0.6404972194962382,
+      right: 0.6578344782466471,
+      top: 0.9218135554013417,
+      bottom: 0.9275965764515383
     )
 
     create(
       :word,
-      text: 'AT851100010687868500',
-      left: 2130,
-      right: 2386,
-      top: 3850,
-      bottom: 3882
+      text: 'AT103225000000013300',
+      left: 0.4370297677461564,
+      right: 0.5763820739286882,
+      top: 0.9324543141337035,
+      bottom: 0.9382373351839001
     )
 
     create(
       :word,
-      text: 'ARA',
-      left: 2416,
-      right: 2492,
-      top: 3850,
-      bottom: 3881
+      text: '+43',
+      left: 0.12921164540399083,
+      right: 0.14753025842329082,
+      top: 0.9324543141337035,
+      bottom: 0.9382373351839001
     )
 
     create(
       :word,
-      text: '94647',
-      left: 2503,
-      right: 2615,
-      top: 3850,
-      bottom: 3882
+      text: '2236',
+      left: 0.15145567549885508,
+      right: 0.17598953222113184,
+      top: 0.9324543141337035,
+      bottom: 0.9382373351839001
     )
 
     iban = IbanDetector.filter
-    expect(iban.map(&:to_s)).to eq ['AT851100010687868500']
+    expect(iban.map(&:to_s)).to eq ['AT103225000000013300']
   end
 
   it 'recognizes separated iban with four digits' do
     create(
       :word,
       text: 'AT10',
-      left: 1487,
-      right: 2118,
-      top: 3849,
-      bottom: 3882
+      left: 0.4370297677461564,
+      right: 0.46123650637880276,
+      top: 0.9326856349757113,
+      bottom: 0.9382373351839001
     )
 
     create(
       :word,
       text: '3225',
-      left: 2130,
-      right: 2386,
-      top: 3850,
-      bottom: 3882
+      left: 0.46483480536473665,
+      right: 0.4893686620870134,
+      top: 0.9326856349757113,
+      bottom: 0.9384686560259079
     )
 
     create(
       :word,
       text: '0000',
-      left: 2416,
-      right: 2492,
-      top: 3850,
-      bottom: 3881
+      left: 0.49329407916257767,
+      right: 0.5184821720641152,
+      top: 0.9326856349757113,
+      bottom: 0.9384686560259079
     )
 
     create(
       :word,
       text: '0001',
-      left: 2503,
-      right: 2615,
-      top: 3850,
-      bottom: 3882
+      left: 0.5224075891396794,
+      right: 0.5456329735034348,
+      top: 0.9326856349757113,
+      bottom: 0.9384686560259079
     )
 
     create(
       :word,
       text: '3300',
-      left: 2503,
-      right: 2615,
-      top: 3850,
-      bottom: 3882
+      left: 0.5508668629375204,
+      right: 0.5763820739286882,
+      top: 0.9326856349757113,
+      bottom: 0.9384686560259079
     )
 
     iban = IbanDetector.filter
