@@ -51,6 +51,7 @@ cat("Amount of false and right combinations:",
     "<=>", table(calibration_data$valid_amount)[2] / nrow(calibration_data) * 100,
     "% right combinations%\n")
 
+
 ##### ALL POSSIBLE COMBINATIONS OF ATTRIBUTES #######
 # 
 # col_all = c("total_price_s", "vat_price_s", "rel_p", "price_order", "price_uq", "common_width", "common_height")
