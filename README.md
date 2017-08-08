@@ -84,3 +84,18 @@ docker-compose run tests rspec ./spec/
 ```
 
 _Modify the path in the command to choose specific spec files._
+
+
+# Generating data for machine learning
+
+```shell
+sudo docker-compose run ml rake machine_learning:import_bill_data
+sudo docker-compose run ml rake machine_learning:add_prices
+sudo docker-compose run ml rake machine_learning:list_bills
+```
+At least on ubuntu, you have to change the ownership of the files the edit them (now the owner is root).
+
+```shell
+sudo docker-compose run ml rake machine_learning:add_dimensions
+sudo docker-compose run ml rake machine_learning:generate_csvs
+```
