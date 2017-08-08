@@ -93,7 +93,7 @@ sudo docker-compose run ml rake machine_learning:import_bill_data
 sudo docker-compose run ml rake machine_learning:add_prices
 sudo docker-compose run ml rake machine_learning:list_bills
 ```
-At least on ubuntu, you have to change the ownership of the files the edit them (now the owner is root).
+At least on ubuntu, you have to change the ownership of the files the edit them (now the owner is root). After changing the ownership, you have to correct the  yml files.
 
 ```shell
 sudo docker-compose run ml rake machine_learning:add_dimensions
