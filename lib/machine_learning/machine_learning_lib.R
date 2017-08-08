@@ -16,9 +16,9 @@
 # prices_several_bills$text_box_top <- min(prices_several_bills$top)
 # prices_several_bills$text_box_bottom <- max(prices_several_bills$bottom)
 
-# add fake format to all bills
-# correct_price_tuples$format <- "a4"
-# correct_price_tuples[c(1, 5, 6, 8, 30), "format"] <- "sales_check"
+# add fake bill_format to all bills
+# correct_price_tuples$bill_format <- "a4"
+# correct_price_tuples[c(1, 5, 6, 8, 30), "bill_format"] <- "sales_check"
 
 
 
@@ -230,7 +230,7 @@ generate_calibration_data_format <- function(prices_several_bills, correct_price
                                       generate_tuples_format(),
                                     correct_tye = correct_price_tuples %>%
                                       filter(bill_id == i) %>%
-                                      select(format)
+                                      select(bill_format)
                                     )
                               )
   }
