@@ -12,7 +12,7 @@ describe IbanCalculation do
       bottom: 0.9382373351839001
     )
 
-    VatNumberTerm.create(
+    IbanTerm.create(
       text: 'ATU62799500',
       left: 0.6781157998037292,
       right: 0.7500817795224076,
