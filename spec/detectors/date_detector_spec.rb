@@ -198,7 +198,7 @@ describe DateDetector do
   end
 
   it 'detects the date in the dd/mm/yyyy format' do
-    # Label missing - needs dd/mm/yy
+    # Missing label - needs dd/mm/yy
     create(
       :word,
       text: '7385622',
@@ -472,7 +472,7 @@ describe DateDetector do
   end
 
   it "doesn't detect the end of an invoice number as part of the date" do
-    # Label Missing - needs invoice number followed by short english date
+    # Missing label - needs invoice number followed by short english date
     create(
       :word,
       text: '8640-7737-7976-1846',

@@ -52,7 +52,7 @@ describe BillingPeriodDetector do
   end
 
   it "Recognizes a billing period seperated by the word 'bis' " do
-    # Label missing - needs bis
+    # Missing label - needs bis
     BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     create(
