@@ -131,6 +131,7 @@ describe IbanDetector do
   end
 
   it 'recognizes separated iban with four digits' do
+    # From 2Z5ZYYjfvhvDdhkvw.pdf
     create(
       :word,
       text: 'AT10',
