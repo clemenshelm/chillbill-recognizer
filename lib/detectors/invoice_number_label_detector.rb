@@ -6,7 +6,7 @@ class InvoiceNumberLabelDetector
     Re-Nr: Bon-ID Rech.Nr: Beleg-nr.: Rechnungsnummer: Rechnung: Rechnungsnummer
   ).freeze
   MULTI_WORD_INVOICE_NUMBER_LABELS_REGEX =
-    /(Invoice number:|Billing ID|Rechnung Nr.:)/
+    /(Invoice number:|Billing ID:|Rechnung Nr.:)/
 
   def self.filter
     invoice_number_label_regexes =

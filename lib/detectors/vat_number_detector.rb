@@ -42,10 +42,10 @@ class VatNumberDetector
           end
 
           term.add_word(word)
+
           last_word = word
           term_stale = term.valid_subterm
         end
-
         terms.compact
       end
   end

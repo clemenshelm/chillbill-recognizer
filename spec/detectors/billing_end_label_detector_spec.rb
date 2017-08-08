@@ -9,19 +9,19 @@ describe BillingEndLabelDetector do
     create(
       :word,
       text: 'Billing',
-      left: 0.4093586387434555,
-      right: 0.4476439790575916,
-      top: 0.17437557816836263,
-      bottom: 0.18316373728029603
+      left: 0.450261780104712,
+      right: 0.4885471204188482,
+      top: 0.26595744680851063,
+      bottom: 0.27451433857539315
     )
 
     create(
       :word,
       text: 'End:',
-      left: 0.45287958115183247,
-      right: 0.4800392670157068,
-      top: 0.17437557816836263,
-      bottom: 0.18131359851988899
+      left: 0.493782722513089,
+      right: 0.5209424083769634,
+      top: 0.26595744680851063,
+      bottom: 0.272895467160037
     )
 
     billing_end_labels = BillingEndLabelDetector.filter

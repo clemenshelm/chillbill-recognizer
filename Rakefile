@@ -67,7 +67,7 @@ end
 
 desc 'Pushes newest docker image to ECS repository'
 task :push_image => [:increment_version] do
-  sh "(aws ecr get-login --region eu-central-1) | /bin/bash
+  sh "(aws ecr get-login --no-include-email --region eu-central-1) | /bin/bash
 
       docker build -t recognizer-repo .
 

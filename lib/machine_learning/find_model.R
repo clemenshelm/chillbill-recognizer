@@ -1,10 +1,9 @@
 # Set Working Directory to Source file location (only necessary in RStudio)
 # RScript uses automatically the right directory
 {
-library(e1071)
+
 source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
-# require(geoR)
-library(fields)
+library(fields) # for scatterplot
 library(ggplot2)
 
 ######################################
@@ -13,15 +12,15 @@ library(ggplot2)
 # This section will go to machine_learning_lib.R
 
 # load data from several bills
-prices_several_bills <- read.csv("prices.csv", header = TRUE)
-correct_price_tuples <- read.csv("correct_price_tuples.csv", header = TRUE)
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
 # generate tuples and add attributes
 tab <- table(prices_several_bills$bill_id)
 calibration_data <-
   generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
 for (i in 2:length(tab)){
-  # cat("Bill #", i, "; \n")
+  # cat("Bill #", i, "; Bill id:", names(tab)[i],"\n")
   calibration_data <-
     rbind(calibration_data,
           generate_tuples(prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
@@ -29,9 +28,9 @@ for (i in 2:length(tab)){
 
 # adding correct answer in "valid_amount"
 calibration_data[, "valid_amount"] <- 0
-calibration_data[   calibration_data$total_id %in% correct_price_tuples$total_id &
-                    calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
-#calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
+calibration_data[calibration_data$total_id %in% correct_price_tuples$total_id &
+                 calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <-  1
+# calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
 
 # Change Row namesto 1, 2, 3, ...
 rownames(calibration_data) <- NULL
@@ -67,9 +66,18 @@ cat("Amount of false and right combinations:",
 # 
 
 
-# choose which arguments are for the SVM
-col <- c("total_price_s", "vat_price_s", "rel_p", "price_order",
-        "price_uq", "common_width", "common_height", "height_uq")
+# choose which arguments to use in the SVM
+col <- c("total_price_s",
+         "vat_price_s",
+         "rel_p",
+         "common_width_s",
+         "common_height_s",
+         "total_price_order",
+         "total_price_uq",
+         "total_height_s",
+         "total_height_uq",
+         "total_char_width_s",
+         "total_char_width_uq")
 
 
 
@@ -84,8 +92,7 @@ gamma_range <- 10 ^ (-1:1)
 
 # Grid search for the hyperparameters using ALL data
 data_train <- calibration_data[, col]
-answer_train <- as.factor(calibration_data[, "valid_amount"])
-
+answer_train <- calibration_data[, "valid_amount"]
 
 # Detaild output
 hyperparameters_detailed <-

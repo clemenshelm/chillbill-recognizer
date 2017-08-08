@@ -45,6 +45,9 @@ gem 'rb-libsvm'
 # QR Code reader
 gem 'zbar', require: false
 
+# Tracks errors
+gem 'rollbar'
+
 group :development do
   gem 'colorize' # Colorizes shell output
   gem 'mongo'

@@ -19,6 +19,13 @@ Because of my observations, I assume that the grid search will not have a huge i
 In the Future it is easy to merge all optimization into one big problem that runs a long time and give us the best result.
 
 
+## Possible ways to speed up the process
+- At the moment, we also generate some "useless" attributes, this just gives us the possibillity to easily recalculate some other attribtutes. They are:
+`common_width`, `common_height`, `total_height`, `total_char_counter`, `total_char_width`
+ - group the code better
+ - we should generate `total_height_s` and `total_char_width_s` at the beginning, before making the possible combinations
+ - parallelize the calculations
+
 
 ## Grid search
 The build in function `tune` for finding the best "hyper-parameters" (in our case C and gamma) needs some adaptations to suits our needs. By default it uses "cross validation" and produces for each combination 10 error outputs. The error is measured by the total fit but we need the "wrong-positive". Via `tune.control` we can change the error function so that it returns the "wrong-positive"-error, but there is the possibility (the higher the less data we use) of "NaN" results (see "Measuring the error" for more details). So for each cost-gamma combination `tune` produces 10 (standard) evaluations of errors. From each of these sets, we need only two numbers, the average standard deviation. The problem is, that only one "NaN" entry destroys the whole set for the combination of C and gamma, because `mean` and `sd` can not handle `NaN`. So we have to adapt these function. Therefore we use `na_omit_mean` and `na_omit_sd` in `tune.control`.
@@ -90,12 +97,21 @@ https://cran.r-project.org/bin/linux/debian/
 http://www.jason-french.com/blog/2013/03/11/installing-r-in-linux/
 ```
 
-I was not able to use the GPG key. Therefore I just used:
+add the cran link to sources.list to get R 3.4
 ```shell
-sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
-apt-get update
-apt-get install r-base r-base-dev
+RUN sh -c 'echo "deb http://cran.rstudio.com/bin/linux/debian jessie-cran34/" >> /etc/apt/sources.list'
 ```
+
+add key, this is important to verify the new R version
+```shell
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+
+RUN apt-get update && apt-get install -y \
+  r-base \
+  r-recommended
+```
+
+
 
 **Linter in R**
 

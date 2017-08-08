@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative './rollbar'
 require 'eventmachine'
 require 'metybur'
 require 'em-hiredis'
@@ -52,5 +53,8 @@ class Hub
         yield(recognition_result, bills[id], meteor)
       end
     end
+  rescue Exception => e # rubocop:disable Lint/RescueException
+    Rollbar.error(e)
+    raise e
   end
 end

@@ -39,6 +39,20 @@ describe DateTerm do
     expect(term.to_datetime).to eq DateTime.iso8601('2016-12-14')
   end
 
+  it 'returns nil for an invalid date format' do
+    term = DateTerm.new(
+      text: '14:30.11111111111111111111111111111111111.111111111111111111111111111.'
+    )
+    expect(term.to_datetime).to be_nil
+  end
+
+  it 'returns nil for another invalid date format' do
+    term = DateTerm.new(
+      text: '11111111111.11.1111111111111111121.'
+    )
+    expect(term.to_datetime).to be_nil
+  end
+
   it 'returns false if the format is not valid' do
     # From pHD2HWtSA4sEFuvHS.pdf
     term = DateTerm.new(text: '30.2.15')

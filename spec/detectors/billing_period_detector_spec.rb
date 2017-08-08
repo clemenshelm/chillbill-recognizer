@@ -7,69 +7,42 @@ require_relative '../factories'
 describe BillingPeriodDetector do
   it 'Recognises the billing period from a bill' do
     # From ZkPkwYF8p6PPLbf7f.pdf
-    BillDimension.create_all(width: 3057, height: 4323)
-
-    create(
-      :word,
-      text: 'T-Mobile',
-      left: 339,
-      right: 599,
-      top: 685,
-      bottom: 740
-    )
-
-    create(
-      :word,
-      text: 'Rechnung',
-      left: 623,
-      right: 925,
-      top: 685,
-      bottom: 753
-    )
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     create(
       :word,
       text: 'Rechnungszeitraum:',
-      left: 206,
-      right: 575,
-      top: 774,
-      bottom: 816
+      left: 0.14556754988550866,
+      right: 0.26856395158652274,
+      top: 0.34374277122368724,
+      bottom: 0.35368956743002544
     )
 
     create(
       :word,
       text: '01.03.2015',
-      left: 591,
-      right: 798,
-      top: 773,
-      bottom: 809
+      left: 0.27347072293097807,
+      right: 0.34216552175335296,
+      top: 0.3435114503816794,
+      bottom: 0.3518390006939625
     )
 
     create(
       :word,
       text: '-',
-      left: 809,
-      right: 819,
-      top: 794,
-      bottom: 797
+      left: 0.3464180569185476,
+      right: 0.3496892378148512,
+      top: 0.34836918806384454,
+      bottom: 0.34906315058986814
     )
 
     create(
       :word,
       text: '31.03.2015',
-      left: 832,
-      right: 1038,
-      top: 773,
-      bottom: 809
-    )
-
-    create(
-      :word,
-      text: 'USt.',
-      left: 1856,
-      right: 1931,
-      top: 934,
-      bottom: 970
+      left: 0.35361465489041544,
+      right: 0.42230945371279033,
+      top: 0.3435114503816794,
+      bottom: 0.3518390006939625
     )
 
     dates = DateDetector.filter
@@ -79,8 +52,8 @@ describe BillingPeriodDetector do
   end
 
   it "Recognizes a billing period seperated by the word 'bis' " do
-    # No idea what bill this comes from. Guessing dimensions ...
-    BillDimension.create_all(width: 3057, height: 4323)
+    # Label missing - needs bis
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     create(
       :word,
@@ -135,86 +108,77 @@ describe BillingPeriodDetector do
 
   it "it doesn't consider other dates as part of the billing period" do
     # No idea what bill this comes from. Guessing dimensions ...
-    BillDimension.create_all(width: 3057, height: 4323)
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     create(
       :word,
-      text: 'Ausstellungsdatum:',
-      left: 1298,
-      right: 1735,
-      top: 770,
-      bottom: 817
+      text: 'Zahlungstermin',
+      left: 0.59633627739614,
+      right: 0.6892378148511613,
+      top: 0.22600046264168402,
+      bottom: 0.2359472588480222
     )
 
     create(
       :word,
-      text: '30.11.2015',
-      left: 1885,
-      right: 2129,
-      top: 770,
-      bottom: 807
+      text: '13.04.2016',
+      left: 0.8079816813869807,
+      right: 0.8756951259404645,
+      top: 0.22576914179967614,
+      bottom: 0.2340966921119593
     )
 
     create(
       :word,
-      text: 'EUR:',
-      left: 1747,
-      right: 1860,
-      top: 1508,
-      bottom: 1545
+      text: 'Rechnungszeitraum:',
+      left: 0.14556754988550866,
+      right: 0.26856395158652274,
+      top: 0.34374277122368724,
+      bottom: 0.35368956743002544
     )
 
     create(
       :word,
-      text: 'Work',
-      left: 269,
-      right: 393,
-      top: 1194,
-      bottom: 1230
-    )
-
-    create(
-      :word,
-      text: '01.11.2015',
-      left: 1301,
-      right: 1546,
-      top: 1194,
-      bottom: 1230
+      text: '01.03.2016',
+      left: 0.27347072293097807,
+      right: 0.34249263984298334,
+      top: 0.3435114503816794,
+      bottom: 0.3518390006939625
     )
 
     create(
       :word,
       text: '-',
-      left: 1565,
-      right: 1580,
-      top: 1214,
-      bottom: 1221
+      left: 0.3464180569185476,
+      right: 0.3496892378148512,
+      top: 0.34836918806384454,
+      bottom: 0.34906315058986814
     )
 
     create(
       :word,
-      text: '30.11.2015',
-      left: 1595,
-      right: 1840,
-      top: 1194,
-      bottom: 1230
+      text: '31.03.2016',
+      left: 0.35361465489041544,
+      right: 0.42263657180242065,
+      top: 0.3435114503816794,
+      bottom: 0.3518390006939625
     )
 
     DateDetector.filter
     billing_periods = BillingPeriodDetector.filter
 
     expect(billing_periods.first.from.to_datetime).to eq DateTime.iso8601(
-      '2015-11-01'
+      '2016-03-01'
     )
 
     expect(billing_periods.first.to.to_datetime).to eq DateTime.iso8601(
-      '2015-11-30'
+      '2016-03-31'
     )
   end
 
   it 'prefers from dates closer to the separator' do
     # From 3EagyvJYF2RJhNTQC.pdf
-    BillDimension.create_all(width: 3056, height: 4324)
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -262,38 +226,38 @@ describe BillingPeriodDetector do
 
   it 'detects the billing period using billing period labels' do
     # From m4F2bLmpKn7wPqM7q.pdf
-    BillDimension.create_all(width: 3057, height: 4323)
+    BillDimension.create_image_dimensions(width: 3057, height: 4323)
 
     BillingStartLabelTerm.create(
       text: 'Billing Start:',
-      left: 0.4525523560209424,
-      right: 0.4849476439790576,
-      top: 0.1593432007400555,
-      bottom: 0.16651248843663274
+      left: 0.450261780104712,
+      right: 0.5258507853403142,
+      top: 0.2511563367252544,
+      bottom: 0.259713228492136
     )
 
     DateTerm.create(
       text: '22 October 2016',
-      left: 0.5788612565445026,
-      right: 0.6070026178010471,
-      top: 0.1593432007400555,
-      bottom: 0.16628122109158186
+      left: 0.5517015706806283,
+      right: 0.6479057591623036,
+      top: 0.2511563367252544,
+      bottom: 0.2578630897317299
     )
 
     BillingEndLabelTerm.create(
       text: 'Billing End:',
-      left: 0.45287958115183247,
-      right: 0.4800392670157068,
-      top: 0.17437557816836263,
-      bottom: 0.18131359851988899
+      left: 0.450261780104712,
+      right: 0.5209424083769634,
+      top: 0.26595744680851063,
+      bottom: 0.27451433857539315
     )
 
     DateTerm.create(
       text: '27 October 2016',
-      left: 0.5788612565445026,
-      right: 0.6070026178010471,
-      top: 0.17414431082331175,
-      bottom: 0.1810823311748381
+      left: 0.5517015706806283,
+      right: 0.6479057591623036,
+      top: 0.26595744680851063,
+      bottom: 0.27266419981498613
     )
 
     billing_periods = BillingPeriodDetector.filter

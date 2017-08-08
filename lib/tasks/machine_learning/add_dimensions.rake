@@ -26,7 +26,12 @@ namespace :machine_learning do
       recognizer.download_and_convert_image
       store['dimensions'] = {
         'width' => BillDimension.bill_width,
-        'height' => BillDimension.bill_height
+        'height' => BillDimension.bill_height,
+        'text_box_top' => BillDimension.text_box_top,
+        'text_box_bottom' => BillDimension.text_box_bottom,
+        'text_box_left' => BillDimension.text_box_left,
+        'text_box_right' => BillDimension.text_box_right,
+        'format' => 'A4'
       }
     end
   end

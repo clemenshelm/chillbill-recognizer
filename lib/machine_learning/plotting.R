@@ -80,4 +80,52 @@ for(i in 1:length(tab)){
 
 ##################################
 
+#### plot the character width in percentage of the bill width ####
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
 
+to_string_nchar <- function(x){
+  nchar(toString(x))
+}
+
+price_list2 <- prices_several_bills %>%
+  mutate(char_width = (right - left) / sapply(price_list$text, to_string_nchar))
+
+# scale for plot (divide by max char_width per bill)
+price_list2 <- price_list2 %>% group_by(bill_id) %>%
+  mutate(char_width_s = char_width/ max(char_width), max_width = max(char_width))
+price_list2[, "valid_amount"] <- 0
+price_list2[price_list2$price_id %in% correct_price_tuples$total_id,  "valid_amount"] <-  1
+
+ggplot(price_list2, aes(x = char_width_s)) + geom_dotplot(aes(color = factor(valid_amount))) + facet_wrap(~ bill_id)
+
+custom
+
+#### plotting total_char_width_s vs. total_height_s
+# need to load "calibration_data"
+ggplot(calibration_data, aes(x = total_char_width_s, y = total_height_s)) +
+  geom_point(aes(color = factor(valid_amount), size = calibration_data$valid_amount/2 + 0.3)) +
+  facet_wrap(~ bill_id)
+
+
+#### plotting  "common_width_s" vs. "common_height_s"
+ggplot(calibration_data, aes(x = common_width_s, y = common_height_s)) +
+  geom_point(aes(color = factor(valid_amount), size = factor(calibration_data$valid_amount/2 + 0.3))) +
+  facet_wrap(~ bill_id)
+
+
+
+
+
+#### plot page ratio of bill
+prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
+one_element_per_bill <- prices_several_bills %>%
+  group_by(bill_id) %>%
+  slice(1) %>%
+  ungroup
+
+one_element_per_bill <- one_element_per_bill %>% mutate(bill_ratio = bill_height / bill_width) %>% filter(bill_ratio > 1) 
+ggplot(data = one_element_per_bill, aes(x = bill_ratio)) +
+  geom_histogram() +
+  geom_density(kernel = "gaussian") +
+  geom_segment(aes(x = 297/210, y = 0, xend = 297/210, yend = 20))
