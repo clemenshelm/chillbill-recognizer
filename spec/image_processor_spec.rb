@@ -46,20 +46,4 @@ describe ImageProcessor do
     width = corrected_image.image_width
     expect(width).to eq 3
   end
-
-  it "gets the width of a bill's first page after trimming" do
-    original_width = image_to_be_trimmed.image_width
-    trimmed_width = image_to_be_trimmed.trim.image_width
-
-    expect(original_width).to eq 2268
-    expect(trimmed_width).to eq 1658
-  end
-
-  it "gets the height of a bill's first page after trimming" do
-    original_height = image_to_be_trimmed.image_height
-    trimmed_height = image_to_be_trimmed.trim.image_height
-
-    expect(original_height).to eq 4032
-    expect(trimmed_height).to eq 3818
-  end
 end

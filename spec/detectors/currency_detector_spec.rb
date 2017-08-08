@@ -5,40 +5,32 @@ require_relative '../factories'
 
 describe CurrencyDetector do
   it 'recognizes EUR currency on a bill' do
+    # From 3NcAALw3DfrfuLRJ4.png
     create(
       :word,
       text: 'EUR',
-      left: 777,
-      right: 843,
-      top: 778,
-      bottom: 818
+      left: 0.9229607250755287,
+      right: 0.9561933534743202,
+      top: 0.77196261682243,
+      bottom: 0.7869158878504673
     )
 
     create(
       :word,
-      text: '4,49',
-      left: 943,
-      right: 1037,
-      top: 778,
-      bottom: 824
+      text: 'sum.,',
+      left: 0.716012084592145,
+      right: 0.7749244712990937,
+      top: 0.794392523364486,
+      bottom: 0.8093457943925234
     )
 
     create(
       :word,
-      text: '17055576',
-      left: 79,
-      right: 264,
-      top: 835,
-      bottom: 880
-    )
-
-    create(
-      :word,
-      text: '023667',
-      left: 292,
-      right: 434,
-      top: 838,
-      bottom: 880
+      text: 'saaaszurz',
+      left: 0.8670694864048338,
+      right: 0.9561933534743202,
+      top: 0.794392523364486,
+      bottom: 0.8093457943925234
     )
 
     currencies = CurrencyDetector.filter
@@ -46,49 +38,32 @@ describe CurrencyDetector do
   end
 
   it 'recognizes € currency on a bill' do
+    # From 6rYBRincCdkNbCeRB.pdf
     create(
       :word,
-      text: '2,59',
-      left: 730,
-      right: 822,
-      top: 1429,
-      bottom: 1476
-    )
-
-    create(
-      :word,
-      text: 'mie-52.2.0',
-      left: 924,
-      right: 1235,
-      top: 1428,
-      bottom: 1483
-    )
-
-    create(
-      :word,
-      text: 'Betrag',
-      left: 248,
-      right: 391,
-      top: 1550,
-      bottom: 1643
+      text: '20,54',
+      left: 0.8406413612565445,
+      right: 0.8864528795811518,
+      top: 0.5413968547641073,
+      bottom: 0.5531914893617021
     )
 
     create(
       :word,
       text: '€',
-      left: 1019,
-      right: 1044,
-      top: 1549,
-      bottom: 1639
+      left: 0.8923429319371727,
+      right: 0.9024869109947644,
+      top: 0.5413968547641073,
+      bottom: 0.5511100832562442
     )
 
     create(
       :word,
-      text: '1,18',
-      left: 1091,
-      right: 1185,
-      top: 1549,
-      bottom: 1642
+      text: 'Menge',
+      left: 0.07591623036649214,
+      right: 0.13383507853403143,
+      top: 0.4794172062904718,
+      bottom: 0.4921369102682701
     )
 
     currencies = CurrencyDetector.filter
@@ -96,6 +71,7 @@ describe CurrencyDetector do
   end
 
   it 'recognizes USD and $ currency on a bill' do
+    # Missing label - needs USD and $
     create(
       :word,
       text: 'USD',
@@ -155,6 +131,7 @@ describe CurrencyDetector do
   end
 
   it 'recognizes CHF currency on a bill' do
+    # Missing label - needs CHF
     create(
       :word,
       text: 'CHF',
@@ -187,58 +164,32 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes CNY currency on the bill' do
-    create(
-      :word,
-      text: '2',
-      left: 61,
-      right: 86,
-      top: 2687,
-      bottom: 2724
-    )
-
-    create(
-      :word,
-      text: 'rooms',
-      left: 103,
-      right: 243,
-      top: 2697,
-      bottom: 2724
-    )
-
+    # From 4KGwfH74J25TQgMGX.pdf
     create(
       :word,
       text: 'CNY',
-      left: 1946,
-      right: 2046,
-      top: 2687,
-      bottom: 2724
+      left: 0.7833769633507853,
+      right: 0.8160994764397905,
+      top: 0.697383653623524,
+      bottom: 0.7059504514934013
     )
 
     create(
       :word,
       text: '3,685',
-      left: 2061,
-      right: 2179,
-      top: 2687,
-      bottom: 2731
+      left: 0.8213350785340314,
+      right: 0.8602748691099477,
+      top: 0.697383653623524,
+      bottom: 0.7078027321139153
     )
 
     create(
       :word,
       text: 'CNY',
-      left: 1868,
-      right: 2003,
-      top: 2804,
-      bottom: 2852
-    )
-
-    create(
-      :word,
-      text: '3,685',
-      left: 2022,
-      right: 2178,
-      top: 2805,
-      bottom: 2862
+      left: 0.756871727748691,
+      right: 0.8017015706806283,
+      top: 0.725167862931234,
+      bottom: 0.7362815466543181
     )
 
     currencies = CurrencyDetector.filter
@@ -246,6 +197,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes SEK currency on the bill' do
+    # Missing label - needs SEK
     create(
       :word,
       text: 'SEK',
@@ -305,6 +257,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes GBP currency on the bill' do
+    # Missing label - needs GBP
     create(
       :word,
       text: '£45.00',
@@ -391,6 +344,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes £ currency on the bill' do
+    # Missing label - needs £
     create(
       :word,
       text: '£45.00',
@@ -450,7 +404,7 @@ describe CurrencyDetector do
   end
 
   it 'detects HUF as Ft. on a bill' do
-    # From bsg8XJqLBJSt2dXeH.pdf
+    # Missing label - needs Ft.
     create(
       :word,
       text: 'Ft.',
@@ -465,23 +419,23 @@ describe CurrencyDetector do
   end
 
   it 'detects EUR as Euro on a bill' do
-    # From mMHiT2b3C5fgYqBzY
+    # From mMHiT2b3C5fgYqBzY.pdf
     create(
       :word,
       text: 'Summe',
-      left: 0.584,
-      right: 0.6416666666666667,
-      top: 0.9112789051439358,
-      bottom: 0.9202453987730062
+      left: 0.5991492146596858,
+      right: 0.6564136125654451,
+      top: 0.9298123697011814,
+      bottom: 0.938846421125781
     )
 
     create(
       :word,
       text: 'Euro',
-      left: 0.648,
-      right: 0.6816666666666666,
-      top: 0.9112789051439358,
-      bottom: 0.9202453987730062
+      left: 0.6632853403141361,
+      right: 0.6966623036649214,
+      top: 0.9300440120454019,
+      bottom: 0.9388464211257818
     )
 
     currencies = CurrencyDetector.filter

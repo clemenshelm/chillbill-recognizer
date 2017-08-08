@@ -74,20 +74,11 @@ class ImageProcessor
     end
   end
 
-  def trim
-    @image.fuzz = '70%'
-    @image.trim!
-    @image_width = @image.columns
-    @image_height = @image.rows
-    self
-  end
-
   def preprocess
     correct_orientation
     apply_background('#fff')
     deskew
     normalize
-    trim
     improve_level
   end
 

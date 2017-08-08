@@ -3,7 +3,7 @@ require_relative '../../lib/calculations/currency_calculation'
 
 describe CurrencyCalculation do
   it 'detects currency code which appear most often in bill' do
-    # From bsg8XJqLBJSt2dXeH.pdf
+    # Missing label - needs Ft.
 
     PriceTerm.create(
       text: '9900',
@@ -53,26 +53,26 @@ describe CurrencyCalculation do
 
     PriceTerm.create(
       text: '20,54',
-      left: 0.7735602094240838,
-      right: 0.819371727748691,
-      top: 0.4405642923219241,
-      bottom: 0.45166512488436633
+      left: 0.39659685863874344,
+      right: 0.44273560209424084,
+      top: 0.6228029602220166,
+      bottom: 0.6339037927844589
     )
 
     CurrencyTerm.create(
       text: '€',
-      left: 0.8255890052356021,
-      right: 0.8354057591623036,
-      top: 0.4405642923219241,
-      bottom: 0.45004625346901017
+      left: 0.4489528795811518,
+      right: 0.4587696335078534,
+      top: 0.6228029602220166,
+      bottom: 0.6322849213691026
     )
 
     CurrencyTerm.create(
       text: '£0.00',
-      left: 0.5765706806282722,
-      right: 0.6220549738219895,
-      top: 0.5640610545790934,
-      bottom: 0.5740055504162812
+      left: 0.5569371727748691,
+      right: 0.5916230366492147,
+      top: 0.6228029602220166,
+      bottom: 0.6339037927844589
     )
 
     currency = CurrencyCalculation.new.iso
@@ -88,18 +88,18 @@ describe CurrencyCalculation do
     # From 3NcAALw3DfrfuLRJ4.png
     CurrencyTerm.create(
       text: 'EUR',
-      left: 0.37009063444108764,
-      right: 0.4123867069486405,
-      top: 0.20186915887850468,
-      bottom: 0.2205607476635514
+      left: 0.9229607250755287,
+      right: 0.9561933534743202,
+      top: 0.77196261682243,
+      bottom: 0.7869158878504673
     )
 
     CurrencyTerm.create(
       text: 'EUR',
-      left: 0.6132930513595166,
-      right: 0.6465256797583081,
-      top: 0.6186915887850467,
-      bottom: 0.6336448598130842
+      left: 0.9229607250755287,
+      right: 0.9561933534743202,
+      top: 0.8542056074766355,
+      bottom: 0.8691588785046729
     )
 
     currency = CurrencyCalculation.new.iso

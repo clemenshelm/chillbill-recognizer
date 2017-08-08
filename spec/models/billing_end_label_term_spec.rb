@@ -6,10 +6,10 @@ describe BillingEndLabelTerm do
     # From m4F2bLmpKn7wPqM7q.pdf
     term = BillingEndLabelTerm.new(
       text: 'Billing End:',
-      left: 0.45287958115183247,
-      right: 0.4800392670157068,
-      top: 0.17437557816836263,
-      bottom: 0.18131359851988899
+      left: 0.450261780104712,
+      right: 0.5209424083769634,
+      top: 0.26595744680851063,
+      bottom: 0.27451433857539315
     )
 
     expect(term.to_s).to eq 'Billing End:'

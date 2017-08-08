@@ -19,7 +19,7 @@ class InvoiceNumberDetector
       Word.all, GOOGLE_INVOICE_NUMBER_REGEX, max_words: 1
     )
     reduced_words -= find_invoice_numbers(
-      reduced_words, DRUCK_INVOICE_NUMBER_REGEX
+      reduced_words, DRUCK_INVOICE_NUMBER_REGEX, max_words: 1
     )
     reduced_words -= find_invoice_numbers(
       reduced_words, A1_INVOICE_NUMBER_REGEX, max_words: 1

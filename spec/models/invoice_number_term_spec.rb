@@ -11,10 +11,10 @@ describe InvoiceNumberTerm do
     # From 6bWSXJ7fdLRbtbzaE.pdf
     term = InvoiceNumberTerm.new(
       text: '3521 634/092/001/20',
-      left: 0.007198952879581152,
-      right: 0.03599476439790576,
-      top: 0.2910395924982635,
-      bottom: 0.2986802500578838,
+      left: 0.6233638743455497,
+      right: 0.7693062827225131,
+      top: 0.32993748552905766,
+      bottom: 0.3380412132438064,
       needs_label: true
     )
 

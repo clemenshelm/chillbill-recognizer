@@ -100,6 +100,9 @@ class BillRecognizer
     recognize_words(png_file)
     filter_words
 
+    calculate_text_box
+
+    process_qr_code_data
     calculate_attributes(version)
   ensure
     @image&.destroy!
@@ -110,7 +113,10 @@ class BillRecognizer
     @image = ImageProcessor.new(image_file.path)
     png_file = @image.preprocess.write_png
 
-    BillDimension.create_all(width: @image.image_width, height: @image.image_height)
+    BillDimension.create_image_dimensions(
+      width: @image.image_width,
+      height: @image.image_height
+    )
 
     png_file
   end
@@ -144,7 +150,7 @@ class BillRecognizer
 
   def perform_ocr(png_file)
     tesseract_config = configure_tessarect
-    `tesseract "#{png_file.path}" stdout -l eng+deu #{tesseract_config}`
+    `tesseract "#{png_file.path}" stdout -l eng+deu+hun #{tesseract_config}`
       .force_encoding('UTF-8')
   end
 
@@ -167,14 +173,11 @@ class BillRecognizer
   end
 
   def adjust_word_attributes(left, top, right, bottom)
-    width = @image.image_width
-    height = @image.image_height
-
     {
-      left: left / width.to_f,
-      right: right / width.to_f,
-      top: top / height.to_f,
-      bottom: bottom / height.to_f
+      left: left / BillDimension.bill_width.to_f,
+      right: right / BillDimension.bill_width.to_f,
+      top: top / BillDimension.bill_height.to_f,
+      bottom: bottom / BillDimension.bill_height.to_f
     }
   end
 
@@ -188,24 +191,49 @@ class BillRecognizer
     )
   end
 
+  def calculate_text_box
+    top = Word.select_order_map(:top).first
+    bottom = Word.select_order_map(:bottom).last
+    left = Word.select_order_map(:left).first
+    right = Word.select_order_map(:right).last
+
+    BillDimension.create_text_boundaries(
+      top: top,
+      bottom: bottom,
+      left: left,
+      right: right
+    )
+  end
+
   def filter_words
     DETECTORS.each(&:filter)
   end
 
+  def process_qr_code_data
+    @qr_data = QRDecoder.new(@image.image).decode_qr_code
+  end
+
   def calculate_attributes(version)
-    {
-      amounts: calculate_amounts,
-      invoiceDate: calculate_invoice_date,
+    bill_attributes = {
       vatNumber: calculate_vat_number,
       billingPeriod: calculate_billing_period,
       currencyCode: calculate_currency,
-      dueDate: calculate_due_date,
       iban: calculate_iban,
       invoiceNumber: calculate_invoice_number,
       clockwiseRotationsRequired: @image.calculate_clockwise_rotations_required,
       qrCodePresent: QRDecoder.new(@image.image).qr_code?,
       recognizerVersion: version
     }
+
+    if @qr_data
+      bill_attributes.merge(@qr_data)
+    else
+      bill_attributes.merge(
+        amounts: calculate_amounts,
+        invoiceDate: calculate_invoice_date,
+        dueDate: calculate_due_date
+      )
+    end
   end
 
   def calculate_amounts
