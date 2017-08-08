@@ -20,6 +20,7 @@ describe PriceCalculation do
   end
 
   it 'takes the right amount if there is no VAT' do
+    # Missing Label - needs amount without VAT
     PriceTerm.create(
       text: '1.185,00',
       left: 2199,
@@ -42,6 +43,7 @@ describe PriceCalculation do
   end
 
   it 'takes the right amount if the VAT is 0' do
+    # Missing Label - needs a price with 0% vat
     PriceTerm.create(
       text: '80,00',
       left: 2320,
@@ -96,6 +98,7 @@ describe PriceCalculation do
   end
 
   it 'takes the highest right amount if there are multiple' do
+    # Missing Label - needs several prices without vats
     PriceTerm.create(
       text: '190,00',
       left: 2706,
@@ -134,6 +137,7 @@ describe PriceCalculation do
   end
 
   it 'takes the highes net amount and VAT amount if there are many choices' do
+    # Missing Label - needs several prices with vats
     PriceTerm.create(
       text: '14,49',
       left: 2703,
@@ -274,6 +278,7 @@ describe PriceCalculation do
   end
 
   it 'accepts a price term including a € symbol' do
+    # Missing Label - needs a price with a euro symbol
     PriceTerm.create(
       text: '€86.97',
       left: '2355',

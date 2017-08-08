@@ -417,7 +417,7 @@ describe VatNumberDetector do
   end
 
   it 'ignores EUR with digits following' do
-    # Label missing - needs EUR followed by digits
+    # Missing label - needs EUR followed by digits
     create(
       :word,
       text: 'EUR',

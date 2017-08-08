@@ -51,7 +51,7 @@ describe RelativeDateDetector do
 
     create(
       :word,
-      text: 'bei',
+      text: 'nach',
       left: 0.4844618907425581,
       right: 0.5047432122996401,
       top: 0.301411057136248,
@@ -68,11 +68,11 @@ describe RelativeDateDetector do
     )
 
     relative_words = RelativeDateDetector.filter
-    expect(relative_words.map(&:to_s)).to eq ['Fällig bei Erhalt']
+    expect(relative_words.map(&:to_s)).to eq ['Fällig nach Erhalt']
   end
 
   it 'detects the relative word Fällig nach Erhalt' do
-    # Missing label - needs Fällig nach Erhalt
+    # Missing label - needs Fällig bei Erhalt
     create(
       :word,
       text: 'Fällig',
@@ -84,7 +84,7 @@ describe RelativeDateDetector do
 
     create(
       :word,
-      text: 'nach',
+      text: 'bei',
       left: 0.04744764397905759,
       right: 0.08180628272251309,
       top: 0.8177839207555863,
@@ -101,6 +101,6 @@ describe RelativeDateDetector do
     )
 
     relative_words = RelativeDateDetector.filter
-    expect(relative_words.map(&:to_s)).to eq ['Fällig nach Erhalt']
+    expect(relative_words.map(&:to_s)).to eq ['Fällig bei Erhalt']
   end
 end
