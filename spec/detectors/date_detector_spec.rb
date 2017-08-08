@@ -5,7 +5,7 @@ require_relative '../factories' # should be loaded automatically
 
 describe DateDetector do
   it 'finds short German dates' do
-    # From bill m6jLaPhmWvuZZqSXy
+    # From bill m6jLaPhmWvuZZqSXy.pdf
     %w(9025 0650/004/133 04.04.2015 13133).each_with_index do |text, index|
       left = index * 100
       create(:word, text: text, left: left, right: left + 20)
@@ -16,7 +16,7 @@ describe DateDetector do
   end
 
   it 'does finds dates connected to other words' do
-    # From bill m6jLaPhmWvuZZqSXy
+    # From bill m6jLaPhmWvuZZqSXy.pdf
     create(:word, text: '04.04.2015/13132257')
 
     dates = DateDetector.filter
@@ -24,7 +24,7 @@ describe DateDetector do
   end
 
   it 'detects multiple dates in a document' do
-    # From bill 4f5mhL6zBb3cyny7n
+    # From bill 4f5mhL6zBb3cyny7n.pdf
     %w(01.04.2015 28.02.15 31.03.15 27.02.2015 16.03.15)
       .each { |text| create(:word, text: text) }
 
@@ -34,7 +34,7 @@ describe DateDetector do
   end
 
   it 'detects dates spread over several words' do
-    # From bill XYt8oerHesxQkdwvp
+    # From bill XYt8oerHesxQkdwvp.pdf
     create_following_words(%w(10 04.2015))
 
     dates = DateDetector.filter
@@ -42,35 +42,57 @@ describe DateDetector do
   end
 
   it 'detects dates spread over several words with periods recognized' do
-    # From bill a8sPrtNYneSzxram9
+    # From bill a8sPrtNYneSzxram9.pdf
     create(
       :word,
       text: '22.1',
-      left: 0.7833769633507853,
-      right: 0.8069371727748691,
-      top: 0.2835337650323774,
-      bottom: 0.2918593894542091
+      left: 0.5448298429319371,
+      right: 0.5683900523560209,
+      top: 0.6417668825161887,
+      bottom: 0.6498612395929695
     )
 
     create(
       :word,
       text: '1.2016',
-      left: 0.8125,
-      right: 0.8524214659685864,
-      top: 0.2835337650323774,
-      bottom: 0.29162812210915817
+      left: 0.5736256544502618,
+      right: 0.6138743455497382,
+      top: 0.6415356151711379,
+      bottom: 0.6498612395929695
     )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-11-22']
   end
 
-  it 'does not detect words as date with too much space in between' do
-    # From bill gANywe3fjvx98iPp2
-    # Horizontal gap
-    create(:word, text: 1, left: 1098, right: 1128, top: 1715, bottom: 1929)
-    create(:word, text: 9, left: 2187, right: 2292, top: 1719, bottom: 1961)
-    create(:word, text: 99, left: 2311, right: 2432, top: 1721, bottom: 1934)
+  it 'does not detect words with a horizontal gap as date' do
+    # From bill gANywe3fjvx98iPp2.pdf
+    create(
+      :word,
+      text: '2',
+      left: 0.8982329842931938,
+      right: 0.9168848167539267,
+      top: 0.3379619739371929,
+      bottom: 0.36210211493270666
+    )
+
+    create(
+      :word,
+      text: '1',
+      left: 0.36714659685863876,
+      right: 0.3763089005235602,
+      top: 0.3751335184789575,
+      bottom: 0.42127750480666526
+    )
+
+    create(
+      :word,
+      text: '1,99',
+      left: 0.7297120418848168,
+      right: 0.8105366492146597,
+      top: 0.3762016663106174,
+      bottom: 0.4283272804956206
+    )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
@@ -103,7 +125,7 @@ describe DateDetector do
     create_following_words(%w(Freitag 4. Dezember 2015))
     # from bill yiaGswKDskiLNkafN.pdf
     create_following_words(%w(01. September 2016))
-    # from bill CuJiDWLneTaSFin4P
+    # from bill CuJiDWLneTaSFin4P.pdf
     create_following_words(%w(3. Oktober 2016))
     dates = DateDetector.filter
     expect(date_strings(dates))
@@ -147,84 +169,36 @@ describe DateDetector do
     create(
       :word,
       text: '+43',
-      left: 2018,
-      right: 2087,
-      top: 223,
-      bottom: 257
+      left: 0.7464005235602095,
+      right: 0.768651832460733,
+      top: 0.10407030527289547,
+      bottom: 0.11147086031452359
     )
 
     create(
       :word,
       text: '1',
-      left: 2103,
-      right: 2121,
-      top: 223,
-      bottom: 256
+      left: 0.774869109947644,
+      right: 0.7804319371727748,
+      top: 0.10407030527289547,
+      bottom: 0.11147086031452359
     )
 
     create(
       :word,
       text: '2675366',
-      left: 2137,
-      right: 2303,
-      top: 223,
-      bottom: 257
+      left: 0.7859947643979057,
+      right: 0.8406413612565445,
+      top: 0.10407030527289547,
+      bottom: 0.11147086031452359
     )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'detects the date in the dd/mm/yy format' do
-    create(
-      :word,
-      text: '7385622',
-      left: 201,
-      right: 340,
-      top: 1396,
-      bottom: 1426
-    )
-
-    create(
-      :word,
-      text: '3670800',
-      left: 480,
-      right: 619,
-      top: 1397,
-      bottom: 1427
-    )
-    create(
-      :word,
-      text: '1/03/16',
-      left: 779,
-      right: 895,
-      top: 1397,
-      bottom: 1427
-    )
-
-    create(
-      :word,
-      text: 'lNTERNET',
-      left: 1065,
-      right: 1259,
-      top: 1397,
-      bottom: 1426
-    )
-
-    create(
-      :word,
-      text: 'BO',
-      left: 1312,
-      right: 1367,
-      top: 1397,
-      bottom: 1426
-    )
-
-    dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2016-03-01']
-  end
-
   it 'detects the date in the dd/mm/yyyy format' do
+    # Missing label - needs dd/mm/yy
     create(
       :word,
       text: '7385622',
@@ -259,69 +233,51 @@ describe DateDetector do
   it 'detects multiple dates on a bill' do
     create(
       :word,
-      text: 'Datum',
-      left: 1613,
-      right: 1732,
-      top: 497,
-      bottom: 529
+      text: 'Rechnungsdatum',
+      left: 0.5969905135754007,
+      right: 0.7026496565260059,
+      top: 0.21188989127920427,
+      bottom: 0.22183668748554244
     )
 
     create(
       :word,
-      text: '16.03.2016',
-      left: 1819,
-      right: 2026,
-      top: 498,
-      bottom: 529
+      text: '08.04.2016',
+      left: 0.8066732090284593,
+      right: 0.8756951259404645,
+      top: 0.21165857043719638,
+      bottom: 0.21998612074947954
     )
 
     create(
       :word,
-      text: '5020',
-      left: 352,
-      right: 444,
-      top: 531,
-      bottom: 563
+      text: '13.04.2016',
+      left: 0.8079816813869807,
+      right: 0.8756951259404645,
+      top: 0.22576914179967614,
+      bottom: 0.2340966921119593
     )
 
     create(
       :word,
-      text: 'Salzburg',
-      left: 459,
-      right: 623,
-      top: 530,
-      bottom: 572
+      text: 'Ihre',
+      left: 0.14622178606476938,
+      right: 0.18253189401373895,
+      top: 0.3224612537589637,
+      bottom: 0.33541522091140413
     )
 
     create(
       :word,
-      text: 'Fällig',
-      left: 1636,
-      right: 1732,
-      top: 585,
-      bottom: 626
-    )
-
-    create(
-      :word,
-      text: '21.03.2016',
-      left: 1816,
-      right: 2026,
-      top: 586,
-      bottom: 618
-    )
-
-    create(
-      :word,
-      text: 'Rechnung',
-      left: 2,
-      right: 190,
-      top: 752,
-      bottom: 793
+      text: '01.03.2016',
+      left: 0.27347072293097807,
+      right: 0.34249263984298334,
+      top: 0.3435114503816794,
+      bottom: 0.3518390006939625
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2016-03-16', '2016-03-21']
+    expect(date_strings(dates)).to eq ['2016-04-08', '2016-04-13', '2016-03-01']
   end
 
   it 'detects Februar' do
@@ -329,28 +285,28 @@ describe DateDetector do
     create(
       :word,
       text: '27.',
-      left: 0.0003333333333333333,
-      right: 0.014,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.725130890052356,
+      right: 0.75032722513089,
+      top: 0.28330249768732657,
+      bottom: 0.29324699352451433
     )
 
     create(
       :word,
       text: 'Februar',
-      left: 0.018666666666666668,
-      right: 0.06533333333333333,
-      top: 0.5587750294464076,
-      bottom: 0.5656065959952886
+      left: 0.7598167539267016,
+      right: 0.8285340314136126,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
     )
 
     create(
       :word,
       text: '2017',
-      left: 0.06833333333333333,
-      right: 0.09666666666666666,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.8347513089005235,
+      right: 0.8782722513089005,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
     )
 
     dates = DateDetector.filter
@@ -363,43 +319,43 @@ describe DateDetector do
     create(
       :word,
       text: '27',
-      left: 0.0003333333333333333,
-      right: 0.014,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.04155759162303665,
+      right: 0.0549738219895288,
+      top: 0.650555041628122,
+      bottom: 0.6572617946345976
     )
 
     create(
       :word,
       text: 'October',
-      left: 0.018666666666666668,
-      right: 0.06533333333333333,
-      top: 0.5587750294464076,
-      bottom: 0.5656065959952886
+      left: 0.05988219895287958,
+      right: 0.10602094240837696,
+      top: 0.650555041628122,
+      bottom: 0.6572617946345976
     )
 
     create(
       :word,
       text: '2016',
-      left: 0.06833333333333333,
-      right: 0.09666666666666666,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.10962041884816753,
+      right: 0.13776178010471204,
+      top: 0.650555041628122,
+      bottom: 0.6572617946345976
     )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-10-27']
   end
 
-  it 'detects yyyy.mm.dd regex' do
+  it 'detects a date in the format yyyy.mm.dd ' do
     # From bsg8XJqLBJSt2dXeH.pdf
     create(
       :word,
-      text: '2016.10.01',
-      left: 0.8226666666666667,
-      right: 0.893,
-      top: 0.1608951707891637,
-      bottom: 0.16772673733804475
+      text: '2016.10.01.',
+      left: 0.8229712041884817,
+      right: 0.893324607329843,
+      top: 0.1681313598519889,
+      bottom: 0.17483811285846437
     )
 
     dates = DateDetector.filter
@@ -412,10 +368,10 @@ describe DateDetector do
     create(
       :word,
       text: '30-09-2016',
-      left: 0.0003333333333333333,
-      right: 0.014,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.7460732984293194,
+      right: 0.8232984293193717,
+      top: 0.22422978920546677,
+      bottom: 0.2323372712531851
     )
 
     dates = DateDetector.filter
@@ -427,18 +383,18 @@ describe DateDetector do
     create(
       :word,
       text: '03-Oct-2016',
-      left: 0.7594895287958116,
-      right: 0.8403141361256544,
-      top: 0.06452358926919519,
-      bottom: 0.07238667900092507
+      left: 0.7964659685863874,
+      right: 0.8769633507853403,
+      top: 0.13899167437557816,
+      bottom: 0.14685476410730805
     )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-10-03']
   end
 
-  it 'detects date format yyyy/mm/yy' do
-    # from bill SaJwGfhgFR6FxCoxe
+  it 'detects date format yyyy/mm/dd' do
+    # Missing Label - needs yyyy/mm/dd
     create(
       :word,
       text: 'Datum:',
@@ -466,19 +422,19 @@ describe DateDetector do
     create(
       :word,
       text: '2016.11.04',
-      left: 0.8226666666666667,
-      right: 0.893,
-      top: 0.1608951707891637,
-      bottom: 0.16772673733804475
+      left: 0.7087696335078534,
+      right: 0.7607984293193717,
+      top: 0.1769195189639223,
+      bottom: 0.18293246993524515
     )
 
     create(
       :word,
       text: '09:40:02',
-      left: 0.8226666666666667,
-      right: 0.893,
-      top: 0.1608951707891637,
-      bottom: 0.16772673733804475
+      left: 0.7640706806282722,
+      right: 0.8043193717277487,
+      top: 0.1769195189639223,
+      bottom: 0.18293246993524515
     )
 
     dates = DateDetector.filter
@@ -489,11 +445,11 @@ describe DateDetector do
     # From Sqc9ixBz4g8mDCdJK.pdf
     create(
       :word,
-      text: '0211-20160901-01-4844',
-      left: 0.149869109947644,
-      right: 0.5981675392670157,
-      top: 0.6031074835283705,
-      bottom: 0.6171698298751106
+      text: '0211-20150901-01-4844',
+      left: 0.24345549738219896,
+      right: 0.6904450261780105,
+      top: 0.6584718261382634,
+      bottom: 0.67214082013964
     )
 
     dates = DateDetector.filter
@@ -504,35 +460,11 @@ describe DateDetector do
     # From FsZPCR9omH4SAvJ7m.pdf
     create(
       :word,
-      text: '25.1',
-      left: 0.10598626104023552,
-      right: 0.1377167157343801,
-      top: 0.6734505087881592,
-      bottom: 0.6836262719703978
-    )
-
-    create(
-      :word,
-      text: '1.2816',
-      left: 0.14327772325809618,
-      right: 0.1959437356885836,
-      top: 0.6729879740980573,
-      bottom: 0.6833950046253469
-    )
-
-    dates = DateDetector.filter
-    expect(date_strings(dates)).to be_empty
-  end
-
-  it 'does not detect long hungarian super future dates' do
-    # From 3KdmxTXLCTMdyeduw.pdf
-    create(
-      :word,
-      text: 'l111115153115.11.15',
-      left: 0.0,
-      right: 0.12401832460732984,
-      top: 0.13058578374623755,
-      bottom: 0.1535077564250984
+      text: '25.12.2816',
+      left: 0.10794896957801767,
+      right: 0.19757932613673537,
+      top: 0.6757631822386679,
+      bottom: 0.6864014801110083
     )
 
     dates = DateDetector.filter
@@ -540,6 +472,7 @@ describe DateDetector do
   end
 
   it "doesn't detect the end of an invoice number as part of the date" do
+    # Missing label - needs invoice number followed by short english date
     create(
       :word,
       text: '8640-7737-7976-1846',
@@ -569,97 +502,66 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it "doesn't detect a year that is too short" do
-    create(
-      :word,
-      text: '30.',
-      left: 0.5107913669064749,
-      right: 0.5336821451929366,
-      top: 0.18631530282015718,
-      bottom: 0.19579288025889968
-    )
-
-    create(
-      :word,
-      text: 'September',
-      left: 0.5405493786788751,
-      right: 0.6324395029431,
-      top: 0.18539066111881647,
-      bottom: 0.19879796578825706
-    )
-
-    create(
-      :word,
-      text: '203',
-      left: 0.6383257030739045,
-      right: 0.6644865925441465,
-      top: 0.18631530282015718,
-      bottom: 0.19579288025889968
-    )
-
-    create(
-      :word,
-      text: '6',
-      left: 0.6690647482014388,
-      right: 0.6782210595160235,
-      top: 0.18631530282015718,
-      bottom: 0.19579288025889968
-    )
-
-    dates = DateDetector.filter
-    expect(date_strings(dates)).to be_empty
-  end
-
   it 'returns nil if the date is not correct' do
     # from bill pHD2HWtSA4sEFuvHS.pdf
     create(
       :word,
-      text: '31.30',
-      left: 0.7081151832460733,
-      right: 0.8164267015706806,
-      top: 0.4988910793494332,
-      bottom: 0.5117052735337605
+      text: '31.',
+      left: 0.7676701570680629,
+      right: 0.824607329842932,
+      top: 0.5165105963528832,
+      bottom: 0.5292015771315919
+    )
+
+    create(
+      :word,
+      text: '30',
+      left: 0.8350785340314136,
+      right: 0.8759816753926701,
+      top: 0.5166338097585017,
+      bottom: 0.5293247905372105
     )
 
     create(
       :word,
       text: '2.15',
-      left: 0.20647905759162305,
-      right: 0.2905759162303665,
-      top: 0.5547067520946279,
-      bottom: 0.5682602267126663
+      left: 0.2660340314136126,
+      right: 0.35013089005235604,
+      top: 0.5723262690980778,
+      bottom: 0.5858797437161163
     )
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
+
   it 'detects a date in August, in the format "Month Day, Year"' do
     # From D9KKkDdhbd2JzaS2C.pdf
     create(
       :word,
       text: 'August',
-      left: 0.5304319371727748,
-      right: 0.580824607329843,
-      top: 0.12372802960222017,
-      bottom: 0.1332099907493062
+      left: 0.618782722513089,
+      right: 0.669175392670157,
+      top: 0.26780758556891765,
+      bottom: 0.2772895467160037
     )
 
     create(
       :word,
       text: '27,',
-      left: 0.5857329842931938,
-      right: 0.6043848167539267,
-      top: 0.12372802960222017,
-      bottom: 0.13274745605920443
+      left: 0.6740837696335078,
+      right: 0.6927356020942408,
+      top: 0.26780758556891765,
+      bottom: 0.27682701202590193
     )
 
     create(
       :word,
       text: '2016',
-      left: 0.6102748691099477,
-      right: 0.6416884816753927,
-      top: 0.12372802960222017,
-      bottom: 0.1311285846438483
+      left: 0.6986256544502618,
+      right: 0.7300392670157068,
+      top: 0.26780758556891765,
+      bottom: 0.27520814061054577
     )
 
     dates = DateDetector.filter
@@ -671,28 +573,28 @@ describe DateDetector do
     create(
       :word,
       text: '1',
-      left: 0.07787958115183247,
-      right: 0.08475130890052356,
-      top: 0.5227617602427921,
-      bottom: 0.5313606474456247
+      left: 0.12467277486910995,
+      right: 0.13154450261780104,
+      top: 0.5923115832068792,
+      bottom: 0.6009104704097117
     )
 
     create(
       :word,
       text: 'Jul',
-      left: 0.08933246073298429,
-      right: 0.10798429319371727,
-      top: 0.5220030349013657,
-      bottom: 0.5313606474456247
+      left: 0.13612565445026178,
+      right: 0.15477748691099477,
+      top: 0.5915528578654528,
+      bottom: 0.6011633788568538
     )
 
     create(
       :word,
       text: '2016',
-      left: 0.11387434554973822,
-      right: 0.1482329842931937,
-      top: 0.52250885179565,
-      bottom: 0.5313606474456247
+      left: 0.1606675392670157,
+      right: 0.1950261780104712,
+      top: 0.592058674759737,
+      bottom: 0.6011633788568538
     )
 
     dates = DateDetector.filter
@@ -703,15 +605,15 @@ describe DateDetector do
     # From KCsWbyeAvH7RMi2hL.pdf
     create(
       :word,
-      text: '09/16/2013',
-      left: 0.08047105004906771,
-      right: 0.16323192672554793,
-      top: 0.16631968540365488,
-      bottom: 0.17510987739995373
+      text: '09/17/2013',
+      left: 0.14066077854105333,
+      right: 0.21524370297677461,
+      top: 0.6426092990978487,
+      bottom: 0.650705528568124
     )
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq ['2013-09-16']
+    expect(date_strings(dates)).to eq ['2013-09-17']
   end
 
   it 'detects August' do
@@ -719,28 +621,28 @@ describe DateDetector do
     create(
       :word,
       text: '29.',
-      left: 0.4204842931937173,
-      right: 0.4375,
-      top: 0.17625058438522676,
-      bottom: 0.182328190743338
+      left: 0.4201570680628272,
+      right: 0.43717277486910994,
+      top: 0.3574100046750818,
+      bottom: 0.3634876110331931
     )
 
     create(
       :word,
       text: 'August',
-      left: 0.44142670157068065,
-      right: 0.48232984293193715,
-      top: 0.17601683029453016,
-      bottom: 0.1841982234689107
+      left: 0.4407722513089005,
+      right: 0.48200261780104714,
+      top: 0.35717625058438524,
+      bottom: 0.3653576437587658
     )
 
     create(
       :word,
       text: '2016',
       left: 0.48592931937172773,
-      right: 0.5137434554973822,
-      top: 0.17625058438522676,
-      bottom: 0.182328190743338
+      right: 0.5130890052356021,
+      top: 0.3574100046750818,
+      bottom: 0.3634876110331931
     )
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-08-29']
@@ -751,37 +653,37 @@ describe DateDetector do
     create(
       :word,
       text: '27.',
-      left: 0.0003333333333333333,
-      right: 0.014,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.725130890052356,
+      right: 0.75032722513089,
+      top: 0.28330249768732657,
+      bottom: 0.29324699352451433
     )
 
     create(
       :word,
       text: 'Februar',
-      left: 0.018666666666666668,
-      right: 0.06533333333333333,
-      top: 0.5587750294464076,
-      bottom: 0.5656065959952886
+      left: 0.7598167539267016,
+      right: 0.8285340314136126,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
     )
 
     create(
       :word,
       text: '2017',
-      left: 0.06833333333333333,
-      right: 0.09666666666666666,
-      top: 0.5585394581861013,
-      bottom: 0.5656065959952886
+      left: 0.8347513089005235,
+      right: 0.8782722513089005,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
     )
 
     create(
       :word,
       text: '51/5/38',
-      left: 0.5363219895287958,
-      right: 0.5765706806282722,
-      top: 0.005319148936170213,
-      bottom: 0.01156336725254394
+      left: 0.6479057591623036,
+      right: 0.6881544502617801,
+      top: 0.0786308973172988,
+      bottom: 0.08487511563367253
     )
 
     dates = DateDetector.filter
@@ -793,29 +695,29 @@ describe DateDetector do
 
     create(
       :word,
-      text: '90230863021707',
-      left: 0.902011707710941,
-      right: 0.98756848607186112,
-      top: 0.060762837637281,
-      bottom: 0.0539329177797566
+      text: '902308630217',
+      left: 0.7814851161269218,
+      right: 0.8756951259404645,
+      top: 0.19731667823270876,
+      bottom: 0.2056442285449919
     )
 
     create(
       :word,
       text: '07.02.2017',
-      left: 0.9023011707710941,
-      right: 0.9874848607186112,
-      top: 0.06470762837637281,
-      bottom: 0.07539329177797566
+      left: 0.8066732090284593,
+      right: 0.8756951259404645,
+      top: 0.21165857043719638,
+      bottom: 0.21998612074947954
     )
 
     create(
       :word,
       text: '15.02.2017',
-      left: 0.9039160274525636,
-      right: 0.9874848607186112,
-      top: 0.08281389136242208,
-      bottom: 0.09349955476402494
+      left: 0.8079816813869807,
+      right: 0.8756951259404645,
+      top: 0.22576914179967614,
+      bottom: 0.2340966921119593
     )
 
     dates = DateDetector.filter

@@ -71,7 +71,7 @@ describe CurrencyDetector do
   end
 
   it 'recognizes USD and $ currency on a bill' do
-    # Label missing - needs USD and $
+    # Missing label - needs USD and $
     create(
       :word,
       text: 'USD',
@@ -131,7 +131,7 @@ describe CurrencyDetector do
   end
 
   it 'recognizes CHF currency on a bill' do
-    # Label missing - needs CHF
+    # Missing label - needs CHF
     create(
       :word,
       text: 'CHF',
@@ -164,59 +164,32 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes CNY currency on the bill' do
-    # Label missing - needs CNY
-    create(
-      :word,
-      text: '2',
-      left: 61,
-      right: 86,
-      top: 2687,
-      bottom: 2724
-    )
-
-    create(
-      :word,
-      text: 'rooms',
-      left: 103,
-      right: 243,
-      top: 2697,
-      bottom: 2724
-    )
-
+    # From 4KGwfH74J25TQgMGX.pdf
     create(
       :word,
       text: 'CNY',
-      left: 1946,
-      right: 2046,
-      top: 2687,
-      bottom: 2724
+      left: 0.7833769633507853,
+      right: 0.8160994764397905,
+      top: 0.697383653623524,
+      bottom: 0.7059504514934013
     )
 
     create(
       :word,
       text: '3,685',
-      left: 2061,
-      right: 2179,
-      top: 2687,
-      bottom: 2731
+      left: 0.8213350785340314,
+      right: 0.8602748691099477,
+      top: 0.697383653623524,
+      bottom: 0.7078027321139153
     )
 
     create(
       :word,
       text: 'CNY',
-      left: 1868,
-      right: 2003,
-      top: 2804,
-      bottom: 2852
-    )
-
-    create(
-      :word,
-      text: '3,685',
-      left: 2022,
-      right: 2178,
-      top: 2805,
-      bottom: 2862
+      left: 0.756871727748691,
+      right: 0.8017015706806283,
+      top: 0.725167862931234,
+      bottom: 0.7362815466543181
     )
 
     currencies = CurrencyDetector.filter
@@ -224,7 +197,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes SEK currency on the bill' do
-    # Label missing - needs SEK
+    # Missing label - needs SEK
     create(
       :word,
       text: 'SEK',
@@ -284,7 +257,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes GBP currency on the bill' do
-    # Label missing - needs GBP
+    # Missing label - needs GBP
     create(
       :word,
       text: '£45.00',
@@ -371,7 +344,7 @@ describe CurrencyDetector do
   end
 
   it 'regcognizes £ currency on the bill' do
-    # Label missing - needs £
+    # Missing label - needs £
     create(
       :word,
       text: '£45.00',
@@ -431,7 +404,7 @@ describe CurrencyDetector do
   end
 
   it 'detects HUF as Ft. on a bill' do
-    # Label missing - needs Ft.
+    # Missing label - needs Ft.
     create(
       :word,
       text: 'Ft.',

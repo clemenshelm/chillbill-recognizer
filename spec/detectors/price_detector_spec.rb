@@ -54,21 +54,23 @@ describe PriceDetector do
   end
 
   it "includes a word's bounding box" do
+    # From fP5Y5WXQGoF45YePr.pdf
     create(
       :word,
-      text: '1.185,00',
-      left: 2199,
-      top: 1996,
-      right: 2350,
-      bottom: 2029
+      text: '7,99',
+      left: 0.8196989528795812,
+      right: 0.9021596858638743,
+      top: 0.6372569963682974,
+      bottom: 0.6646015808587908
     )
 
     prices = PriceDetector.filter
     price = prices.first
-    expect(price.left).to eq 2199
-    expect(price.top).to eq 1996
-    expect(price.width).to eq 151
-    expect(price.height).to eq 33
+
+    expect(price.left).to eq 0.8196989528795812
+    expect(price.top).to eq 0.6372569963682974
+    expect(price.width).to eq 0.08246073298429313
+    expect(price.height).to eq 0.027344584490493484
   end
 
   it 'finds prices with a colon as decimal separator' do
@@ -120,7 +122,7 @@ describe PriceDetector do
   end
 
   it 'finds a price without decimal places with the currency name behind' do
-    # from bill gANywe3fjvx98iPp2
+    # Missing Label - needs price without decimal places following currency name
     create(
       :word,
       text: '360',
@@ -145,7 +147,7 @@ describe PriceDetector do
   end
 
   it 'finds a price without decimal places with the currency symbol behind' do
-    # from bill gANywe3fjvx98iPp2
+    # Missing Label - needs  price, without decimal places, behind a symbol
     create(
       :word,
       text: '300€',
@@ -161,31 +163,31 @@ describe PriceDetector do
   end
 
   it 'finds hungarian price that consist of 2 words' do
-    # from bill Thzi7n3qdSk4awip2
+    # From bill Thzi7n3qdSk4awip2.pdf
     create_following_words(%w(11 038))
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['11 038 ']
   end
 
   it 'detects price with comma and period separator' do
-    # from bill fP5Y5WXQGoF45YePr
+    # From bill fP5Y5WXQGoF45YePr.pdf
 
     create(
       :word,
       text: '€1',
-      left: 0.788027477919529,
-      right: 0.8004579653254825,
-      top: 0.39532731899144113,
-      bottom: 0.4022669442516771
+      left: 0.8410206084396468,
+      right: 0.8534510958456003,
+      top: 0.45061300023132084,
+      bottom: 0.4575526254915568
     )
 
     create(
       :word,
       text: ',202.16',
-      left: 0.8043833824010468,
-      right: 0.8472358521426235,
-      top: 0.39555863983344897,
-      bottom: 0.4034235484617164
+      left: 0.8573765129211646,
+      right: 0.9002289826627412,
+      top: 0.4508443210733287,
+      bottom: 0.4587092297015961
     )
 
     prices = PriceDetector.filter
@@ -193,14 +195,14 @@ describe PriceDetector do
   end
 
   it 'does not detect numbers with only one decimal digit' do
-    # from bill kk4FafcZqvCCC64BY.pdf
+    # From bill kk4FafcZqvCCC64BY.pdf
     create(
       :word,
       text: '3.0',
-      left: 0.48528449967298887,
-      right: 0.5032701111837803,
-      top: 0.42298797409805733,
-      bottom: 0.4296947271045328
+      left: 0.5810987573577502,
+      right: 0.5990843688685416,
+      top: 0.4757169287696577,
+      bottom: 0.4824236817761332
     )
 
     prices = PriceDetector.filter
@@ -208,14 +210,14 @@ describe PriceDetector do
   end
 
   it 'does not detect vat-rate as price' do
-    # from bill BYnCDzw7nNMFergRW.pdf
+    # From bill BYnCDzw7nNMFergRW.pdf
     create(
       :word,
       text: '20,00%',
-      left: 0.5981033355134074,
-      right: 0.6530412034009156,
-      top: 0.4898242368177613,
-      bottom: 0.5
+      left: 0.699051357540072,
+      right: 0.750408897612038,
+      top: 0.5995836224843858,
+      bottom: 0.609530418690724
     )
 
     prices = PriceDetector.filter
@@ -223,32 +225,32 @@ describe PriceDetector do
   end
 
   it 'does not detect a list of numbers as prices' do
-    # from 2AAizxTARPRp8PN4D.pdf
+    # From 2AAizxTARPRp8PN4D.pdf
     create(
       :word,
       text: '01,',
-      left: 0.41216879293424924,
-      right: 0.43277723258096173,
-      top: 0.5047420772611613,
-      bottom: 0.5146888734674995
+      left: 0.4124959110238796,
+      right: 0.4331043506705921,
+      top: 0.5049733981031691,
+      bottom: 0.5149201943095073
     )
 
     create(
       :word,
       text: '02,',
-      left: 0.4383382401046778,
-      right: 0.45894667975139025,
-      top: 0.5047420772611613,
-      bottom: 0.5146888734674995
+      left: 0.43866535819430813,
+      right: 0.4592737978410206,
+      top: 0.5049733981031691,
+      bottom: 0.5149201943095073
     )
 
     create(
       :word,
       text: 'O3',
-      left: 0.46450768727510633,
-      right: 0.48086359175662413,
-      top: 0.5047420772611613,
-      bottom: 0.5130696275734443
+      left: 0.46483480536473665,
+      right: 0.4811907098462545,
+      top: 0.5049733981031691,
+      bottom: 0.5133009484154523
     )
 
     prices = PriceDetector.filter
@@ -260,19 +262,19 @@ describe PriceDetector do
     create(
       :word,
       text: 'A5,',
-      left: 0.16328534031413613,
-      right: 0.18291884816753926,
-      top: 0.31059204440333027,
-      bottom: 0.3191489361702128
+      left: 0.243782722513089,
+      right: 0.26341623036649214,
+      top: 0.3628584643848289,
+      bottom: 0.3714153561517114
     )
 
     create(
       :word,
       text: '32',
-      left: 0.1888089005235602,
-      right: 0.2032068062827225,
-      top: 0.31059204440333027,
-      bottom: 0.3179925994449584
+      left: 0.2693062827225131,
+      right: 0.2837041884816754,
+      top: 0.3628584643848289,
+      bottom: 0.370259019426457
     )
 
     prices = PriceDetector.filter
@@ -284,28 +286,19 @@ describe PriceDetector do
     create(
       :word,
       text: 'EUR',
-      left: 0.6587068332108743,
-      right: 0.6958119030124909,
-      top: 0.41488539788823076,
-      bottom: 0.42467164563481846
+      left: 0.8684985279685966,
+      right: 0.9018645731108931,
+      top: 0.4938699976867916,
+      bottom: 0.5026601896830905
     )
 
     create(
       :word,
       text: '14,90',
-      left: 0.7038941954445261,
-      right: 0.74834680382072,
-      top: 0.41514293072366726,
-      bottom: 0.42621684264743753
-    )
-
-    create(
-      :word,
-      text: 'EUR',
-      left: 0.8475385745775166,
-      right: 0.884643644379133,
-      top: 0.41488539788823076,
-      bottom: 0.42467164563481846
+      left: 0.9087340529931305,
+      right: 0.948642459928034,
+      top: 0.4938699976867916,
+      bottom: 0.5045107564191533
     )
 
     prices = PriceDetector.filter
@@ -313,7 +306,7 @@ describe PriceDetector do
   end
 
   it 'does not detect pieces as prices' do
-    # from bill 29pwjsKx88nhnQKm9.pdf
+    # From bill 29pwjsKx88nhnQKm9.pdf
 
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
@@ -321,82 +314,73 @@ describe PriceDetector do
     create(
       :word,
       text: 'Menge',
-      left: 0.6013185287994448,
-      right: 0.6544066620402498,
-      top: 0.42119769481332997,
-      bottom: 0.43297419193184666
+      left: 0.5791884816753927,
+      right: 0.6292539267015707,
+      top: 0.42298797409805733,
+      bottom: 0.4338575393154487
     )
 
     create(
       :word,
       text: '1,00',
-      left: 0.6210964607911172,
-      right: 0.6492019430950728,
-      top: 0.4560260586319218,
-      bottom: 0.46579804560260585
-    )
-
-    create(
-      :word,
-      text: '2,00',
-      left: 0.6197085357390701,
-      right: 0.6492019430950728,
-      top: 0.4845903282385367,
-      bottom: 0.49436231520922075
-    )
-
-    create(
-      :word,
-      text: '1,00',
-      left: 0.6210964607911172,
-      right: 0.6492019430950728,
-      top: 0.5276872964169381,
-      bottom: 0.5374592833876222
+      left: 0.5978403141361257,
+      right: 0.6243455497382199,
+      top: 0.4551341350601295,
+      bottom: 0.4641535615171138
     )
 
     create(
       :word,
       text: '8,50',
-      left: 0.9389312977099237,
-      right: 0.9687716863289383,
-      top: 0.4560260586319218,
-      bottom: 0.46579804560260585
+      left: 0.6861910994764397,
+      right: 0.7143324607329843,
+      top: 0.4551341350601295,
+      bottom: 0.4641535615171138
+    )
+
+    create(
+      :word,
+      text: '2,00',
+      left: 0.5965314136125655,
+      right: 0.6243455497382199,
+      top: 0.48149861239592967,
+      bottom: 0.49051803885291395
     )
 
     create(
       :word,
       text: '12,00',
-      left: 0.9309507286606523,
-      right: 0.9684247050659265,
-      top: 0.4845903282385367,
-      bottom: 0.49436231520922075
+      left: 0.8900523560209425,
+      right: 0.925392670157068,
+      top: 0.48149861239592967,
+      bottom: 0.49051803885291395
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.5978403141361257,
+      right: 0.6243455497382199,
+      top: 0.5212765957446809,
+      bottom: 0.5302960222016652
     )
 
     create(
       :word,
       text: '4,00',
-      left: 0.9385843164469119,
-      right: 0.9687716863289383,
-      top: 0.5276872964169381,
-      bottom: 0.5374592833876222
+      left: 0.6858638743455497,
+      right: 0.7143324607329843,
+      top: 0.5212765957446809,
+      bottom: 0.5302960222016652
     )
 
     create(
       :word,
-      text: '17',
-      left: 0.7394170714781402,
-      right: 0.7678695350451076,
-      top: 0.08694562766224004,
-      bottom: 0.09771986970684039
-    )
-
-    create(
-      :word,
-      text: '2152',
-      left: 0.7744621790423317,
-      right: 0.8223455933379598,
-      top: 0.08669506389376096,
-      bottom: 0.09596592332748685
+      text: '501.1.0663',
+      left: 0.24083769633507854,
+      right: 0.31544502617801046,
+      top: 0.4946808510638298,
+      bottom: 0.5023126734505088
     )
 
     prices = PriceDetector.filter
@@ -405,14 +389,13 @@ describe PriceDetector do
 
   it 'detects negative prices' do
     # from bill 2D7BuHc3f8wAmb4y8.pdf
-
     create(
       :word,
       text: '-12,00',
-      left: 0.9422174070061394,
-      right: 0.9869989165763814,
-      top: 0.42149788504603136,
-      bottom: 0.4319482458322966
+      left: 0.8792539267015707,
+      right: 0.9198298429319371,
+      top: 0.41676313961565176,
+      bottom: 0.4264876128733503
     )
 
     prices = PriceDetector.filter

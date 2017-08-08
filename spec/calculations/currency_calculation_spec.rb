@@ -3,7 +3,7 @@ require_relative '../../lib/calculations/currency_calculation'
 
 describe CurrencyCalculation do
   it 'detects currency code which appear most often in bill' do
-    # Label missing - needs Ft.
+    # Missing label - needs Ft.
 
     PriceTerm.create(
       text: '9900',
