@@ -1,10 +1,6 @@
 source("machine_learning_lib.R") # loads function "generate_tuples(price_list)"
-library(fields) # for scatterplot
 library(ggplot2)
 
-######################################
-######    GENERATION OF DATA    ######
-######################################
 # load data from several bills
 prices_several_bills <- read.csv("csv/prices.csv", header = TRUE)
 correct_price_tuples <- read.csv("csv/correct_price_tuples.csv", header = TRUE)
