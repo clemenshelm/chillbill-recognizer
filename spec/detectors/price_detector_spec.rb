@@ -5,7 +5,8 @@ require_relative '../factories' # should be loaded automatically
 
 describe PriceDetector do
   it 'finds prices separated with a comma' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(C 14,49 4006972047414 2,69).each { |text| create(:word, text: text) }
 
@@ -14,7 +15,8 @@ describe PriceDetector do
   end
 
   it "doesn't find words that contain no numbers" do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(/,v„ Sie).each { |text| create(:word, text: text) }
 
@@ -23,7 +25,8 @@ describe PriceDetector do
   end
 
   it "doesn't find words with 4 decimal places" do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(:word, text: '5,1920')
 
@@ -32,7 +35,8 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 2 words' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create_following_words(['54,', '00'])
 
@@ -41,7 +45,8 @@ describe PriceDetector do
   end
 
   it 'finds prices that consist of 3 words' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create_following_words(%w(45 , 00))
 
@@ -50,7 +55,8 @@ describe PriceDetector do
   end
 
   it 'only find prices with typical characters' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(02/2015 N24 1.185,00).each { |text| create(:word, text: text) }
 
@@ -59,7 +65,8 @@ describe PriceDetector do
   end
 
   it "doesn't find prices that contain letters" do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(12 x 0,95).each { |text| create(:word, text: text) }
 
@@ -69,6 +76,9 @@ describe PriceDetector do
 
   it "includes a word's bounding box" do
     # From fP5Y5WXQGoF45YePr.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '7,99',
@@ -88,7 +98,8 @@ describe PriceDetector do
   end
 
   it 'finds prices with a colon as decimal separator' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
     price_texts.each { |text| create(:word, text: text) }
@@ -98,7 +109,8 @@ describe PriceDetector do
   end
 
   it "doesn't find dates as prices" do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(28.02.15 31.03.15 29.12.15).each { |text| create(:word, text: text) }
 
@@ -107,7 +119,8 @@ describe PriceDetector do
   end
 
   it 'recognizes correct prices with a period as thousand separator' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     %w(3.551,37 4.261,64).each { |text| create(:word, text: text) }
 
@@ -117,7 +130,8 @@ describe PriceDetector do
   end
 
   it 'recognizes correct prices with a period as decimal separator' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     price_texts = %w(10.00 27.20 1.35 1.50 27.34)
     price_texts.each { |text| create(:word, text: text) }
@@ -128,7 +142,8 @@ describe PriceDetector do
   end
 
   it 'recognizes prices with leading euro symbol' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(:word, text: '€86.97')
 
@@ -138,7 +153,8 @@ describe PriceDetector do
   end
 
   it 'recognizes a price with a dash as decimal places' do
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -156,6 +172,9 @@ describe PriceDetector do
 
   it 'finds a price without decimal places with the currency name behind' do
     # Missing Label - needs price without decimal places following currency name
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '360',
@@ -181,6 +200,9 @@ describe PriceDetector do
 
   it 'finds a price without decimal places with the currency symbol behind' do
     # Missing Label - needs  price, without decimal places, behind a symbol
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '300€',
@@ -197,6 +219,9 @@ describe PriceDetector do
 
   it 'finds hungarian price that consist of 2 words' do
     # From bill Thzi7n3qdSk4awip2.pdf
+    # Dummy values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create_following_words(%w(11 038))
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['11 038']
@@ -206,7 +231,7 @@ describe PriceDetector do
     # From bill fP5Y5WXQGoF45YePr.pdf
 
     # Dummy values for the bill
-    BillDimension.create_all(width: 3056, height: 4324)
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -232,6 +257,9 @@ describe PriceDetector do
 
   it 'does not detect numbers with only one decimal digit' do
     # From bill kk4FafcZqvCCC64BY.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '3.0',
@@ -247,6 +275,9 @@ describe PriceDetector do
 
   it 'does not detect vat-rate as price' do
     # From bill BYnCDzw7nNMFergRW.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '20,00%',
@@ -262,6 +293,9 @@ describe PriceDetector do
 
   it 'does not detect a list of numbers as prices' do
     # From 2AAizxTARPRp8PN4D.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '01,',
@@ -295,8 +329,8 @@ describe PriceDetector do
 
   it 'does not detect paper size followed by quantity as a price' do
     # From 2HtXGWoynP3sFMvFH.pdf
-
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -322,8 +356,8 @@ describe PriceDetector do
 
   it 'does not detect numbers before kg' do
     # From 25KA7rWWmhStXDEsb.pdf
-
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -502,8 +536,8 @@ describe PriceDetector do
 
   it 'detects a price after EUR' do
     # From 2D6A3fe8Ggpovv3EF.pdf
-
-    BillDimension.create_all(width: 3056, height: 4324)
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
       :word,
@@ -529,7 +563,7 @@ describe PriceDetector do
 
   it 'does not detect pieces as prices' do
     # From bill 29pwjsKx88nhnQKm9.pdf
-
+    # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
@@ -609,7 +643,10 @@ describe PriceDetector do
   end
 
   it 'detects negative prices' do
-    # from bill 2D7BuHc3f8wAmb4y8.pdf
+    # From bill 2D7BuHc3f8wAmb4y8.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: '-12,00',
