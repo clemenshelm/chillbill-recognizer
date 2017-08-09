@@ -8,6 +8,10 @@ class PriceTerm < Sequel::Model
   include Term
   include Dimensionable
 
+  def valid?
+    super && Word.right_after(self)&.text != 'kg'
+  end
+
   def to_d
     # remove thousand separator, but keep comma
     dec_text = text.gsub(/(\d+)\.(.{3,})/, '\1\2')
