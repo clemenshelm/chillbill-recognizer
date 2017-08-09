@@ -29,6 +29,7 @@ class TermBuilder
     # logger.debug "groups: #{matching_groups.inspect}"
 
     @text = Array(matching_groups).first if matching_groups
+    @text.strip!
   end
 
   def valid?

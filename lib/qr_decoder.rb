@@ -28,16 +28,19 @@ class QRDecoder
     prices_and_vats = VAT_RATES.zip(prices).to_h
     prices_present = prices_and_vats.select { |_vat, price| price.positive? }
 
+    calculated_amounts = prices_present.map do |vat, price|
+      {
+        total: (price * 100).to_i,
+        vatRate: vat
+      }
+    end
+
     date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
-    total = (prices_present.values.first * 100).to_i
 
     {
       invoiceDate: date_in_qr,
       dueDate: date_in_qr,
-      amounts: [{
-        total: total,
-        vatRate: prices_present.keys.first
-      }]
+      amounts: calculated_amounts
     }
   end
 
