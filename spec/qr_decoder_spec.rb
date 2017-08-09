@@ -120,5 +120,16 @@ describe QRDecoder do
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
       expect(decoded_qr_code).to be_nil
     end
+
+    it 'extracts more than one price from a QR code' do
+      image = Magick::Image.read(
+        './spec/support/multiple-price-qr-code.png'
+      ) { self.density = 600 }.first
+
+      decoded_qr_code = QRDecoder.new(image).decode_qr_code
+      expect(decoded_qr_code[:amounts]).to eq [
+        { total: 15_99, vatRate: 20 }, { total: 7_30, vatRate: 0 }
+      ]
+    end
   end
 end
