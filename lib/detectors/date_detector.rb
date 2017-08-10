@@ -44,7 +44,7 @@ class DateDetector
 
   def self.find_long_dates_with_periods(words)
     end_number_with_period = lambda do |term|
-      term.text += '.' if term.text =~ /\d$/
+      term.text += '.' if term.text =~ /^\d{2}$/
     end
 
     find_dates(

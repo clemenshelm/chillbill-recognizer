@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../lib/detectors/date_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
@@ -6,7 +7,7 @@ require_relative '../factories' # should be loaded automatically
 describe DateDetector do
   it 'finds short German dates' do
     # From bill m6jLaPhmWvuZZqSXy.pdf
-    %w(9025 0650/004/133 04.04.2015 13133).each_with_index do |text, index|
+    %w[9025 0650/004/133 04.04.2015 13133].each_with_index do |text, index|
       left = index * 100
       create(:word, text: text, left: left, right: left + 20)
     end
@@ -25,17 +26,17 @@ describe DateDetector do
 
   it 'detects multiple dates in a document' do
     # From bill 4f5mhL6zBb3cyny7n.pdf
-    %w(01.04.2015 28.02.15 31.03.15 27.02.2015 16.03.15)
+    %w[01.04.2015 28.02.15 31.03.15 27.02.2015 16.03.15]
       .each { |text| create(:word, text: text) }
 
     dates = DateDetector.filter
-    expect(date_strings(dates)).to eq %w(2015-04-01 2015-02-28 2015-03-31
-                                         2015-02-27 2015-03-16)
+    expect(date_strings(dates)).to eq %w[2015-04-01 2015-02-28 2015-03-31
+                                         2015-02-27 2015-03-16]
   end
 
   it 'detects dates spread over several words' do
     # From bill XYt8oerHesxQkdwvp.pdf
-    create_following_words(%w(10 04.2015))
+    create_following_words(%w[10 04.2015])
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2015-04-10']
@@ -120,46 +121,46 @@ describe DateDetector do
   end
 
   it 'detects full German dates' do
-    create_following_words(%w(Wien 23. April 2015))
-    create_following_words(%w(11. März 2016))
-    create_following_words(%w(Freitag 4. Dezember 2015))
+    create_following_words(%w[Wien 23. April 2015])
+    create_following_words(%w[11. März 2016])
+    create_following_words(%w[Freitag 4. Dezember 2015])
     # from bill yiaGswKDskiLNkafN.pdf
-    create_following_words(%w(01. September 2016))
+    create_following_words(%w[01. September 2016])
     # from bill CuJiDWLneTaSFin4P.pdf
-    create_following_words(%w(3. Oktober 2016))
+    create_following_words(%w[3. Oktober 2016])
     dates = DateDetector.filter
     expect(date_strings(dates))
-      .to eq %w(2015-04-23 2016-03-11 2015-12-04 2016-09-01 2016-10-03)
+      .to eq %w[2015-04-23 2016-03-11 2015-12-04 2016-09-01 2016-10-03]
   end
 
   it 'does not recognize a number out of a date range' do
-    %w(41.14.122).map { |text| create(:word, text: text) }
+    %w[41.14.122].map { |text| create(:word, text: text) }
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to be_empty
   end
 
   it 'recognizes a long English date' do
-    create_following_words(%w(09 March 2016))
+    create_following_words(%w[09 March 2016])
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-03-09']
   end
 
   it 'recognizes a short date with slashes as separators' do
-    %w(1/03/16).map { |text| create(:word, text: text) }
+    %w[1/03/16].map { |text| create(:word, text: text) }
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2016-03-01']
   end
 
   it 'keeps the natural word order' do
-    create_following_words(%w(09 March 2016))
+    create_following_words(%w[09 March 2016])
     create(:word, text: '1/03/16')
     create(:word, text: '15/06/2015')
-    create_following_words(%w(09 March 2016))
+    create_following_words(%w[09 March 2016])
 
-    word_order = %w(2016-03-09 2016-03-01 2015-06-15 2016-03-09)
+    word_order = %w[2016-03-09 2016-03-01 2015-06-15 2016-03-09]
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq word_order
   end
@@ -722,6 +723,57 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2017-02-07', '2017-02-15']
+  end
+
+
+  it 'does not detect weird numbers as date' do
+    # from bill F6JJF2j2FqtYfbB5y.pdf
+
+    create(
+      :word,
+      text: '16.25',
+      left: 0.8144633507853403,
+      right: 0.8435863874345549,
+      top: 0.5064754856614246,
+      bottom: 0.515263644773358
+    )
+
+    create(
+      :word,
+      text: '11131:1111111111311131111g',
+      left: 0.1875,
+      right: 0.3344240837696335,
+      top: 0.526827012025902,
+      bottom: 0.5404717853839038
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
+  it 'does not detect long year as date(RangeError)' do
+    # from bill KhqMZTFmYpipEbG46.pdf
+
+    create(
+      :word,
+      text: '13.11.2515114203',
+      left: 0.8123991703157409,
+      right: 0.8958285319197972,
+      top: 0.3599476439790576,
+      bottom: 0.3736910994764398
+    )
+
+    create(
+      :word,
+      text: 'Hen',
+      left: 0.6623646001382807,
+      right: 0.6768840746715833,
+      top: 0.3913612565445026,
+      bottom: 0.4041230366492147
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
   end
 
   def date_strings(date_terms)
