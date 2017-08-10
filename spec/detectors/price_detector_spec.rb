@@ -662,6 +662,7 @@ describe PriceDetector do
 
   it 'does not detect weights below the word kg as prices' do
     # From WmcA2uThGP5QaaciP.pdf
+    # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
     create(
