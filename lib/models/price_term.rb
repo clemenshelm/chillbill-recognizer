@@ -9,7 +9,7 @@ class PriceTerm < Sequel::Model
   include Dimensionable
 
   def valid?
-    super && Word.right_after(self)&.text != 'kg' && Word.right_below(self)&.text != 'kg'
+    super && Word.right_after(self)&.text != 'kg' && Word.right_above(self)&.text != 'kg'
   end
 
   def to_d

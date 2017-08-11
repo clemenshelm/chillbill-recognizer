@@ -31,7 +31,14 @@ module Dimensionable
     def right_below(current)
       all.find do |lower|
         lower.top < (current.bottom + lower.height) &&
-          lower.right > current.left && lower != current
+          lower.top > current.bottom && lower.right > current.left &&
+          lower != current
+      end
+    end
+
+    def right_above(current)
+      all.find do |above|
+        current.top > above.bottom && above != current
       end
     end
 
