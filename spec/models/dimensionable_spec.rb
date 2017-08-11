@@ -349,5 +349,31 @@ describe Dimensionable do
       result = Word.right_below(below)
       expect(result).to be_nil
     end
+
+    describe '#right_above' do
+      it 'detects a word above another' do
+        # From WmcA2uThGP5QaaciP.pdf
+        above = create(
+          :word,
+          text: 'kg',
+          left: 0.7480366492146597,
+          right: 0.7673429319371727,
+          top: 0.3856845031271717,
+          bottom: 0.39587676627287466
+        )
+
+        below = create(
+          :word,
+          text: '123,00',
+          left: 0.7081151832460733,
+          right: 0.7653795811518325,
+          top: 0.41463979615473706,
+          bottom: 0.4232105628908965
+        )
+
+        result = Word.right_above(below)
+        expect(result).to eq above
+      end
+    end
   end
 end
