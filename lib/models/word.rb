@@ -18,4 +18,11 @@ class Word < Sequel::Model
     # space: #{max_space_width} => last: #{previous_word.left}"
     previous_word.right + max_space_width >= left
   end
+
+  def filter_out_artifacts
+    Word.all.each do |word|
+      puts word.text
+    end
+  end
+
 end

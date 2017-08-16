@@ -98,8 +98,9 @@ class BillRecognizer
     end
 
     recognize_words(png_file)
-    filter_words
+    filter_out_artifacts
 
+    filter_words
     calculate_text_box
 
     process_qr_code_data
@@ -207,6 +208,10 @@ class BillRecognizer
 
   def filter_words
     DETECTORS.each(&:filter)
+  end
+
+  def filter_out_artifacts
+    Word.filter_out_artifacts
   end
 
   def process_qr_code_data
