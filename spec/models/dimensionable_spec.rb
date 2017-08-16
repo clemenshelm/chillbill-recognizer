@@ -351,8 +351,35 @@ describe Dimensionable do
     end
 
     describe '#right_above' do
-      it 'detects a word above another' do
+      it 'detects a word directly above another' do
         # From WmcA2uThGP5QaaciP.pdf
+        create(
+          :word,
+          text: 'GmbH',
+          left: 0.2012434554973822,
+          right: 0.24149214659685864,
+          top: 0.08617095205003475,
+          bottom: 0.09427843409775306
+        )
+
+        create(
+          :word,
+          text: 'Telefon',
+          left: 0.5163612565445026,
+          right: 0.5863874345549738,
+          top: 0.08617095205003475,
+          bottom: 0.09427843409775306
+        )
+
+        create(
+          :word,
+          text: ':',
+          left: 0.6914267015706806,
+          right: 0.694371727748691,
+          top: 0.08941394486912208,
+          bottom: 0.09427843409775306
+        )
+
         above = create(
           :word,
           text: 'kg',

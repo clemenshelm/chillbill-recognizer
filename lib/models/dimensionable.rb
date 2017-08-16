@@ -37,9 +37,11 @@ module Dimensionable
     end
 
     def right_above(current)
-      all.find do |above|
-        current.top > above.bottom && above != current
+      everything_above = all.select do |above|
+        current.top > above.bottom && in_same_column(current, above) &&
+          above != current
       end
+      everything_above.last
     end
 
     def below(current)
@@ -52,6 +54,13 @@ module Dimensionable
 
     def on_same_line(word1, word2)
       word1.bottom > word2.top && word2.bottom > word1.top
+    end
+
+    def in_same_column(word1, word2)
+      word1_center = word1.left + (word1.width / 2)
+      word2_center = word2.left + (word2.width / 2)
+      word2.left <= word1_center && word1_center <= word2.right &&
+        word1.left <= word2_center && word2_center <= word1.right
     end
   end
 end

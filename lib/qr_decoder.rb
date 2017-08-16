@@ -36,7 +36,7 @@ class QRDecoder
     end
 
     date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
-
+    binding.pry
     {
       invoiceDate: date_in_qr,
       dueDate: date_in_qr,
