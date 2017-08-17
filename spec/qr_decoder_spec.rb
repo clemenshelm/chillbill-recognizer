@@ -132,7 +132,7 @@ describe QRDecoder do
       ]
     end
 
-    it 'can decode a different value format QR code' do
+    it 'can decode a different value format QR code', :focus do
       image = Magick::Image.read(
         './spec/support/different-value-format-qr-code.pdf'
       ) { self.density = 600 }.first

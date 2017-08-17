@@ -23,7 +23,7 @@ class QRDecoder
     return unless qr_code?
     all_data = qr_codes.last.data.split('_')
     return unless all_data.length == 14
-
+    binding.pry
     prices = all_data[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) }
     prices_and_vats = VAT_RATES.zip(prices).to_h
     prices_present = prices_and_vats.select { |_vat, price| price.positive? }
