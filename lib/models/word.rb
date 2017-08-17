@@ -19,10 +19,15 @@ class Word < Sequel::Model
     previous_word.right + max_space_width >= left
   end
 
-  def filter_out_artifacts
-    Word.all.each do |word|
-      puts word.text
-    end
+  def self.filter_out_artifacts
+    binding.pry
+    # Filter out
+    where { left == 0 }&.destroy
+    where { right > 1 }&.destroy
+    where { top == 0 }&.destroy
+    where { bottom > 1 }&.destroy
+    where(text: [' ', '!', '*', 'ä'])&.destroy
+    binding.pry
   end
 
 end
