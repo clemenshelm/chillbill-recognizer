@@ -15,7 +15,10 @@ class PriceDetector
 
   def self.filter_out_quantity_column
     quantity = Word.first(text: 'Menge')
+    amount = Word.first(text: 'Anz.')
+
     PriceTerm.where { right <= quantity.right }.destroy if quantity
+    PriceTerm.where { right <= amount.right }.destroy if amount
   end
 
   def self.filter
@@ -49,7 +52,7 @@ class PriceDetector
         term_stale = true
 
         Word.each do |word|
-          if term_stale || (last_word && !word.follows(last_word))
+          if term_stale
             term = PriceTerm.new(
               regex: regex,
               after_each_word: after_each_word,
