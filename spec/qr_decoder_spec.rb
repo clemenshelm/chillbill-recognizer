@@ -132,15 +132,15 @@ describe QRDecoder do
       ]
     end
 
-    it 'can decode a different value format QR code', :focus do
+    it 'can decode a different value format QR code' do
       image = Magick::Image.read(
-        './spec/support/different-value-format-qr-code.pdf'
+        './spec/support/different-value-format-qr-code.jpg'
       ) { self.density = 600 }.first
 
       decoded_qr_code = QRDecoder.new(image).decode_qr_code
-      expect(decoded_qr_code[:dueDate]).to eq '2017-02-14'
-      expect(decoded_qr_code[:invoiceDate]).to eq '2017-02-14'
-      expect(decoded_qr_code[:amounts]).to eq [{ total: 30_60, vatRate: 13 }]
+      expect(decoded_qr_code[:dueDate]).to eq '2016-09-29'
+      expect(decoded_qr_code[:invoiceDate]).to eq '2016-09-29'
+      expect(decoded_qr_code[:amounts]).to eq [{ total: 7_90, vatRate: 13 }]
     end
   end
 end

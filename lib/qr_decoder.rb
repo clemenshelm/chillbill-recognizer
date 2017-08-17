@@ -3,13 +3,6 @@ require 'zbar'
 
 class QRDecoder
   include Magick
-  VAT_RATES = [
-    20,
-    10,
-    13,
-    0,
-    nil
-  ].freeze
 
   def initialize(image)
     @image = image
@@ -23,9 +16,18 @@ class QRDecoder
     return unless qr_code?
     all_data = qr_codes.last.data.split('_')
     return unless all_data.length == 14
-    binding.pry
-    prices = all_data[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) }
-    prices_and_vats = VAT_RATES.zip(prices).to_h
+
+    if all_data[1] == 'R1'
+      vat_rates = [20, 13, 10, 0, nil]
+      prices = all_data[6..10].map { |p| BigDecimal.new(p.sub(',', '.')) }
+      date_in_qr = DateTime.strptime(all_data[5], '%Y-%m-%d').strftime('%Y-%m-%d')
+    else
+      vat_rates = [20, 10, 13, 0, nil]
+      prices = all_data[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) }
+      date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
+    end
+
+    prices_and_vats = vat_rates.zip(prices).to_h
     prices_present = prices_and_vats.select { |_vat, price| price.positive? }
 
     calculated_amounts = prices_present.map do |vat, price|
@@ -34,8 +36,6 @@ class QRDecoder
         vatRate: vat
       }
     end
-
-    date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
 
     {
       invoiceDate: date_in_qr,
