@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../lib/detectors/date_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
@@ -722,6 +723,56 @@ describe DateDetector do
 
     dates = DateDetector.filter
     expect(date_strings(dates)).to eq ['2017-02-07', '2017-02-15']
+  end
+
+  it 'does not detect weird numbers as date' do
+    # from bill F6JJF2j2FqtYfbB5y.pdf
+
+    create(
+      :word,
+      text: '16.25',
+      left: 0.8144633507853403,
+      right: 0.8435863874345549,
+      top: 0.5064754856614246,
+      bottom: 0.515263644773358
+    )
+
+    create(
+      :word,
+      text: '11131:1111111111311131111g',
+      left: 0.1875,
+      right: 0.3344240837696335,
+      top: 0.526827012025902,
+      bottom: 0.5404717853839038
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
+  end
+
+  it 'does not detect long year as date(RangeError)' do
+    # from bill KhqMZTFmYpipEbG46.pdf
+
+    create(
+      :word,
+      text: '13.11.2515114203',
+      left: 0.8123991703157409,
+      right: 0.8958285319197972,
+      top: 0.3599476439790576,
+      bottom: 0.3736910994764398
+    )
+
+    create(
+      :word,
+      text: 'Hen',
+      left: 0.6623646001382807,
+      right: 0.6768840746715833,
+      top: 0.3913612565445026,
+      bottom: 0.4041230366492147
+    )
+
+    dates = DateDetector.filter
+    expect(date_strings(dates)).to be_empty
   end
 
   def date_strings(date_terms)
