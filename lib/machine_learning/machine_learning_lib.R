@@ -210,8 +210,9 @@ generate_tuples_format <- function(price_list){
                 ( (text_box_bottom - text_box_top) * bill_height) )
 
   return(
-    data.frame(char_width_med = char_width_med,
-               char_width_med_b = as.numeric(char_width_med > 0.02), # analyse graphically
+    data.frame(bill_id =  toString(price_list[1, "bill_id"]),
+               char_width_med = char_width_med,
+               char_width_med_b = as.numeric(char_width_med > 0.018), # analyse graphically
                text_box_width = text_box_width,
                text_box_width_b = as.numeric(text_box_width < 0.5), # analyse graphically
                text_box_ratio = text_box_ratio)
