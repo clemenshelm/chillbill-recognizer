@@ -14,11 +14,10 @@ class PriceDetector
   HUNGARIAN_PRICE_REGEX = /^(\d{2} \d{3})$/
 
   def self.filter_out_quantity_column
-    quantity = Word.first(text: 'Menge')
-    amount = Word.first(text: 'Anz.')
-
-    PriceTerm.where { right <= quantity.right }.destroy if quantity
-    PriceTerm.where { right <= amount.right }.destroy if amount
+    %w(Menge Anz.).each do |quantity_text|
+      quantity = Word.first(text: quantity_text)
+      PriceTerm.where { right <= quantity.right }.destroy if quantity
+    end
   end
 
   def self.filter
