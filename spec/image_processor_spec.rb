@@ -3,7 +3,7 @@ require_relative '../lib/image_processor'
 
 describe ImageProcessor do
   let(:image) { ImageProcessor.new('./spec/support/orientation-test.jpg') }
-  let(:image_to_be_trimmed) { ImageProcessor.new('./spec/support/image-dimension-test.jpeg') }
+  let(:image_to_deskew) { ImageProcessor.new('./spec/support/image-dimension-test.jpeg') }
 
   it 'auto corrects the orientation of a bill image' do
     original_height = image.image_height
@@ -45,5 +45,17 @@ describe ImageProcessor do
     corrected_image = image.correct_orientation
     width = corrected_image.image_width
     expect(width).to eq 3
+  end
+
+  it 'sets new dimensions after deskew', :focus do
+    original_height = image_to_deskew.image_height
+    original_width = image_to_deskew.image_width
+    deskew_bill = image_to_deskew.deskew
+
+    deskewed_width = deskew_bill.image_width
+    deskewed_height = deskew_bill.image_height
+
+    expect(deskewed_height).to_not eq original_height
+    expect(deskewed_width).to_not eq original_width
   end
 end

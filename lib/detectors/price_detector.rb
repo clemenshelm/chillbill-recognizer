@@ -38,7 +38,6 @@ class PriceDetector
 
     find_prices(SHORT_PRICE_REGEX, max_words: 1)
     PriceTerm.dataset
-    binding.pry
   end
 
   class << self

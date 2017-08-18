@@ -98,7 +98,8 @@ class BillRecognizer
     end
 
     recognize_words(png_file)
-    filter_out_artifacts
+    Word.filter_out_artifacts
+    print_words
 
     filter_words
     calculate_text_box
@@ -137,16 +138,18 @@ class BillRecognizer
 
     hocr_doc = Nokogiri::HTML(hocr)
     create_words_from_hocr(hocr_doc)
+  end
 
-     puts Word.map { |word|
-       "
-       text: \'#{word.text}\',
-       left: #{word.left},
-       right: #{word.right},
-       top: #{word.top},
-       bottom: #{word.bottom}
-       "
-     }
+  def print_words
+    #  puts Word.map { |word|
+    #    "
+    #    text: \'#{word.text}\',
+    #    left: #{word.left},
+    #    right: #{word.right},
+    #    top: #{word.top},
+    #    bottom: #{word.bottom}
+    #    "
+    #  }
   end
 
   def perform_ocr(png_file)
@@ -208,11 +211,6 @@ class BillRecognizer
 
   def filter_words
     DETECTORS.each(&:filter)
-  end
-
-  def filter_out_artifacts
-    # filter out artifacts
-    Word.filter_out_artifacts
   end
 
   def process_qr_code_data

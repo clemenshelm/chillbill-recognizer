@@ -88,22 +88,30 @@ describe 'recognizing words' do
     expect(word2.follows(word1)).to eq true
   end
 
-  it 'removes filtered artifacts', :focus do
-
-    word3 = Word.create(
-      text: '!',
-      left: 0.5303030303030303,
-      right: 0.697979797979798,
-      top: 0.7075,
-      bottom: 0.7216666666666667
+  it 'filters out words with blank space' do
+    # from bill 4gf87ndsAgDhTjZmg.pdf
+    Word.create(
+      text: ' ',
+      left: 0.08107224583197123,
+      right: 0.4570120954560314,
+      top: 0.0,
+      bottom: 0.0009248554913294797
     )
 
-    word4 = Word.create(
+    Word.create(
       text: ' ',
-      left: 0.5303030303030303,
-      right: 0.697979797979798,
-      top: 0.7075,
-      bottom: 0.7216666666666667
+      left: 0.08107224583197123,
+      right: 0.11408957175547564,
+      top: 0.04138728323699422,
+      bottom: 0.06497109826589595
+    )
+
+    Word.create(
+      text: '*',
+      left: 0.08207979071288424,
+      right: 0.08436886854153042,
+      top: 0.24046242774566473,
+      bottom: 0.24254335260115606
     )
 
     Word.filter_out_artifacts
