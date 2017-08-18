@@ -58,7 +58,23 @@ aws ecr get-login |
 aws ecr get-login --no-include-email --region eu-central-1 |
 ```
 
-The output of that command should be put right back into the terminal and executed, which should set up the permissions for everything to run smoothly!
+The output of that command should be put right back into the terminal and executed, which should set up the permissions for everything to run smoothly! You can verify if it's set up properly by running:
+
+```shell
+cat ~/.docker/config.json
+```
+
+If there's something like this, then you're good to go:
+```json
+{
+  "auths" : {
+    "<lots of numbers.dkr.ecr.eu-central-1.amazonaws.com>" : {
+
+    }
+  },
+  "credsStore" : "<usually the output from the previous command or something about your keychain>"
+}%
+```
 
 # Docker Set-Up
 > REMEMBER: If using Ubuntu, all docker commands AND docker compose commands need to be run with sudo!
