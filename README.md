@@ -47,12 +47,13 @@ You will need to have AWS Command Line Interface installed. [Here's a guide](htt
 Once it is installed, run the command `aws configure`. When prompted enter the credentials given to you, enter `eu-central-1` for region and just hit the enter/return key on the last prompt.
 
 Now that your credentials are configured you can get your login:
-*On Mac:*
+
+### MacOS
 ```shell
 aws ecr get-login |
 ```
 
-*On Linux*
+### Ubuntu
 ```shell
 aws ecr get-login --no-include-email --region eu-central-1 |
 ```
