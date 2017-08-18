@@ -19,9 +19,10 @@ bundle exec sidekiq -r ./sidekiq.rb
 
 # Local Set-Up
 1. [Installations](#installations)
-2. [Docker Set-Up](#docker-set-up)
-3. [Running it locally](#running-it-locally)
-4. [Testing](#testing)
+2. [AWS Set-Up](#aws-set-up)
+3. [Docker Set-Up](#docker-set-up)
+4. [Running it locally](#running-it-locally)
+5. [Testing](#testing)
 
 # Installations
 To start things off, you will need [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) on your machine and this repository cloned locally:
@@ -38,6 +39,19 @@ The installation will also include docker-compose, which you will need, so for n
 1. Install [Docker](https://docs.docker.com/engine/installation/linux/ubuntu/). _Remember to get the Community Edition (CE)!_
 3. Install Docker Compose, [here’s a very good guide](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04).
 
+# AWS Set-Up
+> You will need AWS permissions and credentials. Have a memory stick ready and ask either @Althaire or @clemenshelm to create your user and give you your credentials
+
+You will need to have AWS Command Line Interface installed. [Here's a guide](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) on how to install it. _You will need `pip` installed. Either `sudo apt get` it or use homebrew._
+
+Once it is installed, run the command `aws configure`. When prompted enter the credentials given to you, enter `eu-central-1` for region and just hit the enter/return key on the last prompt.
+
+Now that your credentials are configured you can get your login:
+*On Mac:*
+`aws ecr get-login |`
+
+*On Linux*
+'aws ecr get-login --no-include-email --region eu-central-1'
 
 # Docker Set-Up
 > REMEMBER: If using Ubuntu, all docker commands AND docker compose commands need to be run with sudo!
