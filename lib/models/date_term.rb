@@ -29,6 +29,8 @@ class DateTerm < Sequel::Model
     super
   rescue ArgumentError
     false
+  rescue RangeError
+    false
   end
 
   def to_datetime

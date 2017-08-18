@@ -29,7 +29,7 @@ class RecognitionWorker
       image_url: image_url,
       customer_vat_number: customer_vat_number
     )
-    timeout_in_secs = 200
+    timeout_in_secs = 400
     bill_attributes = Timeout.timeout(timeout_in_secs) { recognizer.recognize }
     bill_attributes[:id] = id
     logger.info bill_attributes
