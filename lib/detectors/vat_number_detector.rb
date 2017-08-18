@@ -33,7 +33,7 @@ class VatNumberDetector
         terms = Word.where(
           'bottom - top <= ?', median_height * scale_factor
         ).map do |word|
-          if term_stale || (last_word && !word.follows(last_word))
+          if term_stale
             term = VatNumberTerm.new(
               regex: regex,
               after_each_word: after_each_word,

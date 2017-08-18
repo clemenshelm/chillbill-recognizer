@@ -47,7 +47,7 @@ describe ImageProcessor do
     expect(width).to eq 3
   end
 
-  it 'sets new dimensions after deskew', :focus do
+  it 'sets new dimensions after deskew' do
     original_height = image_to_deskew.image_height
     original_width = image_to_deskew.image_width
     deskew_bill = image_to_deskew.deskew

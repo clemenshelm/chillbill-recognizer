@@ -99,7 +99,9 @@ class BillRecognizer
 
     recognize_words(png_file)
     Word.filter_out_artifacts
-    print_words
+
+    # ****** PRINT ALL WORDS ******
+    # print_words
 
     filter_words
     calculate_text_box
@@ -141,15 +143,15 @@ class BillRecognizer
   end
 
   def print_words
-    #  puts Word.map { |word|
-    #    "
-    #    text: \'#{word.text}\',
-    #    left: #{word.left},
-    #    right: #{word.right},
-    #    top: #{word.top},
-    #    bottom: #{word.bottom}
-    #    "
-    #  }
+    puts Word.map { |word|
+      "
+      text: \'#{word.text}\',
+      left: #{word.left},
+      right: #{word.right},
+      top: #{word.top},
+      bottom: #{word.bottom}
+      "
+    }
   end
 
   def perform_ocr(png_file)
