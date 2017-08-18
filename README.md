@@ -48,10 +48,16 @@ Once it is installed, run the command `aws configure`. When prompted enter the c
 
 Now that your credentials are configured you can get your login:
 *On Mac:*
-`aws ecr get-login |`
+```shell
+aws ecr get-login |
+```
 
 *On Linux*
-'aws ecr get-login --no-include-email --region eu-central-1'
+```shell
+aws ecr get-login --no-include-email --region eu-central-1 |
+```
+
+The output of that command should be put right back into the terminal and executed, which should set up the permissions for everything to run smoothly!
 
 # Docker Set-Up
 > REMEMBER: If using Ubuntu, all docker commands AND docker compose commands need to be run with sudo!
