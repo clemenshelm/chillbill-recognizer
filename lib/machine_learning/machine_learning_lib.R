@@ -204,6 +204,12 @@ generate_tuples_format <- function(price_list){
     ungroup() %>%
     summarise(char_width_med = median(char_width))
 
+  char_height_med <- price_list %>%
+    group_by(price_id) %>%
+    mutate(char_height = (bottom - top) / (text_box_bottom - text_box_top) ) %>%
+    ungroup() %>%
+    summarise(char_height_med = median(char_height))
+
   text_box_width <- price_list %>%
     slice(1) %>%
     transmute(text_box_width = text_box_right - text_box_left)
@@ -215,6 +221,8 @@ generate_tuples_format <- function(price_list){
 
   return(
     data.frame(bill_id =  toString(price_list[1, "bill_id"]),
+               char_hw_ratio = as.numeric(char_height_med / char_width_med),
+               char_height_med = char_height_med,
                char_width_med = char_width_med,
                char_width_med_b = as.numeric(char_width_med > 0.018), # analyse graphically
                text_box_width = text_box_width,
