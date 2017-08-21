@@ -140,6 +140,19 @@ calibration_data_format %>%
   geom_dotplot(aes(color = bill_format))
 
 
+#### plot median character height for bill type
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = char_height_med)) +
+  geom_dotplot(aes(color = bill_format))
+
+#### plot median character height width ratio for bill type
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = char_hw_ratio)) +
+  geom_dotplot(aes(color = bill_format))
+
+
 #### plot text box width 
 # load calibration_data_format
 calibration_data_format %>% 
