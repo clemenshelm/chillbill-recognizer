@@ -48,7 +48,11 @@ recalculate_positions <- function(price_list){
     price_list %>% mutate(left = ( left - text_box_left ) * horizontal_scaling, 
                           right = ( right - text_box_left ) * horizontal_scaling, 
                           top = ( top - text_box_top ) * vertical_scaling, 
-                          bottom = ( bottom - text_box_top ) * vertical_scaling)
+                          bottom = ( bottom - text_box_top ) * vertical_scaling,
+                          text_box_top = 0,
+                          text_box_bottom = 1,
+                          text_box_left = 0,
+                          text_box_right = 1)
   )
 }
 
