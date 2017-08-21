@@ -828,7 +828,7 @@ describe VatNumberDetector do
     expect(vat_numbers.map(&:to_s)).to eq ['ATU65315367']
   end
 
-  it 'detects vats' do
+  it 'detects vats with high space width' do
     create(
       :word,
       text: 'ATU',

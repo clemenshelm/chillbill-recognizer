@@ -100,8 +100,7 @@ class BillRecognizer
     recognize_words(png_file)
     Word.filter_out_artifacts
 
-    # ****** PRINT ALL WORDS ******
-    # print_words
+    # print_all_detected_words
 
     filter_words
     calculate_text_box
@@ -142,7 +141,7 @@ class BillRecognizer
     create_words_from_hocr(hocr_doc)
   end
 
-  def print_words
+  def print_all_detected_words
     puts Word.map { |word|
       "
       text: \'#{word.text}\',

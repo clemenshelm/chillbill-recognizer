@@ -88,7 +88,7 @@ describe 'recognizing words' do
     expect(word2.follows(word1)).to eq true
   end
 
-  it 'filters out words with blank space' do
+  it 'filters out blank space and asterisk' do
     # from bill 4gf87ndsAgDhTjZmg.pdf
     Word.create(
       text: ' ',
