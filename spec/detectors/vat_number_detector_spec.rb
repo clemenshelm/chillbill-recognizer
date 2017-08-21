@@ -829,6 +829,8 @@ describe VatNumberDetector do
   end
 
   it 'detects vats with high space width' do
+    # from bill pYbaWiFCmR7rbhx9K.png
+
     create(
       :word,
       text: 'ATU',
