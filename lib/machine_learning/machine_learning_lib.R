@@ -45,9 +45,9 @@ recalculate_positions <- function(price_list){
     as.numeric()
 
   return(
-    price_list %>% mutate(left = ( left - text_box_left ) * horizontal_scaling, 
-                          right = ( right - text_box_left ) * horizontal_scaling, 
-                          top = ( top - text_box_top ) * vertical_scaling, 
+    price_list %>% mutate(left = ( left - text_box_left ) * horizontal_scaling,
+                          right = ( right - text_box_left ) * horizontal_scaling,
+                          top = ( top - text_box_top ) * vertical_scaling,
                           bottom = ( bottom - text_box_top ) * vertical_scaling,
                           text_box_top = 0,
                           text_box_bottom = 1,
@@ -59,7 +59,7 @@ recalculate_positions <- function(price_list){
 
 generate_tuples_prices <- function(price_list){
   # price_list <- recalculate_positions(price_list)
-  
+
   # Checking of NaN entries in price_list
   if (sum(is.na(price_list)) != 0){
     cat("There are NaN entries in the price list of bill ", toString(price_list$bill_id[1]), "\n")
@@ -229,7 +229,7 @@ generate_calibration_data_format <- function(prices_several_bills, correct_price
   bill_ids <- prices_several_bills %>% select(bill_id) %>% distinct() %>% lapply(as.character)
 
   calibration_data <- NULL
-  for( i in bill_ids$bill_id){
+  for ( i in bill_ids$bill_id ){
     calibration_data <- rbind(calibration_data,
                               cbind(prices_several_bills %>%
                                       filter(bill_id == i) %>%
