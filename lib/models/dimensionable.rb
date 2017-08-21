@@ -8,6 +8,10 @@ module Dimensionable
     bottom - top
   end
 
+  def center
+    left + (width / 2)
+  end
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -57,8 +61,7 @@ module Dimensionable
     end
 
     def in_same_column(word1, word2)
-      word2_center = word2.left + (word2.width / 2)
-      word2_center > word1.left && word2_center < word1.right
+      word2.center > word1.left && word2.center < word1.right
     end
   end
 end

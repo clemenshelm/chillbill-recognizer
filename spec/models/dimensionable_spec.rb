@@ -36,6 +36,20 @@ describe Dimensionable do
     expect(term.height).to eq 0.007400555041628121
   end
 
+  it 'can detect the center of a term' do
+    # From BYnCDzw7nNMFergRW.pdf
+    term = DateTerm.new(
+      text: '16.03.2016',
+      left: 0.68717277486911,
+      right: 0.7555628272251309,
+      top: 0.16951896392229418,
+      bottom: 0.1769195189639223,
+      first_word_id: 26
+    )
+
+    expect(term.center).to eq 0.7213678010471205
+  end
+
   describe '#right_before' do
     it 'can detect the term before another term' do
       # Missing label - needs terms one before the other
