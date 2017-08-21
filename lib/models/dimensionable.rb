@@ -31,7 +31,7 @@ module Dimensionable
     def right_below(current)
       all.find do |lower|
         lower.top < (current.bottom + lower.height) &&
-          lower.top > current.bottom && lower.right > current.left &&
+          lower.top > current.bottom && in_same_column(current, lower) &&
           lower != current
       end
     end
@@ -57,13 +57,8 @@ module Dimensionable
     end
 
     def in_same_column(word1, word2)
-      if word1.width > word2.width
-        word2_center = word2.left + (word2.width / 2)
-        word2_center >= word1.left && word2_center <= word1.right
-      else
-        word1_center = word1.left + (word1.width / 2)
-        word1_center >= word2.left && word1_center <= word2.right
-      end
+      word2_center = word2.left + (word2.width / 2)
+      word2_center >= word1.left && word2_center <= word1.right
     end
   end
 end
