@@ -19,24 +19,14 @@ class QRDecoder
 
     filtered_data = determine_data_format_and_set_data(all_data)
 
-    prices_and_vats = filtered_data[:vat_rates].zip(filtered_data[:prices]).to_h
-    prices_present = prices_and_vats.select { |_vat, price| price.positive? }
+    date, prices, vat_rates = filtered_data.values_at(:date, :prices, :vat_rates)
 
-    calculated_amounts = prices_present.map do |vat, price|
-      {
-        total: (price * 100).to_i,
-        vatRate: vat
-      }
-    end
-
-    date = DateTime.strptime(
-      filtered_data[:date], '%Y-%m-%d'
-    ).strftime('%Y-%m-%d')
+    date = DateTime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
 
     {
       invoiceDate: date,
       dueDate: date,
-      amounts: calculated_amounts
+      amounts: calculate_amounts(prices, vat_rates)
     }
   end
 
@@ -58,14 +48,30 @@ class QRDecoder
     if qr_code_parts[1] == 'R1'
       {
         vat_rates: [20, 13, 10, 0, nil],
-        prices: qr_code_parts[6..10].map { |p| BigDecimal.new(p.sub(',', '.')) },
+        prices: qr_code_parts[6..10],
         date: qr_code_parts[5]
       }
     else
       {
         vat_rates: [20, 10, 13, 0, nil],
-        prices: qr_code_parts[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) },
+        prices: qr_code_parts[5..9],
         date: qr_code_parts[4]
+      }
+    end
+  end
+
+  def calculate_amounts(prices, vat_rates)
+    formatted_prices = prices.map do |p|
+      (BigDecimal.new(p.sub(',', '.')) * 100).to_i
+    end
+
+    prices_and_vats = vat_rates.zip(formatted_prices).to_h
+    prices_present = prices_and_vats.select { |_vat, price| price.positive? }
+
+    prices_present.map do |vat, price|
+      {
+        total: price,
+        vatRate: vat
       }
     end
   end
