@@ -687,6 +687,33 @@ describe PriceDetector do
     expect(prices).to be_empty
   end
 
+  it 'does not detect numbers below Anz.' do
+    # From bill ihfDXTa64yYbFLa6Y.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: 'Anz.',
+      left: 0.1197252208047105,
+      right: 0.1573438011122015,
+      top: 0.475937066173068,
+      bottom: 0.4854234150856085
+    )
+
+    create(
+      :word,
+      text: '32,00',
+      left: 0.1122015047432123,
+      right: 0.1573438011122015,
+      top: 0.5016196205460435,
+      bottom: 0.512494215640907
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
