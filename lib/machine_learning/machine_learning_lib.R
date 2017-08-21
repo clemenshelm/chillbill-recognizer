@@ -215,7 +215,8 @@ generate_tuples_format <- function(price_list){
                char_width_med_b = as.numeric(char_width_med > 0.018), # analyse graphically
                text_box_width = text_box_width,
                text_box_width_b = as.numeric(text_box_width < 0.5), # analyse graphically
-               text_box_ratio = text_box_ratio)
+               text_box_ratio = text_box_ratio,
+               text_box_ratio_b = as.numeric(text_box_ratio < 0.4)) # analyse graphically
   )
 }
 
