@@ -87,4 +87,34 @@ describe 'recognizing words' do
 
     expect(word2.follows(word1)).to eq true
   end
+
+  it 'filters out blank space and asterisk' do
+    # from bill 4gf87ndsAgDhTjZmg.pdf
+    Word.create(
+      text: ' ',
+      left: 0.08107224583197123,
+      right: 0.4570120954560314,
+      top: 0.0,
+      bottom: 0.0009248554913294797
+    )
+
+    Word.create(
+      text: ' ',
+      left: 0.08107224583197123,
+      right: 0.11408957175547564,
+      top: 0.04138728323699422,
+      bottom: 0.06497109826589595
+    )
+
+    Word.create(
+      text: '*',
+      left: 0.08207979071288424,
+      right: 0.08436886854153042,
+      top: 0.24046242774566473,
+      bottom: 0.24254335260115606
+    )
+
+    Word.filter_out_artifacts
+    expect(Word.all).to be_empty
+  end
 end

@@ -42,8 +42,7 @@ class ImageProcessor
 
   def correct_orientation
     @image.auto_orient!
-    @image_width = @image.columns
-    @image_height = @image.rows
+    update_width_and_height
     self
   end
 
@@ -61,11 +60,20 @@ class ImageProcessor
   end
 
   def deskew
-    process_image { |image| image.deskew(0.4) }
+    process_image do |image|
+      image.deskew(0.4, @image_width)
+    end
+    update_width_and_height
+    self
   end
 
   def normalize
     process_image(&:normalize)
+  end
+
+  def update_width_and_height
+    @image_width = @image.columns
+    @image_height = @image.rows
   end
 
   def improve_level
