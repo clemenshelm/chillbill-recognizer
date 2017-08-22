@@ -74,7 +74,7 @@ task :increment_version => [:git_check] do
 
   sh "git add .
 
-      git commit -m "Increase version number"
+      git commit -m 'Increase version number'
 
       git push origin master"
 end
