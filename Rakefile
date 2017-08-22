@@ -60,9 +60,9 @@ end
 desc 'Check for uncommited changes and correct branch'
 task :git_check do
   branch = `branch_name=$(git symbolic-ref HEAD 2>/dev/null); branch_name=${branch_name##refs/heads/}; echo ${branch_name:-HEAD}`.strip
-  abort 'You have checked out the #{branch} branch, please only deploy from the master branch!' unless branch == 'master'
+  abort "You have checked out the #{branch} branch, please only deploy from the master branch!" unless branch == 'master'
 
-  abort 'You have unstaged or uncommitted changes! Please only deploy from a clean working directory!' if `git status --porcelain`.present?
+  abort "You have unstaged or uncommitted changes! Please only deploy from a clean working directory!" if `git status --porcelain`.present?
 end
 
 desc 'Increment recognizer version number'
