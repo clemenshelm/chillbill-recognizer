@@ -6,7 +6,7 @@ require_relative '../models/price_term'
 class PriceDetector
   PRICE_REGEX = /(-?[1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-)/
   PREFIX_CURRENCY_REGEX = /(€|EUR)/
-  ALLOWED_PREFIX_REGEX = /(?:^|[^\d,A-Za-z\.])/
+  ALLOWED_PREFIX_REGEX = /(?:^|[^\d,A-Za-z\.-])/
   DECIMAL_PRICE_REGEX =
     /#{ALLOWED_PREFIX_REGEX}(#{PREFIX_CURRENCY_REGEX}?#{PRICE_REGEX})$/
   WRITTEN_PRICE_REGEX = /(\d+ Euro)/
@@ -40,7 +40,6 @@ class PriceDetector
 
     find_prices(SHORT_PRICE_REGEX, max_words: 1)
     PriceTerm.dataset
-    binding.pry
   end
 
   class << self

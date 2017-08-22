@@ -714,6 +714,24 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'does not detect prices in long weird word' do
+    # from bill 2AQDJZ5Nrhva2Qhug.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: ',.:2,..-2-w-.2---2.....-242.206.-',
+      left: 0.724476439790576,
+      right: 0.9617146596858639,
+      top: 0.9286209286209286,
+      bottom: 0.9410949410949411
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
