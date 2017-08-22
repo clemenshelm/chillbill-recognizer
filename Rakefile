@@ -108,7 +108,7 @@ task :restart_task do
 end
 
 desc 'Notify Rollbar about deployment so it can autoresolve all errors'
-task :notify_rollbar => [:push_image, :restart_task] do
+task :notify_rollbar do
   require 'YAML'
   data = YAML.load_file "lib/version.yml"
   recognizer_version = data["Version"]
@@ -117,7 +117,7 @@ task :notify_rollbar => [:push_image, :restart_task] do
 end
 
 desc 'Increments recognizer version number and deploys newest version'
-task :deploy => [:notify_rollbar] do
+task :deploy => [:push_image, :restart_task, :notify_rollbar] do
   p "Newest recognizer version successfully deployed!✌️"
 end
 
