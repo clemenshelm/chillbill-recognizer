@@ -8,7 +8,7 @@ describe Dimensionable do
     BillDimension.create_image_dimensions(width: 3057, height: 4323)
   end
 
-  it 'can detect the width of a term' do
+  it 'can calculate the width of a term' do
     # From BYnCDzw7nNMFergRW.pdf
     term = DateTerm.new(
       text: '16.03.2016',
@@ -22,7 +22,7 @@ describe Dimensionable do
     expect(term.width).to eq 0.06839005235602091
   end
 
-  it 'can detect the height of a term' do
+  it 'can calculate the height of a term' do
     # From BYnCDzw7nNMFergRW.pdf
     term = DateTerm.new(
       text: '16.03.2016',
@@ -36,7 +36,7 @@ describe Dimensionable do
     expect(term.height).to eq 0.007400555041628121
   end
 
-  it 'can detect the center of a term' do
+  it 'can calculate the horizontal_center of a term' do
     # From BYnCDzw7nNMFergRW.pdf
     term = DateTerm.new(
       text: '16.03.2016',
@@ -47,7 +47,7 @@ describe Dimensionable do
       first_word_id: 26
     )
 
-    expect(term.center).to eq 0.7213678010471205
+    expect(term.horizontal_center).to eq 0.7213678010471205
   end
 
   describe '#right_before' do
