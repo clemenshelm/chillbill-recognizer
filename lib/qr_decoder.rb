@@ -3,13 +3,6 @@ require 'zbar'
 
 class QRDecoder
   include Magick
-  VAT_RATES = [
-    20,
-    10,
-    13,
-    0,
-    nil
-  ].freeze
 
   def initialize(image)
     @image = image
@@ -24,23 +17,16 @@ class QRDecoder
     all_data = qr_codes.last.data.split('_')
     return unless all_data.length == 14
 
-    prices = all_data[5..9].map { |p| BigDecimal.new(p.sub(',', '.')) }
-    prices_and_vats = VAT_RATES.zip(prices).to_h
-    prices_present = prices_and_vats.select { |_vat, price| price.positive? }
+    filtered_data = determine_data_format_and_set_data(all_data)
 
-    calculated_amounts = prices_present.map do |vat, price|
-      {
-        total: (price * 100).to_i,
-        vatRate: vat
-      }
-    end
+    date, prices, vat_rates = filtered_data.values_at(:date, :prices, :vat_rates)
 
-    date_in_qr = DateTime.strptime(all_data[4], '%Y-%m-%d').strftime('%Y-%m-%d')
+    date = DateTime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
 
     {
-      invoiceDate: date_in_qr,
-      dueDate: date_in_qr,
-      amounts: calculated_amounts
+      invoiceDate: date,
+      dueDate: date,
+      amounts: calculate_amounts(prices, vat_rates)
     }
   end
 
@@ -56,5 +42,37 @@ class QRDecoder
     tmp_image.destroy!
 
     @qr_codes = ZBar::Image.from_pgm(image_blob).process(symbology: :qrcode)
+  end
+
+  def determine_data_format_and_set_data(qr_code_parts)
+    if qr_code_parts[1] == 'R1'
+      {
+        vat_rates: [20, 13, 10, 0, nil],
+        prices: qr_code_parts[6..10],
+        date: qr_code_parts[5]
+      }
+    else
+      {
+        vat_rates: [20, 10, 13, 0, nil],
+        prices: qr_code_parts[5..9],
+        date: qr_code_parts[4]
+      }
+    end
+  end
+
+  def calculate_amounts(prices, vat_rates)
+    formatted_prices = prices.map do |p|
+      (BigDecimal.new(p.sub(',', '.')) * 100).to_i
+    end
+
+    prices_and_vats = vat_rates.zip(formatted_prices).to_h
+    prices_present = prices_and_vats.select { |_vat, price| price.positive? }
+
+    prices_present.map do |vat, price|
+      {
+        total: price,
+        vatRate: vat
+      }
+    end
   end
 end
