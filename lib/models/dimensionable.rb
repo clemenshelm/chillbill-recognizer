@@ -8,7 +8,7 @@ module Dimensionable
     bottom - top
   end
 
-  def center
+  def horizontal_center
     left + (width / 2)
   end
 
@@ -61,7 +61,8 @@ module Dimensionable
     end
 
     def in_same_column(word1, word2)
-      word2.center > word1.left && word2.center < word1.right
+      word2.horizontal_center > word1.left &&
+        word2.horizontal_center < word1.right
     end
   end
 end
