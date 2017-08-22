@@ -71,12 +71,6 @@ task :increment_version => [:git_check] do
   data = YAML.load_file "lib/version.yml"
   data["Version"] += 1
   File.open("lib/version.yml", 'w') { |f| YAML.dump(data, f) }
-
-  sh "git add lib/version.yml
-
-      git commit -m 'Increase version number'
-
-      git push origin master"
 end
 
 desc 'Pushes newest docker image to ECS repository'
@@ -118,12 +112,18 @@ end
 
 desc 'Increments recognizer version number and deploys newest version'
 task :deploy => [:push_image, :restart_task, :notify_rollbar] do
+  sh "git add lib/version.yml
+
+      git commit -m 'Increase version number'
+
+      git push origin master"
+      
   p "Newest recognizer version successfully deployed!✌️"
 end
 
 desc 'Gains access to parent image and builds recognizer image'
 task :build do
-  sh "(aws ecr get-login --region eu-central-1) | /bin/bash
+  sh "(aws ecr get-login --no-include-email --region eu-central-1) | /bin/bash
 
       docker pull 175255700812.dkr.ecr.eu-central-1.amazonaws.com/recognizer-envd:latest
 
