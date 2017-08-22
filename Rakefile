@@ -57,12 +57,26 @@ def process(bill_kind, queue, &bill_proc)
   hub.run(&bill_proc)
 end
 
+desc 'Check for uncommited changes and correct branch'
+task :git_check do
+  branch = `branch_name=$(git symbolic-ref HEAD 2>/dev/null); branch_name=${branch_name##refs/heads/}; echo ${branch_name:-HEAD}`.strip
+  abort "⛔️  Deployment aborted! You have checked out the #{branch} branch, please only deploy from the master branch!" unless branch == 'master'
+
+  abort "⛔️  Deployment aborted! You have unstaged or uncommitted changes! Please only deploy from a clean working directory!" unless `git status --porcelain`.empty?
+end
+
 desc 'Increment recognizer version number'
-task :increment_version do
+task :increment_version => [:git_check] do
   require 'YAML'
   data = YAML.load_file "lib/version.yml"
   data["Version"] += 1
   File.open("lib/version.yml", 'w') { |f| YAML.dump(data, f) }
+
+  sh "git add lib/version.yml
+
+      git commit -m 'Increase version number'
+
+      git push origin master"
 end
 
 desc 'Pushes newest docker image to ECS repository'
@@ -89,11 +103,22 @@ task :restart_task do
   latest_revision = all_revision_numbers.map {|num| num.to_i}.sort.last
 
   sh "aws ecs run-task --cluster ChillBill --task-definition ecscompose-recognizer:#{latest_revision} --count 1 --region eu-central-1"
+
+  p "The recognizer task has successfully been restarted!🦑"
+end
+
+desc 'Notify Rollbar about deployment so it can autoresolve all errors'
+task :notify_rollbar do
+  require 'YAML'
+  data = YAML.load_file "lib/version.yml"
+  recognizer_version = data["Version"]
+  access_token = ENV['ROLLBAR_ACCESS_TOKEN']
+  sh "curl https://api.rollbar.com/api/1/deploy/ -F access_token=#{access_token} -F environment=production -F revision=#{recognizer_version}"
 end
 
 desc 'Increments recognizer version number and deploys newest version'
-task :deploy => [:push_image, :restart_task] do
-  p "Newest recognizer version successfully deployed!"
+task :deploy => [:push_image, :restart_task, :notify_rollbar] do
+  p "Newest recognizer version successfully deployed!✌️"
 end
 
 desc 'Gains access to parent image and builds recognizer image'
