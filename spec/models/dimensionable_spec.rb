@@ -8,7 +8,7 @@ describe Dimensionable do
     BillDimension.create_image_dimensions(width: 3057, height: 4323)
   end
 
-  it 'can detect the width of a term' do
+  it 'can calculate the width of a term' do
     # From BYnCDzw7nNMFergRW.pdf
     term = DateTerm.new(
       text: '16.03.2016',
@@ -22,7 +22,7 @@ describe Dimensionable do
     expect(term.width).to eq 0.06839005235602091
   end
 
-  it 'can detect the height of a term' do
+  it 'can calculate the height of a term' do
     # From BYnCDzw7nNMFergRW.pdf
     term = DateTerm.new(
       text: '16.03.2016',
@@ -34,6 +34,20 @@ describe Dimensionable do
     )
 
     expect(term.height).to eq 0.007400555041628121
+  end
+
+  it 'can calculate the horizontal_center of a term' do
+    # From BYnCDzw7nNMFergRW.pdf
+    term = DateTerm.new(
+      text: '16.03.2016',
+      left: 0.68717277486911,
+      right: 0.7555628272251309,
+      top: 0.16951896392229418,
+      bottom: 0.1769195189639223,
+      first_word_id: 26
+    )
+
+    expect(term.horizontal_center).to eq 0.7213678010471205
   end
 
   describe '#right_before' do
@@ -324,6 +338,144 @@ describe Dimensionable do
 
       result = Word.right_below(first_word)
       expect(result).to eq word_below
+    end
+
+    it 'does not detect a word above another' do
+      # From WmcA2uThGP5QaaciP.pdf
+      create(
+        :word,
+        text: 'kg',
+        left: 0.7480366492146597,
+        right: 0.7673429319371727,
+        top: 0.3856845031271717,
+        bottom: 0.39587676627287466
+      )
+
+      below = create(
+        :word,
+        text: '123,00',
+        left: 0.7081151832460733,
+        right: 0.7653795811518325,
+        top: 0.41463979615473706,
+        bottom: 0.4232105628908965
+      )
+
+      result = Word.right_below(below)
+      expect(result).to be_nil
+    end
+  end
+
+  describe '#in_same_column' do
+    it 'detects a words in the same column' do
+      # From ZqMX24iDMxxst5cnP.pdf
+      word1 = create(
+        :word,
+        text: 'Ristretto',
+        left: 0.2087696335078534,
+        right: 0.26767015706806285,
+        top: 0.3808973172987974,
+        bottom: 0.3894542090656799
+      )
+
+      create(
+        :word,
+        text: 'Livanto',
+        left: 0.20844240837696335,
+        right: 0.2594895287958115,
+        top: 0.4024051803885291,
+        bottom: 0.41096207215541164
+      )
+
+      word2 = create(
+        :word,
+        text: 'Caramelito',
+        left: 0.2081151832460733,
+        right: 0.2859947643979058,
+        top: 0.44472710453284,
+        bottom: 0.45351526364477335
+      )
+
+      result = Word.send(:in_same_column, word1, word2)
+      expect(result).to eq true
+    end
+  end
+
+  describe '#right_above' do
+    it 'detects a word directly above another' do
+      # From WmcA2uThGP5QaaciP.pdf
+      create(
+        :word,
+        text: 'GmbH',
+        left: 0.2012434554973822,
+        right: 0.24149214659685864,
+        top: 0.08617095205003475,
+        bottom: 0.09427843409775306
+      )
+
+      create(
+        :word,
+        text: 'Telefon',
+        left: 0.5163612565445026,
+        right: 0.5863874345549738,
+        top: 0.08617095205003475,
+        bottom: 0.09427843409775306
+      )
+
+      create(
+        :word,
+        text: ':',
+        left: 0.6914267015706806,
+        right: 0.694371727748691,
+        top: 0.08941394486912208,
+        bottom: 0.09427843409775306
+      )
+
+      above = create(
+        :word,
+        text: 'kg',
+        left: 0.7480366492146597,
+        right: 0.7673429319371727,
+        top: 0.3856845031271717,
+        bottom: 0.39587676627287466
+      )
+
+      below = create(
+        :word,
+        text: '123,00',
+        left: 0.7081151832460733,
+        right: 0.7653795811518325,
+        top: 0.41463979615473706,
+        bottom: 0.4232105628908965
+      )
+
+      result = Word.right_above(below)
+      expect(result).to eq above
+    end
+  end
+
+  describe '#on_same_line' do
+    it 'detects if a word is on the same line' do
+      # From ZqMX24iDMxxst5cnP.pdf
+      word1 = create(
+        :word,
+        text: 'Ristretto',
+        left: 0.2087696335078534,
+        right: 0.26767015706806285,
+        top: 0.3808973172987974,
+        bottom: 0.3894542090656799
+      )
+
+      word2 = create(
+        :word,
+        text: 'Kaffee',
+        left: 0.2846858638743455,
+        right: 0.33049738219895286,
+        top: 0.38066604995374653,
+        bottom: 0.3894542090656799
+      )
+
+      result = Word.send(:on_same_line, word1, word2)
+      expect(result).to eq true
     end
   end
 end

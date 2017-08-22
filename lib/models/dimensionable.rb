@@ -8,6 +8,10 @@ module Dimensionable
     bottom - top
   end
 
+  def horizontal_center
+    left + (width / 2)
+  end
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -31,8 +35,17 @@ module Dimensionable
     def right_below(current)
       all.find do |lower|
         lower.top < (current.bottom + lower.height) &&
-          lower.right > current.left && lower != current
+          lower.top > current.bottom && in_same_column(current, lower) &&
+          lower != current
       end
+    end
+
+    def right_above(current)
+      everything_above = all.select do |above|
+        current.top > above.bottom && in_same_column(current, above) &&
+          above != current
+      end
+      everything_above.last
     end
 
     def below(current)
@@ -45,6 +58,11 @@ module Dimensionable
 
     def on_same_line(word1, word2)
       word1.bottom > word2.top && word2.bottom > word1.top
+    end
+
+    def in_same_column(word1, word2)
+      word2.horizontal_center > word1.left &&
+        word2.horizontal_center < word1.right
     end
   end
 end
