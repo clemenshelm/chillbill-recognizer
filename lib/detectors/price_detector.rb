@@ -2,6 +2,7 @@
 require 'ostruct'
 require 'bigdecimal'
 require_relative '../models/price_term'
+require_relative '../detectors/currency_detector'
 
 class PriceDetector
   PRICE_REGEX = /(-?[1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}|-)/
@@ -25,12 +26,13 @@ class PriceDetector
     filter_out_quantity_column
 
     end_word_with_space = ->(term) { term.text += ' ' }
-
-    find_prices(
-      HUNGARIAN_PRICE_REGEX,
-      after_each_word: end_word_with_space,
-      max_words: 2
-    )
+    unless Word.where(text: CurrencyDetector::HUF_SYMBOLS).empty?
+      find_prices(
+        HUNGARIAN_PRICE_REGEX,
+        after_each_word: end_word_with_space,
+        max_words: 2
+      )
+    end
 
     find_prices(
       WRITTEN_PRICE_REGEX,

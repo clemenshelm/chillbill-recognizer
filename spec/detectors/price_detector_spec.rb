@@ -221,8 +221,33 @@ describe PriceDetector do
     # From bill Thzi7n3qdSk4awip2.pdf
     # Dummy values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
+    create(
+      :word,
+      text: '11',
+      left: 0.5734380111220151,
+      right: 0.58717697088649,
+      top: 0.5505823247316739,
+      bottom: 0.5613153688056634
+    )
 
-    create_following_words(%w(11 038))
+    create(
+      :word,
+      text: '038',
+      left: 0.5966633954857704,
+      right: 0.6185803074910042,
+      top: 0.5505823247316739,
+      bottom: 0.5608586435259192
+    )
+
+    create(
+      :word,
+      text: 'Ft',
+      left: 0.6277396140006543,
+      right: 0.6411514556754988,
+      top: 0.5505823247316739,
+      bottom: 0.5608586435259192
+    )
+
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to eq ['11 038']
   end
@@ -708,6 +733,60 @@ describe PriceDetector do
       right: 0.1573438011122015,
       top: 0.5016196205460435,
       bottom: 0.512494215640907
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect a telephone number as a hungarian price' do
+    # From bill gNPBm9p7ttJJFgCdY.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '+43',
+      left: 0.5116126921818777,
+      right: 0.5322211318285901,
+      top: 0.9275965764515383,
+      bottom: 0.9343048808697664
+    )
+
+    create(
+      :word,
+      text: '660',
+      left: 0.5377821393523062,
+      right: 0.5583905789990187,
+      top: 0.9275965764515383,
+      bottom: 0.9343048808697664
+    )
+
+    create(
+      :word,
+      text: '76',
+      left: 0.5639515865227347,
+      right: 0.5773634281975794,
+      top: 0.9275965764515383,
+      bottom: 0.9343048808697664
+    )
+
+    create(
+      :word,
+      text: '75',
+      left: 0.582597317631665,
+      right: 0.5960091593065097,
+      top: 0.9275965764515383,
+      bottom: 0.9343048808697664
+    )
+
+    create(
+      :word,
+      text: '979',
+      left: 0.6015701668302257,
+      right: 0.6221786064769381,
+      top: 0.9275965764515383,
+      bottom: 0.9343048808697664
     )
 
     prices = PriceDetector.filter
