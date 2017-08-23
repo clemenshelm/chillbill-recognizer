@@ -714,7 +714,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
-  it 'does not detect prices in long weird word' do
+  it 'does not detect prices in a long weird word' do
     # from bill 2AQDJZ5Nrhva2Qhug.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
