@@ -739,7 +739,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
-  it 'does not detect a telephone number as a hungarian prices' do
+  it 'does not detect a telephone number as a hungarian price' do
     # From bill gNPBm9p7ttJJFgCdY.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
