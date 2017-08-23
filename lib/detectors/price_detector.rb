@@ -26,11 +26,13 @@ class PriceDetector
 
     end_word_with_space = ->(term) { term.text += ' ' }
 
-    find_prices(
-      HUNGARIAN_PRICE_REGEX,
-      after_each_word: end_word_with_space,
-      max_words: 2
-    )
+    unless Word.where(text: ['Ft.', 'Ft', 'HUF']).empty?
+      find_prices(
+        HUNGARIAN_PRICE_REGEX,
+        after_each_word: end_word_with_space,
+        max_words: 2
+      )
+    end
 
     find_prices(
       WRITTEN_PRICE_REGEX,
