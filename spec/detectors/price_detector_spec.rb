@@ -793,6 +793,195 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'does not detect percent as price' do
+    # from bill 2X3ybPNqDbuwH5dSX.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '5,66',
+      left: 0.39299738219895286,
+      right: 0.42408376963350786,
+      top: 0.5289084181313598,
+      bottom: 0.5388529139685476
+    )
+
+    create(
+      :word,
+      text: '%',
+      left: 0.43030104712041883,
+      right: 0.44404450261780104,
+      top: 0.5289084181313598,
+      bottom: 0.5374653098982424
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect prices' do
+    # from bill 2tMo5XaJRTcPwG55r.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '0,25',
+      left: 0.28221059516023544,
+      right: 0.3132766514061478,
+      top: 0.5105202312138728,
+      bottom: 0.5204624277456648
+    )
+
+    create(
+      :word,
+      text: 'Stunden',
+      left: 0.3194898626553303,
+      right: 0.3829300196206671,
+      top: 0.5102890173410405,
+      bottom: 0.5193063583815029
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect multi units' do
+    # from bill KGEFGTvogD5Ly9jTT.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '30,00',
+      left: 0.5173429319371727,
+      right: 0.5543193717277487,
+      top: 0.4663739311301132,
+      bottom: 0.4758493182343425
+    )
+
+    create(
+      :word,
+      text: 'SK',
+      left: 0.5608638743455497,
+      right: 0.580824607329843,
+      top: 0.4661428241275711,
+      bottom: 0.47469378322163164
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.5271596858638743,
+      right: 0.5546465968586387,
+      top: 0.5137508666512596,
+      bottom: 0.5236884677605731
+    )
+
+    create(
+      :word,
+      text: 'PA',
+      left: 0.5611910994764397,
+      right: 0.581151832460733,
+      top: 0.5137508666512596,
+      bottom: 0.5220707187427779
+    )
+
+    create(
+      :word,
+      text: '40,00',
+      left: 0.5160340314136126,
+      right: 0.5536649214659686,
+      top: 0.6089669516986365,
+      bottom: 0.6184423388028657
+    )
+
+    create(
+      :word,
+      text: 'ST',
+      left: 0.5602094240837696,
+      right: 0.5795157068062827,
+      top: 0.6089669516986365,
+      bottom: 0.6170556967876126
+    )
+
+    create(
+      :word,
+      text: '10,00',
+      left: 0.518324607329843,
+      right: 0.5543193717277487,
+      top: 0.5611278021724059,
+      bottom: 0.5710654032817194
+    )
+
+    create(
+      :word,
+      text: 'SG',
+      left: 0.5605366492146597,
+      right: 0.5818062827225131,
+      top: 0.5611278021724059,
+      bottom: 0.5696787612664663
+    )
+
+    create(
+      :word,
+      text: '2.065,10',
+      left: 0.724476439790576,
+      right: 0.7833769633507853,
+      top: 0.561358909174948,
+      bottom: 0.5710654032817194
+    )
+
+    create(
+      :word,
+      text: 'TO',
+      left: 0.7882853403141361,
+      right: 0.8089005235602095,
+      top: 0.561358909174948,
+      bottom: 0.5694476542639242
+    )
+
+    create(
+      :word,
+      text: '1,57',
+      left: 0.7542539267015707,
+      right: 0.7820680628272252,
+      top: 0.5139819736538017,
+      bottom: 0.5232262537554888
+    )
+
+    create(
+      :word,
+      text: 'KG',
+      left: 0.7882853403141361,
+      right: 0.8089005235602095,
+      top: 0.5135197596487173,
+      bottom: 0.5220707187427779
+    )
+
+    create(
+      :word,
+      text: '310,93',
+      left: 0.7372382198952879,
+      right: 0.7830497382198953,
+      top: 0.6089669516986365,
+      bottom: 0.6184423388028657
+    )
+
+    create(
+      :word,
+      text: 'M3',
+      left: 0.7889397905759162,
+      right: 0.8089005235602095,
+      top: 0.6089669516986365,
+      bottom: 0.6170556967876126
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
