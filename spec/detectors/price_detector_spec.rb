@@ -739,6 +739,24 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'does not detect prices in a long weird word' do
+    # from bill 2AQDJZ5Nrhva2Qhug.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: ',.:2,..-2-w-.2---2.....-242.206.-',
+      left: 0.724476439790576,
+      right: 0.9617146596858639,
+      top: 0.9286209286209286,
+      bottom: 0.9410949410949411
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   it 'does not detect a telephone number as a hungarian price' do
     # From bill gNPBm9p7ttJJFgCdY.pdf
     # Dummy dimension values for the bill
