@@ -129,3 +129,39 @@ ggplot(data = one_element_per_bill, aes(x = bill_ratio)) +
   geom_histogram() +
   geom_density(kernel = "gaussian") +
   geom_segment(aes(x = 297/210, y = 0, xend = 297/210, yend = 20))
+
+
+
+
+#### plot median character width for bill type
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = char_width_med)) +
+  geom_dotplot(aes(color = bill_format))
+
+
+#### plot median character height for bill type
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = char_height_med)) +
+  geom_dotplot(aes(color = bill_format))
+
+#### plot median character height width ratio for bill type
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = char_hw_ratio)) +
+  geom_dotplot(aes(color = bill_format))
+
+
+#### plot text box width 
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = text_box_width)) +
+  geom_dotplot(aes(color = bill_format))
+
+
+#### plot page ratio
+# load calibration_data_format
+calibration_data_format %>% 
+  ggplot(aes(x = text_box_ratio)) +
+  geom_dotplot(aes(color = bill_format))

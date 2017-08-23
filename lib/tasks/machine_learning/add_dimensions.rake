@@ -23,7 +23,9 @@ namespace :machine_learning do
 
       recognizer = BillRecognizer.new(image_url: store['image_url'])
       recognizer.empty_database
-      recognizer.download_and_convert_image
+      png_file = recognizer.download_and_convert_image
+      recognizer.recognize_words(png_file)
+      recognizer.calculate_text_box
       store['dimensions'] = {
         'width' => BillDimension.bill_width,
         'height' => BillDimension.bill_height,
