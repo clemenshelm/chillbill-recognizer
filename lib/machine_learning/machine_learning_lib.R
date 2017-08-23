@@ -1,4 +1,4 @@
-# The function "generate_tuples" gets prices and returns possible combinations of tuples. 
+# The function "generate_tuples_prices" gets prices and returns possible combinations of tuples. 
 # It also adds attributes and erases NaN entries
 
 
@@ -6,9 +6,20 @@
 # price_list = read.csv("csv/2D7BuHc3f8wAmb4y8.csv", header=TRUE)
 # price_list = read.csv("csv/5RRtGNwYGPvBsLzZj.csv", header=TRUE)
 # price_list = read.csv("csv/8Rn375famrhC6b3x7.csv", header=TRUE)
-# price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE)
+# price_list = read.csv("csv/a8kRyPYTHrov5nTGC.csv", header=TRUE) # added text_box_attributes
 # price_list = read.csv("csv/9DeNzw5KD2bCFCis9.csv", header=TRUE) # problem
 # price_list = read.csv("csv/2CfCKenByph4Ht8EE.csv", header=TRUE) # problem with total_width_s
+
+# add fake text_box dimensions to all bills
+# prices_several_bills$text_box_left <- min(prices_several_bills$left)
+# prices_several_bills$text_box_right <- max(prices_several_bills$right)
+# prices_several_bills$text_box_top <- min(prices_several_bills$top)
+# prices_several_bills$text_box_bottom <- max(prices_several_bills$bottom)
+
+# add fake bill_format to all bills
+# correct_price_tuples$bill_format <- "a4"
+# correct_price_tuples[c(1, 5, 6, 8, 30), "bill_format"] <- "sales_check"
+
 
 
 # testdata for grid search
@@ -22,14 +33,39 @@ library(e1071)
 library(dplyr)
 library(data.table)
 
+recalculate_positions <- function(price_list){
+  horizontal_scaling <- price_list %>%
+    slice(1) %>%
+    transmute( ( 1 - text_box_left ) / (text_box_right - text_box_left) ) %>%
+    as.numeric()
 
-generate_tuples <- function(price_list){
+  vertical_scaling <- price_list %>%
+    slice(1) %>%
+    transmute( ( 1 - text_box_top ) / (text_box_bottom - text_box_top) ) %>%
+    as.numeric()
+
+  return(
+    price_list %>% mutate(left = ( left - text_box_left ) * horizontal_scaling,
+                          right = ( right - text_box_left ) * horizontal_scaling,
+                          top = ( top - text_box_top ) * vertical_scaling,
+                          bottom = ( bottom - text_box_top ) * vertical_scaling,
+                          text_box_top = 0,
+                          text_box_bottom = 1,
+                          text_box_left = 0,
+                          text_box_right = 1)
+  )
+}
+
+
+generate_tuples_prices <- function(price_list){
+  # price_list <- recalculate_positions(price_list)
+
   # Checking of NaN entries in price_list
   if (sum(is.na(price_list)) != 0){
     cat("There are NaN entries in the price list of bill ", toString(price_list$bill_id[1]), "\n")
     return(NULL)
   }
-  
+
   combinations <- expand.grid(total = c(1:nrow(price_list)),
                               vat = c(1:nrow(price_list)))
 
@@ -131,6 +167,92 @@ generate_tuples <- function(price_list){
 }
 
 
+genearte_calibration_data_prices <- function(prices_several_bills, correct_price_tuples){
+  # generate tuples and add attributes for several bills
+  tab <- table(prices_several_bills$bill_id)
+  calibration_data <-
+    generate_tuples_prices(prices_several_bills[prices_several_bills$bill_id == names(tab)[1], ])
+  for (i in 2:length(tab)){
+    # cat("Bill #", i, "; Bill id:", names(tab)[i],"\n")
+    calibration_data <-
+      rbind(calibration_data,
+            generate_tuples_prices(
+              prices_several_bills[prices_several_bills$bill_id == names(tab)[i], ]))
+  }
+
+  # adding correct answer in "valid_amount"
+  calibration_data[, "valid_amount"] <- 0
+  calibration_data[calibration_data$total_id %in% correct_price_tuples$total_id &
+                     calibration_data$vat_id %in% correct_price_tuples$vat_id,  "valid_amount"] <- 1
+  # calibration_data$valid_amount = as.factor(calibration_data$valid_amount) #convert to factor
+
+  # Change Row names to 1, 2, 3, ...
+  rownames(calibration_data) <- NULL
+
+  return(calibration_data)
+}
+
+
+generate_tuples_format <- function(price_list){
+  # returns one line of attributes
+  char_width_med <- price_list %>%
+    group_by(price_id) %>%
+    mutate(tmp_r_l = right - left,
+           tmp_nchar = nchar(toString(text)),
+           char_width = (right - left) /
+             ( nchar(toString(text)) * (text_box_right - text_box_left) ) ) %>%
+    ungroup() %>%
+    summarise(char_width_med = median(char_width))
+
+  char_height_med <- price_list %>%
+    group_by(price_id) %>%
+    mutate(char_height = (bottom - top) / (text_box_bottom - text_box_top) ) %>%
+    ungroup() %>%
+    summarise(char_height_med = median(char_height))
+
+  text_box_width <- price_list %>%
+    slice(1) %>%
+    transmute(text_box_width = text_box_right - text_box_left)
+
+  text_box_ratio <- price_list %>%
+    slice(1) %>%
+    transmute(text_box_ratio = ( (text_box_right - text_box_left) * bill_width ) /
+                ( (text_box_bottom - text_box_top) * bill_height) )
+
+  return(
+    data.frame(bill_id =  toString(price_list[1, "bill_id"]),
+               char_hw_ratio = as.numeric(char_height_med / char_width_med),
+               char_height_med = char_height_med,
+               char_width_med = char_width_med,
+               char_width_med_b = as.numeric(char_width_med > 0.018), # analyse graphically
+               text_box_width = text_box_width,
+               text_box_width_b = as.numeric(text_box_width < 0.5), # analyse graphically
+               text_box_ratio = text_box_ratio,
+               text_box_ratio_b = as.numeric(text_box_ratio < 0.4)) # analyse graphically
+  )
+}
+
+
+generate_calibration_data_format <- function(prices_several_bills, correct_price_tuples){
+  bill_ids <- prices_several_bills %>% select(bill_id) %>% distinct() %>% lapply(as.character)
+
+  calibration_data <- NULL
+  for ( i in bill_ids$bill_id ){
+    calibration_data <- rbind(calibration_data,
+                              cbind(prices_several_bills %>%
+                                      filter(bill_id == i) %>%
+                                      generate_tuples_format(),
+                                    correct_tye = correct_price_tuples %>%
+                                      filter(bill_id == i) %>%
+                                      select(bill_format)
+                                    )
+                              )
+  }
+
+  return(calibration_data)
+}
+
+
 # Consider that this function can return NaN entries (see  documentation)
 error_wrong_positive <- function(true_values, predictions)
   mean(true_values[predictions == 1] == 0)
@@ -197,11 +319,16 @@ hyperparameters_grid_search <- function(data_train, answer_train, cost_range = 1
 
     return(list(tuned = tuned,
                 wrong_positive = matrix_wrong_positive,
-                wrong_negative = matrix_wrong_negative))
+                wrong_negative = matrix_wrong_negative,
+                standard_format = data.frame(cost = rep(tuned$performances$cost, each = nruns),
+                                             gamma = rep(tuned$performances$gamma, each = nruns),
+                                             wrong_positive = glob_wrong_positive,
+                                             wrong_negative = glob_wrong_negative)))
     }   else {
     return(tuned$best.parameters)
   }
 }
+
 
 
 

@@ -418,6 +418,21 @@ describe CurrencyDetector do
     expect(currencies.map(&:to_iso)).to eq ['HUF']
   end
 
+  it 'detects HUF as Ft on a bill' do
+    # From Thzi7n3qdSk4awip2.pdf
+    create(
+      :word,
+      text: 'Ft',
+      left: 0.5966633954857704,
+      right: 0.6104023552502453,
+      top: 0.5788992920758164,
+      bottom: 0.5896323361498059
+    )
+
+    currencies = CurrencyDetector.filter
+    expect(currencies.map(&:to_iso)).to eq ['HUF']
+  end
+
   it 'detects EUR as Euro on a bill' do
     # From mMHiT2b3C5fgYqBzY.pdf
     create(

@@ -9,7 +9,7 @@ class CurrencyDetector
   CNY_SYMBOLS = %w(CNY).freeze
   SEK_SYMBOLS = %w(SEK).freeze
   GBP_SYMBOLS = %w(GBP £).freeze
-  HUF_SYMBOLS = %w(HUF Ft.).freeze
+  HUF_SYMBOLS = %w(HUF Ft. Ft).freeze
   HRK_SYMBOLS = %w(HRK).freeze
   ALL_SYMBOLS = EUR_SYMBOLS + USD_SYMBOLS + HKD_SYMBOLS +
                 CHF_SYMBOLS + CNY_SYMBOLS + SEK_SYMBOLS + GBP_SYMBOLS +
