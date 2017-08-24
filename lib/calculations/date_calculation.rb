@@ -26,7 +26,7 @@ class DateCalculation
   def due_date
     return nil if DueDateLabelTerm.empty?
     due_date_term = DateTerm.right_after(DueDateLabelTerm.first)
-    due_date_term ||= DateTerm.last_below(DueDateLabelTerm.first)
+    due_date_term ||= DateTerm.bottom_most(DueDateLabelTerm.first)
     due_date = due_date_term&.to_datetime
 
     due_date || begin

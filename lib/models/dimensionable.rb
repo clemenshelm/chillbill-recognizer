@@ -48,12 +48,11 @@ module Dimensionable
       everything_above.last
     end
 
-    def last_below(current)
-      everything_above = all.select do |lower|
-        lower.top > current.top && lower.bottom > current.bottom && current != lower &&
-          current.left < lower.left
+    def bottom_most(current)
+      everything_below = all.select do |lower|
+        in_same_column(current, lower) && current != lower
       end
-      everything_above.last
+      everything_below.last
     end
 
     private

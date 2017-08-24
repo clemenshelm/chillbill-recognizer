@@ -286,7 +286,7 @@ describe Dimensionable do
         bottom: 0.3708073097386074
       )
 
-      result = Word.last_below(first_word)
+      result = Word.bottom_most(first_word)
       expect(result).to eq following_word
     end
 
@@ -310,7 +310,7 @@ describe Dimensionable do
         bottom: 0.3710386305806153
       )
 
-      result = Word.last_below(first_word)
+      result = Word.bottom_most(first_word)
       expect(result).to be_nil
     end
   end
