@@ -811,6 +811,24 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
+  it 'detects price followed by an euro sign only once' do
+    # From bill 2o8P5wJy9pTYaEbLo.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '2,17€',
+      left: 0.7804319371727748,
+      right: 0.8213350785340314,
+      top: 0.5407030527289547,
+      bottom: 0.5499537465309898
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['2,17€']
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
