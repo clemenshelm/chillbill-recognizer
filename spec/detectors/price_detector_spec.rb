@@ -587,7 +587,7 @@ describe PriceDetector do
   end
 
   it 'does not detect pieces as prices' do
-    # From bill 29pwjsKx88nhnQKm9.pdf
+    # From 29pwjsKx88nhnQKm9.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -668,7 +668,7 @@ describe PriceDetector do
   end
 
   it 'detects negative prices' do
-    # From bill 2D7BuHc3f8wAmb4y8.pdf
+    # From 2D7BuHc3f8wAmb4y8.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -713,7 +713,7 @@ describe PriceDetector do
   end
 
   it 'does not detect numbers below Anz.' do
-    # From bill ihfDXTa64yYbFLa6Y.pdf
+    # From ihfDXTa64yYbFLa6Y.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -740,7 +740,7 @@ describe PriceDetector do
   end
 
   it 'does not detect a telephone number as a hungarian price' do
-    # From bill gNPBm9p7ttJJFgCdY.pdf
+    # From gNPBm9p7ttJJFgCdY.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -794,7 +794,7 @@ describe PriceDetector do
   end
 
   it 'does not detect percent as price' do
-    # from bill 2X3ybPNqDbuwH5dSX.pdf
+    # From 2X3ybPNqDbuwH5dSX.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -821,7 +821,7 @@ describe PriceDetector do
   end
 
   it 'does not detect prices' do
-    # from bill 2tMo5XaJRTcPwG55r.pdf
+    # From 2tMo5XaJRTcPwG55r.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
@@ -848,7 +848,7 @@ describe PriceDetector do
   end
 
   it 'does not detect multi units' do
-    # from bill KGEFGTvogD5Ly9jTT.pdf
+    # From KGEFGTvogD5Ly9jTT.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 

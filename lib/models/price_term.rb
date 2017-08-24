@@ -10,7 +10,6 @@ class PriceTerm < Sequel::Model
 
   def valid?
     super && !pass_unit_check
-    # binding.pry
   end
 
   def pass_unit_check
