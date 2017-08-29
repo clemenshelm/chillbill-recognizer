@@ -9,12 +9,12 @@ class PriceTerm < Sequel::Model
   include Dimensionable
 
   def valid?
-    super && !pass_unit_check
+    super && pass_unit_check
   end
 
   def pass_unit_check
-    Word::UNITS.include?(Word.right_after(self)&.text) ||
-      Word::UNITS.include?(Word.right_above(self)&.text)
+    !Word::UNITS.include?(Word.right_after(self)&.text) &&
+      !Word::UNITS.include?(Word.right_above(self)&.text)
   end
 
   def to_d

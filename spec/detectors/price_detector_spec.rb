@@ -838,7 +838,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
-  it 'does not detect prices' do
+  it 'does not detect hours as price' do
     # From 2tMo5XaJRTcPwG55r.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
@@ -865,7 +865,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to be_empty
   end
 
-  it 'does not detect multi units' do
+  it 'does not detect multi units as prices' do
     # From KGEFGTvogD5Ly9jTT.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
@@ -1001,7 +1001,7 @@ describe PriceDetector do
   end
 
   it 'detects price followed by an euro sign only once' do
-    # From bill 2o8P5wJy9pTYaEbLo.pdf
+    # From 2o8P5wJy9pTYaEbLo.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
 
