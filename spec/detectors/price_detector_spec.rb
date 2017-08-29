@@ -3,7 +3,7 @@ require_relative '../../lib/detectors/price_detector'
 require_relative '../support/factory_girl'
 require_relative '../factories' # should be loaded automatically
 
-describe PriceDetector do
+describe PriceDetector, :focus do
   it 'finds prices separated with a comma' do
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
@@ -901,8 +901,11 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['5,00', '431,25', '86,25', '517,50']
   end
 
-  it 'does not detect MWST', :focus do
-    # From  
+  it 'does not detect MWST as price' do
+    # From
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
     :word,
     text: '21,41',
@@ -924,6 +927,60 @@ describe PriceDetector do
     prices = PriceDetector.filter
     expect(prices.map(&:text)).to be_empty
   end
+
+  it 'does not detect date as price' do
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+    :word,
+    text: '10',
+     left: 0.521978021978022,
+     right: 0.5560439560439561,
+     top: 0.724,
+     bottom: 0.737
+    )
+
+    create(
+    :word,
+     text: '.',
+     left: 0.5659340659340659,
+     right: 0.5692307692307692,
+     top: 0.735,
+     bottom: 0.737
+    )
+
+    create(
+    :word,
+     text: '05',
+     left: 0.578021978021978,
+     right: 0.6131868131868132,
+     top: 0.724,
+     bottom: 0.737
+     )
+
+     create(
+     :word,
+     text: '.',
+     left: 0.6230769230769231,
+     right: 0.6263736263736264,
+     top: 0.735,
+     bottom: 0.737
+     )
+
+     create(
+     :word,
+     text: '17',
+     left: 0.6373626373626373,
+     right: 0.6703296703296703,
+     top: 0.724,
+     bottom: 0.7375
+     )
+
+     prices = PriceDetector.filter
+     expect(prices.map(&:text)).to be_empty
+  end
+
 
   # TODO: Move to general helpers
   def create_following_words(texts)

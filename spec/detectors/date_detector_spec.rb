@@ -775,8 +775,58 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'detects dates with max_words 6' do
+    create(
+    :word,
+    text: '10',
+     left: 0.521978021978022,
+     right: 0.5560439560439561,
+     top: 0.724,
+     bottom: 0.737
+    )
+
+    create(
+    :word,
+     text: '.',
+     left: 0.5659340659340659,
+     right: 0.5692307692307692,
+     top: 0.735,
+     bottom: 0.737
+    )
+
+    create(
+    :word,
+     text: '05',
+     left: 0.578021978021978,
+     right: 0.6131868131868132,
+     top: 0.724,
+     bottom: 0.737
+     )
+
+     create(
+     :word,
+     text: '.',
+     left: 0.6230769230769231,
+     right: 0.6263736263736264,
+     top: 0.735,
+     bottom: 0.737
+     )
+
+     create(
+     :word,
+     text: '17',
+     left: 0.6373626373626373,
+     right: 0.6703296703296703,
+     top: 0.724,
+     bottom: 0.7375
+     )
+
+     dates = DateDetector.filter
+     expect(date_strings(dates)).to eq ['2017-05-10']
+  end
+
   def date_strings(date_terms)
-    date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
+    date_terms&.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
   end
 
   # TODO: Move to general helpers

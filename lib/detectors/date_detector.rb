@@ -33,12 +33,11 @@ class DateDetector
     find_dates(reduced_words, LONG_HUNGARIAN_DATE_REGEX, max_words: 1)
 
     DateTerm.order(:first_word_id)
-    binding.pry
   end
 
   def self.filter_out_interefering_date_terms
     words = find_dates(Word.all, LONG_SLASH_DATE_REGEX, max_words: 1)
-    words += find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 3)
+    words += find_dates(Word.all, SHORT_PERIOD_DATE_REGEX, max_words: 6)
     words += find_dates(Word.all, LONG_YEAR_SLASH_REGEX, max_words: 1)
     Word.all - words
   end
