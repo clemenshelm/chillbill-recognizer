@@ -17,7 +17,10 @@ class PriceDetector
   def self.filter_out_quantity_column
     %w(Menge Anz.).each do |quantity_text|
       quantity = Word.first(text: quantity_text)
-      PriceTerm.where { right <= quantity.right }.destroy if quantity
+      next unless quantity
+      PriceTerm.where(Sequel.lit('(right <= ?) AND (left >= ?)',
+                                 quantity.right,
+                                 quantity.left * 0.93)).destroy
     end
   end
 
@@ -42,6 +45,7 @@ class PriceDetector
 
     find_prices(SHORT_PRICE_REGEX, max_words: 1)
     PriceTerm.dataset
+    binding.pry
   end
 
   class << self
