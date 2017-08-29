@@ -3,8 +3,10 @@ require 'ostruct'
 require 'bigdecimal'
 require_relative '../models/price_term'
 require_relative '../detectors/currency_detector'
+require_relative '../models/dimensionable'
 
 class PriceDetector
+  include Dimensionable
   PRICE_REGEX = /(-?[1-9]{1}\d{0,3}|0)([\.,]\d{3})?[,\.](\d{2}€?|-)/
   PREFIX_CURRENCY_REGEX = /(€|EUR)/
   ALLOWED_PREFIX_REGEX = /(?:^|[^\d,A-Za-z\.-])/
@@ -18,15 +20,27 @@ class PriceDetector
     %w(Menge Anz.).each do |quantity_text|
       quantity = Word.first(text: quantity_text)
       next unless quantity
-      PriceTerm.where(Sequel.lit('(right <= ?) AND (left >= ?)',
-                                 quantity.right,
-                                 quantity.left * 0.93)).destroy
+      PriceTerm.map do |term|
+        term.destroy if in_same_column(quantity, term)
+      end
+    end
+  end
+
+  def self.filter_out_dates
+    PriceTerm.map do |term|
+      first_word = Word.right_after(term)
+
+      next unless first_word && first_word.text.match(/\./)
+      second_word = Word.right_after(first_word)
+      term.destroy if second_word &&
+                      second_word.text.match(/^(\d{2})$/)
     end
   end
 
   def self.filter
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
     filter_out_quantity_column
+    filter_out_dates
 
     end_word_with_space = ->(term) { term.text += ' ' }
     unless Word.where(text: CurrencyDetector::HUF_SYMBOLS).empty?

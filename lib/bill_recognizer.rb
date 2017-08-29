@@ -100,7 +100,7 @@ class BillRecognizer
     recognize_words(png_file)
     Word.filter_out_artifacts
 
-     print_all_words
+    # print_all_words
 
     filter_words
     calculate_text_box

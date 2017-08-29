@@ -8,7 +8,7 @@ class Word < Sequel::Model
   include Dimensionable
   include Logging
 
-  UNITS = %w(kg % Stunden SK PA SG ST TO KG M3).freeze
+  UNITS = %w(kg % Stunden SK PA SG ST TO KG M3 MWST).freeze
 
   def next
     Word[id + 1]
