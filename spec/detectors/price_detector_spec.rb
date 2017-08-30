@@ -1036,6 +1036,73 @@ describe PriceDetector do
     expect(prices.map(&:regex)).to eq [PriceDetector::DECIMAL_PRICE_REGEX.to_s]
   end
 
+  it 'detects multiple correct price regexes' do
+    # From tests above
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '€247,28',
+      left: 0.8632198952879581,
+      right: 0.918520942408377,
+      top: 0.36262719703977797,
+      bottom: 0.3723404255319149
+    )
+
+    create(
+      :word,
+      text: '11',
+      left: 0.5734380111220151,
+      right: 0.58717697088649,
+      top: 0.5505823247316739,
+      bottom: 0.5613153688056634
+    )
+
+    create(
+      :word,
+      text: '038',
+      left: 0.5966633954857704,
+      right: 0.6185803074910042,
+      top: 0.5505823247316739,
+      bottom: 0.5608586435259192
+    )
+
+    create(
+      :word,
+      text: 'Ft',
+      left: 0.6277396140006543,
+      right: 0.6411514556754988,
+      top: 0.5505823247316739,
+      bottom: 0.5608586435259192
+    )
+
+    create(
+      :word,
+      text: '360',
+      left: 1048,
+      right: 1134,
+      top: 1826,
+      bottom: 1859
+    )
+
+    create(
+      :word,
+      text: 'Euro',
+      left: 1160,
+      right: 1260,
+      top: 1826,
+      bottom: 1859
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:regex)).to eq [
+      PriceDetector::DECIMAL_PRICE_REGEX.to_s,
+      PriceDetector::HUNGARIAN_PRICE_REGEX.to_s,
+      PriceDetector::WRITTEN_PRICE_REGEX.to_s
+    ]
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
