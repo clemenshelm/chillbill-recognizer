@@ -775,7 +775,7 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
-  it 'detects dates with max_words 6' do
+  it 'detects dates which consists of 6 words' do
     # From C5sri9hxpbDhha68D.png
 
     create(
