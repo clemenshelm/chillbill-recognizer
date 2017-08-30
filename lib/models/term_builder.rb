@@ -5,6 +5,7 @@ class TermBuilder
   include Logging
   attr_reader :words
   attr_accessor :text
+  attr_accessor :regex
 
   def initialize(regex:, after_each_word:, term_class:, max_words: nil)
     @regex = regex

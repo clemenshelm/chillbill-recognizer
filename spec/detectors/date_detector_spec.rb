@@ -775,8 +775,73 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'detects the correct date regex' do
+    # From test above
+    create(
+      :word,
+      text: '16.03.2016',
+      left: 0.6865183246073299,
+      right: 0.7549083769633508,
+      top: 0.1690564292321924,
+      bottom: 0.17645698427382053
+    )
+
+    dates = DateDetector.filter
+    expect(dates.map(&:regex)).to eq [DateDetector::SHORT_PERIOD_DATE_REGEX.to_s]
+  end
+
+  it 'detects multiple date regexes' do
+    # From tests above
+
+    create(
+      :word,
+      text: '16.03.2016',
+      left: 0.6865183246073299,
+      right: 0.7549083769633508,
+      top: 0.1690564292321924,
+      bottom: 0.17645698427382053
+    )
+
+    create(
+      :word,
+      text: '27.',
+      left: 0.725130890052356,
+      right: 0.75032722513089,
+      top: 0.28330249768732657,
+      bottom: 0.29324699352451433
+    )
+
+    create(
+      :word,
+      text: 'Februar',
+      left: 0.7598167539267016,
+      right: 0.8285340314136126,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
+    )
+
+    create(
+      :word,
+      text: '2017',
+      left: 0.8347513089005235,
+      right: 0.8782722513089005,
+      top: 0.28330249768732657,
+      bottom: 0.29347826086956524
+    )
+
+    dates = DateDetector.filter
+    expect(dates.map(&:regex)).to eq [
+      DateDetector::SHORT_PERIOD_DATE_REGEX.to_s,
+      DateDetector::FULL_GERMAN_DATE_REGEX.to_s
+    ]
+  end
+
   def date_strings(date_terms)
     date_terms.map { |date_term| date_term.to_datetime.strftime('%Y-%m-%d') }
+  end
+
+  def date_regexes(date_terms)
+    date_terms.map(&:regex)
   end
 
   # TODO: Move to general helpers

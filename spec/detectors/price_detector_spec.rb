@@ -1018,6 +1018,24 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['2,17€']
   end
 
+  it 'detects the correct price regex' do
+    # From BYnCDzw7nNMFergRW.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '€247,28',
+      left: 0.8632198952879581,
+      right: 0.918520942408377,
+      top: 0.36262719703977797,
+      bottom: 0.3723404255319149
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:regex)).to eq [PriceDetector::DECIMAL_PRICE_REGEX.to_s]
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|

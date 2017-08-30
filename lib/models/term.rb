@@ -16,6 +16,7 @@ module Term
     @term_builder.add_word(word)
 
     self.text = @term_builder.text
+    self.regex = @term_builder.regex
     self.left = @term_builder.words.map(&:left).min
     self.top = @term_builder.words.map(&:top).min
     self.right = @term_builder.words.map(&:right).max
