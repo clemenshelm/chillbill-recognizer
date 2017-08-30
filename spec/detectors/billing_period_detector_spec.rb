@@ -269,28 +269,4 @@ describe BillingPeriodDetector do
       '2016-10-27'
     )
   end
-
-  it 'detects the correct vat regex' do
-    # From test above
-    create(
-      :word,
-      text: 'ATU',
-      left: 0.42424242424242425,
-      right: 0.48484848484848486,
-      top: 0.19330855018587362,
-      bottom: 0.2073523337463858
-    )
-
-    create(
-      :word,
-      text: '69210837',
-      left: 0.51010101010101,
-      right: 0.6747474747474748,
-      top: 0.19330855018587362,
-      bottom: 0.2077653862040479
-    )
-
-    vat_numbers = VatNumberDetector.filter
-    expect(vat_numbers.map(&:regex)).to eq [VatNumberDetector::VAT_REGEX.to_s]
-  end
 end

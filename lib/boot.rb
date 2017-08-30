@@ -16,42 +16,42 @@ end
 DB.create_table :price_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :date_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
   Integer :first_word_id
+  String :regex
 end
 
 DB.create_table :vat_number_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :iban_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :billing_period_terms do
@@ -63,83 +63,83 @@ end
 DB.create_table :currency_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :due_date_label_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :relative_date_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :invoice_date_label_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :billing_start_label_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :billing_end_label_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :invoice_number_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
   Integer :first_word_id
   TrueClass :needs_label
+  String :regex
 end
 
 DB.create_table :invoice_number_label_terms do
   primary_key :id
   String :text
-  String :regex
   Float :left
   Float :right
   Float :top
   Float :bottom
+  String :regex
 end
 
 DB.create_table :bill_dimensions do

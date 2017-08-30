@@ -187,6 +187,8 @@ describe DueDateLabelDetector do
   end
 
   it 'detects the correct due date label regex' do
+    # From JBopEY4wukRCb7Sjh.pdf
+
     create(
       :word,
       text: 'zahlbar',
@@ -232,7 +234,7 @@ describe DueDateLabelDetector do
       bottom: 0.2260402057035998
     )
 
-    currencies = DueDateLabelDetector.filter
-    expect(currencies.map(&:regex)).to eq [DueDateLabelDetector::DUE_DATE_LABELS.to_s]
+    due_date_labels = DueDateLabelDetector.filter
+    expect(due_date_labels.map(&:regex)).to eq [DueDateLabelDetector::DUE_DATE_LABELS.to_s]
   end
 end

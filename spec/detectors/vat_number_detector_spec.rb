@@ -145,6 +145,7 @@ describe VatNumberDetector do
   # This test has a large number of samples
   # so it can calculate a realistic median font height
   it 'recognizes Irish VAT ID number broken by a line break' do
+    # From wrj8fiNZQYjymoocT.pdf
     create(
       :word,
       text: 'Umsatzsteuer-Identitikationsnummer:',
@@ -854,7 +855,7 @@ describe VatNumberDetector do
   end
 
   it 'detects the correct vat regex' do
-    # from bill pYbaWiFCmR7rbhx9K.png
+    # from pYbaWiFCmR7rbhx9K.png
     create(
       :word,
       text: 'ATU',

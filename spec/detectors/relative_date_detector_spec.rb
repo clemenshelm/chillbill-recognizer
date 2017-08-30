@@ -105,7 +105,7 @@ describe RelativeDateDetector do
   end
 
   it 'detects the correct relative word regex' do
-    # From test above
+    #  Missing label - needs Fällig bei Erhalt
     create(
       :word,
       text: 'Fällig',

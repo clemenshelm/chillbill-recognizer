@@ -182,7 +182,7 @@ describe IbanDetector do
   end
 
   it 'detects the correct iban regex' do
-    # From test above
+    # From 9NwagojCEgB3Ex92B.pdf
     create(
       :word,
       text: 'AT103225000000013300',

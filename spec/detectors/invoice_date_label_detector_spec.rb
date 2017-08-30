@@ -37,7 +37,7 @@ describe InvoiceDateLabelDetector do
     expect(invoice_date_labels.map(&:to_s)).to eq ['Rechnungsdatum:']
   end
 
-  it 'detects the correct invoice date regex' do
+  it 'detects the correct invoice date label regex' do
     # From cAfvoH3zHjxmp88Ls.pdf
     create(
       :word,
