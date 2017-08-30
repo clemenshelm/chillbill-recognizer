@@ -20,20 +20,15 @@ class PriceDetector
     %w(Menge Anz.).each do |quantity_text|
       quantity = Word.first(text: quantity_text)
       next unless quantity
-      PriceTerm.map do |term|
+      PriceTerm.each do |term|
         term.destroy if in_same_column(quantity, term)
       end
     end
   end
 
   def self.filter_out_dates
-    PriceTerm.map do |term|
-      first_word = Word.right_after(term)
-
-      next unless first_word && first_word.text.match(/\./)
-      second_word = Word.right_after(first_word)
-      term.destroy if second_word &&
-                      second_word.text.match(/^(\d{2})$/)
+    PriceTerm.each do |term|
+      term.destroy if Word.match_two_words_after(term, /\./, /^\d{2}$/)
     end
   end
 

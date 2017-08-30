@@ -1018,7 +1018,7 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['2,17€']
   end
 
-  it 'detects prices which are not in between of quantity' do
+  it 'detects prices which are not in part of a quantity' do
     # From rDxLnivxoXQw9nWa7.pdf
     # Dummy dimension values for the bill
     BillDimension.create_image_dimensions(width: 3056, height: 4324)
