@@ -775,6 +775,21 @@ describe DateDetector do
     expect(date_strings(dates)).to be_empty
   end
 
+  it 'detects the correct date regex' do
+    # From BYnCDzw7nNMFergRW.pdf
+    create(
+      :word,
+      text: '16.03.2016',
+      left: 0.6865183246073299,
+      right: 0.7549083769633508,
+      top: 0.1690564292321924,
+      bottom: 0.17645698427382053
+    )
+
+    dates = DateDetector.filter
+    expect(dates.map(&:regex)).to eq [DateDetector::SHORT_PERIOD_DATE_REGEX.to_s]
+  end
+
   it 'detects dates which consists of 6 words' do
     # From C5sri9hxpbDhha68D.png
     create(
