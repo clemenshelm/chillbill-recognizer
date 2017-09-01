@@ -456,4 +456,29 @@ describe CurrencyDetector do
     currencies = CurrencyDetector.filter
     expect(currencies.map(&:to_iso)).to eq ['EUR']
   end
+
+  it 'detects the correct currency regex' do
+    # From mMHiT2b3C5fgYqBzY.pdf
+    create(
+      :word,
+      text: 'Summe',
+      left: 0.5991492146596858,
+      right: 0.6564136125654451,
+      top: 0.9298123697011814,
+      bottom: 0.938846421125781
+    )
+
+    create(
+      :word,
+      text: 'Euro',
+      left: 0.6632853403141361,
+      right: 0.6966623036649214,
+      top: 0.9300440120454019,
+      bottom: 0.9388464211257818
+    )
+
+    currencies = CurrencyDetector.filter
+    currencies_regex = /#{CurrencyDetector::ALL_SYMBOLS.map { |s| Regexp.quote(s) }.join('|')}/
+    expect(currencies.map(&:regex)).to eq [currencies_regex.to_s]
+  end
 end

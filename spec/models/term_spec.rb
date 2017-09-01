@@ -4,7 +4,7 @@ require_relative '../../lib/models/word'
 
 class TermTest < Sequel::Model
   include Term
-  attr_accessor :text, :left, :right, :top, :bottom
+  attr_accessor :text, :left, :right, :top, :bottom, :regex
 end
 
 describe Term do

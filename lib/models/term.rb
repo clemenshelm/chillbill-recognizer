@@ -20,6 +20,7 @@ module Term
     self.top = @term_builder.words.map(&:top).min
     self.right = @term_builder.words.map(&:right).max
     self.bottom = @term_builder.words.map(&:bottom).max
+    self.regex = @term_builder.regex
   end
 
   def valid?

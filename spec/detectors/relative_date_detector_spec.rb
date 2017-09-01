@@ -39,7 +39,6 @@ describe RelativeDateDetector do
 
   it 'detects the relative word Fällig bei Erhalt' do
     # From bill 5wsQ7YppaZLN5FSGC.pdf
-
     create(
       :word,
       text: 'Fällig',
@@ -102,5 +101,39 @@ describe RelativeDateDetector do
 
     relative_words = RelativeDateDetector.filter
     expect(relative_words.map(&:to_s)).to eq ['Fällig bei Erhalt']
+  end
+
+  it 'detects the correct relative word regex' do
+    # From 5wsQ7YppaZLN5FSGC.pdf
+    create(
+      :word,
+      text: 'Fällig',
+      left: 0.44030094864245994,
+      right: 0.47759241086032056,
+      top: 0.301411057136248,
+      bottom: 0.31251445755262547
+    )
+
+    create(
+      :word,
+      text: 'nach',
+      left: 0.4844618907425581,
+      right: 0.5047432122996401,
+      top: 0.301411057136248,
+      bottom: 0.3102012491325468
+    )
+
+    create(
+      :word,
+      text: 'Erhalt',
+      left: 0.511939810271508,
+      right: 0.5538109257441937,
+      top: 0.301411057136248,
+      bottom: 0.3102012491325468
+    )
+
+    relative_words = RelativeDateDetector.filter
+    relative_regex = /#{RelativeDateDetector::ALL_REL_WORDS.map { |s| Regexp.quote(s) }.join('|')}/
+    expect(relative_words.map(&:regex)).to eq [relative_regex.to_s]
   end
 end
