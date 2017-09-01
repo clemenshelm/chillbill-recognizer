@@ -98,7 +98,6 @@ class BillRecognizer
     end
 
     recognize_words(png_file)
-    Word.filter_out_artifacts
 
     # print_all_words
 
@@ -139,6 +138,7 @@ class BillRecognizer
 
     hocr_doc = Nokogiri::HTML(hocr)
     create_words_from_hocr(hocr_doc)
+    Word.filter_out_artifacts
   end
 
   def print_all_words

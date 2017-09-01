@@ -1018,6 +1018,159 @@ describe PriceDetector do
     expect(prices.map(&:text)).to eq ['2,17€']
   end
 
+  it 'detects prices which are not in part of a quantity' do
+    # From rDxLnivxoXQw9nWa7.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: 'Menge',
+      left: 0.5785340314136126,
+      right: 0.6285994764397905,
+      top: 0.4225254394079556,
+      bottom: 0.4333950046253469
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.5971858638743456,
+      right: 0.6236910994764397,
+      top: 0.5074005550416282,
+      bottom: 0.5164199814986123
+    )
+
+    create(
+      :word,
+      text: '1,00',
+      left: 0.5971858638743456,
+      right: 0.6236910994764397,
+      top: 0.5208140610545791,
+      bottom: 0.5298334875115633
+    )
+
+    create(
+      :word,
+      text: '5,00',
+      left: 0.6855366492146597,
+      right: 0.7136780104712042,
+      top: 0.5208140610545791,
+      bottom: 0.5298334875115633
+    )
+
+    create(
+      :word,
+      text: '431,25',
+      left: 0.09325916230366492,
+      right: 0.1387434554973822,
+      top: 0.8237742830712304,
+      bottom: 0.8327937095282146
+    )
+
+    create(
+      :word,
+      text: '86,25',
+      left: 0.21171465968586387,
+      right: 0.24803664921465968,
+      top: 0.8237742830712304,
+      bottom: 0.8327937095282146
+    )
+
+    create(
+      :word,
+      text: '517,50',
+      left: 0.837696335078534,
+      right: 0.8828534031413613,
+      top: 0.8237742830712304,
+      bottom: 0.8327937095282146
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to eq ['5,00', '431,25', '86,25', '517,50']
+  end
+
+  it 'does not detect MWST as price' do
+    # From C5sri9hxpbDhha68D.png
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '21,41',
+      left: 0.44945054945054946,
+      right: 0.5406593406593406,
+      top: 0.5265,
+      bottom: 0.542
+    )
+
+    create(
+      :word,
+      text: 'MWST',
+      left: 0.5648351648351648,
+      right: 0.6362637362637362,
+      top: 0.5265,
+      bottom: 0.54
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
+  it 'does not detect date as price' do
+    # From C5sri9hxpbDhha68D.png
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
+    create(
+      :word,
+      text: '10',
+      left: 0.521978021978022,
+      right: 0.5560439560439561,
+      top: 0.724,
+      bottom: 0.737
+    )
+
+    create(
+      :word,
+      text: '.',
+      left: 0.5659340659340659,
+      right: 0.5692307692307692,
+      top: 0.735,
+      bottom: 0.737
+    )
+
+    create(
+      :word,
+      text: '05',
+      left: 0.578021978021978,
+      right: 0.6131868131868132,
+      top: 0.724,
+      bottom: 0.737
+    )
+
+    create(
+      :word,
+      text: '.',
+      left: 0.6230769230769231,
+      right: 0.6263736263736264,
+      top: 0.735,
+      bottom: 0.737
+    )
+
+    create(
+      :word,
+      text: '17',
+      left: 0.6373626373626373,
+      right: 0.6703296703296703,
+      top: 0.724,
+      bottom: 0.7375
+    )
+
+    prices = PriceDetector.filter
+    expect(prices.map(&:text)).to be_empty
+  end
+
   # TODO: Move to general helpers
   def create_following_words(texts)
     texts.each_with_index do |text, index|
