@@ -8,14 +8,14 @@ class Word < Sequel::Model
   include Dimensionable
   include Logging
 
-  UNITS = %w(kg % Stunden SK PA SG ST TO KG M3).freeze
+  UNITS = %w(kg % Stunden SK PA SG ST TO KG M3 MWST).freeze
 
   def next
     Word[id + 1]
   end
 
   def follows(previous_word)
-    max_space_width = previous_word.height * 1.80
+    max_space_width = previous_word.height * 10.0
     # logger.debug "#{text}:: first: #{previous_word.right} =>
     # space: #{max_space_width} => last: #{previous_word.left}"
     previous_word.right + max_space_width >= left
