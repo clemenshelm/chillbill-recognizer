@@ -777,7 +777,6 @@ describe DateDetector do
 
   it 'detects dates which consists of 6 words' do
     # From C5sri9hxpbDhha68D.png
-
     create(
       :word,
       text: '10',

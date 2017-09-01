@@ -48,14 +48,12 @@ module Dimensionable
       everything_above.last
     end
 
-    def match_two_words_after(current, regex1, regex2)
+    def two_words_after_matches?(current, regex1, regex2)
       first_word = right_after(current)
 
       if first_word && first_word.text.match(regex1)
         second_word = right_after(first_word)
         second_word && second_word.text.match(regex2)
-      else
-        false
       end
     end
 

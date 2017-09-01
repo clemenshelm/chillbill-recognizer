@@ -28,7 +28,7 @@ class PriceDetector
 
   def self.filter_out_dates
     PriceTerm.each do |term|
-      term.destroy if Word.match_two_words_after(term, /\./, /^\d{2}$/)
+      term.destroy if Word.two_words_after_matches?(term, /\./, /^\d{2}$/)
     end
   end
 
