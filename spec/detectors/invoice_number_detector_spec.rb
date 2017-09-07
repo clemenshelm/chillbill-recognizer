@@ -258,4 +258,19 @@ describe InvoiceNumberDetector do
     invoice_numbers = InvoiceNumberDetector.filter
     expect(invoice_numbers.map(&:to_s)).to eq ['EUVINS1-OFS-CZ-53299456']
   end
+  
+  it 'detects the correct invoice number regex' do
+    # From 4CodL4nWuXkwcsGQq.pdf
+    create(
+      :word,
+      text: '5873',
+      left: 0.4862565445026178,
+      right: 0.506544502617801,
+      top: 0.24629972247918594,
+      bottom: 0.2530064754856614
+    )
+
+    invoice_numbers = InvoiceNumberDetector.filter
+    expect(invoice_numbers.map(&:regex)).to eq [InvoiceNumberDetector::DREI_INVOICE_NUMBER_REGEX.to_s]
+  end
 end

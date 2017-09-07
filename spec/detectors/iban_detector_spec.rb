@@ -180,4 +180,19 @@ describe IbanDetector do
     iban = IbanDetector.filter
     expect(iban.map(&:to_s)).to eq ['AT103225000000013300']
   end
+
+  it 'detects the correct iban regex' do
+    # From 9NwagojCEgB3Ex92B.pdf
+    create(
+      :word,
+      text: 'AT103225000000013300',
+      left: 0.4370297677461564,
+      right: 0.5763820739286882,
+      top: 0.9324543141337035,
+      bottom: 0.9382373351839001
+    )
+
+    iban = IbanDetector.filter
+    expect(iban.map(&:regex)).to eq [IbanDetector::AT_IBAN_REGEX.to_s]
+  end
 end
