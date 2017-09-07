@@ -14,6 +14,7 @@ class InvoiceNumberDetector
   LABELLED_FIVE_DIGIT_INVOICE_NUMBER_REGEX = /\d{5}/
   TEN_DIGIT_DREI_INVOICE_NUMBER_REGEX = /\d{10}/
   FOUR_DIGIT_DREI_INVOICE_NUMBER_REGEX = /\d{4}/
+  AMAZON_INVOICE_NUMBER_REGEX = /EUVINS1-OFS-[A-Z]{2}-\d{8}/
 
   def self.filter
     reduced_words = filter_out_interfering_invoice_numbers
@@ -43,6 +44,9 @@ class InvoiceNumberDetector
 
     words = find_invoice_numbers(
       Word.all, DRIVE_NOW_INVOICE_NUMBER_REGEX, max_words: 1
+    )
+    words += find_invoice_numbers(
+      Word.all, AMAZON_INVOICE_NUMBER_REGEX, max_words: 1
     )
     words += find_invoice_numbers(
       Word.all, EASYNAME_INVOICE_NUMBER_REGEX, max_words: 1
