@@ -235,6 +235,30 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['5873']
   end
 
+  it 'detects an amazon invoice number' do
+    # From 2RoTS7WgqQXbY5KMT.pdf
+    create(
+      :word,
+      text: 'Rechnungsnummer:',
+      left: 0.46138743455497383,
+      right: 0.6420157068062827,
+      top: 0.4054116558741906,
+      bottom: 0.41790009250693805
+    )
+
+    create(
+      :word,
+      text: 'EUVINS1-OFS-CZ-53299456',
+      left: 0.650523560209424,
+      right: 0.8956151832460733,
+      top: 0.4054116558741906,
+      bottom: 0.41535615171137835
+    )
+
+    invoice_numbers = InvoiceNumberDetector.filter
+    expect(invoice_numbers.map(&:to_s)).to eq ['EUVINS1-OFS-CZ-53299456']
+  end
+
   it 'detects the correct invoice number regex' do
     # From 4CodL4nWuXkwcsGQq.pdf
     create(
