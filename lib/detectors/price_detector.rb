@@ -34,8 +34,6 @@ class PriceDetector
 
   def self.filter
     find_prices(DECIMAL_PRICE_REGEX, max_words: 3)
-    filter_out_quantity_column
-    filter_out_dates
 
     end_word_with_space = ->(term) { term.text += ' ' }
     unless Word.where(text: CurrencyDetector::HUF_SYMBOLS).empty?
