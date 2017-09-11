@@ -133,7 +133,6 @@ describe RelativeDateDetector do
     )
 
     relative_words = RelativeDateDetector.filter
-    relative_regex = /#{RelativeDateDetector::ALL_REL_WORDS.map { |s| Regexp.quote(s) }.join('|')}/
-    expect(relative_words.map(&:regex)).to eq [relative_regex.to_s]
+    expect(relative_words.map(&:regex)).to eq [RelativeDateDetector::SAME_DAY_TERMS.to_s]
   end
 end
