@@ -286,6 +286,8 @@ describe InvoiceNumberDetector do
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
-    expect(invoice_numbers.map(&:regex)).to eq [InvoiceNumberDetector::DREI_INVOICE_NUMBER_REGEX.to_s]
+    expect(invoice_numbers.map(&:regex)).to eq [
+      InvoiceNumberDetector::FOUR_DIGIT_DREI_INVOICE_NUMBER_REGEX.to_s
+    ]
   end
 end
