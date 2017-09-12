@@ -10,8 +10,10 @@ class InvoiceNumberDetector
   EASYNAME_INVOICE_NUMBER_REGEX = /RE\d{7}/
   GOOGLE_INVOICE_NUMBER_REGEX = /((\d{12,16}-\d{1,2})|(\d{4}-\d{4}-\d{4}))/
   HOFER_INVOICE_NUMBER_REGEX = %r(\d{4} \d{3}\/\d{3}\/\d{3}\/\d{2})
-  DREI_INVOICE_NUMBER_REGEX = /(\d{10}|\d{4})/
   DRUCK_INVOICE_NUMBER_REGEX = /\d{14}/
+  LABELLED_FIVE_DIGIT_INVOICE_NUMBER_REGEX = /\d{5}/
+  TEN_DIGIT_DREI_INVOICE_NUMBER_REGEX = /\d{10}/
+  FOUR_DIGIT_DREI_INVOICE_NUMBER_REGEX = /\d{4}/
   AMAZON_INVOICE_NUMBER_REGEX = /EUVINS1-OFS-[A-Z]{2}-\d{8}/
 
   def self.filter
@@ -25,10 +27,15 @@ class InvoiceNumberDetector
     reduced_words -= find_invoice_numbers(
       reduced_words, A1_INVOICE_NUMBER_REGEX, max_words: 1
     )
-    find_invoice_numbers(
-      reduced_words, DREI_INVOICE_NUMBER_REGEX, max_words: 1
+    reduced_words -= find_invoice_numbers(
+      reduced_words, TEN_DIGIT_DREI_INVOICE_NUMBER_REGEX, max_words: 1
     )
-
+    reduced_words -= find_invoice_numbers(
+      reduced_words, LABELLED_FIVE_DIGIT_INVOICE_NUMBER_REGEX, max_words: 1
+    )
+    find_invoice_numbers(
+      reduced_words, FOUR_DIGIT_DREI_INVOICE_NUMBER_REGEX, max_words: 1
+    )
     InvoiceNumberTerm.dataset
   end
 

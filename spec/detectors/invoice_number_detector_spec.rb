@@ -235,6 +235,21 @@ describe InvoiceNumberDetector do
     expect(invoice_numbers.map(&:to_s)).to eq ['5873']
   end
 
+  it 'detects made up of just 5 digits' do
+    # From vYkPiDkrvZte3Jn2S.PDF
+    create(
+      :word,
+      text: '26347',
+      left: 0.6946989528795812,
+      right: 0.7447643979057592,
+      top: 0.1604995374653099,
+      bottom: 0.16975023126734506
+    )
+
+    invoice_numbers = InvoiceNumberDetector.filter
+    expect(invoice_numbers.map(&:to_s)).to eq ['26347']
+  end
+
   it 'detects an amazon invoice number' do
     # From 2RoTS7WgqQXbY5KMT.pdf
     create(
@@ -271,6 +286,8 @@ describe InvoiceNumberDetector do
     )
 
     invoice_numbers = InvoiceNumberDetector.filter
-    expect(invoice_numbers.map(&:regex)).to eq [InvoiceNumberDetector::DREI_INVOICE_NUMBER_REGEX.to_s]
+    expect(invoice_numbers.map(&:regex)).to eq [
+      InvoiceNumberDetector::FOUR_DIGIT_DREI_INVOICE_NUMBER_REGEX.to_s
+    ]
   end
 end
