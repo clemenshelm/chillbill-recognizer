@@ -50,6 +50,7 @@ gem 'rollbar'
 
 group :development do
   gem 'colorize' # Colorizes shell output
+  gem 'mina', '~> 1.0', '>= 1.0.7'
   gem 'mongo'
   gem 'rake'
 end
