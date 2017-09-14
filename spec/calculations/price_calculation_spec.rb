@@ -310,6 +310,9 @@ describe PriceCalculation do
 
   it 'removes detected pieces as prices' do
     # From 29pwjsKx88nhnQKm9.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: 'Menge',
@@ -367,12 +370,15 @@ describe PriceCalculation do
       bottom: 0.5302960222016652
     )
 
-    PriceCalculation.remove_quantities
+    PriceCalculation.remove_false_positives
     expect(price_strings).to eq ['8,50', '12,00', '4,00']
   end
 
   it 'removes numbers below Anz.' do
     # From ihfDXTa64yYbFLa6Y.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: 'Anz.',
@@ -390,12 +396,15 @@ describe PriceCalculation do
       bottom: 0.512494215640907
     )
 
-    PriceCalculation.remove_quantities
+    PriceCalculation.remove_false_positives
     expect(price_strings).to be_empty
   end
 
   it 'deletes prices which are not in part of a quantity' do
     # From rDxLnivxoXQw9nWa7.pdf
+    # Dummy dimension values for the bill
+    BillDimension.create_image_dimensions(width: 3056, height: 4324)
+
     create(
       :word,
       text: 'Menge',
@@ -453,7 +462,7 @@ describe PriceCalculation do
       bottom: 0.8327937095282146
     )
 
-    PriceCalculation.remove_quantities
+    PriceCalculation.remove_false_positives
     expect(price_strings).to eq ['5,00', '431,25', '86,25', '517,50']
   end
 
@@ -488,7 +497,7 @@ describe PriceCalculation do
       bottom: 0.7375
     )
 
-    PriceCalculation.remove_dates
+    PriceCalculation.remove_false_positives
     expect(price_strings).to be_empty
   end
 

@@ -242,9 +242,7 @@ class BillRecognizer
   end
 
   def calculate_amounts
-    # First: Remove false positives
-    PriceCalculation.remove_quantities
-    PriceCalculation.remove_dates
+    PriceCalculation.remove_false_positives
 
     amounts = []
     prices = PriceCalculation.new

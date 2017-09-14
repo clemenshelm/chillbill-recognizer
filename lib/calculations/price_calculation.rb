@@ -16,6 +16,11 @@ class PriceCalculation
     @vat_amount * 100
   end
 
+  def self.remove_false_positives
+    remove_quantities
+    remove_dates
+  end
+
   def self.remove_quantities
     %w(Menge Anz.).each do |quantity_text|
       quantity = Word.first(text: quantity_text)
