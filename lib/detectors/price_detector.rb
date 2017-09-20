@@ -38,7 +38,8 @@ class PriceDetector
     filter_out_dates
 
     end_word_with_space = ->(term) { term.text += ' ' }
-    unless Word.where(text: CurrencyDetector::HUF_SYMBOLS).empty?
+    # binding.pry
+    unless Word.where(text: ['Ft.', 'Ft']).empty?
       find_prices(
         HUNGARIAN_PRICE_REGEX,
         after_each_word: end_word_with_space,
