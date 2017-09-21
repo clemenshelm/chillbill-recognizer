@@ -4,7 +4,7 @@ namespace :machine_learning do
   task :import_bill_data do
     require 'mongo'
     require 'yaml/store'
-    limit = 10
+    limit = 50
     existing_ids = Dir['data/bills/*.yml']
                    .map { |f| f.match(%r{([^\/]+)\.yml})[1] }
     client = Mongo::Client.new(ENV['MONGO_READ_URL'], ssl: true, ssl_verify: false)
@@ -20,7 +20,7 @@ namespace :machine_learning do
               'accountingRecord.amounts.0.vatRate': { '$ne': 0 }
             }
           },
-          { '$sample' => { size: 10 } }
+          { '$sample' => { size: limit} }
         ]
       )
       .each do |bill|
