@@ -1,8 +1,8 @@
-# Datageneration for machine learning - Workflow
+# Data generation for machine learning - Work flow
 ##0. Get access
-You need access to the S3 (files) and github (error report).
+You need access to the S3 (files) and GitHub (error report).
 
-Via the web you can not download multiple files from S3, so one way is to use a program like "Cyberduck" to download / move / delete files on S3. Another possiblity is to zip several files (e.g. 20), upload them to s3 and everyone how processes the bills downloads one zip file, deletes it from s3, process the included bills and uploads it with a different name (e.g. "done_OriginalName").
+Via the web you can not download multiple files from S3, so one way is to use a program like "Cyberduck" to download / move / delete files on S3. Another possibility is to zip several files (e.g. 20), upload them to s3 and everyone how processes the bills downloads one zip file, deletes it from s3, process the included bills and uploads it with a different name (e.g. "done_OriginalName").
 
 
 ## 1. Opening the next bill
@@ -19,7 +19,7 @@ __All coordinates are relative (between 0 and 1) to the scan dimension. The orig
 Check if the coordinates of the textbox make sense by comparing them with the scanned image. So you have to look at the values `text_box_top:`, ` text_box_bottom:`, `
   text_box_left:` and `text_box_right:`. 
   
-  If there are weird coordinates (e.g. greater than 1) stop and report an error in the rubrik "Wrong text_box dimensions".
+  If there are weird coordinates (e.g. greater than 1) stop and report an error in the rubric "Wrong text_box dimensions".
 
 
 
@@ -31,7 +31,7 @@ Is the bill of type `A4`, `sales_check` or `email`? Write the correct one to `bi
 
 ## 4. Check total_prices_candidates
 
-1. If there is no candidate stop and report an error in the rubrik "Prices missing".
+1. If there is no candidate stop and report an error in the rubric "Prices missing".
 
 2. If there is only one candidate check if it is correct by looking at the amount.
 
@@ -41,7 +41,7 @@ Is the bill of type `A4`, `sales_check` or `email`? Write the correct one to `bi
 
 ## 5. Check vat_prices_candidates
 
-1. If there is no candidate stop and report an error in the rubrik "Prices missing".
+1. If there is no candidate stop and report an error in the rubric "Prices missing".
 
 
 2. If there is only one candidate check if it is correct by looking at the amount.
@@ -50,19 +50,19 @@ Is the bill of type `A4`, `sales_check` or `email`? Write the correct one to `bi
 
 
 ## 6. Check remaining_prices
-1. Check all prices in `remaining_prices` if they are actual prices. If someting eles (e.g. phone number, adress, weight, percentage, ...) gets recognized as price delete this price and its coordinates and report an error in the rubrik "Something else recognized as price ". In this case we can still use the bill.
+1. Check all prices in `remaining_prices` if they are actual prices. If something else (e.g. phone number, address, weight, percentage, ...) gets recognized as price delete this price and its coordinates and report an error in the rubric "Something else recognized as price ". In this case we can still use the bill.
 
-2. While checking the remaining prices you also have to check for missing prices. Are there any prices on the bill (scan) that do not appear on the list? If so stop and report an error in the rubrik "Prices missing".
+2. While checking the remaining prices you also have to check for missing prices. Are there any prices on the bill (scan) that do not appear on the list? If so stop and report an error in the rubric "Prices missing".
 
 
 ## 7. Correct formatting
-i. In the rubrik "total_prices_candidates" change the name "total_prices_candidates" to "total_prices". Also replace the "-" with a space. 
+i. In the rubric "total_prices_candidates" change the name "total_prices_candidates" to "total_prices". Also replace the "-" with a space. 
 
 Example:
 ![exampleimage](images/total_prices_candidates.png  "Before")  becomes ![exampleimage](images/total_prices.png  "After") 
 
 
-ii. In the rubrik "vat_prices_candidates" change the name "vat_prices_candidates" to "vat_prices". Also replace the "-" with a space. 
+ii. In the rubric "vat_prices_candidates" change the name "vat_prices_candidates" to "vat_prices". Also replace the "-" with a space. 
 
 Example:
 ![exampleimage](images/vat_prices_candidates.png  "Before")  becomes ![exampleimage](images/vat_prices.png  "After") 
@@ -82,7 +82,7 @@ To solve problems with the recognizer we need "bad" examples. In the following p
 ~~~
 https://github.com/clemenshelm/chillbill-recognizer/projects/6
 ~~~
-Just press in  the correct column on the "+" sign to add a new note. Insert the bill id __with the file type__ (e.g. .pdf, .jpg, .tiff, ..). You can find the file tye at the end of the second line (image_url). For every possible error, there should be a column. If you find an error and there is no column for it, please tell the person in charge.
+Just press in  the correct column on the "+" sign to add a new note. Insert the bill id __with the file type__ (e.g. .pdf, .jpg, .tiff, ..). You can find the file type at the end of the second line (image_url). For every possible error, there should be a column. If you find an error and there is no column for it, please tell the person in charge.
 
 
 ## 8. Finish
