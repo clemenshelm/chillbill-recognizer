@@ -27,7 +27,8 @@ namespace :machine_learning do
       recognizer.recognize_words(png_file)
       recognizer.filter_words
 
-      %w(total_prices_candidates total_prices vat_prices_candidates vat_prices)
+      #%w(total_prices_candidates total_prices vat_prices_candidates vat_prices)
+      %w(total_prices_candidates vat_prices_candidates)
         .each { |attr| store[attr] = {} }
 
       extractor = PriceExtractor.new
@@ -40,7 +41,7 @@ namespace :machine_learning do
           candidates = prices.send(attr)
           price_key = "#{attr}_#{vat_rate}"
           store["#{attr}_prices_candidates"][price_key] = candidates.map(&:to_h)
-          store["#{attr}_prices"][price_key] = nil
+          #store["#{attr}_prices"][price_key] = nil
         end
       end
       store['remaining_prices'] = extractor.remaining_prices.map(&:to_h)
