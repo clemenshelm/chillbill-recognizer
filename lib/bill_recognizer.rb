@@ -93,7 +93,7 @@ class BillRecognizer
 
     begin
       png_file = download_and_convert_image
-    rescue UnprocessableFileError, ImageProcessor::InvalidImage => e
+    rescue UnprocessableFileError, ImageProcessor::InvalidImage, Magick::ImageMagickError => e
       return { error: e.to_s, recognizerVersion: version }
     end
 
