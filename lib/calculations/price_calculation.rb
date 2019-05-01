@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 require 'bigdecimal'
+require_relative '../models/dimensionable'
 
 class PriceCalculation
+  include Dimensionable
   def net_amount
     return nil if PriceTerm.empty?
     calculate unless @net_amount
@@ -12,6 +14,27 @@ class PriceCalculation
     return nil if PriceTerm.empty?
     calculate unless @vat_amount
     @vat_amount * 100
+  end
+
+  def self.remove_false_positives
+    remove_quantities
+    remove_dates
+  end
+
+  def self.remove_quantities
+    %w(Menge Anz.).each do |quantity_text|
+      quantity = Word.first(text: quantity_text)
+      next unless quantity
+      PriceTerm.each do |term|
+        term.destroy if in_same_column(quantity, term)
+      end
+    end
+  end
+
+  def self.remove_dates
+    PriceTerm.each do |term|
+      term.destroy if Word.two_words_after_matches?(term, /\./, /^\d{2}$/)
+    end
   end
 
   private
