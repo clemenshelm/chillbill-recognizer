@@ -145,239 +145,68 @@ describe VatNumberDetector do
   # This test has a large number of samples
   # so it can calculate a realistic median font height
   it 'recognizes Irish VAT ID number broken by a line break' do
-    # From wrj8fiNZQYjymoocT.pdf
+    # From 2LGDLtLHAMCb4XSNN.pdf
     create(
       :word,
-      text: 'Umsatzsteuer-Identitikationsnummer:',
-      left: 1821,
-      right: 2483,
-      top: 368,
-      bottom: 398
+      text: 'Umsatzsteuer-ldentifikationsnummer:',
+      left: 0.6740837696335078,
+      right: 0.8943062827225131,
+      top: 0.10661424606845514,
+      bottom: 0.11355226641998149
     )
 
     create(
       :word,
-      text: 'IE',
-      left: 2500,
-      right: 2534,
-      top: 368,
-      bottom: 398
+      text: 'Rechnung',
+      left: 0.0693717277486911,
+      right: 0.2287303664921466,
+      top: 0.10522664199814986,
+      bottom: 0.12696577243293247
     )
 
     create(
       :word,
-      text: 'Rec',
-      left: 7,
-      right: 181,
-      top: 362,
-      bottom: 437
-    )
-
-    create(
-      :word,
-      text: 'h',
-      left: 191,
-      right: 239,
-      top: 362,
-      bottom: 435
-    )
-
-    create(
-      :word,
-      text: 'n',
-      left: 253,
-      right: 301,
-      top: 380,
-      bottom: 435
-    )
-
-    create(
-      :word,
-      text: 'u',
-      left: 314,
-      right: 362,
-      top: 382,
-      bottom: 437
-    )
-
-    create(
-      :word,
-      text: 'I1',
-      left: 376,
-      right: 424,
-      top: 380,
-      bottom: 435
-    )
-
-    create(
-      :word,
-      text: '9',
-      left: 434,
-      right: 486,
-      top: 380,
-      bottom: 457
-    )
-
-    create(
-      :word,
-      text: '6388047V',
-      left: 1819,
-      right: 2003,
-      top: 417,
-      bottom: 446
+      text: 'IE6388047V',
+      left: 0.6740837696335078,
+      right: 0.7470549738219895,
+      top: 0.11817761332099908,
+      bottom: 0.12488436632747456
     )
 
     create(
       :word,
       text: 'Rechnungsempfänger',
-      left: 3,
-      right: 533,
-      top: 628,
-      bottom: 675
-    )
-
-    create(
-      :word,
-      text: 'Rechnungsempfänger',
-      left: 3,
-      right: 533,
-      top: 628,
-      bottom: 675
+      left: 0.06773560209424084,
+      right: 0.2087696335078534,
+      top: 0.16743755781683625,
+      bottom: 0.1759944495837188
     )
 
     create(
       :word,
       text: 'Details',
-      left: 1302,
-      right: 1462,
-      top: 628,
-      bottom: 665
+      left: 0.5009816753926701,
+      right: 0.5539921465968587,
+      top: 0.16766882516188714,
+      bottom: 0.17622571692876965
     )
 
     create(
       :word,
-      text: 'Clemens',
-      left: 2,
-      right: 196,
-      top: 699,
-      bottom: 736
+      text: 'Michael',
+      left: 0.06773560209424084,
+      right: 0.11223821989528796,
+      top: 0.18177613320999075,
+      bottom: 0.18848288621646622
     )
 
     create(
       :word,
-      text: 'Helm',
-      left: 216,
-      right: 328,
-      top: 699,
-      bottom: 736
-    )
-
-    create(
-      :word,
-      text: 'Rechnungsnummer:',
-      left: 1302,
-      right: 1749,
-      top: 699,
-      bottom: 745
-    )
-
-    create(
-      :word,
-      text: '321923922866546-5',
-      left: 1885,
-      right: 2347,
-      top: 699,
-      bottom: 736
-    )
-
-    create(
-      :word,
-      text: 'ChillBiII',
-      left: 2,
-      right: 163,
-      top: 770,
-      bottom: 807
-    )
-
-    create(
-      :word,
-      text: 'Ausstellungsdatum:',
-      left: 1298,
-      right: 1735,
-      top: 770,
-      bottom: 817
-    )
-
-    create(
-      :word,
-      text: '30.11.2015',
-      left: 1885,
-      right: 2129,
-      top: 770,
-      bottom: 807
-    )
-
-    create(
-      :word,
-      text: 'Hietzinger',
-      left: 3,
-      right: 228,
-      top: 840,
-      bottom: 887
-    )
-
-    create(
-      :word,
-      text: 'Hauptstraße',
-      left: 244,
-      right: 516,
-      top: 840,
-      bottom: 887
-    )
-
-    create(
-      :word,
-      text: '99A/3',
-      left: 533,
-      right: 661,
-      top: 840,
-      bottom: 877
-    )
-
-    create(
-      :word,
-      text: 'Zahlungsbedingungen:',
-      left: 1300,
-      right: 1807,
-      top: 840,
-      bottom: 887
-    )
-
-    create(
-      :word,
-      text: 'Sofort',
-      left: 1885,
-      right: 2018,
-      top: 840,
-      bottom: 877
-    )
-
-    create(
-      :word,
-      text: 'fällig',
-      left: 2033,
-      right: 2132,
-      top: 840,
-      bottom: 887
-    )
-
-    create(
-      :word,
-      text: '1130',
-      left: 5,
-      right: 106,
-      top: 910,
-      bottom: 947
+      text: 'AUgSten',
+      left: 0.11681937172774869,
+      right: 0.16524869109947643,
+      top: 0.18177613320999075,
+      bottom: 0.19033302497687327
     )
 
     vat_numbers = VatNumberDetector.filter
