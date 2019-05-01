@@ -61,7 +61,7 @@ class ImageProcessor
 
   def deskew
     process_image do |image|
-      image.deskew(0.4, @image_width)
+      image.deskew(0.4)
     end
     update_width_and_height
     self

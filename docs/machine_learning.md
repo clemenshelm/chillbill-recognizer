@@ -59,8 +59,26 @@ best features.
   very big (compared to the bill width). I will also create a boolean variable
   for this, but to calibrate the threshold we also need more data.
 
+## Generating Data for ML via Docker
+__Ubuntu:__
+In the following commands the paths must be adapted!
 
+Download and preprocess the bills:
+~~~R
+sudo docker-compose run ml rake machine_learning:import_bill_data &&
+	sudo docker-compose run ml rake machine_learning:add_dimensions &&
+	sudo docker-compose run ml rake machine_learning:add_prices &&
+	sudo chown -cR chillbill:chillbill ~/Dokumente/chillbill-recognizer/data/ &&
+	sudo docker-compose run ml rake machine_learning:list_bills
+~~~
 
+correct the yml files
+
+generate csv:
+~~~R
+sudo docker-compose run ml rake machine_learning:generate_csvs &&
+	sudo chown -cR chillbill:chillbill ~/Dokumente/chillbill-recognizer/data/
+~~~
 
 ## Description of the procedure
 In the long run there are several possibilities to optimize the result:
