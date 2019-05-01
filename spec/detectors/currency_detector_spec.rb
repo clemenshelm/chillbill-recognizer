@@ -478,7 +478,6 @@ describe CurrencyDetector do
     )
 
     currencies = CurrencyDetector.filter
-    currencies_regex = /#{CurrencyDetector::ALL_SYMBOLS.map { |s| Regexp.quote(s) }.join('|')}/
-    expect(currencies.map(&:regex)).to eq [currencies_regex.to_s]
+    expect(currencies.map(&:regex)).to eq [CurrencyDetector::EUR_SYMBOLS.to_s]
   end
 end
